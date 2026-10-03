@@ -39,6 +39,7 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
+| v01 | 2026-10-02 | Criação da secção 8.5 - Swipe Vaga  | `I030` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -274,7 +275,78 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 ### 8.5. UC05 — Dar swipe numa vaga
 
-> A preencher pela Issue `I030`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | UC05 — Dar swipe numa vaga |
+| Ator principal | Candidato |
+| Objetivo | Percorrer as vagas compatíveis com as preferências de procura e, em cada uma, recusá-la ou manifestar interesse, para que o Recrutador possa avaliar a candidatura. |
+| Requisitos relacionados | RF013, RF014, RF016, RF018, RF019, RF020, RF021, RF022, RF023; RF015 (distância em linha reta); RF113 (interesse em espera até à decisão); RF033 (notificação da reposição da quota); RF076 (notificação de novo interesse ao Recrutador); RF112 (registo do autor e da data e hora do interesse e da recusa); RF017, pelo UC06 que estende este caso de uso |
+
+**Pré-condições**
+
+1. O Candidato tem sessão iniciada na aplicação móvel e a conta está ativa.
+
+**Fluxo principal (manifestar interesse)**
+
+1. O Candidato abre a área de exploração de vagas.
+2. O sistema seleciona as vagas que cumprem cumulativamente as condições seguintes: vaga publicada; Empresa aprovada; vaga ainda não recusada nem objeto de interesse do Candidato; distância não superior à distância máxima, exceto nas vagas em regime remoto; valor máximo do intervalo salarial não inferior à pretensão salarial mínima; regime de trabalho e tipo de contrato incluídos nas preferências de procura. A distância é calculada em linha reta, em quilómetros arredondados às unidades, a partir das coordenadas das localidades do Candidato e da vaga.
+3. O sistema apresenta o cartão de uma vaga, com função, designação e logótipo da Empresa, intervalo salarial, localidade, distância, tipo de contrato, regime de trabalho, indicação de urgência e fotografias (logótipo e fotografias só quando registados), e o número de interesses disponíveis na quota de 10.
+4. O Candidato manifesta interesse na vaga (swipe para a direita).
+5. O sistema verifica que o Candidato tem, pelo menos, um interesse disponível, que ainda não manifestou interesse nessa vaga e que a vaga continua a cumprir as condições do passo 2.
+6. O sistema regista o interesse no estado em espera de resposta, com o Candidato e a data e hora, e reduz em uma unidade os interesses disponíveis.
+7. O sistema gera uma notificação de novo interesse, que identifica a vaga, dirigida ao Recrutador.
+8. Se este interesse esgotou a quota, o sistema bloqueia novos interesses durante as vinte e quatro horas seguintes ao instante em que foi registado.
+9. O sistema deixa de apresentar essa vaga ao Candidato e apresenta o cartão seguinte, com o número de interesses disponíveis atualizado. O caso de uso continua no passo 4 para cada cartão, até o Candidato sair da área de exploração.
+
+**Fluxos alternativos**
+
+*A1 — Recusar a vaga* (começa no passo 4)
+
+1. O Candidato recusa a vaga (swipe para a esquerda).
+2. O sistema regista a recusa, com o Candidato e a data e hora, sem consumir a quota de interesses. Não existe limite ao número de recusas.
+3. O sistema deixa de apresentar essa vaga ao Candidato e apresenta o cartão seguinte. O caso de uso continua no passo 4.
+
+*A2 — Consultar o detalhe da vaga* (começa no passo 4)
+
+1. O Candidato abre o detalhe da vaga apresentada.
+2. O sistema apresenta a descrição completa, as competências pretendidas, os benefícios e o acesso à página de apresentação da Empresa.
+3. Se o Candidato quiser, consulta a página de apresentação da Empresa (UC06, que estende este caso de uso).
+4. O Candidato regressa ao cartão e o caso de uso continua no passo 4.
+
+*A3 — Ajustar as preferências de procura* (começa no passo 3 ou no passo 4)
+
+1. O Candidato altera as preferências de procura a partir da área de exploração.
+2. O sistema grava as novas preferências e aplica-as às vagas apresentadas a seguir à alteração. O caso de uso continua no passo 2.
+
+*A4 — Quota esgotada* (começa no passo 3)
+
+1. O Candidato está no período de bloqueio de vinte e quatro horas.
+2. O sistema apresenta o cartão com a indicação de que a quota está esgotada e o tempo em falta até à reposição.
+3. O Candidato pode recusar a vaga (A1), consultar o detalhe (A2) ou ajustar as preferências (A3). Uma tentativa de manifestar interesse corresponde à exceção E1.
+
+*A5 — Fim do período de bloqueio* (desencadeado pelo sistema, sem ação do Candidato)
+
+1. Decorridas vinte e quatro horas sobre o interesse que esgotou a quota, o sistema repõe integralmente a quota em 10 interesses.
+2. O sistema gera uma notificação de reposição da quota, dirigida ao Candidato.
+
+*A6 — Sem vagas para apresentar* (começa no passo 3)
+
+1. Nenhuma vaga cumpre as condições do passo 2.
+2. O sistema indica que não existem vagas compatíveis com as preferências de procura. O Candidato pode ajustar as preferências (A3).
+
+**Exceções**
+
+| ID | Situação | Resposta do sistema |
+| --- | --- | --- |
+| E1 | O Candidato tenta manifestar interesse com a quota esgotada, dentro das vinte e quatro horas de bloqueio (passo 5). | Rejeita o interesse e apresenta o tempo em falta até ao fim do bloqueio. Nada é registado e a quota não é alterada. |
+| E2 | O Candidato já manifestou interesse nessa vaga (passo 5). | Rejeita a segunda manifestação de interesse. Nada é registado e a quota não é alterada. |
+| E3 | Entre a apresentação do cartão e a ação do Candidato, a vaga deixou de cumprir as condições do passo 2, por exemplo por ter sido suspensa ou encerrada, ou por a Empresa ter sido suspensa (passo 5). | Rejeita a ação, informa que a vaga já não está disponível e apresenta o cartão seguinte. Nada é registado e a quota não é alterada. |
+
+**Pós-condições**
+
+- Interesse (sucesso): o interesse está registado no estado em espera de resposta, com o Candidato e a data e hora, e o Candidato surge na lista de candidatos em espera dessa vaga; os interesses disponíveis diminuíram uma unidade; o Recrutador recebeu a notificação de novo interesse; a vaga não volta a ser apresentada ao Candidato. Se a quota ficou esgotada, novos interesses estão bloqueados durante vinte e quatro horas a contar desse interesse, findas as quais a quota é reposta em 10 e o Candidato é notificado.
+- Recusa (A1): a recusa está registada, com o Candidato e a data e hora; a quota não foi alterada; a vaga não volta a ser apresentada ao Candidato.
+- Em qualquer exceção, nada é registado e a quota de interesses não é alterada.
 
 ### 8.6. UC12 — Aceitar ou recusar candidato
 

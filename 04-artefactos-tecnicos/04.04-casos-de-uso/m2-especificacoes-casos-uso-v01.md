@@ -39,6 +39,7 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
+| v01 | 2026-10-02 | Criação da secção 8.6. — Aceitar ou recusar candidato | `I031` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -278,7 +279,67 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 ### 8.6. UC12 — Aceitar ou recusar candidato
 
-> A preencher pela Issue `I031`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | UC12 — Aceitar ou recusar candidato |
+| Ator principal | Recrutador |
+| Objetivo | Decidir sobre um Candidato que manifestou interesse numa vaga da Empresa: aceitar, confirmando o match, ou recusar, excluindo o Candidato dessa vaga. |
+| Requisitos relacionados | RF063, RF064, RF065, RF066, RF117 (decisão registada não pode ser alterada); RF068 (criação automática da conversa); RF031 e RF077 (notificação de novo match); RF039 (operações reservadas só com Empresa aprovada); RF113 (interesse em espera até à decisão); RF060, RF061, RF062 e RF118, pelo UC11 incluído |
+
+**Pré-condições**
+
+1. O Recrutador tem sessão iniciada na área de gestão web e a conta está ativa.
+2. A Empresa do Recrutador está aprovada.
+3. A vaga pertence à Empresa do Recrutador.
+4. O Candidato manifestou interesse na vaga e o interesse está em espera.
+5. O Recrutador abriu o perfil completo do Candidato para essa vaga (UC11) e o sistema registou essa abertura.
+
+**Fluxo principal (aceitar)**
+
+1. O Recrutador abre a lista de candidatos em espera de uma das suas vagas. A lista mostra a data da manifestação de interesse e não tem ações de decisão.
+2. O Recrutador seleciona um Candidato.
+3. O sistema executa o UC11: apresenta o perfil completo, com as competências coincidentes com a vaga em destaque, e regista a abertura do perfil para essa vaga, com data e hora.
+4. Na página do perfil, o Recrutador escolhe **Aceitar**.
+5. O sistema verifica as pré-condições 1 a 5.
+6. O sistema, numa única operação atómica:
+   1. regista a decisão, com o Recrutador que a tomou e a data e hora;
+   2. confirma o match, com a data e hora da confirmação;
+   3. cria a conversa do match, única e associada ao match e à vaga de origem;
+   4. disponibiliza os dados de contacto às duas partes;
+   5. gera uma notificação de novo match para o Candidato, que identifica a vaga e a Empresa, e outra para o Recrutador, que identifica a vaga e o Candidato.
+7. O sistema informa o Recrutador de que o match foi confirmado e apresenta o contacto do Candidato e o acesso à conversa.
+
+**Fluxos alternativos**
+
+*A1 — Recusar o Candidato* (começa no passo 4)
+
+1. Na página do perfil, o Recrutador escolhe **Recusar**.
+2. O sistema verifica as pré-condições 1 a 5.
+3. O sistema regista a recusa, com o Recrutador que a tomou e a data e hora.
+4. O sistema retira o Candidato da lista de candidatos em espera dessa vaga. Os interesses do mesmo Candidato noutras vagas da Empresa não são afetados.
+5. O sistema informa o Recrutador de que a recusa foi registada. Não é criada conversa, não é disponibilizado contacto e o Candidato não recebe notificação.
+
+*A2 — Sair sem decidir* (começa no passo 4)
+
+1. O Recrutador sai da página do perfil sem escolher nenhuma ação.
+2. O interesse mantém-se em espera, sem prazo de expiração. A abertura do perfil fica registada e o Recrutador pode decidir mais tarde, voltando ao perfil a partir da lista.
+
+**Exceções**
+
+| ID | Situação | Resposta do sistema |
+| --- | --- | --- |
+| E1 | Decisão pedida sem o perfil ter sido aberto para essa vaga (por exemplo, pedido direto à API). | Rejeita a decisão e indica que é necessário abrir o perfil completo. Nada é alterado. |
+| E2 | Empresa não aprovada ou suspensa, ou conta do Recrutador bloqueada ou desativada. | Impede o acesso à operação e, se a Empresa não estiver aprovada, indica o estado atual da Empresa. Nada é alterado. |
+| E3 | A vaga não pertence à Empresa do Recrutador. | Rejeita a operação por falta de autorização. Nada é alterado. |
+| E4 | O interesse já não está em espera, por exemplo porque foi registada uma decisão noutro pedido simultâneo. | Rejeita a decisão, informa que o Candidato já foi avaliado e mostra o estado atual. A decisão registada não é alterada. |
+| E5 | Falha durante a operação do passo 6. | Nenhuma das alterações é aplicada (decisão, match, conversa, notificações). O sistema informa o erro e o interesse continua em espera. |
+
+**Pós-condições**
+
+- Aceitação: o match está confirmado, com o Recrutador e a data da decisão; existe uma única conversa aberta para esse match; os contactos estão disponíveis às duas partes; as duas notificações foram geradas. O match mantém-se mesmo que a vaga seja encerrada ou a Empresa suspensa.
+- Recusa: a recusa está registada, com o Recrutador e a data; o Candidato deixa de ser apresentado nessa vaga; não existe conversa nem partilha de contacto.
+- Em qualquer exceção, o estado do interesse não é alterado: nas exceções E1, E2, E3 e E5 mantém-se em espera; na exceção E4 mantém-se a decisão já registada.
+
 
 ### 8.7. UC11 — Consultar perfil de candidato
 

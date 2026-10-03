@@ -39,6 +39,7 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
+| v01 | 2026-10-02 | Criação da secção 8.4. UC09 — Publicar vaga | `I029` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -270,7 +271,64 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 ### 8.4. UC09 — Publicar vaga
 
-> A preencher pela Issue `I029`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | UC09 — Publicar vaga |
+| Ator principal | Recrutador |
+| Objetivo | Criar uma vaga da Empresa e publicá-la, para que passe a ser apresentada aos Candidatos cujas preferências de procura a admitam. |
+| Requisitos relacionados | RF050, RF051, RF052, RF053; RF039 (publicação só com Empresa aprovada); RF112 (registo do autor e da data e hora da criação e da publicação); RF057 (encerramento automático na data-limite, executado no âmbito do UC10) |
+
+**Pré-condições**
+
+1. O Recrutador tem sessão iniciada na área de gestão web e a conta está ativa.
+2. A Empresa do Recrutador está aprovada.
+
+**Fluxo principal (criar e publicar)**
+
+1. O Recrutador escolhe criar uma nova vaga.
+2. O sistema apresenta o formulário da vaga, com a localidade preenchida por omissão com a localidade da Empresa e com as listas pré-definidas de localidades, competências e benefícios, os tipos de contrato (sem termo, a termo, estágio, prestação de serviços) e os regimes de trabalho (presencial, híbrido, remoto).
+3. O Recrutador preenche os campos obrigatórios: função, descrição da oportunidade, intervalo salarial em euros, localidade, tipo de contrato, regime de trabalho e competências pretendidas.
+4. O Recrutador preenche, se quiser, os campos opcionais: benefícios, indicação de urgência e data-limite de publicação.
+5. O Recrutador carrega, se quiser, até 5 fotografias da vaga, em JPEG ou PNG, com o máximo de 5 MB cada.
+6. O Recrutador grava a vaga.
+7. O sistema valida os campos obrigatórios, o intervalo salarial e as fotografias, cria a vaga no estado não publicada e regista o Recrutador que a criou e a data e hora.
+8. O Recrutador escolhe **Publicar**.
+9. O sistema verifica que a Empresa está aprovada e que a vaga pertence à Empresa e está no estado não publicada.
+10. O sistema passa a vaga ao estado publicada e regista o Recrutador que a publicou e a data e hora.
+11. O sistema informa o Recrutador de que a vaga foi publicada. A partir deste instante, a vaga é apresentada aos Candidatos cujas preferências de procura a admitam.
+
+**Fluxos alternativos**
+
+*A1 — Guardar sem publicar* (começa no passo 8)
+
+1. O Recrutador não escolhe publicar e sai do formulário depois de gravar.
+2. A vaga fica no estado não publicada e não é apresentada aos Candidatos.
+
+*A2 — Publicar uma vaga já criada* (substitui os passos 1 a 7)
+
+1. O Recrutador abre a lista de vagas da Empresa e seleciona uma vaga no estado não publicada.
+2. O caso de uso continua no passo 8.
+
+*A3 — Alterar a localidade proposta* (começa no passo 3)
+
+1. O Recrutador substitui a localidade da Empresa por outra da lista pré-definida de localidades.
+2. O caso de uso continua no passo 3.
+
+**Exceções**
+
+| ID | Situação | Resposta do sistema |
+| --- | --- | --- |
+| E1 | Um campo obrigatório está vazio (passo 7). | Rejeita a gravação e indica o motivo. A vaga não é criada. |
+| E2 | O valor mínimo do intervalo salarial é superior ao máximo, ou um dos valores não é um número positivo em euros (passo 7). | Rejeita a gravação e indica o motivo. A vaga não é criada. |
+| E3 | Uma fotografia não é JPEG nem PNG, excede 5 MB ou seria a sexta da vaga (passos 5 e 7). | Rejeita essa fotografia e indica o motivo. |
+| E4 | A Empresa está no estado pendente, recusada ou suspensa (passos 1 e 9). | Impede a criação e a publicação da vaga e indica o estado atual da Empresa. |
+| E5 | A vaga não pertence à Empresa do Recrutador ou não está no estado não publicada (passo 9). | Rejeita a publicação e indica o motivo. O estado da vaga não é alterado. |
+
+**Pós-condições**
+
+- Publicação (sucesso): a vaga existe no estado publicada, com o Recrutador e a data e hora da criação e da publicação registados, e é apresentada aos Candidatos cujas preferências de procura a admitam. Se tiver data-limite de publicação, passa automaticamente ao estado encerrada quando essa data é atingida (RF057, UC10).
+- Gravação sem publicação (A1): a vaga existe no estado não publicada e não é apresentada aos Candidatos.
+- Nas exceções E1, E2 e E4, a vaga não é criada nem publicada. Na exceção E3, só a fotografia rejeitada fica de fora e a vaga pode ser gravada com as restantes. Na exceção E5, o estado da vaga não é alterado.
 
 ### 8.5. UC05 — Dar swipe numa vaga
 

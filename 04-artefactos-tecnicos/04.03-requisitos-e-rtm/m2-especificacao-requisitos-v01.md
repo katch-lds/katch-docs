@@ -16,8 +16,8 @@
 | Ano letivo | 2026/2027 |
 | Curso | LEI — Licenciatura em Engenharia Informática |
 | Turma | LEI3T2 |
-| Versão do documento | v02 |
-| Data | 02 de outubro de 2026 |
+| Versão do documento | v01 |
+| Data | 29 de setembro de 2026 |
 | Critérios de qualidade aplicados | `m1-criterios-qualidade-requisitos-v01.md`, nos termos da secção 2.1 deste documento |
 | Documentos de origem | `m1-proposta-sistema-v02.pdf` e `m1-declaracao-ambito-v02.pdf`, homologados com reservas pelo docente em 24-09-2026 (`m1-email-homologacao-ps-da-cca-v01.pdf`) |
 
@@ -28,21 +28,21 @@
 | 4.1. Requisitos funcionais do Candidato | `I020` | João Coelho | Roberto Baptista | João Borguem |
 | 4.2. Requisitos funcionais do Recrutador | `I021` | Roberto Baptista | João Borguem | João Coelho |
 | 4.3. Requisitos funcionais do Administrador | `I022` | Miguel Santos | João Borguem | João Coelho |
-| 5. Requisitos não funcionais | `I023` | A preencher com a atribuição do Sprint Planning do Sprint S02 | A preencher | A preencher |
-| 6. Restrições | A definir no Backlog Refinement | A preencher | A preencher | A preencher |
+| 5. Requisitos não funcionais | `I023` | João Borguem | Roberto Baptista | Miguel Santos |
+| 6. Restrições | A definir no Backlog Refinement | — | — | — |
 
 ### 1.2. Histórico de versões
 
 | Versão | Data | Descrição das alterações | Reunião e ata de aprovação |
 | --- | --- | --- | --- |
 | v01 | 29 de setembro de 2026 | Primeira versão: requisitos funcionais RF001 a RF118 das Issues I020, I021 e I022. RF105 a RF113 foram acrescentados na autoverificação; RF114 a RF118 foram acrescentados no tratamento das não conformidades detetadas na primeira aplicação da checklist, que também reformulou os requisitos não aprovados e uniformizou a redação. | Avaliação registada na `m2-checklist-aprovacao-requisitos-v01.xlsx`; aprovação formal a registar na ata do Sprint Review do Sprint S01 (30-09-2026) |
-| v02 | 02 de outubro de 2026 | Acrescento dos requisitos não funcionais RNF001 a RNF018 da Issue I023 (secção 5), dos termos complementares necessários à sua verificação (secção 2.2) e dos parâmetros P18 a P21 (secção 3). | Avaliação registada na `[nome do ficheiro de aprovação]`; aprovação formal a registar na ata do Sprint Review do Sprint S02 (07-02-2026) |
+| v01 | 04 de outubro de 2026 | Issue `I023`: acrescento dos requisitos não funcionais RNF001 a RNF018 (secção 5), dos termos complementares necessários à sua verificação (secção 2.2) e dos parâmetros P18 a P21 (secção 3); atualização da secção 2 e encaminhamento da manutenibilidade para a secção 6. Os requisitos funcionais RF001 a RF118 não foram alterados. | Avaliação registada na `m2-checklist-aprovacao-requisitos-v02.xlsx`; aprovação formal a registar na ata do Sprint Review do Sprint S02 (07-10-2026) |
 
 ---
 
 ## 2. Objeto e âmbito
 
-Este documento especifica os requisitos do sistema Katch de forma verificável, consistente e rastreável, nos termos da secção 17 do Regulamento de Funcionamento da Unidade Curricular e do documento `m1-criterios-qualidade-requisitos-v01.md`. A versão v01 contém os requisitos funcionais dos três atores. Os requisitos não funcionais de desempenho, segurança, usabilidade, disponibilidade e manutenibilidade são acrescentados na secção 5 pela Issue `I023`, e as restrições tecnológicas e normativas na secção 6.
+Este documento especifica os requisitos do sistema Katch de forma verificável, consistente e rastreável, nos termos da secção 17 do Regulamento de Funcionamento da Unidade Curricular e do documento `m1-criterios-qualidade-requisitos-v01.md`. O documento contém os requisitos funcionais dos três atores (secção 4), os requisitos não funcionais de desempenho, segurança, usabilidade e disponibilidade (secção 5, Issue `I023`) e as restrições tecnológicas e normativas (secção 6). A manutenibilidade, que o Regulamento Interno do Grupo fixa como limiares de cobertura de testes e critérios de qualidade da integração contínua (secções 11.5 e 11.6), é uma imposição sobre o processo de desenvolvimento e não uma propriedade verificável pelos atores, pelo que é tratada como restrição na secção 6.
 
 Todos os requisitos derivam das funcionalidades `F001` a `F011` da Proposta de Sistema v02 e respeitam o âmbito e os elementos excluídos da Declaração de Âmbito v02. A identificação, a estrutura de cada requisito, a redação do enunciado e a terminologia seguem as secções 3.1 a 3.5 dos critérios de qualidade, com as regras de aplicação fixadas na secção 2.1.
 
@@ -122,7 +122,7 @@ A Proposta de Sistema e a Declaração de Âmbito referem limites de formato, di
 | `P16` | Regimes de trabalho | Presencial; Híbrido; Remoto | F004, F005, F006 |
 | `P17` | Apresentação sem atualização manual | Mensagens e notificações apresentadas ao destinatário no máximo 5 segundos após o acontecimento que as origina, com a aplicação aberta e sessão iniciada, em ambiente de demonstração | F010, F011 |
 | `P18` | Dados de demonstração | Mínimo de 20 Candidatos com conta no estado ativa, 5 Empresas no estado aprovada, 2 Empresas no estado pendente e 50 vagas no estado publicada. Todos os dados são fictícios | F001, F002, F003, F004, F005, F006, F007, F008, F009, F010, F011 |
-| `P19` | Limites de tempo | Operação da interface do servidor, excluindo o carregamento de ficheiros: 2 segundos; carregamento de um ficheiro de 5 MB: 5 segundos; cartão de vaga seguinte: 2 segundos; indicação de falha de ligação: 10 segundos | F002, F003, F004, F005, F006, F007, F008, F009, F010, F011 |
+| `P19` | Limites de tempo | Operação da interface do servidor, excluindo o carregamento de ficheiros: 2 segundos; carregamento de um ficheiro de 5 MB: 5 segundos; cartão de vaga seguinte: 2 segundos; indicação de falha de ligação: 10 segundos | F001, F002, F003, F004, F005, F006, F007, F008, F009, F010, F011 |
 | `P20` | Validade da credencial de sessão | 8 horas contadas desde o início de sessão | F001 |
 | `P21` | Interações e apresentação | Ações sobre o cartão de vaga: 1 interação; acesso às áreas da aplicação móvel: 3 interações; larguras de janela da área de gestão web: 1280 a 1920 píxeis | F001, F003, F004, F005, F006, F007, F008, F009, F010, F011 |
 
@@ -2045,12 +2045,12 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Tipo | Não funcional |
 | Ator | Não aplicável |
 | Descrição | O sistema deve responder a cada operação da interface do servidor, com exceção do carregamento de ficheiros, com um tempo de resposta não superior a 2 segundos, no ambiente de demonstração, com os dados de demonstração e um único utilizador. |
-| Funcionalidade de origem | F002, F003, F004, F005, F006, F007, F008, F009, F010, F011 |
+| Funcionalidade de origem | F001, F002, F003, F004, F005, F006, F007, F008, F009, F010, F011 |
 | Componentes abrangidos | Backend |
 | Pré-condições | Os dados de demonstração estão carregados no ambiente de demonstração. |
 | Critério de aceitação | Na execução completa da coleção de testes da interface do servidor no ambiente de demonstração, nenhuma operação, excluindo o carregamento de ficheiros, apresenta tempo de resposta superior a 2 segundos. |
 | Prioridade | Obrigatório |
-| Origem | Backlog de Projeto v02 (I023) (tempos de resposta da interface do servidor); parâmetros P18, P19 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023) (tempos de resposta da interface do servidor); Proposta de Sistema v02 (secção 2); Declaração de Âmbito v02 (secção 3); parâmetros P18, P19 da secção 3 |
 
 #### RNF002 — Apresentar o cartão de vaga seguinte em 2 segundos
 
@@ -2066,7 +2066,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | O Candidato tem sessão iniciada na aplicação móvel e existem, pelo menos, 6 vagas que cumprem as suas preferências de procura. |
 | Critério de aceitação | Em 5 recusas ou interesses consecutivos, cada cartão de vaga seguinte é apresentado em 2 segundos ou menos após a ação anterior. |
 | Prioridade | Obrigatório |
-| Origem | Backlog de Projeto v02 (I023) (navegação na área de exploração de vagas); parâmetros P18, P19 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023) (navegação na área de exploração de vagas); Proposta de Sistema v02 (secção 2 e F006); Declaração de Âmbito v02 (secção 3); parâmetros P18, P19 da secção 3 |
 
 #### RNF003 — Conservar palavras-passe sob a forma de resumo irreversível
 
@@ -2114,7 +2114,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | Não aplicável |
 | Critério de aceitação | Num teste automático com o relógio do sistema simulado, um pedido com uma credencial de sessão emitida há 8 horas e 1 minuto é rejeitado e o mesmo pedido com uma credencial de sessão emitida há 7 horas e 59 minutos é aceite. |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023) (autenticação por credencial de sessão); parâmetros P20 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023) (autenticação por credencial de sessão); Proposta de Sistema v02 (F001); parâmetros P20 da secção 3 |
 
 #### RNF006 — Verificar no servidor a autorização de cada pedido
 
@@ -2125,12 +2125,12 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Tipo | Não funcional |
 | Ator | Não aplicável |
 | Descrição | O sistema deve rejeitar 100% dos pedidos que solicitem uma operação não autorizada ao tipo de conta ou ao titular da credencial de sessão apresentada, incluindo os pedidos diretos. |
-| Funcionalidade de origem | F001, F005, F007, F009, F010 |
+| Funcionalidade de origem | F001, F004, F005, F007, F009, F010, F011 |
 | Componentes abrangidos | Backend |
 | Pré-condições | Não aplicável |
-| Critério de aceitação | São rejeitados um pedido direto com credencial de sessão de Candidato para publicar uma vaga, um pedido direto com credencial de sessão de Recrutador para alterar uma vaga de outra Empresa e um pedido direto com credencial de sessão de Administrador para consultar o histórico de uma conversa. |
+| Critério de aceitação | São rejeitados um pedido direto com credencial de sessão de Candidato para registar a aceitação de um Candidato em espera, um pedido direto com credencial de sessão de Candidato para alterar o perfil profissional de outro Candidato e um pedido direto com credencial de sessão de Recrutador para marcar como lida uma notificação de outro utilizador. |
 | Prioridade | Obrigatório |
-| Origem | Backlog de Projeto v02 (I023) (controlo de acesso por perfil); Proposta de Sistema v02 (F001, F005, F009, F010) |
+| Origem | Backlog de Projeto v02 (I023) (controlo de acesso por perfil); Proposta de Sistema v02 (secção 3, F001, F004, F005, F007, F009, F010 e F011) |
 
 #### RNF007 — Restringir a obtenção do curriculum vitae
 
@@ -2140,11 +2140,11 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Título | Restringir a obtenção do curriculum vitae |
 | Tipo | Não funcional |
 | Ator | Não aplicável |
-| Descrição | O sistema deve rejeitar 100% dos pedidos de obtenção do curriculum vitae de um Candidato que não provenham do Recrutador responsável por uma vaga em que esse Candidato esteja em espera, incluindo os pedidos diretos ao endereço do ficheiro. |
+| Descrição | O sistema deve rejeitar 100% dos pedidos de obtenção do curriculum vitae de um Candidato que não provenham do próprio Candidato nem do Recrutador responsável por uma vaga em que esse Candidato esteja em espera, incluindo os pedidos diretos ao endereço do ficheiro. |
 | Funcionalidade de origem | F004, F007 |
 | Componentes abrangidos | Backend |
 | Pré-condições | O Candidato enviou um curriculum vitae. |
-| Critério de aceitação | O pedido do Recrutador responsável por uma vaga em que o Candidato está em espera é aceite; são rejeitados o pedido sem credencial de sessão, o pedido de outro Recrutador e o pedido do Administrador. |
+| Critério de aceitação | São aceites o pedido do próprio Candidato e o pedido do Recrutador responsável por uma vaga em que o Candidato está em espera; são rejeitados o pedido sem credencial de sessão, o pedido de outro Candidato, o pedido de outro Recrutador e o pedido do Administrador. |
 | Prioridade | Obrigatório |
 | Origem | Backlog de Projeto v02 (I023) (proteção do curriculum vitae); Proposta de Sistema v02 (F004); Declaração de Âmbito v02 (F004) |
 
@@ -2160,9 +2160,9 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Funcionalidade de origem | F002, F003, F004, F005, F010 |
 | Componentes abrangidos | Backend |
 | Pré-condições | Não aplicável |
-| Critério de aceitação | São rejeitados um pedido direto de registo de Candidato com contacto telefónico de 8 algarismos, um pedido direto de envio de mensagem com 1001 caracteres e um pedido direto de definição de distância máxima de 501 km. |
+| Critério de aceitação | A coleção de testes da interface do servidor contém, para cada regra dos parâmetros P01 a P16, pelo menos um pedido direto com dados não conformes, e todos esses pedidos são rejeitados, designadamente o registo de Candidato com contacto telefónico de 8 algarismos, o envio de mensagem com 1001 caracteres e a definição de distância máxima de 501 km. |
 | Prioridade | Obrigatório |
-| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v02 (F002, F003); parâmetros P01 a P16 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v02 (secção 2, F002 e F003); parâmetros P01 a P16 da secção 3 |
 
 #### RNF009 — Uniformizar o motivo de rejeição por credenciais
 
@@ -2178,7 +2178,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | Não aplicável |
 | Critério de aceitação | A rejeição de um início de sessão com endereço de correio eletrónico não registado e a rejeição com palavra-passe errada de uma conta existente devolvem a mesma indicação de motivo. |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023); RF001, RF038, RF083 |
+| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v02 (F001); RF001, RF038, RF083 |
 
 #### RNF010 — Exigir uma interação por ação sobre o cartão de vaga
 
@@ -2210,7 +2210,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | O Candidato tem sessão iniciada na aplicação móvel. |
 | Critério de aceitação | A partir da área de exploração de vagas, cada uma das cinco áreas enumeradas é aberta com 3 interações ou menos. |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023); parâmetros P21 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v02 (secção 3, F004, F006, F008, F010 e F011); parâmetros P21 da secção 3 |
 
 #### RNF012 — Apresentar a área de gestão web sem deslocamento horizontal
 
@@ -2226,7 +2226,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | Não aplicável |
 | Critério de aceitação | Com a janela a 1280 e a 1920 píxeis de largura, nenhuma área da área de gestão web apresenta barra de deslocamento horizontal. |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023); parâmetros P21 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v02 (secção 2); Declaração de Âmbito v02 (secção 3); parâmetros P21 da secção 3 |
 
 #### RNF013 — Conservar os dados confirmados após reinício do servidor
 
@@ -2268,13 +2268,13 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Título | Carregar ficheiro de 5 MB em 5 segundos |
 | Tipo | Não funcional |
 | Ator | Não aplicável |
-| Descrição | O sistema deve concluir o carregamento de um ficheiro de imagem ou de curriculum vitae com 5 MB num tempo não superior a 5 segundos, medido entre o início do envio e a confirmação da aceitação, no ambiente de demonstração. |
+| Descrição | O sistema deve concluir o carregamento de um ficheiro de imagem ou de curriculum vitae com 5 MB num tempo não superior a 5 segundos, medido por pedido direto entre o início do envio e a confirmação da aceitação, no ambiente de demonstração. |
 | Funcionalidade de origem | F003, F004, F005 |
 | Componentes abrangidos | Backend |
 | Pré-condições | O utilizador tem sessão iniciada e a operação de carregamento está autorizada ao seu tipo de conta. |
-| Critério de aceitação | Um ficheiro PNG de 5 MB e um ficheiro PDF de 5 MB, carregados um de cada vez, são confirmados, cada um, em 5 segundos ou menos. |
+| Critério de aceitação | Na coleção de testes da interface do servidor, um ficheiro PNG de 5 MB e um ficheiro PDF de 5 MB, enviados por pedido direto um de cada vez, são confirmados, cada um, em 5 segundos ou menos. |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023); parâmetros P01, P02, P19 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v02 (F003, F004 e F005); parâmetros P01, P02, P19 da secção 3 |
 
 #### RNF016 — Rejeitar ficheiros com conteúdo diferente do formato admitido
 
@@ -2288,9 +2288,9 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Funcionalidade de origem | F003, F004, F005 |
 | Componentes abrangidos | Backend |
 | Pré-condições | O utilizador tem sessão iniciada e a operação de carregamento está autorizada ao seu tipo de conta. |
-| Critério de aceitação | Um ficheiro de texto com o nome «foto.png» carregado como fotografia de perfil e um ficheiro de imagem com o nome «cv.pdf» carregado como curriculum vitae são rejeitados. |
+| Critério de aceitação | A coleção de testes da interface do servidor contém, para cada carregamento previsto nos parâmetros P01 e P02 (fotografia de perfil, logótipo, fotografia da galeria, fotografia da vaga e curriculum vitae), pelo menos um ficheiro com a extensão admitida e conteúdo de outro formato, e todos são rejeitados, designadamente um ficheiro de texto com o nome «foto.png» e um ficheiro de imagem com o nome «cv.pdf». |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023) (proteção do curriculum vitae); parâmetros P01, P02 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023) (proteção do curriculum vitae); Proposta de Sistema v02 (F003, F004 e F005); parâmetros P01, P02 da secção 3 |
 
 #### RNF017 — Excluir dados confidenciais dos registos de diagnóstico
 
@@ -2316,10 +2316,10 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Título | Indicar falha de ligação na área web em 10 segundos |
 | Tipo | Não funcional |
 | Ator | Não aplicável |
-| Descrição | O sistema deve apresentar ao Recrutador e ao Administrador uma indicação de falha de ligação num tempo não superior a 10 segundos após o envio, a partir da área de gestão web, de um pedido que não obtenha resposta do servidor. |
+| Descrição | O sistema deve apresentar na área de gestão web uma indicação de falha de ligação num tempo não superior a 10 segundos após o envio de um pedido que não obtenha resposta do servidor. |
 | Funcionalidade de origem | F001, F003, F005, F007, F009, F010 |
 | Componentes abrangidos | Frontend web |
-| Pré-condições | O utilizador tem a área de gestão web aberta. |
+| Pré-condições | A área de gestão web está aberta. |
 | Critério de aceitação | Com o servidor desligado, uma tentativa de publicar uma vaga apresenta a indicação de falha de ligação em 10 segundos ou menos. |
 | Prioridade | Importante |
 | Origem | Backlog de Projeto v02 (I023) (disponibilidade); Declaração de Âmbito v02 (secção 3); parâmetros P19 da secção 3 |
@@ -2328,7 +2328,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 
 ## 6. Restrições
 
-Secção reservada aos requisitos `RSTR` que fixam imposições tecnológicas ou normativas, designadamente as tecnologias definidas na secção 11.2 do Regulamento Interno do Grupo e os limites transversais da secção 3 da Declaração de Âmbito v02, com numeração iniciada em `RSTR001`. A Issue responsável é definida no Backlog Refinement.
+Secção reservada aos requisitos `RSTR` que fixam imposições tecnológicas ou normativas, designadamente as tecnologias definidas na secção 11.2 do Regulamento Interno do Grupo, os limiares de cobertura de testes e os critérios de qualidade da integração contínua das secções 11.5 e 11.6 do mesmo regulamento e os limites transversais da secção 3 da Declaração de Âmbito v02, com numeração iniciada em `RSTR001`. A Issue responsável é definida no Backlog Refinement.
 
 ---
 

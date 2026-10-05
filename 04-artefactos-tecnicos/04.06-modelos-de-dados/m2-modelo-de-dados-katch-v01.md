@@ -20,7 +20,7 @@
 | Base de dados | `katch` (PostgreSQL 18) |
 | Issue | `I035` — Elaborar o modelo de dados (diagrama entidade-relação) |
 | Executor / Revisor / Auditor | Roberto Baptista / João Borguem / Miguel Santos |
-| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, `m2-especificacao-requisitos-v02.md` (RF001 a RF118, RNF001 a RNF018, parâmetros P01 a P19), `m1-regulamento-grupo-v01.pdf` (secções 5, 11.2, 14.2 e 14.3), `m2-backlog-projeto-v02.xlsx` (Issue `I035`), `m2-documentacao-arquitetura-v01.md` (secção 2, decisão AD-01), `m2-diagrama-estados-interesse-match-v01.md` |
+| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, `m2-especificacao-requisitos-v01.md` (RF001 a RF118, RNF001 a RNF018, parâmetros P01 a P19), `m1-regulamento-grupo-v01.pdf` (secções 5, 11.2, 14.2 e 14.3), `m2-backlog-projeto-v02.xlsx` (Issue `I035`), `m2-documentacao-arquitetura-v01.md` (secção 2, decisão AD-01), `m2-diagrama-estados-interesse-match-v01.md` |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.06-modelos-de-dados`: um ficheiro por base de dados, com finalidade, tecnologia, modelos conceptual, lógico e físico e dicionário de dados. Corresponde à linha `OF-M2-006` — «Modelo de dados — katch v1» da Checklist de Controlo de Artefactos, gerida em code-first com o Entity Framework Core.
 

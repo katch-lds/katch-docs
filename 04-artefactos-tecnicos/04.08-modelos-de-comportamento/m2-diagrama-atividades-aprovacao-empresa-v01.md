@@ -2,7 +2,7 @@
 
 **Unidade curricular:** Laboratório de Desenvolvimento de Software — LDS
 **Milestone:** `m2`
-**Ficheiro:** `m2-diagrama-atividades-aprovacao-empresas-v01.md`
+**Ficheiro:** `m2-diagrama-atividades-aprovacao-empresa-v01.md`
 **Pasta de arquivo:** `04-artefactos-tecnicos/04.08-modelos-de-comportamento`
 **Compromisso na CCA:** `AD-002` — Diagrama de atividades — aprovação de empresas v1
 
@@ -19,19 +19,20 @@
 | Turma | LEI3T2 |
 | Versão do documento | v01 |
 | Issue | `I038` |
-| Documentos de origem | `m1-proposta-sistema-v02.pdf` (F001, F003, F009, F011), `m1-declaracao-ambito-v02.pdf` (F003), `m2-especificacao-requisitos-v01.md` (RF001 a RF118) e `m1-checklist-controlo-artefactos-v02.pdf` (AD-002) |
+| Documentos de origem | `m1-proposta-sistema-v02.pdf` (F001, F003, F009, F011), `m1-declaracao-ambito-v02.pdf` (F003), `m2-especificacao-requisitos-v01.md` (RF001 a RF118), `m2-especificacoes-casos-uso-v01.md` (UC07 e UC16) e `m1-checklist-controlo-artefactos-v02.pdf` (AD-002) |
 
 ### 1.1. Responsáveis
 
 | Issue | Executor | Revisor | Auditor |
 | --- | --- | --- | --- |
-| `I038` | Miguel Santos | A indicar segundo o Sprint Backlog | A indicar segundo o Sprint Backlog |
+| `I038` | Miguel Santos | Roberto Baptista | João Borguem |
 
 ### 1.2. Histórico de versões
 
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-02 | Criação do diagrama de atividades do fluxo de aprovação de empresas. | `I038` |
+| v01 | 2026-10-06 | Correções da revisão (ciclo 1): nome do ficheiro, responsáveis, funcionalidades e casos de uso na rastreabilidade, e documentos de origem. | `I038` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -213,11 +214,12 @@ O estado suspensa (RF095) não faz parte deste fluxo.
 | R03, R04, D04 | F003 | RF044 | UC07 |
 | R05 | F003 | RF045 | UC07 |
 | A01 | F003, F009 | RF091 | UC16 |
-| A02 | F003, F009 | RF092 | UC16 |
-| D02, S04 | F003, F009 | RF093 | UC16 |
-| A03, D03, S05 | F003, F009 | RF094 | UC16 |
-| S06 | F003, F011 | RF079 | UC16 |
-| S03, S04, S05 | F001 | RF112 | UC01 |
+| A02 | F003 | RF092 | UC16 |
+| D02, S04 | F003 | RF093 | UC16 |
+| A03, D03, S05 | F003 | RF094 | UC16 |
+| S06 | F011 | RF079 | UC16 |
+| S03 | F001 | RF112 | UC07 |
+| S04, S05 | F001 | RF112 | UC16 |
 
 ---
 

@@ -20,7 +20,7 @@
 | Base de dados | `katch` (PostgreSQL 18) |
 | Issue | `I035` — Elaborar o modelo de dados (diagrama entidade-relação) |
 | Executor / Revisor / Auditor | Roberto Baptista / João Borguem / Miguel Santos |
-| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, `m2-especificacao-requisitos-v01.md` (RF001 a RF118, RNF001 a RNF018, parâmetros P01 a P19), `m1-regulamento-grupo-v01.pdf` (secções 5, 11.2, 14.2 e 14.3), `m2-backlog-projeto-v02.xlsx` (Issue `I035`), `m2-documentacao-arquitetura-v01.md` (secção 2, decisão AD-01), `m2-diagrama-estados-interesse-match-v01.md` |
+| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, `m2-especificacao-requisitos-v01.md` (RF001 a RF118, RNF001 a RNF018, parâmetros P01 a P21), `m1-regulamento-grupo-v01.pdf` (secções 5, 11.2, 14.2 e 14.3), `m2-backlog-projeto-v02.xlsx` (Issue `I035`), `m2-documentacao-arquitetura-v01.md` (secção 2, decisão AD-01), `m2-diagrama-estados-interesse-match-v01.md` |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.06-modelos-de-dados`: um ficheiro por base de dados, com finalidade, tecnologia, modelos conceptual, lógico e físico e dicionário de dados. Corresponde à linha `OF-M2-006` — «Modelo de dados — katch v1» da Checklist de Controlo de Artefactos, gerida em code-first com o Entity Framework Core.
 
@@ -29,6 +29,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-03 | Criação do documento: modelos conceptual, lógico e físico, dicionário de dados, índices, integridade, dados sensíveis, dados iniciais, decisões e limitações. | `I035` |
+| v01 | 2026-10-06 | Correções da revisão da `I035` (ciclo 1): transição T7, ainda por ratificar, retirada das regras em vigor e passada a evolução prevista (D01); `ELSE false` em `ck_notification_target` (M01); concorrência da quota de interesses (M02); fim de sessão com credencial não persistida (M03). | `I035` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -373,7 +374,7 @@ Correspondência com os valores da especificação de requisitos:
 | `industry` | tecnologia, saúde, comércio, hotelaria e restauração, construção, indústria, educação, finanças, logística, serviços, outro (P15) |
 | `company_status` | pendente, aprovada, recusada, suspensa (secção 2.2) |
 | `job_status` | não publicada, publicada, suspensa, encerrada (secção 2.2) |
-| `match_status` | `WAITING` = Candidato em espera; `MATCHED` = match confirmado; `REJECTED` = recusa da vaga pelo Candidato, recusa do Candidato pelo Recrutador ou interesse encerrado sem match |
+| `match_status` | `WAITING` = Candidato em espera; `MATCHED` = match confirmado; `REJECTED` = recusa da vaga pelo Candidato ou recusa do Candidato pelo Recrutador |
 | `notification_type` | Os cinco acontecimentos da F011 da DA: nova ligação confirmada, nova mensagem, novo candidato interessado, decisão sobre o registo da Empresa (aprovação ou recusa) e reposição da quota |
 | `operation_type` | As operações enumeradas no RF112, exceto o interesse e a recusa de vaga, registados na tabela `match` |
 
@@ -611,6 +612,7 @@ CREATE TABLE notification (
             WHEN 'COMPANY_APPROVED'        THEN company_id IS NOT NULL AND match_id IS NULL AND job_id IS NULL
             WHEN 'COMPANY_REJECTED'        THEN company_id IS NOT NULL AND match_id IS NULL AND job_id IS NULL
             WHEN 'INTEREST_QUOTA_RESTORED' THEN num_nonnulls(match_id, job_id, company_id) = 0
+            ELSE false
         END),
     CONSTRAINT ck_notification_detail CHECK ((type = 'COMPANY_REJECTED') = (detail IS NOT NULL)),
     CONSTRAINT ck_notification_read   CHECK (read_at IS NULL OR read_at >= created_at)
@@ -869,7 +871,8 @@ Combinações válidas dos estados, com as transições do diagrama de estados d
 | Candidato em espera | `INTERESTED` | `PENDING` | `WAITING` | T2, T3, T4 |
 | Match confirmado | `INTERESTED` | `ACCEPTED` | `MATCHED` | T5 |
 | Recusa do Candidato pelo Recrutador | `INTERESTED` | `DECLINED` | `REJECTED` | T6 |
-| Interesse encerrado sem match | `INTERESTED` | `PENDING` | `REJECTED` | T7 (decisão `m2-decisao-encerramento-interesses-em-espera-v01.md`, por ratificar) |
+
+Um interesse em espera só sai desse estado pela decisão do Recrutador (RF113). A transição T7 do diagrama de estados, proposta numa decisão ainda por ratificar, não faz parte das regras em vigor (secção 11).
 
 ### 6.14. `message` — mensagem
 
@@ -954,17 +957,26 @@ Estas regras dependem de outras linhas ou do momento da operação e ficam nos s
 | Uma decisão do Recrutador não é alterada depois de registada. | RF117; DA, F007 |
 | Só o Candidato ou o Recrutador do match enviam mensagens, e só com a conversa aberta. | RF026, RF069, RF070 |
 | Confirmação do match numa única transação: atualizar `match` (incluindo `conversation_status = 'OPEN'`) e criar as duas notificações `MATCH_CONFIRMED`. | RF066, RF068, RF031, RF077 |
-| Bloqueio ou suspensão de conta, e suspensão de Empresa: passar a `CLOSED` as conversas abertas, com o motivo correspondente; encerrar os interesses em espera (T7, se a decisão for ratificada). | RF075, RF086, RF089, RF095 |
+| Bloqueio ou suspensão de conta, e suspensão de Empresa: passar a `CLOSED` as conversas abertas, com o motivo correspondente. Os interesses em espera mantêm-se (RF113). | RF075, RF086, RF089, RF095, RF113 |
 | Tarefas periódicas: encerrar as vagas publicadas com `expires_at` atingida (`close_reason = 'EXPIRED'`) e repor a quota com a notificação `INTEREST_QUOTA_RESTORED`. | RF057, RF021, RF033 |
 | Vagas apresentadas ao Candidato: filtro do RF014 e distância em linha reta pela fórmula de Haversine sobre `location`, arredondada às unidades. | RF014, RF015 |
 | Acesso ao CV apenas pelo Recrutador de uma vaga em que o Candidato está em espera. | RNF007; DA, F004 |
 | As notificações são dirigidas apenas a contas de Candidato e de Recrutador. | DA, F011 |
 | Formato real do ficheiro (JPEG, PNG ou PDF) e dimensão máxima. | P01, P02, RNF016 |
 | Inserção no `operation_log` em cada operação do RF112. | RF112 |
+| Manifestação de interesse: verificar a quota, inserir a linha de `match` e atualizar `swipe_rights_remaining` e `next_swipe_available_at` na mesma transação, com o controlo de concorrência da secção 7.3. | RF019, RF020, P11 |
 
 ### 7.3. Concorrência
 
-A tabela `match` usa a coluna de sistema `xmin` do PostgreSQL como marca de concorrência otimista, mapeada pelo Npgsql no Entity Framework Core. Protege o caso de o encerramento automático de um interesse (tarefa periódica ou suspensão) coincidir com a decisão do Recrutador sobre o mesmo interesse. Não é criada coluna própria de versão.
+As tabelas `match` e `candidate` usam a coluna de sistema `xmin` do PostgreSQL como marca de concorrência otimista, mapeada pelo Npgsql no Entity Framework Core. Não é criada coluna própria de versão. Se a linha tiver sido alterada depois de lida, a gravação falha e a operação é rejeitada sem alterar dados.
+
+| Tabela | Situação protegida | Requisitos |
+| --- | --- | --- |
+| `match` | Dois pedidos de decisão sobre o mesmo Candidato na mesma vaga (por exemplo, aceitar e recusar em dois separadores): só o primeiro é gravado. | RF063, RF064, RF117 |
+| `match` | Encerramento da conversa por uma das partes em simultâneo com o bloqueio ou a suspensão que a passa ao modo apenas de consulta: fica registado um único motivo de encerramento. | RF030, RF074, RF075 |
+| `candidate` | Dois interesses simultâneos do mesmo Candidato em vagas diferentes, lidos com o mesmo valor de `swipe_rights_remaining`: o segundo é rejeitado e repetido com o valor atualizado, sem ultrapassar a quota. | RF019, RF020, P11 |
+
+Dois interesses na mesma vaga são impedidos pela restrição `uq_match_candidate_job` (RF019).
 
 ---
 
@@ -973,7 +985,7 @@ A tabela `match` usa a coluna de sistema `xmin` do PostgreSQL como marca de conc
 | Dado | Coluna | Proteção | Requisitos |
 | --- | --- | --- | --- |
 | Palavra-passe | `app_user.password_hash` | Só o resumo irreversível com valor aleatório por conta. Nunca nos registos de diagnóstico. | RNF003, RNF017 |
-| Credencial de sessão | Não persistida | Emitida no início de sessão e validada em cada pedido; expira ao fim de 8 horas. Nunca nos registos de diagnóstico. | RNF004, RNF005, RNF017 |
+| Credencial de sessão | Não persistida | Emitida no início de sessão e validada em cada pedido; expira ao fim de 8 horas. Nunca nos registos de diagnóstico. Ao terminar a sessão, o cliente descarta a credencial (secção 11). | RNF004, RNF005, RNF017, RF105 a RF107 |
 | Contactos pessoais do Candidato | `app_user.email`, `candidate.phone_number` | Visíveis ao Recrutador só depois do match; ao Administrador na lista de contas. | RF067, RF085, RF088 |
 | Curriculum vitae e fotografia | `candidate.cv_path`, `candidate.profile_photo_path` e ficheiros | CV só para o Recrutador de uma vaga em que o Candidato está em espera; pedidos diretos ao ficheiro rejeitados. | RF061, RNF007 |
 | Conteúdo das mensagens | `message.content` | Sem acesso do Administrador; os indicadores usam apenas contagens; nunca nos registos de diagnóstico. | RF103, RF096, RNF017 |
@@ -1027,7 +1039,8 @@ Os dados iniciais são criados por scripts do backend (RI, secção 14.3).
 | O ficheiro e o caminho guardado podem ficar inconsistentes (por exemplo, ficheiro apagado no servidor). | O backend grava o ficheiro antes de guardar o caminho e apaga o ficheiro substituído depois de confirmar a transação. |
 | O `operation_log` não tem chave estrangeira para o elemento registado. | A coerência entre `entity_type` e `entity_id` depende do backend. |
 | A eliminação de vagas é lógica. | Todas as consultas têm de excluir as vagas com `deleted_at` preenchido. |
-| A transição T7 (encerramento do interesse em espera) depende da ratificação da decisão `m2-decisao-encerramento-interesses-em-espera-v01.md` e dos requisitos que ela propõe. | O modelo suporta-a sem alterações (`status = 'REJECTED'` com `recruiter_status = 'PENDING'`). Se a decisão não for ratificada, a transição não é usada. |
+| A transição T7 (encerramento do interesse em espera sem decisão do Recrutador), proposta em `m2-decisao-encerramento-interesses-em-espera-v01.md`, não está ratificada e contraria o RF113 em vigor. | Não faz parte das regras deste modelo. Se a decisão for ratificada e os requisitos forem alterados, entra numa nova versão; o esquema já admite `status = 'REJECTED'` com `recruiter_status = 'PENDING'`, mas o backend não cria essa combinação. |
+| A credencial de sessão não é persistida. | Depois de terminar a sessão (RF105 a RF107), uma credencial copiada continua aceite em pedidos diretos até expirar (8 horas, RNF005). Risco aceite no ambiente académico; uma lista de credenciais revogadas exige uma tabela nova numa versão futura. |
 | As expressões regulares com `[:alnum:]` dependem da configuração regional da base de dados para aceitar letras acentuadas. | A base de dados é criada em UTF-8 com uma configuração regional portuguesa ou ICU. |
 
 ---
@@ -1038,7 +1051,7 @@ Os dados iniciais são criados por scripts do backend (RI, secção 14.3).
 | --- | --- |
 | RF001 a RF005, RF037, RF038, RF083 (registo e início de sessão) | `app_user`, `candidate`, `recruiter`, `admin` |
 | RF002, RF040, RF084 (palavra-passe) | `app_user.password_hash` |
-| RF105 a RF107 (terminar sessão) | Sem persistência: a credencial de sessão não é guardada (RNF005). |
+| RF105 a RF107 (terminar sessão) | Sem persistência: a credencial de sessão não é guardada (RNF005; secção 11). |
 | RF006 a RF012 (perfil profissional) | `candidate`, `candidate_link`, `candidate_skill`, `skill` |
 | RF013 a RF023 (exploração de vagas e quota) | `job`, `company`, `location`, `job_skill`, `job_benefit`, `match`, `candidate.swipe_rights_remaining`, `candidate.next_swipe_available_at` |
 | RF024, RF025, RF067 (matches e contactos) | `match`, `company`, `app_user`, `candidate` |

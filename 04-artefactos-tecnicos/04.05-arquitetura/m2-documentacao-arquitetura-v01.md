@@ -78,8 +78,8 @@ flowchart TB
 
     Mobile -->|"HTTPS · JSON"| API
     Web -->|"HTTPS · JSON"| API
-    Mobile -.->|"polling a cada 3 s<br/>mensagens e notificações"| API
-    Web -.->|"polling a cada 3 s<br/>mensagens e notificações"| API
+    Mobile -.->|"ligação persistente<br/>mensagens e notificações (D-08)"| API
+    Web -.->|"ligação persistente<br/>mensagens e notificações (D-08)"| API
 
     API --> Serv
     Jobs --> Serv
@@ -119,12 +119,12 @@ flowchart TB
 | --- | --- | --- |
 | Aplicação móvel → API REST | HTTPS, JSON | Pedidos autenticados com o token JWT. Só o tipo de conta Candidato acede por aqui. |
 | Área de gestão web → API REST | HTTPS, JSON | Pedidos autenticados com o token JWT. Só os tipos de conta Recrutador e Administrador acedem por aqui. |
-| Aplicações → API REST (consulta periódica) | HTTPS, JSON | As mensagens são consultadas a cada 3 segundos, com a conversa aberta. As notificações são consultadas a cada 3 segundos, com a aplicação aberta e sessão iniciada. Cada consulta devolve só os elementos novos. No pior caso, o destinatário espera 3 segundos pela consulta e até 2 segundos pela resposta (RNF001), num total de 5 segundos, que é o limite do parâmetro P17 (RF029, RF073, RF110 e RF111). Não há notificações nativas do sistema operativo nem envio por e-mail ou SMS. |
+| Aplicações → API REST (ligação persistente) | HTTPS, JSON; protocolo de subnegociação do SignalR | A ligação persistente entrega as mensagens e as notificações em tempo real. O SignalR (D-08) encapsula o protocolo de subnegociação e oferece reconexão automática, reconhecimento de entrega e roteamento por grupo. A especificação de requisitos (parâmetro P17, RF029, RF073, RF110 e RF111) fixa o limite de 5 segundos para a entrega. Não há notificações nativas do sistema operativo nem envio por e-mail ou SMS. A decisão D-08 está sujeita a confirmação em reunião formal do grupo (Regulamento da UC, secção 10.1). Até essa confirmação, o estado aprovado é o que descreve esta secção. |
 | API REST e Tarefas periódicas → Serviços de negócio | Chamadas internas ao backend | As regras de negócio são executadas nos serviços. |
 | Serviços de negócio → Acesso a dados → Base de dados | SQL, via Entity Framework Core | Única via de acesso à base de dados. |
 | Serviços de negócio → Armazenamento de ficheiros | Leitura e escrita de ficheiros | Os clientes nunca acedem diretamente aos ficheiros nem à base de dados. |
 
-A decisão D-08 da secção 3.5 propõe uma ligação persistente para as mensagens e as notificações. A decisão `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md` propõe a consulta periódica descrita acima e, se for ratificada, substitui a D-08.
+A decisão D-08 da secção 3.5 propõe uma ligação persistente com SignalR para as mensagens e as notificações. Esta decisão está sujeita a confirmação em reunião formal do grupo (Regulamento da UC, secção 10.1). Até essa confirmação, o estado aprovado é o descrito nesta secção. Uma eventual mudança de tecnologia (por exemplo, para consulta periódica) exige aprovação formal e fica registada em ata de reunião.
 
 ### 2.5. Fronteiras e restrições
 
@@ -150,7 +150,7 @@ Restrições que condicionam a arquitetura:
 | Autenticação sem estado de sessão no servidor | Token JWT em cada pedido. O estado da conta e da Empresa é confirmado na base de dados em cada operação reservada (secção 3.5, D-04). |
 | Persistência code-first | Entity Framework Core, com migrations para criar e evoluir o esquema. |
 | Concorrência otimista | Coluna de sistema `xmin` na tabela `match`, para que duas alterações simultâneas ao mesmo registo não se sobreponham. |
-| Consulta periódica (polling) | Entrega de mensagens e notificações, descrita na secção 2.4. |
+| Ligação bidirecional persistente | Entrega de mensagens e notificações em tempo real, com ASP.NET Core SignalR (decisão D-08, sujeita a ratificação em reunião formal). |
 | Tarefas periódicas em segundo plano | Encerramento das vagas expiradas e reposição da quota de interesses. |
 | Base de dados única | Uma só base de dados PostgreSQL, acedida apenas pelo backend. |
 
@@ -170,7 +170,7 @@ A tabela indica, para cada atributo, os requisitos não funcionais da especifica
 | N.º | Decisão | Alternativas | Justificação |
 | --- | --- | --- | --- |
 | AD-01 | Os ficheiros (fotografias, logótipos e CV) são guardados no sistema de ficheiros do servidor do backend. A base de dados guarda apenas o caminho. | Guardar os ficheiros na base de dados; usar um serviço externo de armazenamento. | O modelo de dados mantém os ficheiros fora da base de dados. A DA exclui os serviços externos. A solução não acrescenta tecnologia à stack. Resolve o ponto 3 da secção 3.6. |
-| AD-02 | As mensagens e as notificações são entregues por consulta periódica à API REST, a cada 3 segundos. | Ligação persistente com SignalR (D-08). | Evita a complexidade da ligação persistente e cumpre o limite de 5 segundos do parâmetro P17. A decisão e as consequências constam de `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`, que fica por ratificar em reunião do grupo. |
+| AD-02 | As mensagens e as notificações são entregues por ligação bidirecional persistente com ASP.NET Core SignalR. | Consulta periódica à API REST (polling); WebSockets diretos; serviços comerciais de notificação. | A DA exige ligação persistente em tempo real (F010, F011) e exclui os serviços comerciais externos (limites transversais). O SignalR é parte do ASP.NET Core, não acrescenta tecnologia ao backend e oferece reconexão automática. A decisão está sujeita a confirmação em reunião formal do grupo (Regulamento da UC, secção 10.1) e fica registada em ata. |
 
 ### 2.9. Evolução prevista
 
@@ -202,7 +202,7 @@ flowchart LR
         B2["Autenticação JWT Bearer"]
         B3["Swagger/OpenAPI (Swashbuckle)"]
         B4["Entity Framework Core<br/>code-first + migrations<br/>fornecedor Npgsql"]
-        B5["Canal em tempo real<br/>ligação bidirecional persistente<br/>(proposta: ASP.NET Core SignalR)"]
+        B5["Canal em tempo real<br/>ASP.NET Core SignalR<br/>(ligação bidirecional persistente)"]
         B6["Tarefas periódicas em background<br/>(ASP.NET Core hosted services)"]
     end
     subgraph Dados["Persistência"]
@@ -211,8 +211,8 @@ flowchart LR
     end
     M1 -- "HTTPS / JSON + token JWT" --> B1
     W1 -- "HTTPS / JSON + token JWT" --> B1
-    M1 -. "mensagens e notificações" .-> B5
-    W1 -. "mensagens e notificações" .-> B5
+    M1 -. "ligação persistente<br/>mensagens e notificações" .-> B5
+    W1 -. "ligação persistente<br/>mensagens e notificações" .-> B5
     B1 --- B2
     B1 --- B3
     B1 --- B5
@@ -232,7 +232,7 @@ O diagrama mostra apenas a correspondência entre componentes e tecnologias. A e
 | Backend — SDK e execução | .NET SDK 10.0 (LTS) | RI v01, secção 11.2 | Versão com suporte de longo prazo (até novembro de 2028), o que garante atualizações de segurança durante todo o semestre e depois dele. |
 | Backend — documentação da API | Swagger/OpenAPI com Swashbuckle, disponível em `/swagger` | RI v01, secções 5 e 11.2 | Permite explorar e testar os endpoints sem ferramentas externas e serve de referência à documentação da API (`04.11`). |
 | Backend — acesso a dados | Entity Framework Core, abordagem code-first com migrations (`dotnet ef migrations`), com o fornecedor Npgsql e o pacote `EFCore.NamingConventions` (`UseSnakeCaseNamingConvention()`) | EF Core: RI v01, secção 11.2 (o RI não fixa a versão). Npgsql e `EFCore.NamingConventions`: modelo de dados (`m2-modelo-de-dados-postgresql-v01.md`); versão não fixada no RI | O modelo de dados fica descrito em C# e versionado com o código; as migrations tornam reproduzível a criação da base de dados em qualquer máquina do grupo e na pipeline. O Npgsql é necessário para o `xmin` como controlo de concorrência otimista em `match`, para os arrays e para os tipos enumerados do esquema. |
-| Backend — canal em tempo real | Ligação bidirecional persistente entre cliente e servidor; proposta: ASP.NET Core SignalR (parte do framework) | DA v02 (F010, F011); proposta de tecnologia em D-08 — não fixada no RI | A DA impõe que as mensagens (F010) e as notificações (F011) sejam entregues em tempo real «através de uma ligação bidirecional persistente entre cliente e servidor», assegurada pelo próprio sistema. A consulta periódica à API não cumpre esta exigência. |
+| Backend — canal em tempo real | Ligação bidirecional persistente entre cliente e servidor; tecnologia: ASP.NET Core SignalR (parte do framework) | DA v02 (F010, F011); decisão D-08 — não fixada no RI | A DA impõe que as mensagens (F010) e as notificações (F011) sejam entregues em tempo real «através de uma ligação bidirecional persistente entre cliente e servidor», assegurada pelo próprio sistema. O SignalR é proposto em D-08 e está sujeito a confirmação em reunião formal (Regulamento da UC, secção 10.1). Até essa confirmação, o estado aprovado é o descrito nesta secção. |
 | Backend — tarefas periódicas | Hosted services do ASP.NET Core (`BackgroundService`) | Modelo de dados (`m2-modelo-de-dados-postgresql-v01.md`); framework do v01, secção 11.2 | Encerrar vagas cuja data-limite expirou (F005) e repor a quota de interesses com a respetiva notificação (F006, F011). Não exige nenhuma tecnologia adicional ao backend. |
 | Armazenamento de ficheiros | A definir — ver secção 3.6, ponto 3 | Modelo de dados (`m2-modelo-de-dados-postgresql-v01.md`: ficheiros fora da base de dados) | Fotos de perfil, CV, logótipos e galerias ficam fora da base de dados, que guarda apenas o caminho ou URL (`varchar(500)`). O local de armazenamento ainda não está decidido. |
 | Base de dados | PostgreSQL 18 | RI v01, secções 5 e 11.2 | Base de dados relacional robusta e gratuita, adequada às relações do domínio (Candidato, Empresa, vaga, interesse, match). Em desenvolvimento corre em `localhost`, porta 6000 (RI, secção 5). |
@@ -274,13 +274,13 @@ As versões das dependências que o RI não fixa ficam fixadas no momento da con
 | D-05 | Frontend web em React 19 + TypeScript + Vite. | Angular; Vue. | Ecossistema mais amplo, tipagem estática e build rápido; ferramentas de teste (Jest, Playwright) compatíveis. | RI v01, secção 11.2 |
 | D-06 | Aplicação móvel em Flutter. | React Native; Android nativo (Kotlin). | Código único para Android e iOS; o Candidato acede apenas pela aplicação móvel (DA). | RI v01, secção 11.2; DA v02 |
 | D-07 | GitHub Actions + SonarQube Server 2026.1 LTA para os quality gates. | GitLab CI; SonarCloud. | Integração direta com os repositórios GitHub e Quality Gate bloqueante em todos os componentes. | RI v01, secções 11.4 e 11.6 |
-| D-08 | Mensagens (F010) e notificações (F011) entregues por uma ligação bidirecional persistente, com ASP.NET Core SignalR como tecnologia proposta, reutilizando a autenticação JWT. | Consulta periódica à API (polling); WebSockets diretos sem biblioteca; serviço externo de envio de notificações. | A DA exige a ligação bidirecional persistente, o que exclui a consulta periódica, e exclui os serviços comerciais de comunicação e de notificação, pelo que a solução tem de ser interna. O SignalR faz parte do ASP.NET Core, pelo que não acrescenta tecnologia ao backend. O token JWT tem de ser aceite também na ligação persistente. Proposta sujeita a confirmação em reunião formal, com decisão registada em ata (Regulamento da UC, secção 10.1), porque os clientes web e móvel precisam de uma biblioteca cliente. | DA v02 (F010, F011 e limites transversais) |
+| D-08 | Mensagens (F010) e notificações (F011) entregues por uma ligação bidirecional persistente, com ASP.NET Core SignalR, reutilizando a autenticação JWT. | Consulta periódica à API (polling); WebSockets diretos sem biblioteca; serviço externo de envio de notificações. | A DA exige a ligação bidirecional persistente e exclui os serviços comerciais de comunicação. O SignalR faz parte do ASP.NET Core e não acrescenta tecnologia ao backend. O token JWT é aceite na ligação persistente. **Estado atual (até ratificação):** esta decisão é o que está documentado nesta arquitetura e é o que deve ser implementado até à Sprint Review. **Ratificação:** a decisão está sujeita a confirmação em reunião formal (Regulamento da UC, secção 10.1), com ata. Uma mudança (por exemplo, para polling) exige aprovação formal e fica registada em ata antes de ser implementada. | DA v02 (F010, F011 e limites transversais) |
 
 ### 3.6. Pontos a acompanhar
 
 | N.º | Ponto | Encaminhamento |
 | --- | --- | --- |
-| 1 | A receção de mensagens e notificações em tempo real (F010 e F011) exige uma ligação bidirecional persistente entre cliente e servidor, imposta pela DA. O RI não fixa nenhuma tecnologia para isso. | Proposta D-08 (ASP.NET Core SignalR). A DA determina que a comunicação em tempo real e as notificações são «asseguradas pelo próprio sistema», o que exclui serviços externos de envio de notificações. A decisão é confirmada em reunião formal e registada em ata (Regulamento da UC, secção 10.1). O tempo máximo de entrega fixado na especificação de requisitos (parâmetro P17) é verificado contra esta escolha quando esse documento for consolidado. |
+| 1 | A receção de mensagens e notificações em tempo real (F010 e F011) exige uma ligação bidirecional persistente entre cliente e servidor, imposta pela DA. O RI não fixa nenhuma tecnologia para isso. | Decisão D-08 (ASP.NET Core SignalR, secção 3.5). Esta é a tecnologia aprovada até ratificação em reunião formal. A DA determina que a comunicação em tempo real e as notificações são «asseguradas pelo próprio sistema», o que exclui serviços externos de envio de notificações. A ratificação fica registada em ata (Regulamento da UC, secção 10.1). Qualquer mudança (por exemplo, para polling) exige aprovação formal antes da implementação. O tempo máximo de entrega fixado na especificação de requisitos (parâmetro P17) será verificado contra a tecnologia ratificada. |
 | 2 | O RI não fixa versões para Jest, Playwright, Postman, Npgsql, `EFCore.NamingConventions` nem para o pacote JWT Bearer. | Versões fixadas nos ficheiros de dependências de cada repositório (secção 3.4). |
 | 3 | O local de armazenamento dos ficheiros (fotos de perfil, CV, logótipos e galerias) não está decidido. A base de dados guarda apenas o caminho ou URL. | A decidir na secção 2 (`I033`) e, se exigir tecnologia nova, em reunião formal. |
 | 4 | O SQLite in-memory dos testes de integração não reproduz o `xmin` (concorrência otimista em `match`), os tipos enumerados nativos, nem as restrições `CHECK` com expressão regular do esquema v01. Estes aspetos não ficam cobertos pelos testes de integração. | Limitação aceite pelo RI (secções 5 e 11.2). Qualquer alternativa, como testar contra PostgreSQL, exige uma nova versão do RI. |

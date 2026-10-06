@@ -29,6 +29,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-05 | Criação do documento: camadas, classes de domínio, enumerações, repositórios, serviços, tarefas periódicas, controllers e DTOs, com responsabilidades, atributos, operações, relações e multiplicidades. | `I036` |
+| v01 | 2026-10-06 | Alinhamento com as correções da revisão da `I035`: retirada a transição T7 (`Match.CloseWithoutMatch` e consultas de interesses em espera por Candidato e por Empresa), por estar ainda por ratificar; concorrência otimista também em `Candidate` (`Version` ↔ `xmin`). | `I036` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -140,6 +141,7 @@ classDiagram
         +List~ContractType~ PreferredContractTypes
         +short SwipeRightsRemaining
         +DateTimeOffset? NextSwipeAvailableAt
+        +uint Version
         +DateTimeOffset CreatedAt
         +DateTimeOffset UpdatedAt
         +HasInterestAvailable(DateTimeOffset now) bool
@@ -330,7 +332,6 @@ classDiagram
         +OpenProfile(Guid recruiterId, DateTimeOffset now) void
         +Accept(Guid recruiterId, DateTimeOffset now) void
         +Reject(Guid recruiterId, DateTimeOffset now) void
-        +CloseWithoutMatch(DateTimeOffset now) void
         +CloseConversation(Guid? closedById, ConversationCloseReason reason, DateTimeOffset now) void
         +CanSendMessages() bool
         +RegisterMessage(DateTimeOffset sentAt) void
@@ -405,11 +406,11 @@ Regras aplicadas pelas operações de `Match` (modelo de dados, secções 6.13 e
 | `OpenProfile` | `Status = WAITING` | Regista a primeira abertura (data e Recrutador) | RF061, RF118 |
 | `Accept` | `Status = WAITING` e perfil aberto | `ACCEPTED` / `MATCHED`; abre a conversa (`ConversationStatus = OPEN`) | RF063, RF065, RF066, RF068 |
 | `Reject` | `Status = WAITING` e perfil aberto | `DECLINED` / `REJECTED` | RF064, RF065 |
-| `CloseWithoutMatch` | `Status = WAITING` | `REJECTED`, mantendo `RecruiterStatus = PENDING` (transição T7, por ratificar) | Decisão da I086 |
+| Interesse em espera | — | Só sai de `WAITING` por `Accept` ou `Reject`, sem prazo de expiração | RF113 |
 | `CloseConversation` | Conversa aberta | `CLOSED`, com data, motivo e autor quando é uma das partes | RF030, RF074, RF075 |
 | Qualquer decisão | Decisão já registada | Rejeitada (não altera a decisão) | RF117 |
 
-`Version` é mapeada para a coluna de sistema `xmin` (concorrência otimista, modelo de dados, secção 7.3).
+Em `Match` e em `Candidate`, `Version` é mapeada para a coluna de sistema `xmin` (concorrência otimista, modelo de dados, secção 7.3): em `Match`, protege as decisões e o encerramento da conversa (RF117, RF075); em `Candidate`, impede que dois interesses simultâneos ultrapassem a quota (RF020, P11).
 
 ### 3.5. Enumerações
 
@@ -628,8 +629,6 @@ classDiagram
         +GetAsync(Guid candidateId, Guid jobId) Match?
         +AddAsync(Match match) void
         +ListWaitingByJobAsync(Guid jobId) List~Match~
-        +ListWaitingByCandidateAsync(Guid candidateId) List~Match~
-        +ListWaitingByCompanyAsync(Guid companyId) List~Match~
         +ListMatchesByCandidateAsync(Guid candidateId) List~Match~
         +ListMatchesByCompanyAsync(Guid companyId) List~Match~
         +ListOpenConversationsByUserAsync(Guid userId) List~Match~
@@ -973,7 +972,6 @@ classDiagram
     CompanyService ..> IOperationLogger
     JobService ..> IJobRepository
     JobService ..> ICompanyRepository
-    JobService ..> IMatchRepository
     JobService ..> IFileStorage
     JobService ..> IFileValidator
     JobService ..> IOperationLogger
@@ -1012,9 +1010,9 @@ Todos os serviços que alteram dados dependem também de `IUnitOfWork` e de `ICl
 | --- | --- | --- | --- |
 | `AuthService` | Registo de Candidato com validação automática e ativação imediata; criação de conta de Recrutador; início de sessão com mensagem única para credenciais erradas e rejeição de contas bloqueadas ou suspensas; alteração da palavra-passe. | UC01, UC02, UC03, UC07 | RF001 a RF005, RF037, RF038, RF040, RF083, RF084; RNF003, RNF009 |
 | `CandidateProfileService` | Perfil profissional, preferências de procura (também a partir da área de exploração), competências da lista e «Outro», hiperligações, fotografia e CV. | UC04, UC05 | RF006 a RF012, RF023 |
-| `JobExplorationService` | Cartão de vaga seguinte com o filtro do RF014 e a distância; detalhe da vaga e página da Empresa; recusa e interesse (verificação da quota, uma resposta por vaga), com notificação de novo interesse. O autor e a data do interesse e da recusa ficam na própria linha de `match`, e não no `operation_log` (modelo de dados, tipo `operation_type`). | UC05, UC06 | RF013 a RF022, RF076, RF112; RNF002 |
+| `JobExplorationService` | Cartão de vaga seguinte com o filtro do RF014 e a distância; detalhe da vaga e página da Empresa; recusa e interesse (verificação da quota com controlo de concorrência, uma resposta por vaga), com notificação de novo interesse. O autor e a data do interesse e da recusa ficam na própria linha de `match`, e não no `operation_log` (modelo de dados, tipo `operation_type`). | UC05, UC06 | RF013 a RF022, RF076, RF112; RNF002 |
 | `CompanyService` | Registo, nova submissão e alteração da Empresa (NIF único e imutável depois da aprovação), estado do pedido, página de apresentação, logótipo e galeria. | UC07, UC08 | RF039, RF041 a RF049, RF112 |
-| `JobService` | Criação, alteração, publicação, suspensão, nova publicação, encerramento e eliminação lógica de vagas da própria Empresa; fotografias; encerramento automático. Ao suspender ou encerrar, encerra os interesses em espera (T7, se ratificada). | UC09, UC10 | RF050 a RF059, RF114, RF115, RF112 |
+| `JobService` | Criação, alteração, publicação, suspensão, nova publicação, encerramento e eliminação lógica de vagas da própria Empresa; fotografias; encerramento automático. Suspender ou encerrar uma vaga não altera os interesses em espera (RF113). | UC09, UC10 | RF050 a RF059, RF114, RF115, RF112 |
 | `CandidateEvaluationService` | Lista de candidatos em espera; abertura do perfil completo com registo; acesso ao CV; aceitação (match, conversa e duas notificações numa transação) e recusa. | UC11, UC12 | RF060 a RF066, RF068, RF031, RF077, RF117, RF118; RNF007 |
 | `MatchService` | Listas de matches do Candidato e da Empresa, com os contactos. | UC13 | RF024, RF025, RF067 |
 | `ConversationService` | Lista de conversas com mensagens por ler, histórico com marcação de leitura ao abrir, mensagens novas desde a última consulta, envio (só com match e conversa aberta) com notificação, encerramento. Nenhuma operação para o Administrador. | UC14 | RF026 a RF030, RF069 a RF074, RF108, RF109, RF032, RF078, RF103 |
@@ -1436,7 +1434,7 @@ classDiagram
     ICandidateEvaluationService "1" ..> "1" MatchDto : devolve
 ```
 
-O serviço confirma que a vaga do `Match` pertence à Empresa do Recrutador e que a Empresa está aprovada, chama `Match.Accept` (que exige o perfil aberto e a decisão por registar), cria as duas notificações `MatchConfirmed` e grava tudo numa única transação. Se outro processo tiver alterado o `Match` entretanto (por exemplo, a suspensão da vaga), a gravação falha pelo controlo de concorrência (`xmin`) e o pedido é rejeitado (RF063, RF066, RF068, RF031, RF077, RF117).
+O serviço confirma que a vaga do `Match` pertence à Empresa do Recrutador e que a Empresa está aprovada, chama `Match.Accept` (que exige o perfil aberto e a decisão por registar), cria as duas notificações `MatchConfirmed` e grava tudo numa única transação. Se outro processo tiver alterado o `Match` entretanto (por exemplo, um segundo pedido de decisão sobre o mesmo Candidato), a gravação falha pelo controlo de concorrência (`xmin`) e o pedido é rejeitado (RF063, RF066, RF068, RF031, RF077, RF117).
 
 ---
 
@@ -1445,7 +1443,7 @@ O serviço confirma que a vaga do `Match` pertence à Empresa do Recrutador e qu
 | Classe de domínio | Tabela | Notas de mapeamento |
 | --- | --- | --- |
 | `AppUser` | `app_user` | Índice único sobre `lower(email)`. |
-| `Admin`, `Recruiter`, `Candidate` | `admin`, `recruiter`, `candidate` | Chave primária partilhada com `app_user` (relação 1 : 0..1). |
+| `Admin`, `Recruiter`, `Candidate` | `admin`, `recruiter`, `candidate` | Chave primária partilhada com `app_user` (relação 1 : 0..1). `Candidate.Version` ↔ `xmin`. |
 | `Location` | `location` | Só leitura na aplicação. |
 | `CandidateLink` | `candidate_link` | `Position` de 1 a 3. |
 | `Skill`, `Benefit` | `skill`, `benefit` | Índices únicos sobre `lower(name)`. |
@@ -1482,7 +1480,7 @@ As 17 tabelas do modelo de dados têm correspondência nas 15 classes de domíni
 | Limitação | Consequência |
 | --- | --- |
 | O modelo depende da arquitetura (`I033`) e do modelo de dados (`I035`), ainda em revisão. | Uma alteração a qualquer deles obriga a rever as classes afetadas. |
-| A transição T7 (`Match.CloseWithoutMatch`) depende da ratificação da decisão `m2-decisao-encerramento-interesses-em-espera-v01.md`. | Se não for ratificada, a operação não é chamada pelos serviços. |
+| A transição T7 (encerramento de interesses em espera sem decisão), proposta em `m2-decisao-encerramento-interesses-em-espera-v01.md`, não está ratificada e contraria o RF113 em vigor. | Não está representada. Se for ratificada e os requisitos forem alterados, uma nova versão acrescenta a operação em `Match` e as consultas necessárias em `IMatchRepository`. |
 | As assinaturas mostram os tipos de retorno sem `Task`, e as dependências de `IUnitOfWork` e `IClock` não estão todas desenhadas. | Simplificação de leitura; a implementação em `m3` segue a convenção assíncrona da secção 2.2. |
 | Depois do fim de sessão, a credencial descartada pelo cliente continua tecnicamente válida até expirar (8 horas, RNF005). | Risco aceite no ambiente académico; uma lista de credenciais revogadas pode ser acrescentada mais tarde sem alterar os Services. |
 | As rotas são indicativas. | As rotas, os códigos de estado e os exemplos são fixados na documentação da API (`04.11`). |

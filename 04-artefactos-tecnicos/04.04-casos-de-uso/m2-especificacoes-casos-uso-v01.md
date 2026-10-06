@@ -40,6 +40,7 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
 | v01 | 2026-10-02 | Especificação do UC07 — Registar a Empresa (secção 8.2). | `I027` |
+| v01 | 2026-10-06 | Correção da revisão da I027: pré-condições do UC07 compatíveis com os fluxos A2 e A3 (D01) e unicidade do número de identificação fiscal verificada face às outras Empresas na nova submissão (D02). | `I027` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -268,7 +269,7 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 | Identificação | `UC07` — Registar a Empresa |
 | Ator principal | Recrutador |
 | Objetivo | Criar a conta de Recrutador e submeter o registo da Empresa que representa, para que o Administrador o aprove e a Empresa possa publicar vagas. |
-| Pré-condições | O Recrutador acede à área de gestão web. A conta do Recrutador, se já existir, não tem nenhuma Empresa associada, porque cada Recrutador representa uma única Empresa (secção 2.2 da especificação de requisitos). |
+| Pré-condições | O Recrutador acede à área de gestão web. A conta do Recrutador, se já existir, não tem nenhuma Empresa associada, porque cada Recrutador representa uma única Empresa (secção 2.2 da especificação de requisitos). Exceções: no fluxo A2, a Empresa associada já foi submetida; no fluxo A3, a Empresa associada está no estado recusada. |
 
 **Fluxo principal**
 
@@ -277,14 +278,14 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 3. O sistema valida os dados e cria a conta de Recrutador (RF037).
 4. O Recrutador inicia sessão (UC01) e abre o registo da Empresa.
 5. O Recrutador indica a designação social, o número de identificação fiscal, o setor de atividade, a morada, a localidade (da lista pré-definida de localidades), o endereço de correio eletrónico, o contacto telefónico e o nome do responsável da Empresa, e submete o registo (RF041).
-6. O sistema aplica a validação automática: campos obrigatórios preenchidos, formatos dos dados e número de identificação fiscal ainda não registado (RF042).
+6. O sistema aplica a validação automática: campos obrigatórios preenchidos, formatos dos dados e número de identificação fiscal não registado por outra Empresa (RF042).
 7. O sistema regista a Empresa no estado pendente, guarda o autor e a data e hora da submissão e apresenta ao Recrutador o estado do pedido (RF043, RF044, RF112).
 
 **Fluxos alternativos**
 
 * **A1 — Recrutador já tem conta (passo 1).** O Recrutador inicia sessão (UC01) e o caso de uso continua no passo 4.
 * **A2 — Consulta do estado do pedido (depois do passo 7).** O Recrutador consulta, em qualquer momento, o estado do pedido (pendente, aprovada, recusada ou suspensa) e, no estado recusada, o motivo indicado pelo Administrador (RF044).
-* **A3 — Nova submissão depois da recusa do registo (passo 5).** A Empresa está no estado recusada. O sistema apresenta os dados submetidos e o motivo da recusa. O Recrutador corrige os dados e submete o registo de novo. O caso de uso continua no passo 6 e, se a validação automática for cumprida, a Empresa volta ao estado pendente (RF045).
+* **A3 — Nova submissão depois da recusa do registo (passo 5).** A Empresa está no estado recusada. O sistema apresenta os dados submetidos e o motivo da recusa. O Recrutador corrige os dados, incluindo, se necessário, o número de identificação fiscal, que só deixa de poder ser alterado depois da aprovação (RF049), e submete o registo de novo. O caso de uso continua no passo 6. A unicidade do número de identificação fiscal é verificada face às outras Empresas. Se a validação automática for cumprida, a mesma Empresa volta ao estado pendente, com nova data de submissão e sem o motivo da recusa anterior (RF045).
 * **A4 — Saída antes de submeter (passo 5).** O Recrutador sai sem submeter o registo. A conta de Recrutador mantém-se, mas não fica nenhuma Empresa registada.
 
 **Exceções**
@@ -293,7 +294,7 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 * **E2 — Endereço de correio eletrónico já registado (passo 3).** O sistema rejeita a criação da conta e indica o motivo (RF037).
 * **E3 — Campos obrigatórios em falta (passo 6).** O sistema rejeita o registo e indica cada campo em falta. A Empresa não é registada e o Recrutador pode corrigir e submeter de novo, voltando ao passo 5 (RF042).
 * **E4 — Formato inválido (passo 6).** O endereço de correio eletrónico não está no formato local@domínio, ou o contacto telefónico ou o número de identificação fiscal não têm 9 algarismos. O sistema rejeita o registo e indica cada campo em causa e o motivo (RF042).
-* **E5 — Número de identificação fiscal duplicado (passo 6).** Já existe uma Empresa registada com o mesmo número de identificação fiscal. O sistema rejeita o registo e indica o campo e o motivo (RF042).
+* **E5 — Número de identificação fiscal duplicado (passo 6).** Já existe outra Empresa registada com o mesmo número de identificação fiscal. Na nova submissão (A3), a própria Empresa recusada não conta como duplicado. O sistema rejeita o registo e indica o campo e o motivo (RF042).
 * **E6 — Operação reservada antes da aprovação (depois do passo 7).** Com a Empresa no estado pendente, recusada ou suspensa, o Recrutador tenta publicar uma vaga ou aceder a candidatos. O sistema rejeita a operação e apresenta o estado atual da Empresa (RF039).
 
 **Pós-condições**

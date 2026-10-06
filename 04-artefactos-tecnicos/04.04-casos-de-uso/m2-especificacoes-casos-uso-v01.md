@@ -40,6 +40,7 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
 | v01 | 2026-10-02 | Especificação do UC11 — Consultar perfil de candidato (secção 8.7). | `I032` |
+| v01 | 2026-10-06 | Correção da revisão da `I032` (D01): pré-condições do UC11 reduzidas à sessão iniciada, porque o estado da Empresa e a pertença da vaga são tratados nas exceções E1 e E2. | `I032` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -288,7 +289,7 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 | Identificação | `UC11` — Consultar perfil de candidato |
 | Ator principal | Recrutador |
 | Objetivo | Conhecer o perfil completo de um Candidato que manifestou interesse numa vaga da Empresa, antes de o aceitar ou recusar. |
-| Pré-condições | O Recrutador tem sessão iniciada na área de gestão web. A Empresa que representa está no estado aprovada. A vaga consultada pertence a essa Empresa. |
+| Pré-condições | O Recrutador tem sessão iniciada na área de gestão web. |
 
 **Fluxo principal**
 

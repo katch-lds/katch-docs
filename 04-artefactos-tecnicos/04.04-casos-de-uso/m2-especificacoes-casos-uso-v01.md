@@ -375,7 +375,58 @@ flowchart LR
 
 ### 8.3. UC16 — Aprovar ou recusar o registo de Empresa
 
-> A preencher pela Issue `I028`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | UC16 — Aprovar ou recusar o registo de Empresa |
+| Ator principal | Administrador |
+| Objetivo | Decidir sobre o registo de uma Empresa pendente, para que só Empresas verificadas publiquem vagas. |
+| Requisitos relacionados | RF091, RF092, RF093, RF094; RF043 (Empresa em estado pendente); RF079 (notificação da decisão ao Recrutador); RF104 (área de supervisão reservada ao Administrador); RF112 (registo do autor e da data e hora da decisão); RNF006 (autorização verificada no servidor); RNF008 (validação do motivo no servidor) |
+
+**Pré-condições**
+
+1. O Administrador tem sessão iniciada na área de gestão web.
+2. Existe, pelo menos, uma Empresa no estado pendente.
+
+**Fluxo principal (aprovar)**
+
+1. O Administrador abre a lista das Empresas pendentes de aprovação.
+2. O sistema apresenta as Empresas no estado pendente, com a designação social, o número de identificação fiscal e a data de submissão do pedido.
+3. O Administrador seleciona uma Empresa.
+4. O sistema apresenta os dados submetidos no registo: designação social, número de identificação fiscal, setor de atividade, morada, localidade, endereço de correio eletrónico, contacto telefónico e nome do responsável.
+5. O Administrador escolhe **Aprovar**.
+6. O sistema verifica que a Empresa continua no estado pendente.
+7. O sistema passa a Empresa ao estado aprovada e regista o Administrador que decidiu e a data e hora.
+8. O sistema gera uma notificação com a decisão, dirigida ao Recrutador da Empresa.
+9. O sistema retira a Empresa da lista de Empresas pendentes e informa o Administrador de que o registo foi aprovado.
+
+**Fluxos alternativos**
+
+*A1 — Recusar o registo* (começa no passo 5)
+
+1. O Administrador escolhe **Recusar** e indica o motivo, com 10 a 500 caracteres.
+2. O sistema verifica que a Empresa continua no estado pendente e que o motivo é válido.
+3. O sistema passa a Empresa ao estado recusada, guarda o motivo e regista o Administrador que decidiu e a data e hora.
+4. O sistema gera uma notificação com a decisão e o motivo, dirigida ao Recrutador da Empresa.
+5. O sistema retira a Empresa da lista de Empresas pendentes e informa o Administrador de que a recusa do registo foi registada.
+
+*A2 — Sair sem decidir* (começa no passo 5)
+
+1. O Administrador regressa à lista sem escolher nenhuma ação.
+2. A Empresa mantém o estado pendente. O caso de uso continua no passo 2.
+
+**Exceções**
+
+| ID | Situação | Resposta do sistema |
+| --- | --- | --- |
+| E1 | O motivo da recusa do registo está vazio ou não tem entre 10 e 500 caracteres (A1, passo 2). | Rejeita a recusa do registo e indica o motivo. A Empresa mantém o estado pendente. |
+| E2 | A Empresa já não está no estado pendente, por ter sido decidida noutro pedido entretanto (passo 6 ou A1, passo 2). | Rejeita a decisão, informa que a Empresa já foi decidida e apresenta a lista atualizada. A decisão registada não é alterada. |
+| E3 | Uma conta que não é do tipo Administrador tenta aceder à lista das Empresas pendentes (passo 1). | Rejeita o acesso. Nada é alterado. |
+
+**Pós-condições**
+
+- Aprovação (sucesso): a Empresa está no estado aprovada, com o Administrador e a data e hora da decisão registados; o Recrutador recebeu a notificação da decisão e pode publicar vagas e aceder a candidatos.
+- Recusa do registo (A1): a Empresa está no estado recusada, com o motivo, o Administrador e a data e hora registados; o Recrutador recebeu a notificação com a decisão e o motivo e pode corrigir os dados e submeter de novo o pedido.
+- Saída sem decisão (A2) e qualquer exceção: o estado da Empresa não é alterado.
 
 ### 8.4. UC09 — Publicar vaga
 

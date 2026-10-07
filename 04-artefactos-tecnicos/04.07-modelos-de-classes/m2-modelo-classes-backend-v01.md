@@ -30,6 +30,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | --- | --- | --- | --- |
 | v01 | 2026-10-05 | Criação do documento: camadas, classes de domínio, enumerações, repositórios, serviços, tarefas periódicas, controllers e DTOs, com responsabilidades, atributos, operações, relações e multiplicidades. | `I036` |
 | v01 | 2026-10-06 | Alinhamento com as correções da revisão da `I035`: retirada a transição T7 (`Match.CloseWithoutMatch` e consultas de interesses em espera por Candidato e por Empresa), por estar ainda por ratificar; concorrência otimista também em `Candidate` (`Version` ↔ `xmin`). | `I036` |
+| v01 | 2026-10-07 | Correções da auditoria da `I036`: mensagens e notificações entregues pela ligação bidirecional persistente (`MessagesHub`, `NotificationsHub` e `IRealtimePublisher`), sem consulta periódica, e DC-07 revista (D01); atributos dos 21 DTOs que só constavam da lista da secção 7.2 (D02). | `I036` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -39,23 +40,25 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 
 ### 2.1. Módulo e camadas
 
-O módulo é o backend do Katch, o único componente com acesso à base de dados e aos ficheiros (arquitetura, secção 2.1). As classes seguem as camadas da arquitetura (secção 2.6) e o âmbito de cobertura do Regulamento Interno (secção 11.5): **Controllers**, **Services**, **Repositories** e **Domain**. Acrescentam-se os **DTOs**, as **tarefas periódicas** e os serviços de **infraestrutura** (ficheiros, credencial de sessão, palavras-passe, relógio e registo de autoria), que a arquitetura identifica como componentes do backend.
+O módulo é o backend do Katch, o único componente com acesso à base de dados e aos ficheiros (arquitetura, secção 2.1). As classes seguem as camadas da arquitetura (secção 2.6) e o âmbito de cobertura do Regulamento Interno (secção 11.5): **Controllers**, **Services**, **Repositories** e **Domain**. Acrescentam-se os **DTOs**, os **hubs** da ligação persistente, as **tarefas periódicas** e os serviços de **infraestrutura** (ficheiros, credencial de sessão, palavras-passe, relógio, registo de autoria e publicação em tempo real), que a arquitetura identifica como componentes do backend.
 
 | Camada | Namespace | Responsabilidade | Depende de |
 | --- | --- | --- | --- |
 | Controllers | `Katch.Backend.Controllers` | Receber os pedidos HTTP, validar o formato dos DTOs, aplicar a autorização por tipo de conta e devolver as respostas. Não acedem à base de dados. | Services, DTOs |
+| Hubs | `Katch.Backend.Hubs` | Manter a ligação bidirecional persistente (ASP.NET Core SignalR) com os clientes autenticados e entregar-lhes as mensagens e as notificações novas (DA, F010 e F011; arquitetura, AD-02 e D-08). Não executam regras de negócio. | DTOs |
 | DTOs | `Katch.Backend.Dtos` | Formato dos dados trocados com os clientes. Registos imutáveis, sem lógica (excluídos da cobertura, RI 11.5). | — |
 | Services | `Katch.Backend.Services` | Regras de negócio de F001 a F011, transações e geração de notificações e de registos de autoria. | Repositories, Domain, Infraestrutura |
 | Tarefas periódicas | `Katch.Backend.BackgroundJobs` | Encerramento automático de vagas e reposição da quota de interesses. | Services |
 | Repositories | `Katch.Backend.Repositories` | Persistência e consultas das entidades, com Entity Framework Core e Npgsql. | Domain |
 | Domain | `Katch.Backend.Domain` | Entidades, enumerações e regras de estado que não dependem de outras linhas. | — |
-| Infraestrutura | `Katch.Backend.Infrastructure` | Armazenamento de ficheiros, emissão da credencial de sessão, resumo das palavras-passe, relógio e registo de autoria. | Repositories |
+| Infraestrutura | `Katch.Backend.Infrastructure` | Armazenamento de ficheiros, emissão da credencial de sessão, resumo das palavras-passe, relógio, registo de autoria e publicação em tempo real através dos hubs. | Repositories, Hubs |
 
 ```mermaid
 flowchart TB
     Clientes["Aplicação móvel · Área de gestão web"]
     subgraph Backend["katch-backend"]
         C["Controllers<br/>+ DTOs"]
+        H["Hubs SignalR<br/>mensagens · notificações"]
         S["Services"]
         J["BackgroundJobs"]
         R["Repositories<br/>KatchDbContext"]
@@ -65,6 +68,7 @@ flowchart TB
     DB[("PostgreSQL 18<br/>base de dados katch")]
     FS[("Sistema de ficheiros")]
     Clientes -->|"HTTPS · JSON"| C
+    Clientes <-->|"ligação persistente (SignalR)"| H
     C --> S
     J --> S
     S --> R
@@ -73,9 +77,10 @@ flowchart TB
     R --> D
     R --> DB
     I --> FS
+    I --> H
     classDef camada fill:#ecfdf5,stroke:#047857,stroke-width:1.5px,color:#111827
     classDef externo fill:#ffffff,stroke:#1f2937,stroke-width:1.5px,color:#111827
-    class C,S,J,R,D,I camada
+    class C,H,S,J,R,D,I camada
     class Clientes,DB,FS externo
     style Backend fill:#f9fafb,stroke:#6b7280,stroke-width:1.5px,color:#111827
     linkStyle default stroke:#374151,stroke-width:1.5px
@@ -640,7 +645,6 @@ classDiagram
         <<interface>>
         +AddAsync(Message message) void
         +ListByMatchAsync(Guid matchId) List~Message~
-        +ListSinceAsync(Guid matchId, DateTimeOffset since) List~Message~
         +MarkReadAsync(Guid matchId, Guid readerId, DateTimeOffset now) int
         +CountUnreadAsync(Guid matchId, Guid readerId) int
         +CountConversationsStartedAsync(DateTimeOffset from, DateTimeOffset to) int
@@ -650,7 +654,6 @@ classDiagram
         +GetByIdAsync(Guid id) Notification?
         +AddAsync(Notification notification) void
         +ListByUserAsync(Guid userId) List~Notification~
-        +ListSinceAsync(Guid userId, DateTimeOffset since) List~Notification~
         +CountUnreadAsync(Guid userId) int
     }
     class IReferenceDataRepository {
@@ -689,7 +692,6 @@ Regras das consultas:
 - `ListEligibleForCandidateAsync` aplica no SQL os filtros do RF014 que não dependem da distância: vaga publicada e não eliminada, Empresa aprovada, sem resposta anterior do Candidato, intervalo salarial, regimes e tipos de contrato. O filtro de distância é aplicado no serviço (secção 5).
 - O filtro global de consulta do `KatchDbContext` exclui as vagas com `DeletedAt` preenchido (modelo de dados, DM-09).
 - `CountActiveCandidatesAtAsync` e `CountByStatusAtAsync` calculam o estado das contas e das Empresas na data final do período a partir do estado atual e das linhas do `operation_log` posteriores a essa data (modelo de dados, índices `ix_operation_log_*`; RF096). As restantes contagens do RF096 usam `job.first_published_at`, `match.candidate_action_at`, `match.matched_at` e a primeira mensagem de cada conversa.
-- `ListSinceAsync` (mensagens e notificações) devolve apenas os elementos criados depois do instante indicado, para a consulta periódica (arquitetura, secção 2.4).
 
 ---
 
@@ -767,14 +769,12 @@ classDiagram
         <<interface>>
         +ListAsync(Guid userId) List~ConversationSummaryDto~
         +OpenAsync(Guid userId, Guid matchId) List~MessageDto~
-        +ListNewAsync(Guid userId, Guid matchId, DateTimeOffset since) List~MessageDto~
         +SendAsync(Guid userId, Guid matchId, SendMessageRequest request) MessageDto
         +CloseAsync(Guid userId, Guid matchId) void
     }
     class INotificationService {
         <<interface>>
         +ListAsync(Guid userId) NotificationListDto
-        +ListNewAsync(Guid userId, DateTimeOffset since) List~NotificationDto~
         +MarkReadAsync(Guid userId, Guid notificationId) int
         +AddAsync(Notification notification) void
     }
@@ -888,6 +888,16 @@ classDiagram
         CompanyPhoto
         JobPhoto
     }
+    class IRealtimePublisher {
+        <<interface>>
+        +PublishMessageAsync(Guid recipientId, MessageDto message) void
+        +PublishNotificationAsync(Guid recipientId, NotificationDto notification, int unreadCount) void
+        +PublishConversationClosedAsync(Guid matchId, List~Guid~ participantIds) void
+    }
+    class SignalRRealtimePublisher {
+        -IHubContext~MessagesHub~ _messagesHub
+        -IHubContext~NotificationsHub~ _notificationsHub
+    }
     class ClientApp {
         <<enumeration>>
         Mobile
@@ -914,6 +924,7 @@ classDiagram
     FileValidator ..|> IFileValidator
     HaversineDistanceCalculator ..|> IDistanceCalculator
     OperationLogger ..|> IOperationLogger
+    SignalRRealtimePublisher ..|> IRealtimePublisher
     OperationLogger ..> IOperationLogRepository
     BackgroundService <|-- JobExpirationWorker
     BackgroundService <|-- QuotaRestoreWorker
@@ -930,6 +941,7 @@ classDiagram
 | `FileValidator` | Valida o formato real (assinatura do ficheiro), a extensão e a dimensão de cada tipo de ficheiro. | P01, P02, RNF016 |
 | `HaversineDistanceCalculator` | Calcula a distância em linha reta entre duas localidades, em km arredondados às unidades. | RF015 |
 | `OperationLogger` | Insere uma linha no `operation_log` por cada operação do RF112. | RF112 |
+| `SignalRRealtimePublisher` (`IRealtimePublisher`) | Envia pela ligação persistente, através do `IHubContext` de cada hub, a mensagem nova aos participantes da conversa, a notificação nova ao destinatário (com o número de não lidas) e o encerramento ou a passagem a só de consulta da conversa. É chamado pelos serviços depois de confirmada a transação, para que nunca se entregue um elemento que não ficou gravado. | RF029, RF073, RF110, RF111, RF075; P17; arquitetura, AD-02 e D-08 |
 | `JobExpirationWorker` | Executa periodicamente o encerramento das vagas publicadas com data-limite atingida. | RF057 |
 | `QuotaRestoreWorker` | Executa periodicamente a reposição das quotas cujo período de bloqueio terminou, com a notificação. | RF021, RF033 |
 
@@ -982,7 +994,9 @@ classDiagram
     ConversationService ..> IMatchRepository
     ConversationService ..> IMessageRepository
     ConversationService ..> INotificationService
+    ConversationService ..> IRealtimePublisher
     NotificationService ..> INotificationRepository
+    NotificationService ..> IRealtimePublisher
     AccountAdminService ..> IUserRepository
     AccountAdminService ..> ICandidateRepository
     AccountAdminService ..> IMatchRepository
@@ -1015,8 +1029,8 @@ Todos os serviços que alteram dados dependem também de `IUnitOfWork` e de `ICl
 | `JobService` | Criação, alteração, publicação, suspensão, nova publicação, encerramento e eliminação lógica de vagas da própria Empresa; fotografias; encerramento automático. Suspender ou encerrar uma vaga não altera os interesses em espera (RF113). | UC09, UC10 | RF050 a RF059, RF114, RF115, RF112 |
 | `CandidateEvaluationService` | Lista de candidatos em espera; abertura do perfil completo com registo; acesso ao CV; aceitação (match, conversa e duas notificações numa transação) e recusa. | UC11, UC12 | RF060 a RF066, RF068, RF031, RF077, RF117, RF118; RNF007 |
 | `MatchService` | Listas de matches do Candidato e da Empresa, com os contactos. | UC13 | RF024, RF025, RF067 |
-| `ConversationService` | Lista de conversas com mensagens por ler, histórico com marcação de leitura ao abrir, mensagens novas desde a última consulta, envio (só com match e conversa aberta) com notificação, encerramento. Nenhuma operação para o Administrador. | UC14 | RF026 a RF030, RF069 a RF074, RF108, RF109, RF032, RF078, RF103 |
-| `NotificationService` | Área de notificações, contador de não lidas, notificações novas desde a última consulta, marcação como lida e criação de notificações pelos outros serviços. | UC15 | RF034 a RF036, RF080 a RF082, RF110, RF111 |
+| `ConversationService` | Lista de conversas com mensagens por ler, histórico com marcação de leitura ao abrir, envio (só com match e conversa aberta) com notificação e entrega imediata ao destinatário pela ligação persistente, depois de gravada, encerramento. Nenhuma operação para o Administrador. | UC14 | RF026 a RF030, RF069 a RF074, RF108, RF109, RF032, RF078, RF103 |
+| `NotificationService` | Área de notificações, contador de não lidas, marcação como lida e criação de notificações pelos outros serviços; cada notificação gravada é entregue de imediato ao destinatário pela ligação persistente, com o contador atualizado (P17). | UC15 | RF034 a RF036, RF080 a RF082, RF110, RF111 |
 | `AccountAdminService` | Listas de contas e de Candidatos; bloqueio, suspensão e reativação, com passagem das conversas a só de consulta e registo de autoria. | UC18 | RF085 a RF090, RF075, RF112 |
 | `CompanyAdminService` | Empresas pendentes e dados submetidos; aprovação e recusa com motivo (com notificação); suspensão (conversas a só de consulta) e reativação; listas globais de Empresas e de vagas publicadas. | UC16, UC17 | RF091 a RF095, RF097, RF098, RF116, RF079, RF075, RF112 |
 | `IndicatorService` | Os sete indicadores do período, só com contagens e sem acesso ao texto das mensagens. | UC19 | RF096, RF103, RF104 |
@@ -1099,14 +1113,12 @@ classDiagram
         -IConversationService _conversationService
         +List() ActionResult~List~ConversationSummaryDto~~
         +Open(Guid matchId) ActionResult~List~MessageDto~~
-        +ListNew(Guid matchId, DateTimeOffset since) ActionResult~List~MessageDto~~
         +Send(Guid matchId, SendMessageRequest request) ActionResult~MessageDto~
         +Close(Guid matchId) IActionResult
     }
     class NotificationsController {
         -INotificationService _notificationService
         +List() ActionResult~NotificationListDto~
-        +ListNew(DateTimeOffset since) ActionResult~List~NotificationDto~~
         +MarkRead(Guid notificationId) IActionResult
     }
     class AdminAccountsController {
@@ -1191,6 +1203,44 @@ O identificador do utilizador (`userId`, `candidateId`, `recruiterId`, `adminId`
 A autorização usa atributos `[Authorize(Roles = …)]` com o tipo de conta da credencial de sessão (RF104). Em cada pedido autenticado, o backend confirma na base de dados que a conta continua ativa e rejeita as contas bloqueadas ou suspensas (RF086, RF089). A política `ApprovedCompany` confirma também o estado da Empresa em cada operação reservada (arquitetura, secção 2.6; RF039; RNF004, RNF006).
 
 O fim de sessão (RF105 a RF107) não altera dados no servidor, porque a autenticação não guarda estado de sessão (arquitetura, secção 2.6): o cliente descarta a credencial e passa a exigir novo início de sessão, e `Logout` apenas confirma o pedido. As rotas e os formatos detalhados são definidos na documentação da API (`04.11`).
+
+### 6.1. Ligação persistente (hubs)
+
+```mermaid
+classDiagram
+    direction LR
+    class Hub {
+        <<abstract>>
+        +OnConnectedAsync() Task
+        +OnDisconnectedAsync(Exception? exception) Task
+    }
+    class MessagesHub {
+        +OnConnectedAsync() Task
+    }
+    class NotificationsHub {
+        +OnConnectedAsync() Task
+    }
+    class IRealtimePublisher {
+        <<interface>>
+    }
+    class SignalRRealtimePublisher
+    class ConversationService
+    class NotificationService
+    Hub <|-- MessagesHub
+    Hub <|-- NotificationsHub
+    SignalRRealtimePublisher ..|> IRealtimePublisher
+    SignalRRealtimePublisher "1" ..> "1" MessagesHub : IHubContext
+    SignalRRealtimePublisher "1" ..> "1" NotificationsHub : IHubContext
+    ConversationService "1" ..> "1" IRealtimePublisher : depois de gravar
+    NotificationService "1" ..> "1" IRealtimePublisher : depois de gravar
+```
+
+| Hub | Rota | Autorização | Eventos enviados ao cliente | Requisitos |
+| --- | --- | --- | --- | --- |
+| `MessagesHub` | `/hubs/messages` | Candidato ou Recrutador com conta ativa; o Administrador é rejeitado na ligação (RF103) | `MessageReceived` (`MessageDto`), só aos participantes da conversa; `ConversationClosed` (identificador do match) | RF029, RF073, RF070, RF075, RF103 |
+| `NotificationsHub` | `/hubs/notifications` | Candidato ou Recrutador com conta ativa | `NotificationReceived` (`NotificationDto` e número de não lidas), só ao destinatário | RF110, RF111, RF034, RF080 |
+
+Os hubs autenticam a ligação com a mesma credencial de sessão (JWT) dos pedidos HTTP, enviada na abertura da ligação, e associam cada ligação ao identificador do utilizador da credencial (RNF004, RNF006). Não recebem operações do cliente: o envio de mensagens, a marcação como lida e o encerramento continuam nos controllers, que aplicam as regras nos serviços. A entrega é feita no instante em que a transação é confirmada, dentro do limite de 5 segundos do P17. Quando a ligação é restabelecida, o cliente volta a obter a lista de conversas, o histórico aberto e a área de notificações pelos controllers, sem consulta periódica.
 
 ---
 
@@ -1364,10 +1414,209 @@ classDiagram
 
 ### 7.2. Lista completa
 
+Os DTOs que não estão na secção 7.1 têm os atributos seguintes:
+
+```mermaid
+classDiagram
+    direction LR
+    class CreateRecruiterAccountRequest {
+        <<record>>
+        +string Email
+        +string Password
+        +bool AcceptTerms
+    }
+    class ChangePasswordRequest {
+        <<record>>
+        +string CurrentPassword
+        +string NewPassword
+    }
+    class CandidateProfileDto {
+        <<record>>
+        +Guid CandidateId
+        +string FullName
+        +string Email
+        +string PhoneNumber
+        +Guid LocationId
+        +string LocationName
+        +string? DesiredRole
+        +Availability? Availability
+        +string? ExperienceSummary
+        +string? PhotoUrl
+        +bool HasCv
+        +List~string~ Links
+        +List~ProfileSkillDto~ Skills
+        +SearchPreferencesDto Preferences
+    }
+    class ProfileSkillDto {
+        <<record>>
+        +Guid CandidateSkillId
+        +string Name
+        +bool IsCustom
+    }
+    class UpdateCandidateProfileRequest {
+        <<record>>
+        +string? DesiredRole
+        +Guid LocationId
+        +Availability? Availability
+        +string? ExperienceSummary
+    }
+    class SearchPreferencesDto {
+        <<record>>
+        +int? MaxDistanceKm
+        +decimal? MinSalaryExpectation
+        +List~WorkMode~ WorkModes
+        +List~ContractType~ ContractTypes
+    }
+    class AddSkillRequest {
+        <<record>>
+        +Guid? SkillId
+        +string? CustomLabel
+    }
+    class SetLinksRequest {
+        <<record>>
+        +List~string~ Urls
+    }
+    class CompanyPageDto {
+        <<record>>
+        +Guid CompanyId
+        +string CompanyName
+        +string? Description
+        +string? Website
+        +string? LogoUrl
+        +List~string~ PhotoUrls
+    }
+    class CompanyPageRequest {
+        <<record>>
+        +string? Description
+        +string? Website
+    }
+    class CompanyRegistrationDto {
+        <<record>>
+        +Guid CompanyId
+        +string CompanyName
+        +string TaxId
+        +Industry Industry
+        +string Address
+        +string LocationName
+        +string ContactEmail
+        +string ContactPhone
+        +string ResponsibleName
+        +DateTimeOffset SubmittedAt
+    }
+    class CompanyStatusDto {
+        <<record>>
+        +Guid CompanyId
+        +CompanyStatus Status
+        +string? RejectionReason
+        +DateTimeOffset SubmittedAt
+    }
+    class JobDto {
+        <<record>>
+        +Guid JobId
+        +string Title
+        +string Description
+        +decimal MinSalary
+        +decimal MaxSalary
+        +Guid LocationId
+        +string LocationName
+        +ContractType ContractType
+        +WorkMode WorkMode
+        +List~ReferenceItemDto~ Skills
+        +List~ReferenceItemDto~ Benefits
+        +bool IsUrgent
+        +DateTimeOffset? ExpiresAt
+        +JobStatus Status
+        +DateTimeOffset? PublishedAt
+        +List~string~ PhotoUrls
+        +int WaitingCandidates
+    }
+    class ConversationSummaryDto {
+        <<record>>
+        +Guid MatchId
+        +string CounterpartName
+        +string JobTitle
+        +string CompanyName
+        +ConversationStatus Status
+        +ConversationCloseReason? CloseReason
+        +DateTimeOffset? LastMessageAt
+        +int UnreadCount
+    }
+    class NotificationListDto {
+        <<record>>
+        +List~NotificationDto~ Items
+        +int UnreadCount
+    }
+    class AccountDto {
+        <<record>>
+        +Guid UserId
+        +string Email
+        +UserType UserType
+        +AccountStatus Status
+    }
+    class CandidateAdminDto {
+        <<record>>
+        +Guid CandidateId
+        +string FullName
+        +string Email
+        +string LocationName
+        +DateTimeOffset RegisteredAt
+        +AccountStatus Status
+    }
+    class PendingCompanyDto {
+        <<record>>
+        +Guid CompanyId
+        +string CompanyName
+        +string TaxId
+        +DateTimeOffset SubmittedAt
+    }
+    class CompanyAdminDto {
+        <<record>>
+        +Guid CompanyId
+        +string CompanyName
+        +CompanyStatus Status
+        +int PublishedJobs
+    }
+    class PublishedJobAdminDto {
+        <<record>>
+        +Guid JobId
+        +string Title
+        +string CompanyName
+        +DateTimeOffset PublishedAt
+        +int InterestCount
+    }
+    class ReferenceItemDto {
+        <<record>>
+        +Guid Id
+        +string Name
+    }
+    class ReferenceItemRequest {
+        <<record>>
+        +string Name
+    }
+    CandidateProfileDto "1" *-- "0..*" ProfileSkillDto
+    CandidateProfileDto "1" *-- "1" SearchPreferencesDto
+    JobDto "1" *-- "0..*" ReferenceItemDto
+```
+
+| DTO | Regras dos atributos | Requisitos |
+| --- | --- | --- |
+| `CreateRecruiterAccountRequest`, `ChangePasswordRequest` | Correio eletrónico no formato local@domínio; palavra-passe com pelo menos 8 caracteres, uma letra e um algarismo; aceitação obrigatória das condições. | RF002, RF037, RF040, RF084; P04, P05 |
+| `CandidateProfileDto`, `UpdateCandidateProfileRequest`, `ProfileSkillDto` | Resumo até 1000 caracteres; localidade da lista; `IsCustom` identifica as competências «Outro»; `PhotoUrl` e `HasCv` nunca expõem o caminho do ficheiro. | RF006, RF008 a RF012 |
+| `SearchPreferencesDto` | Distância de 1 a 500 km; pretensão salarial em euros; regimes e tipos de contrato das enumerações. | RF007, RF023 |
+| `AddSkillRequest` | Exatamente um de `SkillId` (lista) e `CustomLabel` (2 a 40 caracteres, letras, algarismos, espaços e + # . -). | RF008, RF009 |
+| `SetLinksRequest` | Até 3 endereços iniciados por http:// ou https://. | RF012 |
+| `CompanyPageDto`, `CompanyPageRequest` | Descrição até 1000 caracteres; sítio na Internet iniciado por http:// ou https://. | RF017, RF046 a RF048 |
+| `CompanyRegistrationDto`, `CompanyStatusDto` | Os oito dados submetidos; estado entre pendente, aprovada, recusada e suspensa; motivo só no estado recusada. | RF044, RF092 |
+| `JobDto` | Mesmas regras do `JobRequest`; `WaitingCandidates` conta os interesses em espera da vaga. | RF050 a RF056, RF060 |
+| `ConversationSummaryDto`, `NotificationListDto` | Número de mensagens e de notificações por ler; estado da conversa (`Open` ou `Closed`) e, quando fechada, o motivo (encerrada por uma das partes ou só de consulta por bloqueio ou suspensão), como em `conversation_status` e `conversation_close_reason` do modelo de dados. | RF027, RF034, RF071, RF075, RF080 |
+| `AccountDto`, `CandidateAdminDto` | Tipo e estado de conta das enumerações. | RF085, RF088 |
+| `PendingCompanyDto`, `CompanyAdminDto`, `PublishedJobAdminDto` | Os três dados do RF091; designação, estado e número de vagas publicadas; função, Empresa, data de publicação e número de interesses. | RF091, RF097, RF098 |
+| `ReferenceItemDto`, `ReferenceItemRequest` | Designação não vazia e única na lista (verificada no serviço). | RF099 a RF102 |
+
 | DTO | Direção | Usado em | Requisitos |
 | --- | --- | --- | --- |
 | `RegisterCandidateRequest`, `CreateRecruiterAccountRequest`, `LoginRequest`, `LoginResponse`, `ChangePasswordRequest` | Pedido / resposta | `AuthController` | RF001 a RF005, RF037, RF038, RF040, RF083, RF084, RF105 a RF107 |
-| `CandidateProfileDto`, `UpdateCandidateProfileRequest`, `SearchPreferencesDto`, `AddSkillRequest`, `SetLinksRequest` | Pedido / resposta | `CandidateProfileController` | RF006 a RF012, RF023 |
+| `CandidateProfileDto`, `ProfileSkillDto`, `UpdateCandidateProfileRequest`, `SearchPreferencesDto`, `AddSkillRequest`, `SetLinksRequest` | Pedido / resposta | `CandidateProfileController` | RF006 a RF012, RF023 |
 | `JobCardDto`, `JobDetailDto`, `CompanyPageDto`, `QuotaDto` | Resposta | `JobExplorationController` | RF013, RF016, RF017, RF020, RF022 |
 | `CompanyRegistrationRequest`, `CompanyRegistrationDto`, `CompanyStatusDto`, `CompanyPageRequest` | Pedido / resposta | `CompanyController`, `AdminCompaniesController` | RF041 a RF049, RF092 |
 | `JobRequest`, `JobDto` | Pedido / resposta | `JobsController` | RF050 a RF056, RF114, RF115 |
@@ -1375,6 +1624,7 @@ classDiagram
 | `MatchDto` | Resposta | `MatchesController`, `CandidateEvaluationController` | RF024, RF025, RF067 |
 | `ConversationSummaryDto`, `MessageDto`, `SendMessageRequest` | Pedido / resposta | `ConversationsController` | RF026 a RF028, RF069, RF071, RF072 |
 | `NotificationDto`, `NotificationListDto` | Resposta | `NotificationsController` | RF034 a RF036, RF080 a RF082 |
+| `MessageDto`, `NotificationDto` | Envio pelo servidor na ligação persistente | `MessagesHub`, `NotificationsHub` (através de `IRealtimePublisher`) | RF029, RF073, RF110, RF111 |
 | `AccountDto`, `CandidateAdminDto` | Resposta | `AdminAccountsController` | RF085, RF088 |
 | `PendingCompanyDto`, `RejectCompanyRequest`, `CompanyAdminDto`, `PublishedJobAdminDto` | Pedido / resposta | `AdminCompaniesController` | RF091, RF094, RF097, RF098 |
 | `IndicatorsDto` | Resposta | `AdminIndicatorsController` | RF096 |
@@ -1470,7 +1720,7 @@ As 17 tabelas do modelo de dados têm correspondência nas 15 classes de domíni
 | DC-04 | `IClock` em vez de `DateTimeOffset.UtcNow` direto. | Permite verificar com relógio simulado o período de bloqueio de 24 horas e a expiração da credencial de sessão (RF020, RF021, RNF005). |
 | DC-05 | Os identificadores do utilizador vêm sempre da credencial de sessão. | Impede que um pedido direto atue em nome de outro utilizador (RNF004, RNF006). |
 | DC-06 | Um serviço e um controller por caso de uso ou grupo de casos de uso do mesmo ator. | Cada classe tem uma responsabilidade identificável e rastreável aos casos de uso (secção 5.3). |
-| DC-07 | Mensagens e notificações novas obtidas por `ListNew…(since)`. | Arquitetura, secção 2.4 e decisão AD-02 (consulta periódica, por ratificar). Se a decisão não for ratificada, estas operações mantêm-se e acrescenta-se o canal persistente na camada dos controllers, sem alterar os Services. |
+| DC-07 | Mensagens e notificações novas entregues pela ligação bidirecional persistente (`MessagesHub`, `NotificationsHub`), publicadas pelos Services através de `IRealtimePublisher` depois de gravadas; os controllers ficam com o histórico, o envio, a marcação como lida e as listas. Não há consulta periódica. | DA v02 (F010, F011: «ligação bidirecional persistente entre cliente e servidor»); arquitetura, AD-02 e D-08 (ASP.NET Core SignalR, com a consulta periódica excluída); RF029, RF073, RF110, RF111 e P17. A interface `IRealtimePublisher` isola os Services da biblioteca escolhida. |
 | DC-08 | DTOs como `record` sem lógica. | Excluídos da cobertura pelo RI (secção 11.5) e nunca expõem dados internos. |
 
 ---
@@ -1483,6 +1733,7 @@ As 17 tabelas do modelo de dados têm correspondência nas 15 classes de domíni
 | A transição T7 (encerramento de interesses em espera sem decisão), proposta em `m2-decisao-encerramento-interesses-em-espera-v01.md`, não está ratificada e contraria o RF113 em vigor. | Não está representada. Se for ratificada e os requisitos forem alterados, uma nova versão acrescenta a operação em `Match` e as consultas necessárias em `IMatchRepository`. |
 | As assinaturas mostram os tipos de retorno sem `Task`, e as dependências de `IUnitOfWork` e `IClock` não estão todas desenhadas. | Simplificação de leitura; a implementação em `m3` segue a convenção assíncrona da secção 2.2. |
 | Depois do fim de sessão, a credencial descartada pelo cliente continua tecnicamente válida até expirar (8 horas, RNF005). | Risco aceite no ambiente académico; uma lista de credenciais revogadas pode ser acrescentada mais tarde sem alterar os Services. |
+| A tecnologia da ligação persistente (ASP.NET Core SignalR, D-08) está sujeita a confirmação em reunião formal (Regulamento da UC, secção 10.1). | Se for escolhida outra biblioteca de ligação persistente, mudam apenas os hubs e o `SignalRRealtimePublisher`; os Services dependem só de `IRealtimePublisher`. |
 | As rotas são indicativas. | As rotas, os códigos de estado e os exemplos são fixados na documentação da API (`04.11`). |
 
 ---
@@ -1499,8 +1750,8 @@ As 17 tabelas do modelo de dados têm correspondência nas 15 classes de domíni
 | UC09, UC10 (vagas) | `JobsController` | `JobService` | `Job`, `Skill`, `Benefit`, `Match`, `OperationLog` |
 | UC11, UC12 (perfil do Candidato e decisão) | `CandidateEvaluationController` | `CandidateEvaluationService` | `Match`, `Candidate`, `Notification` |
 | UC13 (matches) | `MatchesController` | `MatchService` | `Match`, `Company`, `Candidate` |
-| UC14 (conversas) | `ConversationsController` | `ConversationService` | `Match`, `Message`, `Notification` |
-| UC15 (notificações) | `NotificationsController` | `NotificationService` | `Notification` |
+| UC14 (conversas) | `ConversationsController`, `MessagesHub` | `ConversationService` | `Match`, `Message`, `Notification` |
+| UC15 (notificações) | `NotificationsController`, `NotificationsHub` | `NotificationService` | `Notification` |
 | UC16, UC17 (aprovação e supervisão de Empresas e vagas) | `AdminCompaniesController` | `CompanyAdminService` | `Company`, `Job`, `Match`, `Notification`, `OperationLog` |
 | UC18 (contas) | `AdminAccountsController` | `AccountAdminService` | `AppUser`, `Match`, `OperationLog` |
 | UC19 (indicadores) | `AdminIndicatorsController` | `IndicatorService` | `AppUser`, `Company`, `Job`, `Match`, `Message`, `OperationLog` |

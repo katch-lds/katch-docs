@@ -17,7 +17,7 @@
 | Curso | LEI — Licenciatura em Engenharia Informática |
 | Turma | LEI3T2 |
 | Versão do documento | v01 |
-| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, Regulamento Interno do Grupo v01 (`m1-regulamento-grupo-v01.pdf`, secções 5, 10 e 11), `m2-backlog-projeto-v02.xlsx` (Issues `I033`, `I034` e `I051`), `m2-modelo-de-dados-katch-v01.md` e `m2-especificacao-requisitos-v01.md` |
+| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, Regulamento Interno do Grupo v01 (`m1-regulamento-grupo-v01.pdf`, secções 5, 10 e 11), `m2-backlog-projeto-v02.xlsx` (Issues `I033`, `I034` e `I051`), `m2-modelo-de-dados-postgresql-v01.md` e `m2-especificacao-requisitos-v01.md` |
 
 ### 1.1. Responsáveis por secção
 
@@ -33,6 +33,8 @@ O documento é consolidado por várias Issues do Sprint 02. Cada secção indica
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e da secção 3 (tecnologias e decisões tecnológicas). | `I034` |
+| v01 | 2026-10-03 | Acrescento da secção 2 (arquitetura do sistema). | `I033` |
+| v01 | 2026-10-07 | Correção da secção 2 após revisão: entrega de mensagens e notificações por ligação bidirecional persistente (DA v02), com a consulta periódica como alternativa proposta e pendente de decisão; AD-01 identificada como proposta; referência à especificação de requisitos v02. | `I033` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -40,7 +42,141 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 
 ## 2. Arquitetura do sistema
 
-> Secção da responsabilidade da Issue `I033` (prazo do Executor: 2026-10-03 23:59). Será acrescentada neste mesmo ficheiro, com os diagramas Mermaid de componentes, responsabilidades, relações, fronteiras, interfaces, restrições, padrões, atributos de qualidade e evolução prevista.
+### 2.1. Visão geral
+
+O Katch tem dois clientes e um servidor. O Candidato usa a aplicação móvel e o Recrutador e o Administrador usam a área de gestão web. Os dois clientes comunicam com um único backend, que é o único componente com acesso à base de dados e aos ficheiros. O sistema não tem integração com serviços externos.
+
+Esta secção descreve a estrutura do sistema: componentes, ligações, fronteiras, padrões e atributos de qualidade. As tecnologias e a sua justificação estão na secção 3. As classes, as tabelas e os fluxos de negócio são tratados nos modelos de classes, de dados e de comportamento.
+
+### 2.2. Diagrama de arquitetura
+
+Como o Mermaid não tem um tipo de diagrama de arquitetura, o diagrama usa um `flowchart`. Os atores são retângulos fora da fronteira, a fronteira é o retângulo «Sistema Katch» e o retângulo «Backend» agrupa os componentes internos do servidor. As setas contínuas são pedidos dos clientes e as setas a tracejado são a ligação bidirecional persistente que entrega mensagens e notificações em tempo real (tecnologia por confirmar, proposta D-08). As cores estão fixadas no próprio diagrama, para que se leia da mesma forma em tema claro e em tema escuro.
+
+```mermaid
+flowchart TB
+    Cand["Candidato"]
+    Rec["Recrutador"]
+    Adm["Administrador"]
+
+    subgraph Katch["Sistema Katch"]
+        Mobile["Aplicação móvel<br/>Flutter 3.47 · Dart 3.13"]
+        Web["Área de gestão web<br/>React 19 · TypeScript 7 · Vite"]
+
+        subgraph Backend["Backend — ASP.NET Core 10 · C# 14"]
+            API["API REST<br/>Controllers · autenticação JWT<br/>Swagger/OpenAPI"]
+            Serv["Serviços de negócio<br/>regras de F001 a F011"]
+            Jobs["Tarefas periódicas<br/>encerrar vagas expiradas<br/>repor quota de interesses"]
+            Rep["Acesso a dados<br/>Repositories · Entity Framework Core"]
+            FS["Armazenamento de ficheiros<br/>fotografias, logótipos e CV"]
+        end
+
+        DB[("PostgreSQL 18<br/>base de dados relacional")]
+    end
+
+    Cand --- Mobile
+    Rec --- Web
+    Adm --- Web
+
+    Mobile -->|"HTTPS · JSON"| API
+    Web -->|"HTTPS · JSON"| API
+    Mobile -.->|"ligação bidirecional persistente<br/>mensagens e notificações em tempo real<br/>(tecnologia por confirmar · proposta D-08)"| API
+    Web -.->|"ligação bidirecional persistente<br/>mensagens e notificações em tempo real<br/>(tecnologia por confirmar · proposta D-08)"| API
+
+    API --> Serv
+    Jobs --> Serv
+    Serv --> Rep
+    Serv --> FS
+    Rep -->|"SQL"| DB
+
+    classDef ator fill:#ffffff,stroke:#1f2937,stroke-width:2px,color:#111827
+    classDef cliente fill:#eef2ff,stroke:#3730a3,stroke-width:1.5px,color:#111827
+    classDef servidor fill:#ecfdf5,stroke:#047857,stroke-width:1.5px,color:#111827
+    classDef dados fill:#fff7ed,stroke:#c2410c,stroke-width:1.5px,color:#111827
+    class Cand,Rec,Adm ator
+    class Mobile,Web cliente
+    class API,Serv,Jobs,Rep,FS servidor
+    class DB dados
+    style Katch fill:#ffffff,stroke:#1f2937,stroke-width:2px,color:#111827
+    style Backend fill:#f9fafb,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    linkStyle default stroke:#374151,stroke-width:1.5px
+```
+
+### 2.3. Componentes e responsabilidades
+
+| Componente | Responsabilidade | Tecnologia | Repositório | Funcionalidades |
+| --- | --- | --- | --- | --- |
+| Aplicação móvel | Interface exclusiva do Candidato: registo, perfil, exploração de vagas, matches, conversas e notificações. | Flutter 3.47, Dart 3.13 | `katch-frontend-mobile` | F001, F002, F004, F006, F008, F010, F011 |
+| Área de gestão web | Interface do Recrutador (Empresa, vagas, candidatos em espera, matches, conversas e notificações) e do Administrador (Empresas, contas, indicadores e listas pré-definidas). | React 19, TypeScript 7, Vite 8 | `katch-frontend-web` | F001, F002, F003, F005, F007, F008, F009, F010, F011 |
+| API REST | Ponto de entrada dos clientes. Recebe os pedidos, autentica-os com JWT, verifica o tipo de conta e devolve as respostas. Aceita também a ligação bidirecional persistente por onde segue a entrega, em tempo real, das mensagens e das notificações (tecnologia por confirmar, proposta D-08). Documentada com Swagger/OpenAPI. | ASP.NET Core 10 (Web API), Swashbuckle | `katch-backend` | F001 a F011 |
+| Serviços de negócio | Regras do domínio: validação automática, quota de interesses, filtragem de vagas e cálculo de distância, confirmação do match, estados da Empresa, da vaga e da conta, e geração de notificações. | C# 14 | `katch-backend` | F001 a F011 |
+| Tarefas periódicas | Encerrar as vagas que atingiram a data-limite e repor a quota de interesses, com a notificação respetiva. | Serviços em segundo plano do ASP.NET Core | `katch-backend` | F005, F006, F011 |
+| Acesso a dados | Persistência das entidades e consultas, com migrations e controlo de concorrência otimista. | Entity Framework Core (code-first), Npgsql | `katch-backend` | F001 a F011 |
+| Armazenamento de ficheiros | Guarda as fotografias, os logótipos e os CV. A base de dados guarda apenas o caminho de cada ficheiro. | Sistema de ficheiros do servidor do backend | `katch-backend` | F003, F004, F005 |
+| Base de dados | Guarda os dados do sistema, segundo o modelo de dados. | PostgreSQL 18 | `katch-backend` (migrations) | F001 a F011 |
+
+### 2.4. Interfaces e relações
+
+| Ligação | Protocolo e formato | Notas |
+| --- | --- | --- |
+| Aplicação móvel → API REST | HTTPS, JSON | Pedidos autenticados com o token JWT. Só o tipo de conta Candidato acede por aqui. |
+| Área de gestão web → API REST | HTTPS, JSON | Pedidos autenticados com o token JWT. Só os tipos de conta Recrutador e Administrador acedem por aqui. |
+| Aplicações → backend (ligação bidirecional persistente) | Ligação persistente entre cada cliente e o backend; tecnologia por confirmar (proposta D-08) | A DA v02 exige, na F010, uma ligação bidirecional persistente entre cliente e servidor, e a F011 reutiliza esse mecanismo. Entrega as mensagens e as notificações em tempo real, dentro das aplicações. A especificação de requisitos (parâmetro P17, RF029, RF073, RF110 e RF111) fixa o limite de 5 segundos para a entrega. Não há notificações nativas do sistema operativo nem envio por e-mail ou SMS. A tecnologia é a proposta D-08 (ASP.NET Core SignalR), por confirmar em reunião formal do grupo (Regulamento da UC, secção 10.1). |
+| API REST e Tarefas periódicas → Serviços de negócio | Chamadas internas ao backend | As regras de negócio são executadas nos serviços. |
+| Serviços de negócio → Acesso a dados → Base de dados | SQL, via Entity Framework Core | Única via de acesso à base de dados. |
+| Serviços de negócio → Armazenamento de ficheiros | Leitura e escrita de ficheiros | Os clientes nunca acedem diretamente aos ficheiros nem à base de dados. |
+
+O que está aprovado é o mecanismo: a ligação bidirecional persistente da DA v02. A tecnologia que o concretiza ainda não está decidida. A decisão D-08 da secção 3.5 propõe o ASP.NET Core SignalR e está por ratificar em reunião formal do grupo (Regulamento da UC, secção 10.1). A consulta periódica à API REST é uma alternativa proposta e pendente, descrita em `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`; só substitui a ligação persistente se for aprovada em reunião formal e registada em ata.
+
+### 2.5. Fronteiras e restrições
+
+A fronteira segue a Declaração de Âmbito v02.
+
+| Dentro da fronteira | Fora da fronteira (excluído pela DA v02) |
+| --- | --- |
+| Aplicação móvel, área de gestão web, backend e base de dados, desenvolvidos pelo grupo. | Fornecedores externos de identidade; portais de emprego, redes profissionais e sistemas de recursos humanos; serviços de pagamento. |
+| Conversas e notificações, entregues apenas dentro das aplicações. | Serviços externos de mapas ou de geolocalização (a distância usa as coordenadas da lista pré-definida de localidades); envio de e-mail, SMS ou notificações para fora da plataforma; serviços comerciais de comunicação. |
+
+Restrições que condicionam a arquitetura:
+
+- O sistema usa apenas a língua portuguesa e dados fictícios, em ambiente académico.
+- A base de dados de entrega é PostgreSQL. Em desenvolvimento corre em `localhost:6000` e é publicada depois por port forwarding no router do grupo. O SQLite em memória só é permitido nos testes automáticos.
+- Cada componente tem o seu repositório e a sua pipeline CI/CD no GitHub Actions, com análise estática no SonarQube.
+
+### 2.6. Padrões arquiteturais
+
+| Padrão | Aplicação |
+| --- | --- |
+| Cliente–servidor com interface REST única | Os dois clientes usam a mesma interface do servidor, em HTTPS e JSON. |
+| Backend em camadas | Controllers, Services, Repositories e Domain, como no âmbito de cobertura de testes do Regulamento Interno. Os Controllers não acedem diretamente à base de dados. |
+| Autenticação sem estado de sessão no servidor | Token JWT em cada pedido. O estado da conta e da Empresa é confirmado na base de dados em cada operação reservada (secção 3.5, D-04). |
+| Persistência code-first | Entity Framework Core, com migrations para criar e evoluir o esquema. |
+| Concorrência otimista | Coluna de sistema `xmin` na tabela `match`, para que duas alterações simultâneas ao mesmo registo não se sobreponham. |
+| Ligação bidirecional persistente | Entrega de mensagens e notificações em tempo real, como exige a DA v02 (F010 e F011). Tecnologia por confirmar (proposta D-08, ASP.NET Core SignalR, por ratificar em reunião formal). |
+| Tarefas periódicas em segundo plano | Encerramento das vagas expiradas e reposição da quota de interesses. |
+| Base de dados única | Uma só base de dados PostgreSQL, acedida apenas pelo backend. |
+
+### 2.7. Atributos de qualidade
+
+A tabela indica, para cada atributo, os requisitos não funcionais da especificação de requisitos (secção 5) e o componente que os suporta.
+
+| Atributo | Requisitos | Componentes |
+| --- | --- | --- |
+| Desempenho | RNF001 (operações do servidor em 2 segundos), RNF002 (cartão de vaga seguinte em 2 segundos), RNF015 (ficheiro de 5 MB em 5 segundos); parâmetro P17 (mensagens e notificações em 5 segundos) | API REST, Serviços de negócio, Acesso a dados, Armazenamento de ficheiros |
+| Segurança | RNF003 (palavras-passe em resumo irreversível), RNF004 a RNF006 e RNF009 (credencial de sessão, expiração e autorização de cada pedido), RNF007 e RNF016 (CV e conteúdo dos ficheiros), RNF008 (validação automática no servidor), RNF017 (dados confidenciais fora dos registos de diagnóstico) | API REST, Serviços de negócio, Armazenamento de ficheiros |
+| Usabilidade | RNF010 a RNF012 (interações na aplicação móvel e área de gestão web sem deslocamento horizontal) | Aplicação móvel, Área de gestão web |
+| Fiabilidade e disponibilidade | RNF013 (dados confirmados conservados após reinício do servidor), RNF014 e RNF018 (indicação de falha de ligação em 10 segundos) | Base de dados, Aplicação móvel, Área de gestão web |
+
+### 2.8. Decisões de arquitetura
+
+| N.º | Decisão | Alternativas | Justificação |
+| --- | --- | --- | --- |
+| AD-01 (proposta) | Propõe-se guardar os ficheiros (fotografias, logótipos e CV) no sistema de ficheiros do servidor do backend, com a base de dados a guardar apenas o caminho. | Guardar os ficheiros na base de dados; usar um serviço externo de armazenamento. | O modelo de dados mantém os ficheiros fora da base de dados. A DA exclui os serviços externos. A solução não acrescenta tecnologia à stack. Se for aprovada, resolve o ponto 3 da secção 3.6. **Estado:** proposta, por confirmar em reunião formal do grupo (Plano de Qualidade, secção 7). Ata: a indicar quando existir. |
+| AD-02 | As mensagens e as notificações são entregues por ligação bidirecional persistente entre cliente e servidor, como aprovado na DA v02 (F010; a F011 reutiliza o mecanismo). A tecnologia está por confirmar: a proposta D-08 é o ASP.NET Core SignalR. | Consulta periódica à API REST a cada 3 segundos (proposta pendente de decisão, ver `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`); WebSockets diretos; serviços comerciais de notificação. | A DA exige ligação persistente em tempo real (F010, F011) e exclui os serviços comerciais externos (limites transversais). O SignalR é parte do ASP.NET Core e não acrescenta tecnologia ao backend. A consulta periódica é só uma alternativa proposta: até ser aprovada em reunião formal e registada em ata, vale o que está aprovado na DA. **Estado:** a tecnologia (D-08) e a alternativa de consulta periódica estão por decidir (Regulamento da UC, secção 10.1). Ata: a indicar quando existir. |
+
+### 2.9. Evolução prevista
+
+- **Entrega de mensagens e notificações.** A entrega usa a ligação bidirecional persistente aprovada na DA v02. A consulta periódica à API REST é apenas uma alternativa proposta e pendente de decisão (`m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`). Se for aprovada em reunião formal e registada em ata, a mudança afeta a API REST e os clientes, e não os Serviços de negócio nem o modelo de dados.
+- **Armazenamento de ficheiros.** O acesso aos ficheiros fica concentrado nos Serviços de negócio, o que permite mudar o local de armazenamento sem alterar as regras de negócio.
 
 ---
 

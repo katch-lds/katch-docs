@@ -325,7 +325,46 @@ flowchart LR
 
 ### 8.2. UC07 — Registar a Empresa
 
-> A preencher pela Issue `I027`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | `UC07` — Registar a Empresa |
+| Ator principal | Recrutador |
+| Objetivo | Criar a conta de Recrutador e submeter o registo da Empresa que representa, para que o Administrador o aprove e a Empresa possa publicar vagas. |
+| Pré-condições | O Recrutador acede à área de gestão web. A conta do Recrutador, se já existir, não tem nenhuma Empresa associada, porque cada Recrutador representa uma única Empresa (secção 2.2 da especificação de requisitos). Exceções: no fluxo A2, a Empresa associada já foi submetida; no fluxo A3, a Empresa associada está no estado recusada. |
+
+**Fluxo principal**
+
+1. O Recrutador abre a criação de conta na área de gestão web.
+2. O Recrutador indica o endereço de correio eletrónico e a palavra-passe e aceita as condições de utilização.
+3. O sistema valida os dados e cria a conta de Recrutador (RF037).
+4. O Recrutador inicia sessão (UC01) e abre o registo da Empresa.
+5. O Recrutador indica a designação social, o número de identificação fiscal, o setor de atividade, a morada, a localidade (da lista pré-definida de localidades), o endereço de correio eletrónico, o contacto telefónico e o nome do responsável da Empresa, e submete o registo (RF041).
+6. O sistema aplica a validação automática: campos obrigatórios preenchidos, formatos dos dados e número de identificação fiscal não registado por outra Empresa (RF042).
+7. O sistema regista a Empresa no estado pendente, guarda o autor e a data e hora da submissão e apresenta ao Recrutador o estado do pedido (RF043, RF044, RF112).
+
+**Fluxos alternativos**
+
+* **A1 — Recrutador já tem conta (passo 1).** O Recrutador inicia sessão (UC01) e o caso de uso continua no passo 4.
+* **A2 — Consulta do estado do pedido (depois do passo 7).** O Recrutador consulta, em qualquer momento, o estado do pedido (pendente, aprovada, recusada ou suspensa) e, no estado recusada, o motivo indicado pelo Administrador (RF044).
+* **A3 — Nova submissão depois da recusa do registo (passo 5).** A Empresa está no estado recusada. O sistema apresenta os dados submetidos e o motivo da recusa. O Recrutador corrige os dados, incluindo, se necessário, o número de identificação fiscal, que só deixa de poder ser alterado depois da aprovação (RF049), e submete o registo de novo. O caso de uso continua no passo 6. A unicidade do número de identificação fiscal é verificada face às outras Empresas. Se a validação automática for cumprida, a mesma Empresa volta ao estado pendente, com nova data de submissão e sem o motivo da recusa anterior (RF045).
+* **A4 — Saída antes de submeter (passo 5).** O Recrutador sai sem submeter o registo. A conta de Recrutador mantém-se, mas não fica nenhuma Empresa registada.
+
+**Exceções**
+
+* **E1 — Dados da conta não conformes (passo 3).** Há um campo em falta, o endereço de correio eletrónico não está no formato local@domínio, a palavra-passe não tem pelo menos 8 caracteres, com uma letra e um algarismo, ou as condições de utilização não foram aceites. O sistema rejeita a criação da conta e indica o motivo (RF037).
+* **E2 — Endereço de correio eletrónico já registado (passo 3).** O sistema rejeita a criação da conta e indica o motivo (RF037).
+* **E3 — Campos obrigatórios em falta (passo 6).** O sistema rejeita o registo e indica cada campo em falta. A Empresa não é registada e o Recrutador pode corrigir e submeter de novo, voltando ao passo 5 (RF042).
+* **E4 — Formato inválido (passo 6).** O endereço de correio eletrónico não está no formato local@domínio, ou o contacto telefónico ou o número de identificação fiscal não têm 9 algarismos. O sistema rejeita o registo e indica cada campo em causa e o motivo (RF042).
+* **E5 — Número de identificação fiscal duplicado (passo 6).** Já existe outra Empresa registada com o mesmo número de identificação fiscal. Na nova submissão (A3), a própria Empresa recusada não conta como duplicado. O sistema rejeita o registo e indica o campo e o motivo (RF042).
+* **E6 — Operação reservada antes da aprovação (depois do passo 7).** Com a Empresa no estado pendente, recusada ou suspensa, o Recrutador tenta publicar uma vaga ou aceder a candidatos. O sistema rejeita a operação e apresenta o estado atual da Empresa (RF039).
+
+**Pós-condições**
+
+* Sucesso: a conta de Recrutador está ativa e a Empresa está registada no estado pendente, associada ao Recrutador, com o autor e a data e hora da submissão registados. A Empresa passa a constar da lista das Empresas pendentes do Administrador (UC16).
+* Enquanto a Empresa não for aprovada, o Recrutador não publica vagas nem acede a candidatos (RF039). Só a aprovação do Administrador no UC16, notificada ao Recrutador (RF079), levanta esta restrição.
+* Rejeição na validação automática: não fica registada nenhuma Empresa nova e o estado de uma Empresa recusada não muda.
+
+**Requisitos relacionados:** RF037, RF039, RF041, RF042, RF043, RF044, RF045, RF112; parâmetros P04 e P15 da especificação de requisitos. Relacionados com o UC16: RF079, RF091.
 
 ### 8.3. UC16 — Aprovar ou recusar o registo de Empresa
 
@@ -333,7 +372,64 @@ flowchart LR
 
 ### 8.4. UC09 — Publicar vaga
 
-> A preencher pela Issue `I029`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | UC09 — Publicar vaga |
+| Ator principal | Recrutador |
+| Objetivo | Criar uma vaga da Empresa e publicá-la, para que passe a ser apresentada aos Candidatos cujas preferências de procura a admitam. |
+| Requisitos relacionados | RF050, RF051, RF052, RF053; RF039 (publicação só com Empresa aprovada); RF112 (registo do autor e da data e hora da criação e da publicação); RF057 (encerramento automático na data-limite, executado no âmbito do UC10) |
+
+**Pré-condições**
+
+1. O Recrutador tem sessão iniciada na área de gestão web e a conta está ativa.
+2. A Empresa do Recrutador está aprovada.
+
+**Fluxo principal (criar e publicar)**
+
+1. O Recrutador escolhe criar uma nova vaga.
+2. O sistema apresenta o formulário da vaga, com a localidade preenchida por omissão com a localidade da Empresa e com as listas pré-definidas de localidades, competências e benefícios, os tipos de contrato (sem termo, a termo, estágio, prestação de serviços) e os regimes de trabalho (presencial, híbrido, remoto).
+3. O Recrutador preenche os campos obrigatórios: função, descrição da oportunidade, intervalo salarial em euros, localidade, tipo de contrato, regime de trabalho e competências pretendidas.
+4. O Recrutador preenche, se quiser, os campos opcionais: benefícios, indicação de urgência e data-limite de publicação.
+5. O Recrutador carrega, se quiser, até 5 fotografias da vaga, em JPEG ou PNG, com o máximo de 5 MB cada.
+6. O Recrutador grava a vaga.
+7. O sistema valida os campos obrigatórios, o intervalo salarial e as fotografias, cria a vaga no estado não publicada e regista o Recrutador que a criou e a data e hora.
+8. O Recrutador escolhe **Publicar**.
+9. O sistema verifica que a Empresa está aprovada e que a vaga pertence à Empresa e está no estado não publicada.
+10. O sistema passa a vaga ao estado publicada e regista o Recrutador que a publicou e a data e hora.
+11. O sistema informa o Recrutador de que a vaga foi publicada. A partir deste instante, a vaga é apresentada aos Candidatos cujas preferências de procura a admitam.
+
+**Fluxos alternativos**
+
+*A1 — Guardar sem publicar* (começa no passo 8)
+
+1. O Recrutador não escolhe publicar e sai do formulário depois de gravar.
+2. A vaga fica no estado não publicada e não é apresentada aos Candidatos.
+
+*A2 — Publicar uma vaga já criada* (substitui os passos 1 a 7)
+
+1. O Recrutador abre a lista de vagas da Empresa e seleciona uma vaga no estado não publicada.
+2. O caso de uso continua no passo 8.
+
+*A3 — Alterar a localidade proposta* (começa no passo 3)
+
+1. O Recrutador substitui a localidade da Empresa por outra da lista pré-definida de localidades.
+2. O caso de uso continua no passo 3.
+
+**Exceções**
+
+| ID | Situação | Resposta do sistema |
+| --- | --- | --- |
+| E1 | Um campo obrigatório está vazio (passo 7). | Rejeita a gravação e indica o motivo. A vaga não é criada. |
+| E2 | O valor mínimo do intervalo salarial é superior ao máximo, ou um dos valores não é um número positivo em euros (passo 7). | Rejeita a gravação e indica o motivo. A vaga não é criada. |
+| E3 | Uma fotografia não é JPEG nem PNG, excede 5 MB ou seria a sexta da vaga (passos 5 e 7). | Rejeita essa fotografia e indica o motivo. |
+| E4 | A Empresa está no estado pendente, recusada ou suspensa (passos 1 e 9). | Impede a criação e a publicação da vaga e indica o estado atual da Empresa. |
+| E5 | A vaga não pertence à Empresa do Recrutador ou não está no estado não publicada (passo 9). | Rejeita a publicação e indica o motivo. O estado da vaga não é alterado. |
+
+**Pós-condições**
+
+- Publicação (sucesso): a vaga existe no estado publicada, com o Recrutador e a data e hora da criação e da publicação registados, e é apresentada aos Candidatos cujas preferências de procura a admitam. Se tiver data-limite de publicação, passa automaticamente ao estado encerrada quando essa data é atingida (RF057, UC10).
+- Gravação sem publicação (A1): a vaga existe no estado não publicada e não é apresentada aos Candidatos.
+- Nas exceções E1, E2 e E4, a vaga não é criada nem publicada. Na exceção E3, só a fotografia rejeitada fica de fora e a vaga pode ser gravada com as restantes. Na exceção E5, o estado da vaga não é alterado.
 
 ### 8.5. UC05 — Dar swipe numa vaga
 
@@ -345,4 +441,41 @@ flowchart LR
 
 ### 8.7. UC11 — Consultar perfil de candidato
 
-> A preencher pela Issue `I032`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | `UC11` — Consultar perfil de candidato |
+| Ator principal | Recrutador |
+| Objetivo | Conhecer o perfil completo de um Candidato que manifestou interesse numa vaga da Empresa, antes de o aceitar ou recusar. |
+| Pré-condições | O Recrutador tem sessão iniciada na área de gestão web. |
+
+**Fluxo principal**
+
+1. O Recrutador seleciona uma vaga da Empresa e abre a lista de candidatos em espera.
+2. O sistema apresenta os Candidatos que manifestaram interesse na vaga e ainda não têm decisão, com a data do interesse. A lista não tem ações de aceitação nem de recusa (RF060).
+3. O Recrutador seleciona um Candidato.
+4. O sistema confirma que o Candidato está em espera nessa vaga e regista a abertura do perfil para a vaga, com a data e hora (RF118).
+5. O sistema apresenta o perfil completo do Candidato: fotografia, dados profissionais (função pretendida, localidade, disponibilidade e resumo da experiência), hiperligações profissionais, competências em etiquetas e curriculum vitae, quando exista (RF061). As competências do Candidato que coincidem com as pretendidas na vaga aparecem em destaque (RF062).
+6. O Recrutador termina a consulta. A partir do perfil aberto, pode aceitar ou recusar o Candidato (UC12).
+
+**Fluxos alternativos**
+
+* **A1 — Acesso a partir da notificação de novo interesse (passo 1).** O Recrutador abre a notificação de novo interesse e acede à vaga a que se refere (RF076, RF082). O caso de uso continua no passo 2.
+* **A2 — Nenhum Candidato em espera (passo 2).** O sistema indica que não há Candidatos em espera na vaga e o caso de uso termina.
+* **A3 — Perfil incompleto (passo 5).** O Candidato não registou fotografia, hiperligações ou curriculum vitae. O sistema apresenta os restantes dados registados, sem os elementos em falta (RF061).
+* **A4 — Consulta do curriculum vitae (passo 5).** O Recrutador abre o curriculum vitae do Candidato, em PDF (RF061).
+* **A5 — Saída sem decisão (passo 6).** O Recrutador volta à lista sem decidir. O Candidato continua em espera, sem prazo de expiração (RF113), e a abertura do perfil fica registada para uma decisão posterior.
+
+**Exceções**
+
+* **E1 — Empresa não aprovada (passo 1).** A Empresa está no estado pendente, recusada ou suspensa. O sistema rejeita o acesso aos candidatos e apresenta o estado da Empresa (RF039).
+* **E2 — Vaga de outra Empresa (passo 1).** O Recrutador tenta consultar os candidatos de uma vaga que não pertence à Empresa que representa. O sistema rejeita o acesso (RF060).
+* **E3 — Candidato sem interesse nas vagas da Empresa (passo 4).** O Recrutador tenta abrir o perfil de um Candidato que não manifestou interesse em nenhuma vaga da Empresa (por exemplo, através de uma ligação direta). O sistema rejeita a abertura do perfil (RF061).
+* **E4 — Candidato que já não está em espera na vaga (passo 4).** O Recrutador já aceitou ou recusou o Candidato nessa vaga. O sistema rejeita a abertura do perfil para essa vaga, e o Candidato deixa de constar da lista de candidatos em espera (RF060, RF061).
+
+**Pós-condições**
+
+* A abertura do perfil do Candidato para a vaga fica registada, com a data e hora (RF118). Este registo é a condição para o Recrutador aceitar ou recusar o Candidato no UC12 (RF063, RF064).
+* O interesse do Candidato continua em espera até à decisão do Recrutador (RF113). A consulta não altera o estado do interesse.
+* O endereço de correio eletrónico e o contacto telefónico do Candidato não fazem parte do perfil completo. Só ficam disponíveis ao Recrutador depois do match (UC13, RF067).
+
+**Requisitos relacionados:** RF039, RF060, RF061, RF062, RF113, RF118; parâmetros P01 e P02 da especificação de requisitos. Relacionados com outros casos de uso: RF063 e RF064 (UC12), RF076 e RF082 (UC15), RF067 (UC13).

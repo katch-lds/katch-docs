@@ -260,7 +260,69 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 ### 8.1. UC03 — Registar-se como Candidato
 
-> A preencher pela Issue `I026`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | `UC03` — Registar-se como Candidato |
+| Ator principal | Candidato |
+| Objetivo | Criar uma conta na plataforma e ficar com a conta ativa de imediato, sem aprovação do Administrador. |
+| Pré-condições | O Candidato tem a aplicação móvel instalada e não tem sessão iniciada. A lista pré-definida de localidades está carregada no sistema. |
+
+**Fluxo principal**
+
+1. O Candidato abre o registo na aplicação móvel.
+2. O sistema apresenta o formulário de registo, com a lista pré-definida de localidades.
+3. O Candidato indica o nome, o endereço de correio eletrónico, o contacto telefónico e a palavra-passe, e seleciona a localidade na lista pré-definida de localidades (RF003).
+4. O Candidato aceita as condições de utilização e submete o registo (RF003).
+5. O sistema aplica a validação automática: campos obrigatórios preenchidos, endereço de correio eletrónico no formato local@domínio e ainda não registado, contacto telefónico com 9 algarismos e palavra-passe com pelo menos 8 caracteres, uma letra e um algarismo (RF004).
+6. O sistema cria a conta de Candidato no estado ativa, sem aprovação do Administrador, associada à localidade selecionada e às respetivas coordenadas, e regista a data e a hora da aceitação das condições de utilização (RF003, RF005).
+7. O sistema confirma ao Candidato que a conta foi criada e está ativa (RF005).
+
+**Fluxos alternativos**
+
+* **A1 — Saída antes de submeter (passos 2 a 4).** O Candidato sai do formulário sem submeter o registo. O sistema não cria nenhuma conta nem guarda os dados preenchidos.
+
+**Exceções**
+
+* **E1 — Campos obrigatórios em falta (passo 5).** Um ou mais campos obrigatórios estão vazios, incluindo a localidade. O sistema rejeita o registo, indica cada campo em falta e o motivo, e não cria a conta (RF004).
+* **E2 — Formato inválido (passo 5).** O endereço de correio eletrónico não está no formato local@domínio, o contacto telefónico não tem 9 algarismos ou a palavra-passe não tem pelo menos 8 caracteres, com uma letra e um algarismo. O sistema rejeita o registo, indica cada campo em causa e o motivo, e não cria a conta (RF004).
+* **E3 — Endereço de correio eletrónico já registado (passo 5).** Já existe uma conta com o mesmo endereço de correio eletrónico, sem distinção entre maiúsculas e minúsculas, incluindo uma conta criada entretanto por um registo simultâneo. O sistema rejeita o registo, indica o campo e o motivo, e não cria a conta (RF004).
+* **E4 — Localidade fora da lista (passo 5).** Um pedido direto indica uma localidade que não pertence à lista pré-definida de localidades. O sistema rejeita o registo e não cria a conta (RF003, RNF008).
+* **E5 — Condições de utilização não aceites (passo 5).** O registo é submetido sem a aceitação das condições de utilização. O sistema rejeita o registo, indica que a aceitação é obrigatória e não cria a conta (RF003).
+* **E6 — Falha de ligação (passo 4 ou 5).** A aplicação móvel não consegue comunicar com o sistema ao submeter o registo, ou a ligação é interrompida antes da confirmação. A aplicação informa o Candidato de que não foi possível concluir o registo e permite voltar a submeter. Não é criada nenhuma conta (RNF014).
+
+**Pós-condições**
+
+* Sucesso: existe uma conta de Candidato no estado ativa, com endereço de correio eletrónico único no sistema, associada à localidade selecionada e às respetivas coordenadas, e com a aceitação das condições de utilização registada. Depois de iniciar sessão (UC01), o Candidato pode completar o perfil profissional (UC04) (RF005).
+* Rejeição na validação automática, falha de ligação ou saída antes de submeter: não fica registada nenhuma conta nova e nenhum dado do registo é guardado.
+
+**Requisitos relacionados:** RF003, RF004, RF005, RNF008, RNF014; parâmetros P04 e P05 da especificação de requisitos. Relacionado com o UC01: RF001.
+
+#### Diagrama do caso de uso
+
+O diagrama segue as convenções da secção 5.1: ator fora da fronteira, caso de uso em elipse dentro do retângulo «Sistema Katch» e associação por linha contínua. A validação automática e a ativação imediata fazem parte do UC03 e não são casos de uso autónomos. O UC01 e o UC04 são casos de uso subsequentes, sendo o Candidato o ator direto associado a todos eles.
+
+```mermaid
+flowchart LR
+    ACand["Candidato"]
+
+    subgraph Katch["Sistema Katch"]
+        direction TB
+        UC03(["UC03 — Registar-se como Candidato"])
+        UC01(["UC01 — Iniciar e terminar sessão"])
+        UC04(["UC04 — Gerir o perfil profissional"])
+    end
+
+    ACand --- UC03
+    ACand --- UC01
+    ACand --- UC04
+
+    classDef ator fill:#ffffff,stroke:#1f2937,stroke-width:2px,color:#111827
+    classDef uc fill:#eef2ff,stroke:#3730a3,stroke-width:1.5px,color:#111827
+    class ACand ator
+    class UC01,UC03,UC04 uc
+    style Katch fill:#ffffff,stroke:#1f2937,stroke-width:2px,color:#111827
+    linkStyle default stroke:#374151,stroke-width:1.5px
+```
 
 ### 8.2. UC07 — Registar a Empresa
 

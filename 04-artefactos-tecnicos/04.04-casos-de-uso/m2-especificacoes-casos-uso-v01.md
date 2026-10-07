@@ -45,6 +45,8 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | v01 | 2026-10-06 | Correção da revisão da `I032` (D01): pré-condições do UC11 reduzidas à sessão iniciada, porque o estado da Empresa e a pertença da vaga são tratados nas exceções E1 e E2. | `I032` |
 | v01 | 2026-10-02 | Criação da secção 8.4. UC09 — Publicar vaga | `I029` |
 | v01 | 2026-10-02 | Criação da secção 8.5 - Swipe Vaga  | `I030` |
+| v01 | 2026-10-02 | Criação da secção 8.6. — Aceitar ou recusar candidato | `I031` |
+| v01 | 2026-10-07 | Correção da exceção E2 do UC12 (secção 8.6): retirada a referência a conta «desativada», estado que não existe (D01). | `I031` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -264,7 +266,69 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 ### 8.1. UC03 — Registar-se como Candidato
 
-> A preencher pela Issue `I026`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | `UC03` — Registar-se como Candidato |
+| Ator principal | Candidato |
+| Objetivo | Criar uma conta na plataforma e ficar com a conta ativa de imediato, sem aprovação do Administrador. |
+| Pré-condições | O Candidato tem a aplicação móvel instalada e não tem sessão iniciada. A lista pré-definida de localidades está carregada no sistema. |
+
+**Fluxo principal**
+
+1. O Candidato abre o registo na aplicação móvel.
+2. O sistema apresenta o formulário de registo, com a lista pré-definida de localidades.
+3. O Candidato indica o nome, o endereço de correio eletrónico, o contacto telefónico e a palavra-passe, e seleciona a localidade na lista pré-definida de localidades (RF003).
+4. O Candidato aceita as condições de utilização e submete o registo (RF003).
+5. O sistema aplica a validação automática: campos obrigatórios preenchidos, endereço de correio eletrónico no formato local@domínio e ainda não registado, contacto telefónico com 9 algarismos e palavra-passe com pelo menos 8 caracteres, uma letra e um algarismo (RF004).
+6. O sistema cria a conta de Candidato no estado ativa, sem aprovação do Administrador, associada à localidade selecionada e às respetivas coordenadas, e regista a data e a hora da aceitação das condições de utilização (RF003, RF005).
+7. O sistema confirma ao Candidato que a conta foi criada e está ativa (RF005).
+
+**Fluxos alternativos**
+
+* **A1 — Saída antes de submeter (passos 2 a 4).** O Candidato sai do formulário sem submeter o registo. O sistema não cria nenhuma conta nem guarda os dados preenchidos.
+
+**Exceções**
+
+* **E1 — Campos obrigatórios em falta (passo 5).** Um ou mais campos obrigatórios estão vazios, incluindo a localidade. O sistema rejeita o registo, indica cada campo em falta e o motivo, e não cria a conta (RF004).
+* **E2 — Formato inválido (passo 5).** O endereço de correio eletrónico não está no formato local@domínio, o contacto telefónico não tem 9 algarismos ou a palavra-passe não tem pelo menos 8 caracteres, com uma letra e um algarismo. O sistema rejeita o registo, indica cada campo em causa e o motivo, e não cria a conta (RF004).
+* **E3 — Endereço de correio eletrónico já registado (passo 5).** Já existe uma conta com o mesmo endereço de correio eletrónico, sem distinção entre maiúsculas e minúsculas, incluindo uma conta criada entretanto por um registo simultâneo. O sistema rejeita o registo, indica o campo e o motivo, e não cria a conta (RF004).
+* **E4 — Localidade fora da lista (passo 5).** Um pedido direto indica uma localidade que não pertence à lista pré-definida de localidades. O sistema rejeita o registo e não cria a conta (RF003, RNF008).
+* **E5 — Condições de utilização não aceites (passo 5).** O registo é submetido sem a aceitação das condições de utilização. O sistema rejeita o registo, indica que a aceitação é obrigatória e não cria a conta (RF003).
+* **E6 — Falha de ligação (passo 4 ou 5).** A aplicação móvel não consegue comunicar com o sistema ao submeter o registo, ou a ligação é interrompida antes da confirmação. A aplicação informa o Candidato de que não foi possível concluir o registo e permite voltar a submeter. Não é criada nenhuma conta (RNF014).
+
+**Pós-condições**
+
+* Sucesso: existe uma conta de Candidato no estado ativa, com endereço de correio eletrónico único no sistema, associada à localidade selecionada e às respetivas coordenadas, e com a aceitação das condições de utilização registada. Depois de iniciar sessão (UC01), o Candidato pode completar o perfil profissional (UC04) (RF005).
+* Rejeição na validação automática, falha de ligação ou saída antes de submeter: não fica registada nenhuma conta nova e nenhum dado do registo é guardado.
+
+**Requisitos relacionados:** RF003, RF004, RF005, RNF008, RNF014; parâmetros P04 e P05 da especificação de requisitos. Relacionado com o UC01: RF001.
+
+#### Diagrama do caso de uso
+
+O diagrama segue as convenções da secção 5.1: ator fora da fronteira, caso de uso em elipse dentro do retângulo «Sistema Katch» e associação por linha contínua. A validação automática e a ativação imediata fazem parte do UC03 e não são casos de uso autónomos. O UC01 e o UC04 são casos de uso subsequentes, sendo o Candidato o ator direto associado a todos eles.
+
+```mermaid
+flowchart LR
+    ACand["Candidato"]
+
+    subgraph Katch["Sistema Katch"]
+        direction TB
+        UC03(["UC03 — Registar-se como Candidato"])
+        UC01(["UC01 — Iniciar e terminar sessão"])
+        UC04(["UC04 — Gerir o perfil profissional"])
+    end
+
+    ACand --- UC03
+    ACand --- UC01
+    ACand --- UC04
+
+    classDef ator fill:#ffffff,stroke:#1f2937,stroke-width:2px,color:#111827
+    classDef uc fill:#eef2ff,stroke:#3730a3,stroke-width:1.5px,color:#111827
+    class ACand ator
+    class UC01,UC03,UC04 uc
+    style Katch fill:#ffffff,stroke:#1f2937,stroke-width:2px,color:#111827
+    linkStyle default stroke:#374151,stroke-width:1.5px
+```
 
 ### 8.2. UC07 — Registar a Empresa
 
@@ -452,45 +516,68 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 ### 8.6. UC12 — Aceitar ou recusar candidato
 
-> A preencher pela Issue `I031`.
-
-### 8.7. UC11 — Consultar perfil de candidato
-
 | Campo | Conteúdo |
 | --- | --- |
-| Identificação | `UC11` — Consultar perfil de candidato |
+| Identificação | UC12 — Aceitar ou recusar candidato |
 | Ator principal | Recrutador |
-| Objetivo | Conhecer o perfil completo de um Candidato que manifestou interesse numa vaga da Empresa, antes de o aceitar ou recusar. |
-| Pré-condições | O Recrutador tem sessão iniciada na área de gestão web. |
+| Objetivo | Decidir sobre um Candidato que manifestou interesse numa vaga da Empresa: aceitar, confirmando o match, ou recusar, excluindo o Candidato dessa vaga. |
+| Requisitos relacionados | RF063, RF064, RF065, RF066, RF117 (decisão registada não pode ser alterada); RF068 (criação automática da conversa); RF031 e RF077 (notificação de novo match); RF039 (operações reservadas só com Empresa aprovada); RF113 (interesse em espera até à decisão); RF060, RF061, RF062 e RF118, pelo UC11 incluído |
 
-**Fluxo principal**
+**Pré-condições**
 
-1. O Recrutador seleciona uma vaga da Empresa e abre a lista de candidatos em espera.
-2. O sistema apresenta os Candidatos que manifestaram interesse na vaga e ainda não têm decisão, com a data do interesse. A lista não tem ações de aceitação nem de recusa (RF060).
-3. O Recrutador seleciona um Candidato.
-4. O sistema confirma que o Candidato está em espera nessa vaga e regista a abertura do perfil para a vaga, com a data e hora (RF118).
-5. O sistema apresenta o perfil completo do Candidato: fotografia, dados profissionais (função pretendida, localidade, disponibilidade e resumo da experiência), hiperligações profissionais, competências em etiquetas e curriculum vitae, quando exista (RF061). As competências do Candidato que coincidem com as pretendidas na vaga aparecem em destaque (RF062).
-6. O Recrutador termina a consulta. A partir do perfil aberto, pode aceitar ou recusar o Candidato (UC12).
+1. O Recrutador tem sessão iniciada na área de gestão web e a conta está ativa.
+2. A Empresa do Recrutador está aprovada.
+3. A vaga pertence à Empresa do Recrutador.
+4. O Candidato manifestou interesse na vaga e o interesse está em espera.
+5. O Recrutador abriu o perfil completo do Candidato para essa vaga (UC11) e o sistema registou essa abertura.
+
+**Fluxo principal (aceitar)**
+
+1. O Recrutador abre a lista de candidatos em espera de uma das suas vagas. A lista mostra a data da manifestação de interesse e não tem ações de decisão.
+2. O Recrutador seleciona um Candidato.
+3. O sistema executa o UC11: apresenta o perfil completo, com as competências coincidentes com a vaga em destaque, e regista a abertura do perfil para essa vaga, com data e hora.
+4. Na página do perfil, o Recrutador escolhe **Aceitar**.
+5. O sistema verifica as pré-condições 1 a 5.
+6. O sistema, numa única operação atómica:
+   1. regista a decisão, com o Recrutador que a tomou e a data e hora;
+   2. confirma o match, com a data e hora da confirmação;
+   3. cria a conversa do match, única e associada ao match e à vaga de origem;
+   4. disponibiliza os dados de contacto às duas partes;
+   5. gera uma notificação de novo match para o Candidato, que identifica a vaga e a Empresa, e outra para o Recrutador, que identifica a vaga e o Candidato.
+7. O sistema informa o Recrutador de que o match foi confirmado e apresenta o contacto do Candidato e o acesso à conversa.
 
 **Fluxos alternativos**
 
-* **A1 — Acesso a partir da notificação de novo interesse (passo 1).** O Recrutador abre a notificação de novo interesse e acede à vaga a que se refere (RF076, RF082). O caso de uso continua no passo 2.
-* **A2 — Nenhum Candidato em espera (passo 2).** O sistema indica que não há Candidatos em espera na vaga e o caso de uso termina.
-* **A3 — Perfil incompleto (passo 5).** O Candidato não registou fotografia, hiperligações ou curriculum vitae. O sistema apresenta os restantes dados registados, sem os elementos em falta (RF061).
-* **A4 — Consulta do curriculum vitae (passo 5).** O Recrutador abre o curriculum vitae do Candidato, em PDF (RF061).
-* **A5 — Saída sem decisão (passo 6).** O Recrutador volta à lista sem decidir. O Candidato continua em espera, sem prazo de expiração (RF113), e a abertura do perfil fica registada para uma decisão posterior.
+*A1 — Recusar o Candidato* (começa no passo 4)
+
+1. Na página do perfil, o Recrutador escolhe **Recusar**.
+2. O sistema verifica as pré-condições 1 a 5.
+3. O sistema regista a recusa, com o Recrutador que a tomou e a data e hora.
+4. O sistema retira o Candidato da lista de candidatos em espera dessa vaga. Os interesses do mesmo Candidato noutras vagas da Empresa não são afetados.
+5. O sistema informa o Recrutador de que a recusa foi registada. Não é criada conversa, não é disponibilizado contacto e o Candidato não recebe notificação.
+
+*A2 — Sair sem decidir* (começa no passo 4)
+
+1. O Recrutador sai da página do perfil sem escolher nenhuma ação.
+2. O interesse mantém-se em espera, sem prazo de expiração. A abertura do perfil fica registada e o Recrutador pode decidir mais tarde, voltando ao perfil a partir da lista.
 
 **Exceções**
 
-* **E1 — Empresa não aprovada (passo 1).** A Empresa está no estado pendente, recusada ou suspensa. O sistema rejeita o acesso aos candidatos e apresenta o estado da Empresa (RF039).
-* **E2 — Vaga de outra Empresa (passo 1).** O Recrutador tenta consultar os candidatos de uma vaga que não pertence à Empresa que representa. O sistema rejeita o acesso (RF060).
-* **E3 — Candidato sem interesse nas vagas da Empresa (passo 4).** O Recrutador tenta abrir o perfil de um Candidato que não manifestou interesse em nenhuma vaga da Empresa (por exemplo, através de uma ligação direta). O sistema rejeita a abertura do perfil (RF061).
-* **E4 — Candidato que já não está em espera na vaga (passo 4).** O Recrutador já aceitou ou recusou o Candidato nessa vaga. O sistema rejeita a abertura do perfil para essa vaga, e o Candidato deixa de constar da lista de candidatos em espera (RF060, RF061).
+| ID | Situação | Resposta do sistema |
+| --- | --- | --- |
+| E1 | Decisão pedida sem o perfil ter sido aberto para essa vaga (por exemplo, pedido direto à API). | Rejeita a decisão e indica que é necessário abrir o perfil completo. Nada é alterado. |
+| E2 | Empresa não aprovada ou suspensa, ou conta do Recrutador bloqueada. | Impede o acesso à operação e, se a Empresa não estiver aprovada, indica o estado atual da Empresa. Nada é alterado. |
+| E3 | A vaga não pertence à Empresa do Recrutador. | Rejeita a operação por falta de autorização. Nada é alterado. |
+| E4 | O interesse já não está em espera, por exemplo porque foi registada uma decisão noutro pedido simultâneo. | Rejeita a decisão, informa que o Candidato já foi avaliado e mostra o estado atual. A decisão registada não é alterada. |
+| E5 | Falha durante a operação do passo 6. | Nenhuma das alterações é aplicada (decisão, match, conversa, notificações). O sistema informa o erro e o interesse continua em espera. |
 
 **Pós-condições**
 
-* A abertura do perfil do Candidato para a vaga fica registada, com a data e hora (RF118). Este registo é a condição para o Recrutador aceitar ou recusar o Candidato no UC12 (RF063, RF064).
-* O interesse do Candidato continua em espera até à decisão do Recrutador (RF113). A consulta não altera o estado do interesse.
-* O endereço de correio eletrónico e o contacto telefónico do Candidato não fazem parte do perfil completo. Só ficam disponíveis ao Recrutador depois do match (UC13, RF067).
+- Aceitação: o match está confirmado, com o Recrutador e a data da decisão; existe uma única conversa aberta para esse match; os contactos estão disponíveis às duas partes; as duas notificações foram geradas. O match mantém-se mesmo que a vaga seja encerrada ou a Empresa suspensa.
+- Recusa: a recusa está registada, com o Recrutador e a data; o Candidato deixa de ser apresentado nessa vaga; não existe conversa nem partilha de contacto.
+- Em qualquer exceção, o estado do interesse não é alterado: nas exceções E1, E2, E3 e E5 mantém-se em espera; na exceção E4 mantém-se a decisão já registada.
 
-**Requisitos relacionados:** RF039, RF060, RF061, RF062, RF113, RF118; parâmetros P01 e P02 da especificação de requisitos. Relacionados com outros casos de uso: RF063 e RF064 (UC12), RF076 e RF082 (UC15), RF067 (UC13).
+
+### 8.7. UC11 — Consultar perfil de candidato
+
+> A preencher pela Issue `I032`.

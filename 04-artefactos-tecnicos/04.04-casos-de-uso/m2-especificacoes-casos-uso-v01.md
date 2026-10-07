@@ -296,7 +296,7 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 6. O sistema regista o interesse no estado em espera de resposta, com o Candidato e a data e hora, e reduz em uma unidade os interesses disponíveis.
 7. O sistema gera uma notificação de novo interesse, que identifica a vaga, dirigida ao Recrutador.
 8. Se este interesse esgotou a quota, o sistema bloqueia novos interesses durante as vinte e quatro horas seguintes ao instante em que foi registado.
-9. O sistema deixa de apresentar essa vaga ao Candidato e apresenta o cartão seguinte, com o número de interesses disponíveis atualizado. O caso de uso continua no passo 4 para cada cartão, até o Candidato sair da área de exploração.
+9. O sistema deixa de apresentar essa vaga ao Candidato e apresenta o cartão seguinte, com o número de interesses disponíveis atualizado. O caso de uso continua no passo 3 para cada cartão, até o Candidato sair da área de exploração.
 
 **Fluxos alternativos**
 
@@ -304,7 +304,7 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 
 1. O Candidato recusa a vaga (swipe para a esquerda).
 2. O sistema regista a recusa, com o Candidato e a data e hora, sem consumir a quota de interesses. Não existe limite ao número de recusas.
-3. O sistema deixa de apresentar essa vaga ao Candidato e apresenta o cartão seguinte. O caso de uso continua no passo 4.
+3. O sistema deixa de apresentar essa vaga ao Candidato e apresenta o cartão seguinte. O caso de uso continua no passo 3.
 
 *A2 — Consultar o detalhe da vaga* (começa no passo 4)
 
@@ -341,6 +341,7 @@ As especificações são acrescentadas neste ficheiro pelas Issues `I026` a `I03
 | E1 | O Candidato tenta manifestar interesse com a quota esgotada, dentro das vinte e quatro horas de bloqueio (passo 5). | Rejeita o interesse e apresenta o tempo em falta até ao fim do bloqueio. Nada é registado e a quota não é alterada. |
 | E2 | O Candidato já manifestou interesse nessa vaga (passo 5). | Rejeita a segunda manifestação de interesse. Nada é registado e a quota não é alterada. |
 | E3 | Entre a apresentação do cartão e a ação do Candidato, a vaga deixou de cumprir as condições do passo 2, por exemplo por ter sido suspensa ou encerrada, ou por a Empresa ter sido suspensa (passo 5). | Rejeita a ação, informa que a vaga já não está disponível e apresenta o cartão seguinte. Nada é registado e a quota não é alterada. |
+| E4 | O Candidato define uma distância máxima fora do intervalo de 1 a 500 km (passo 2 do A3). | Rejeita a alteração, indica o motivo e mantém as preferências anteriores. |
 
 **Pós-condições**
 

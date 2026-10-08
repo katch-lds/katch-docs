@@ -19,7 +19,7 @@
 | Versão do documento | v01 |
 | Módulo | Frontend mobile (`katch-frontend-mobile`), aplicação Flutter 3.47.x em Dart 3.13.x, exclusiva do Candidato |
 | Issue | `I091` — Elaborar o modelo de classes do frontend mobile |
-| Executor / Revisor / Auditor | João Coelho / a definir no Sprint Planning do Sprint S03 / a definir no Sprint Planning do Sprint S03 |
+| Executor / Revisor / Auditor | João Coelho / Roberto Baptista / João Borguem |
 | Documentos de origem | `m2-s02-i039-20261005-prototipo-baixa-fidelidade-v01.pdf` (ecrãs M01 a M21, `I039`), `m2-modelo-classes-backend-v01.md` (controllers, hubs e DTOs, `I036`), `m2-documentacao-arquitetura-v01.md` (secção 2, `I033`, e secção 3, `I034`), `m2-especificacao-requisitos-v01.md` (RF001 a RF036, RF075, RF105, RF108, RF110 e RNF002, RNF005, RNF010, RNF011, RNF014; parâmetros P01 a P11 e P17), `m2-especificacoes-casos-uso-v01.md` (UC01 a UC06 e UC13 a UC15), `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`, `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf` e `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.07-modelos-de-classes`: um ficheiro por módulo relevante, com classes, responsabilidades, atributos, operações, relações e multiplicidades. Corresponde à linha `OF-M2-009` — «Modelo de classes — frontend mobile v1» da Checklist de Controlo de Artefactos. É o módulo da aplicação Flutter do Candidato; o backend está em `m2-modelo-classes-backend-v01.md` e a área de gestão web tem o seu próprio módulo.

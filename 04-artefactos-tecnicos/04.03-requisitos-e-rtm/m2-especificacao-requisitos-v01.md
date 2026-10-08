@@ -37,6 +37,7 @@
 | --- | --- | --- | --- |
 | v01 | 29 de setembro de 2026 | Primeira versão: requisitos funcionais RF001 a RF118 das Issues I020, I021 e I022. RF105 a RF113 foram acrescentados na autoverificação; RF114 a RF118 foram acrescentados no tratamento das não conformidades detetadas na primeira aplicação da checklist, que também reformulou os requisitos não aprovados e uniformizou a redação. | Avaliação registada na `m2-checklist-aprovacao-requisitos-v01.xlsx`; aprovação formal a registar na ata do Sprint Review do Sprint S01 (30-09-2026) |
 | v01 | 04 de outubro de 2026 | Issue `I023`: acrescento dos requisitos não funcionais RNF001 a RNF018 (secção 5), dos termos complementares necessários à sua verificação (secção 2.2) e dos parâmetros P18 a P21 (secção 3); atualização da secção 2 e encaminhamento da manutenibilidade para a secção 6. Os requisitos funcionais RF001 a RF118 não foram alterados. | Avaliação registada na `m2-checklist-aprovacao-requisitos-v02.xlsx`; aprovação formal a registar na ata do Sprint Review do Sprint S02 (07-10-2026) |
+| v01 | 08 de outubro de 2026 | Issue `I089`: acrescento do ator, entre parênteses, aos títulos dos 25 requisitos cujo título se repetia (12 títulos), para coincidirem com os títulos da `m2-requirements-traceability-matrix-v01.xlsx` e da `m2-checklist-aprovacao-requisitos-v02.xlsx`. Os enunciados e os restantes campos de todos os requisitos não foram alterados. | Revisão e auditoria da Issue `I089`; aprovação formal a registar na ata do Sprint Review do Sprint S03 |
 
 ---
 
@@ -150,12 +151,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F001); Declaração de Âmbito v02 (F001) |
 
-#### RF002 — Alterar a própria palavra-passe
+#### RF002 — Alterar a própria palavra-passe (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF002` |
-| Título | Alterar a própria palavra-passe |
+| Título | Alterar a própria palavra-passe (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato altere a sua palavra-passe indicando a palavra-passe atual e a nova palavra-passe, rejeitando a alteração, com indicação do motivo, quando a palavra-passe atual estiver errada ou a nova palavra-passe não tiver pelo menos 8 caracteres, com pelo menos uma letra e um algarismo. |
@@ -550,12 +551,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010); parâmetros P03 da secção 3 |
 
-#### RF027 — Consultar a lista de conversas
+#### RF027 — Consultar a lista de conversas (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF027` |
-| Título | Consultar a lista de conversas |
+| Título | Consultar a lista de conversas (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato consulte a lista das suas conversas, acessível também a partir da lista de matches, com o número de mensagens por ler em cada conversa. |
@@ -566,12 +567,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF028 — Consultar o histórico de uma conversa
+#### RF028 — Consultar o histórico de uma conversa (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF028` |
-| Título | Consultar o histórico de uma conversa |
+| Título | Consultar o histórico de uma conversa (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato consulte o histórico de uma conversa, com o texto, a data e hora de envio de cada mensagem e a indicação de leitura pelo destinatário. |
@@ -582,12 +583,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF029 — Receber mensagens sem atualização manual
+#### RF029 — Receber mensagens sem atualização manual (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF029` |
-| Título | Receber mensagens sem atualização manual |
+| Título | Receber mensagens sem atualização manual (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato receba na conversa aberta cada nova mensagem do Recrutador sem atualização manual da aplicação, no máximo 5 segundos após o envio, enquanto a aplicação móvel estiver aberta com sessão iniciada. |
@@ -598,12 +599,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010); parâmetros P17 da secção 3 |
 
-#### RF030 — Encerrar uma conversa
+#### RF030 — Encerrar uma conversa (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF030` |
-| Título | Encerrar uma conversa |
+| Título | Encerrar uma conversa (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato encerre uma conversa, passando essa conversa ao modo apenas de consulta para o Candidato e para o Recrutador. |
@@ -662,12 +663,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011); parâmetros P11 da secção 3 |
 
-#### RF034 — Consultar a área de notificações
+#### RF034 — Consultar a área de notificações (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF034` |
-| Título | Consultar a área de notificações |
+| Título | Consultar a área de notificações (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato consulte a área de notificações com as notificações recebidas e o número de notificações por ler. |
@@ -678,12 +679,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011) |
 
-#### RF035 — Marcar notificação como lida
+#### RF035 — Marcar notificação como lida (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF035` |
-| Título | Marcar notificação como lida |
+| Título | Marcar notificação como lida (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato marque uma notificação como lida, reduzindo em uma unidade o número de notificações por ler. |
@@ -694,12 +695,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011) |
 
-#### RF036 — Aceder ao elemento associado à notificação
+#### RF036 — Aceder ao elemento associado à notificação (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF036` |
-| Título | Aceder ao elemento associado à notificação |
+| Título | Aceder ao elemento associado à notificação (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato aceda, a partir de uma notificação, ao elemento a que a notificação se refere: match, conversa ou área de exploração de vagas. |
@@ -726,12 +727,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F001); Declaração de Âmbito v02 (F001) |
 
-#### RF108 — Marcar como lidas as mensagens ao abrir a conversa
+#### RF108 — Marcar como lidas as mensagens ao abrir a conversa (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF108` |
-| Título | Marcar como lidas as mensagens ao abrir a conversa |
+| Título | Marcar como lidas as mensagens ao abrir a conversa (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato marque como lidas todas as mensagens do Recrutador contidas numa conversa, através da abertura dessa conversa. |
@@ -742,12 +743,12 @@ Requisitos `RF001` a `RF036` e `RF105`, `RF108`, `RF110`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF110 — Receber notificações sem atualização manual
+#### RF110 — Receber notificações sem atualização manual (Candidato)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF110` |
-| Título | Receber notificações sem atualização manual |
+| Título | Receber notificações sem atualização manual (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
 | Descrição | O sistema deve permitir que o Candidato receba cada nova notificação na área de notificações sem atualização manual da aplicação, no máximo 5 segundos após o acontecimento que a origina, enquanto a aplicação móvel estiver aberta com sessão iniciada. |
@@ -778,12 +779,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F001); Declaração de Âmbito v02 (F001); parâmetros P04, P05 da secção 3 |
 
-#### RF038 — Iniciar sessão na área de gestão web
+#### RF038 — Iniciar sessão na área de gestão web (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF038` |
-| Título | Iniciar sessão na área de gestão web |
+| Título | Iniciar sessão na área de gestão web (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador inicie sessão na área de gestão web indicando o endereço de correio eletrónico e a palavra-passe, rejeitando o acesso, com indicação do motivo, quando as credenciais não coincidirem com as registadas ou a conta estiver no estado bloqueada. |
@@ -810,12 +811,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F001); Declaração de Âmbito v02 (F001) |
 
-#### RF040 — Alterar a própria palavra-passe
+#### RF040 — Alterar a própria palavra-passe (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF040` |
-| Título | Alterar a própria palavra-passe |
+| Título | Alterar a própria palavra-passe (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador altere a sua palavra-passe indicando a palavra-passe atual e a nova palavra-passe, rejeitando a alteração, com indicação do motivo, quando a palavra-passe atual estiver errada ou a nova palavra-passe não tiver pelo menos 8 caracteres, com pelo menos uma letra e um algarismo. |
@@ -1306,12 +1307,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF071 — Consultar a lista de conversas
+#### RF071 — Consultar a lista de conversas (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF071` |
-| Título | Consultar a lista de conversas |
+| Título | Consultar a lista de conversas (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador consulte a lista das conversas dos matches das vagas da sua Empresa, com o número de mensagens por ler em cada conversa. |
@@ -1322,12 +1323,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF072 — Consultar o histórico de uma conversa
+#### RF072 — Consultar o histórico de uma conversa (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF072` |
-| Título | Consultar o histórico de uma conversa |
+| Título | Consultar o histórico de uma conversa (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador consulte o histórico de uma conversa, com o texto, a data e hora de envio de cada mensagem e a indicação de leitura pelo destinatário. |
@@ -1338,12 +1339,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF073 — Receber mensagens sem atualização manual
+#### RF073 — Receber mensagens sem atualização manual (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF073` |
-| Título | Receber mensagens sem atualização manual |
+| Título | Receber mensagens sem atualização manual (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador receba na conversa aberta cada nova mensagem do Candidato sem atualização manual da página, no máximo 5 segundos após o envio, enquanto a área de gestão web estiver aberta com sessão iniciada. |
@@ -1354,12 +1355,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010); parâmetros P17 da secção 3 |
 
-#### RF074 — Encerrar uma conversa
+#### RF074 — Encerrar uma conversa (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF074` |
-| Título | Encerrar uma conversa |
+| Título | Encerrar uma conversa (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador encerre uma conversa, passando essa conversa ao modo apenas de consulta para o Recrutador e para o Candidato. |
@@ -1450,12 +1451,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011) |
 
-#### RF080 — Consultar a área de notificações
+#### RF080 — Consultar a área de notificações (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF080` |
-| Título | Consultar a área de notificações |
+| Título | Consultar a área de notificações (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador consulte a área de notificações com as notificações recebidas e o número de notificações por ler. |
@@ -1466,12 +1467,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011) |
 
-#### RF081 — Marcar notificação como lida
+#### RF081 — Marcar notificação como lida (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF081` |
-| Título | Marcar notificação como lida |
+| Título | Marcar notificação como lida (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador marque uma notificação como lida, reduzindo em uma unidade o número de notificações por ler. |
@@ -1482,12 +1483,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011) |
 
-#### RF082 — Aceder ao elemento associado à notificação
+#### RF082 — Aceder ao elemento associado à notificação (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF082` |
-| Título | Aceder ao elemento associado à notificação |
+| Título | Aceder ao elemento associado à notificação (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador aceda, a partir de uma notificação, ao elemento a que a notificação se refere: match, conversa, vaga ou pedido de registo da Empresa. |
@@ -1498,12 +1499,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F011); Declaração de Âmbito v02 (F011) |
 
-#### RF106 — Terminar sessão na área de gestão web
+#### RF106 — Terminar sessão na área de gestão web (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF106` |
-| Título | Terminar sessão na área de gestão web |
+| Título | Terminar sessão na área de gestão web (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador termine a sessão na área de gestão web, exigindo novo início de sessão para qualquer operação seguinte. |
@@ -1514,12 +1515,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F001); Declaração de Âmbito v02 (F001) |
 
-#### RF109 — Marcar como lidas as mensagens ao abrir a conversa
+#### RF109 — Marcar como lidas as mensagens ao abrir a conversa (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF109` |
-| Título | Marcar como lidas as mensagens ao abrir a conversa |
+| Título | Marcar como lidas as mensagens ao abrir a conversa (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador marque como lidas todas as mensagens do Candidato contidas numa conversa, através da abertura dessa conversa. |
@@ -1530,12 +1531,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F010); Declaração de Âmbito v02 (F010) |
 
-#### RF111 — Receber notificações sem atualização manual
+#### RF111 — Receber notificações sem atualização manual (Recrutador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF111` |
-| Título | Receber notificações sem atualização manual |
+| Título | Receber notificações sem atualização manual (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
 | Descrição | O sistema deve permitir que o Recrutador receba cada nova notificação na área de notificações sem atualização manual da página, no máximo 5 segundos após o acontecimento que a origina, enquanto a área de gestão web estiver aberta com sessão iniciada. |
@@ -1630,12 +1631,12 @@ Requisitos `RF037` a `RF082` e `RF106`, `RF109`, `RF111`, `RF113`, `RF114`, `RF1
 
 Requisitos `RF083` a `RF104` e `RF107`, `RF112`, `RF116`. Os identificadores acrescentados depois da numeração inicial mantêm a ordem de criação (secção 3.1 dos critérios). Os requisitos sem ator direto incluídos nesta secção decorrem da mesma Issue.
 
-#### RF083 — Iniciar sessão na área de gestão web
+#### RF083 — Iniciar sessão na área de gestão web (Administrador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF083` |
-| Título | Iniciar sessão na área de gestão web |
+| Título | Iniciar sessão na área de gestão web (Administrador) |
 | Tipo | Funcional |
 | Ator | Administrador |
 | Descrição | O sistema deve permitir que o Administrador inicie sessão na área de gestão web indicando o endereço de correio eletrónico e a palavra-passe, rejeitando o acesso, com indicação do motivo, quando as credenciais não coincidirem com as registadas. |
@@ -1646,12 +1647,12 @@ Requisitos `RF083` a `RF104` e `RF107`, `RF112`, `RF116`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F001); Declaração de Âmbito v02 (F001) |
 
-#### RF084 — Alterar a própria palavra-passe
+#### RF084 — Alterar a própria palavra-passe (Administrador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF084` |
-| Título | Alterar a própria palavra-passe |
+| Título | Alterar a própria palavra-passe (Administrador) |
 | Tipo | Funcional |
 | Ator | Administrador |
 | Descrição | O sistema deve permitir que o Administrador altere a sua palavra-passe indicando a palavra-passe atual e a nova palavra-passe, rejeitando a alteração, com indicação do motivo, quando a palavra-passe atual estiver errada ou a nova palavra-passe não tiver pelo menos 8 caracteres, com pelo menos uma letra e um algarismo. |
@@ -1982,12 +1983,12 @@ Requisitos `RF083` a `RF104` e `RF107`, `RF112`, `RF116`. Os identificadores acr
 | Prioridade | Obrigatório |
 | Origem | Proposta de Sistema v02 (F009); Declaração de Âmbito v02 (F009) |
 
-#### RF107 — Terminar sessão na área de gestão web
+#### RF107 — Terminar sessão na área de gestão web (Administrador)
 
 | Campo | Conteúdo |
 | --- | --- |
 | ID | `RF107` |
-| Título | Terminar sessão na área de gestão web |
+| Título | Terminar sessão na área de gestão web (Administrador) |
 | Tipo | Funcional |
 | Ator | Administrador |
 | Descrição | O sistema deve permitir que o Administrador termine a sessão na área de gestão web, exigindo novo início de sessão para qualquer operação seguinte. |

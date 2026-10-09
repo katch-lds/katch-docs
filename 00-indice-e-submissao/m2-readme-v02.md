@@ -126,7 +126,7 @@ O índice seguinte identifica os artefactos previstos para esta milestone e o re
 | Relatório de Revisão - Sprint 03, I088 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 03, I089 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 03, I090 | Sim | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `v01` | [m2-s03-i090-20261009-relatorio-revisao-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.04-revisoes/m2-s03-i090-20261009-relatorio-revisao-v01.pdf) | Sim |
-| Relatório de Revisão - Sprint 03, I091 | Sim | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `v02` | [m2-s03-i091-20261009-relatorio-revisao-v02.pdf](../02-artefactos-de-qualidade-de-processo/02.04-revisoes/m2-s03-i091-20261009-relatorio-revisao-v02.pdf) | Sim |
+| Relatório de Revisão - Sprint 03, I091 | Sim | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `v02` | [m2-s03-i091-20261009-relatorio-revisao-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.04-revisoes/m2-s03-i091-20261009-relatorio-revisao-v01.pdf) | Sim |
 | Relatório de Revisão - Sprint 03, I092 | Sim | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `v01` | [m2-s03-i092-20261009-relatorio-revisao-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.04-revisoes/m2-s03-i092-20261009-relatorio-revisao-v01.pdf) | Sim |
 | Relatório de Revisão - Sprint 03, I093 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 03, I094 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |

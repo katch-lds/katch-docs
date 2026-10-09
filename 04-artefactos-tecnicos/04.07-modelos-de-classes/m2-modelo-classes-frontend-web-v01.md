@@ -20,7 +20,7 @@
 | Módulo | Área de gestão web (`katch-frontend-web`), React 19.3 com TypeScript 7.0 e Vite 8.3 |
 | Issue | `I090` — Elaborar o modelo de classes do frontend web |
 | Executor / Revisor / Auditor | Roberto Baptista / João Borguem / Miguel Santos |
-| Documentos de origem | `m2-documentacao-arquitetura-v01.md` (secções 2 e 3, `I033` e `I034`), `m2-modelo-classes-backend-v01.md` (`I036`), `m2-especificacao-requisitos-v01.md` (RF037 a RF118 com componente Frontend web, RNF004 a RNF009, RNF012, RNF018; parâmetros P01 a P21), `m2-especificacoes-casos-uso-v01.md` (UC01, UC02, UC07 a UC20), protótipos de baixa fidelidade aceites na `I040` (Recrutador, ecrãs W01 a W26) e na `I041` (Administrador, ecrãs A01 a A11), a consolidar em `m2-prototipo-baixa-fidelidade-v01.pdf` pela `I087`, `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m2-documentacao-api-v01.md` (secções 2 a 8 e 11, `I092`), `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5), `m2-backlog-projeto-v03.xlsx` (Issue `I090`) |
+| Documentos de origem | `m2-documentacao-arquitetura-v01.md` (secções 2 e 3, `I033` e `I034`), `m2-modelo-classes-backend-v01.md` (`I036`), `m2-especificacao-requisitos-v01.md` (RF037 a RF118 com componente Frontend web, RNF004 a RNF009, RNF012, RNF018; parâmetros P01 a P21), `m2-especificacoes-casos-uso-v01.md` (UC01, UC02, UC07 a UC20), protótipos de baixa fidelidade aceites na `I040` (Recrutador, ecrãs W01 a W26) e na `I041` (Administrador, ecrãs A01 a A11), a consolidar em `m2-prototipo-baixa-fidelidade-v01.pdf` pela `I087`, `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m2-modelo-de-dados-katch-v01.md` (DM-02, `I035`), `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md` (alternativa pendente à ligação persistente), `m2-documentacao-api-v01.md` (secções 2 a 8 e 11, `I092`), `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5), `m2-backlog-projeto-v03.xlsx` (Issue `I090`) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.07-modelos-de-classes`: um ficheiro por módulo relevante, com classes, responsabilidades, atributos, operações, relações e multiplicidades. Corresponde à linha `OF-M2-008` — «Modelo de classes — frontend web v1» da Checklist de Controlo de Artefactos.
 
@@ -31,6 +31,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | v01 | 2026-10-08 | Criação do documento: camadas, tipos dos DTOs e enumerações, cliente da API e serviços, ficheiros protegidos, ligação persistente, sessão, rotas protegidas por tipo de conta e por estado da Empresa, páginas e componentes do Recrutador e do Administrador, estado dos ecrãs, dependências do backend por resolver, divergências com os protótipos e rastreabilidade. | `I090` |
 | v01 | 2026-10-09 | Alinhamento com a documentação da API v01 (`I092`) antes da revisão: enumerações com os valores JSON da API, cabeçalho `X-Client-App`, tratamento dos erros do catálogo da API, carregamentos em `multipart/form-data`, pedido HTTP de cada operação dos serviços, autenticação e eventos dos hubs; dependências G1 a G10 confrontadas com os pontos em aberto PA-01 a PA-06 da API e acrescentadas G11 e G12. | `I090` |
 | v01 | 2026-10-09 | Alinhamento com a versão revista da documentação da API v01 (`I092`): lista de matches só com Empresa aprovada (6.7.1), com a rota `/matches`, a moldura do Recrutador e a divergência P2 ajustadas; ERR-35 também na abertura do perfil e na obtenção do CV; dependências G1, G2, G4, G5 e G10 confrontadas com PA-03 e PA-07 a PA-09; cabeçalho `X-Client-App` descrito como exigido no início de sessão. | `I090` |
+| v01 | 2026-10-09 | Melhorias M01 a M06 do relatório de revisão (ciclo 1): ligações página → hook, página → componente e hook → serviço com multiplicidades nos diagramas (nova secção 8.4, relações dos componentes partilhados em 8.1 e dos hooks aos serviços na secção 9); `IResourceState` com o prefixo `I`; exceção do `useProtectedFile` na regra da secção 9; ecrãs da `RecruiterShell`; modelo de dados e decisão da consulta periódica nos documentos de origem; destino da notificação `COMPANY_APPROVED` registado (DF-13). | `I090` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -213,7 +214,7 @@ A língua da interface é apenas o português (arquitetura, secção 2.5). As de
 | `ConversationCloseReason` | Encerrada por uma das partes; Conta bloqueada ou suspensa; Empresa suspensa | RF074, RF075 |
 | `NotificationType` | Ação apresentada: `NEW_INTEREST` «Ver candidatos»; `MATCH_CONFIRMED` «Ver match»; `NEW_MESSAGE` «Abrir conversa»; `COMPANY_APPROVED` e `COMPANY_REJECTED` «Ver dados da Empresa» | W24, RF082 |
 
-O texto de cada notificação vem pronto do servidor (`NotificationDto.text`); o cliente só escolhe a ação pelo tipo e abre o elemento indicado em `targetId` (documentação da API, secção 7.3): `NEW_INTEREST` → identificador da vaga (`/candidatos?vaga=:jobId`); `MATCH_CONFIRMED` → identificador do match (`/matches`); `NEW_MESSAGE` → identificador do match (`/conversas?match=:matchId`); `COMPANY_APPROVED` e `COMPANY_REJECTED` → identificador da Empresa (`/empresa` se aprovada, `/empresa/estado` se recusada).
+O texto de cada notificação vem pronto do servidor (`NotificationDto.text`); o cliente só escolhe a ação pelo tipo e abre o elemento indicado em `targetId` (documentação da API, secção 7.3): `NEW_INTEREST` → identificador da vaga (`/candidatos?vaga=:jobId`); `MATCH_CONFIRMED` → identificador do match (`/matches`); `NEW_MESSAGE` → identificador do match (`/conversas?match=:matchId`); `COMPANY_APPROVED` e `COMPANY_REJECTED` → identificador da Empresa (`/empresa` se aprovada, `/empresa/estado` se recusada). A documentação da API (secção 7.3) indica, para os dois tipos, o «Estado do pedido de registo»; no `COMPANY_APPROVED`, o cliente abre `/empresa` porque a rota `/empresa/estado` só admite Empresas pendentes, recusadas ou suspensas (secção 7.2, decisão DF-13).
 
 ### 3.2. Tipos dos DTOs
 
@@ -1183,11 +1184,22 @@ classDiagram
         +string? src
         +string alt
     }
+    class BadgeStatus {
+        <<type>>
+    }
+    class useProtectedFile {
+        <<hook>>
+    }
+    StatusBadge "1" ..> "1" BadgeStatus : status
+    ProtectedImage "1" ..> "1" useProtectedFile : src
+    FormField "1" *-- "0..1" FileUpload : children
 ```
+
+Os componentes partilhados não dependem uns dos outros, exceto o `FileUpload`, que é apresentado dentro de um `FormField` (rótulo, ajuda e erro do ficheiro). Só o `ProtectedImage` usa um hook (secção 2.1). As páginas que usam cada componente estão na secção 8.4.
 
 | Componente | Responsabilidade | Ecrãs | Requisitos |
 | --- | --- | --- | --- |
-| `RecruiterShell` | Moldura do Recrutador. Com a Empresa não aprovada (`locked`), mostra Vagas e Candidatos com cadeado e o item «Estado do pedido»; Matches fica com cadeado sempre que a Empresa não está aprovada (documentação da API, 6.7.1); Conversas fica com cadeado nos estados pendente e recusada; Notificações e Conta ficam sempre acessíveis (divergências P1 e P2 da secção 12). | W05 a W26, exceto W03 e W04 | RF039, RF075, RF079, RF080, RF106 |
+| `RecruiterShell` | Moldura do Recrutador. Com a Empresa não aprovada (`locked`), mostra Vagas e Candidatos com cadeado e o item «Estado do pedido»; Matches fica com cadeado sempre que a Empresa não está aprovada (documentação da API, 6.7.1); Conversas fica com cadeado nos estados pendente e recusada; Notificações e Conta ficam sempre acessíveis (divergências P1 e P2 da secção 12). | W05 a W26 | RF039, RF075, RF079, RF080, RF106 |
 | `AdminShell` | Moldura da área de supervisão: Indicadores; Empresas (Pendentes de aprovação, com o número de pendentes; Todas as Empresas; Vagas publicadas); Utilizadores (Contas de utilizador; Candidatos); Configuração (Listas pré-definidas). Não tem conversas nem notificações. | A02 a A10 | RF103, RF104 |
 | `Sidebar` | Navegação, com o item ativo em destaque e os contadores: conversas (soma das mensagens por ler) e notificações por ler, no Recrutador; Empresas pendentes, no Administrador. | W05 a W26, A02 a A10 | RF071, RF080, RF091 |
 | `RecruiterTopBar` | Designação social e nome do responsável da Empresa (dependência G1). | W05 a W26 | RF044 |
@@ -1444,14 +1456,338 @@ A área de supervisão não tem nenhum ecrã de conversas nem acesso ao conteúd
 
 ---
 
-## 9. Estado dos ecrãs
+### 8.4. Ligações das páginas aos hooks e aos componentes
 
-Os hooks concentram o estado de cada ecrã. Todos os hooks que obtêm dados realizam o contrato `ResourceState<T>`, para que as páginas tratem o carregamento, o erro e a lista vazia da mesma forma: `data` é o recurso principal do hook, com o tipo `T` indicado na tabela desta secção, e os atributos acrescentados por cada hook são estado complementar. Os hooks são funções: compõem-se, não se especializam.
+Os diagramas seguintes representam as colunas «Hook» das tabelas das secções 8.2 e 8.3 e os ecrãs da tabela de componentes da secção 8.1, com as multiplicidades. Cada página usa uma instância de cada hook; as multiplicidades dos componentes indicam quantas instâncias a página apresenta (`0..1` nos diálogos, que só aparecem quando a ação é pedida). As molduras (`RecruiterShell`, `AdminShell`) e o `ConnectionBanner` estão no primeiro diagrama da secção 8.1. A ligação dos hooks aos serviços está na secção 9.
+
+Páginas do Recrutador e hooks:
 
 ```mermaid
 classDiagram
     direction LR
-    class ResourceState~T~ {
+    class LoginPage {
+        <<page>>
+    }
+    class CreateRecruiterAccountPage {
+        <<page>>
+    }
+    class CompanyRegistrationPage {
+        <<page>>
+    }
+    class CompanyRequestStatusPage {
+        <<page>>
+    }
+    class CompanyProfilePage {
+        <<page>>
+    }
+    class JobListPage {
+        <<page>>
+    }
+    class JobFormPage {
+        <<page>>
+    }
+    class WaitingCandidatesPage {
+        <<page>>
+    }
+    class CandidateProfilePage {
+        <<page>>
+    }
+    class MatchConfirmedPage {
+        <<page>>
+    }
+    class MatchesPage {
+        <<page>>
+    }
+    class ConversationsPage {
+        <<page>>
+    }
+    class NotificationsPage {
+        <<page>>
+    }
+    class AccountPage {
+        <<page>>
+    }
+    class useSession {
+        <<hook>>
+    }
+    class useCompany {
+        <<hook>>
+    }
+    class useJobs {
+        <<hook>>
+    }
+    class useReferenceLists {
+        <<hook>>
+    }
+    class useWaitingCandidates {
+        <<hook>>
+    }
+    class useCandidateProfile {
+        <<hook>>
+    }
+    class useMatches {
+        <<hook>>
+    }
+    class useConversations {
+        <<hook>>
+    }
+    class useNotifications {
+        <<hook>>
+    }
+    LoginPage "1" ..> "1" useSession
+    CreateRecruiterAccountPage "1" ..> "1" useSession
+    CompanyRegistrationPage "1" ..> "1" useCompany
+    CompanyRequestStatusPage "1" ..> "1" useCompany
+    CompanyProfilePage "1" ..> "1" useCompany
+    JobListPage "1" ..> "1" useJobs
+    JobFormPage "1" ..> "1" useJobs
+    JobFormPage "1" ..> "1" useReferenceLists
+    WaitingCandidatesPage "1" ..> "1" useWaitingCandidates
+    WaitingCandidatesPage "1" ..> "1" useJobs
+    CandidateProfilePage "1" ..> "1" useCandidateProfile
+    MatchConfirmedPage "1" ..> "1" useCandidateProfile
+    MatchesPage "1" ..> "1" useMatches
+    ConversationsPage "1" ..> "1" useConversations
+    NotificationsPage "1" ..> "1" useNotifications
+    AccountPage "1" ..> "1" useSession
+```
+
+Páginas do Recrutador e componentes partilhados (a `LoginPage` e a `NotificationsPage` não usam nenhum):
+
+```mermaid
+classDiagram
+    direction LR
+    class CreateRecruiterAccountPage {
+        <<page>>
+    }
+    class CompanyRegistrationPage {
+        <<page>>
+    }
+    class CompanyRequestStatusPage {
+        <<page>>
+    }
+    class CompanyProfilePage {
+        <<page>>
+    }
+    class JobListPage {
+        <<page>>
+    }
+    class JobFormPage {
+        <<page>>
+    }
+    class WaitingCandidatesPage {
+        <<page>>
+    }
+    class CandidateProfilePage {
+        <<page>>
+    }
+    class MatchConfirmedPage {
+        <<page>>
+    }
+    class MatchesPage {
+        <<page>>
+    }
+    class ConversationsPage {
+        <<page>>
+    }
+    class AccountPage {
+        <<page>>
+    }
+    class FormField {
+        <<component>>
+    }
+    class StatusBadge {
+        <<component>>
+    }
+    class FileUpload {
+        <<component>>
+    }
+    class ProtectedImage {
+        <<component>>
+    }
+    class DataTable {
+        <<component>>
+    }
+    class ConfirmDialog {
+        <<component>>
+    }
+    class SkillTag {
+        <<component>>
+    }
+    CreateRecruiterAccountPage "1" ..> "1..*" FormField
+    CompanyRegistrationPage "1" ..> "1..*" FormField
+    CompanyRequestStatusPage "1" ..> "1" StatusBadge
+    CompanyRequestStatusPage "1" ..> "0..*" FormField
+    CompanyProfilePage "1" ..> "1..*" FormField
+    CompanyProfilePage "1" ..> "1..2" FileUpload
+    CompanyProfilePage "1" ..> "0..*" ProtectedImage
+    CompanyProfilePage "1" ..> "1" StatusBadge
+    JobListPage "1" ..> "1" DataTable
+    JobListPage "1" ..> "0..*" StatusBadge
+    JobListPage "1" ..> "0..1" ConfirmDialog
+    JobFormPage "1" ..> "1..*" FormField
+    JobFormPage "1" ..> "1" FileUpload
+    JobFormPage "1" ..> "0..*" SkillTag
+    JobFormPage "1" ..> "0..*" ProtectedImage
+    WaitingCandidatesPage "1" ..> "1" DataTable
+    CandidateProfilePage "1" ..> "0..*" SkillTag
+    CandidateProfilePage "1" ..> "0..1" ProtectedImage
+    CandidateProfilePage "1" ..> "0..1" ConfirmDialog
+    MatchConfirmedPage "1" ..> "0..1" ProtectedImage
+    MatchesPage "1" ..> "1" DataTable
+    MatchesPage "1" ..> "0..*" StatusBadge
+    ConversationsPage "1" ..> "0..1" FormField
+    AccountPage "1" ..> "1..*" FormField
+```
+
+Páginas do Administrador e hooks:
+
+```mermaid
+classDiagram
+    direction LR
+    class IndicatorsPage {
+        <<page>>
+    }
+    class PendingCompaniesPage {
+        <<page>>
+    }
+    class PendingCompanyDetailPage {
+        <<page>>
+    }
+    class CompaniesPage {
+        <<page>>
+    }
+    class PublishedJobsPage {
+        <<page>>
+    }
+    class AccountsPage {
+        <<page>>
+    }
+    class CandidatesPage {
+        <<page>>
+    }
+    class ReferenceListsPage {
+        <<page>>
+    }
+    class ChangePasswordPage {
+        <<page>>
+    }
+    class AccessDeniedPage {
+        <<page>>
+    }
+    class useIndicators {
+        <<hook>>
+    }
+    class usePendingCompanies {
+        <<hook>>
+    }
+    class useCompaniesAdmin {
+        <<hook>>
+    }
+    class usePublishedJobs {
+        <<hook>>
+    }
+    class useAccounts {
+        <<hook>>
+    }
+    class useCandidatesAdmin {
+        <<hook>>
+    }
+    class useReferenceLists {
+        <<hook>>
+    }
+    class useSession {
+        <<hook>>
+    }
+    IndicatorsPage "1" ..> "1" useIndicators
+    IndicatorsPage "1" ..> "1" usePendingCompanies
+    PendingCompaniesPage "1" ..> "1" usePendingCompanies
+    PendingCompanyDetailPage "1" ..> "1" usePendingCompanies
+    CompaniesPage "1" ..> "1" useCompaniesAdmin
+    PublishedJobsPage "1" ..> "1" usePublishedJobs
+    AccountsPage "1" ..> "1" useAccounts
+    CandidatesPage "1" ..> "1" useCandidatesAdmin
+    ReferenceListsPage "1" ..> "1" useReferenceLists
+    ChangePasswordPage "1" ..> "1" useSession
+    AccessDeniedPage "1" ..> "1" useSession
+```
+
+Páginas do Administrador e componentes partilhados (a `IndicatorsPage` e a `AccessDeniedPage` não usam nenhum):
+
+```mermaid
+classDiagram
+    direction LR
+    class PendingCompaniesPage {
+        <<page>>
+    }
+    class PendingCompanyDetailPage {
+        <<page>>
+    }
+    class CompaniesPage {
+        <<page>>
+    }
+    class PublishedJobsPage {
+        <<page>>
+    }
+    class AccountsPage {
+        <<page>>
+    }
+    class CandidatesPage {
+        <<page>>
+    }
+    class ReferenceListsPage {
+        <<page>>
+    }
+    class ChangePasswordPage {
+        <<page>>
+    }
+    class DataTable {
+        <<component>>
+    }
+    class EmptyState {
+        <<component>>
+    }
+    class StatusBadge {
+        <<component>>
+    }
+    class ConfirmDialog {
+        <<component>>
+    }
+    class ReasonDialog {
+        <<component>>
+    }
+    class FormField {
+        <<component>>
+    }
+    PendingCompaniesPage "1" ..> "1" DataTable
+    PendingCompaniesPage "1" ..> "0..1" EmptyState
+    PendingCompanyDetailPage "1" ..> "1" StatusBadge
+    PendingCompanyDetailPage "1" ..> "0..1" ConfirmDialog
+    PendingCompanyDetailPage "1" ..> "0..1" ReasonDialog
+    CompaniesPage "1" ..> "1" DataTable
+    CompaniesPage "1" ..> "0..*" StatusBadge
+    CompaniesPage "1" ..> "0..1" ConfirmDialog
+    PublishedJobsPage "1" ..> "1" DataTable
+    AccountsPage "1" ..> "1" DataTable
+    AccountsPage "1" ..> "0..*" StatusBadge
+    AccountsPage "1" ..> "0..1" ConfirmDialog
+    CandidatesPage "1" ..> "1" DataTable
+    CandidatesPage "1" ..> "0..*" StatusBadge
+    CandidatesPage "1" ..> "0..1" ConfirmDialog
+    ReferenceListsPage "1" ..> "1..*" FormField
+    ChangePasswordPage "1" ..> "1..*" FormField
+```
+
+O `useSession` não chama serviços: lê o `SessionProvider`, que usa o `AuthService` e o `CompanyService` (secção 7.1). O `useProtectedFile` não é usado pelas páginas, mas pelo componente `ProtectedImage` (secção 8.1).
+
+## 9. Estado dos ecrãs
+
+Os hooks concentram o estado de cada ecrã. Todos os hooks que obtêm dados para um ecrã realizam o contrato `IResourceState<T>`, exceto o `useProtectedFile` (secção 4.3), que serve um componente e devolve apenas o endereço local de um ficheiro, sem recurso nem lista a apresentar; para que as páginas tratem o carregamento, o erro e a lista vazia da mesma forma: `data` é o recurso principal do hook, com o tipo `T` indicado na tabela desta secção, e os atributos acrescentados por cada hook são estado complementar. Os hooks são funções: compõem-se, não se especializam.
+
+```mermaid
+classDiagram
+    direction LR
+    class IResourceState~T~ {
         <<interface>>
         +T? data
         +boolean loading
@@ -1526,22 +1862,38 @@ classDiagram
         <<interface>>
     }
     useReferenceLists ..> ReferenceLists : data
-    useCompany ..|> ResourceState
-    useJobs ..|> ResourceState
-    useReferenceLists ..|> ResourceState
-    useWaitingCandidates ..|> ResourceState
-    useCandidateProfile ..|> ResourceState
-    useMatches ..|> ResourceState
-    useConversations ..|> ResourceState
-    useNotifications ..|> ResourceState
+    useCompany ..|> IResourceState
+    useJobs ..|> IResourceState
+    useReferenceLists ..|> IResourceState
+    useWaitingCandidates ..|> IResourceState
+    useCandidateProfile ..|> IResourceState
+    useMatches ..|> IResourceState
+    useConversations ..|> IResourceState
+    useNotifications ..|> IResourceState
     useConversations "1" ..> "1" IRealtimeClient : MessageReceived e ConversationClosed
     useNotifications "1" ..> "1" IRealtimeClient : NotificationReceived
+    class CompanyService
+    class JobService
+    class ReferenceListService
+    class CandidateEvaluationService
+    class MatchService
+    class ConversationService
+    class NotificationService
+    useCompany "0..*" ..> "1" CompanyService
+    useCompany "0..*" ..> "1" ReferenceListService : localidades
+    useJobs "0..*" ..> "1" JobService
+    useReferenceLists "0..*" ..> "1" ReferenceListService
+    useWaitingCandidates "0..*" ..> "1" CandidateEvaluationService
+    useCandidateProfile "0..*" ..> "1" CandidateEvaluationService
+    useMatches "0..*" ..> "1" MatchService
+    useConversations "0..*" ..> "1" ConversationService
+    useNotifications "0..*" ..> "1" NotificationService
 ```
 
 ```mermaid
 classDiagram
     direction LR
-    class ResourceState~T~ {
+    class IResourceState~T~ {
         <<interface>>
         +T? data
         +boolean loading
@@ -1599,13 +1951,24 @@ classDiagram
         +suspend(string candidateId) void
         +reactivate(string candidateId) void
     }
-    useIndicators ..|> ResourceState
-    usePendingCompanies ..|> ResourceState
-    useCompaniesAdmin ..|> ResourceState
-    usePublishedJobs ..|> ResourceState
-    useAccounts ..|> ResourceState
-    useCandidatesAdmin ..|> ResourceState
+    useIndicators ..|> IResourceState
+    usePendingCompanies ..|> IResourceState
+    useCompaniesAdmin ..|> IResourceState
+    usePublishedJobs ..|> IResourceState
+    useAccounts ..|> IResourceState
+    useCandidatesAdmin ..|> IResourceState
+    class IndicatorService
+    class AdminCompanyService
+    class AdminAccountService
+    useIndicators "0..*" ..> "1" IndicatorService
+    usePendingCompanies "0..*" ..> "1" AdminCompanyService
+    useCompaniesAdmin "0..*" ..> "1" AdminCompanyService
+    usePublishedJobs "0..*" ..> "1" AdminCompanyService
+    useAccounts "0..*" ..> "1" AdminAccountService
+    useCandidatesAdmin "0..*" ..> "1" AdminAccountService
 ```
+
+Cada serviço é uma instância única, partilhada por todos os hooks que o usam (`0..*` → `1`). O `useReferenceLists` do Administrador usa o mesmo `ReferenceListService` do primeiro diagrama, com as operações de acrescento e alteração.
 
 | Hook | `data` (T) | Estado complementar | Origem das atualizações |
 | --- | --- | --- | --- |
@@ -1747,6 +2110,7 @@ O modelo segue os protótipos aceites, exceto onde contrariam os requisitos ou o
 | DF-10 | Filtros, pesquisa e paginação das listas da área de supervisão são aplicados no cliente. | O backend devolve as listas completas, sem parâmetros de filtragem nem de paginação (backend, secção 6); os volumes de demonstração são pequenos (P18). |
 | DF-11 | As ações irreversíveis e as mudanças de estado passam por `ConfirmDialog` com a lista dos efeitos. | Ecrãs W12 a W15, W18, W20, A04b, A05b, A07b, A07c e A08b, aceites nas `I040` e `I041`; RF117. |
 | DF-12 | O cliente identifica os erros pelo código HTTP e pelas mensagens fixas do catálogo da API até existir um código de erro no `ApiErrorDto`. | A documentação da API fixa as mensagens para que os clientes as possam verificar (secção 4.3) e regista o código de erro como proposta (PA-05); quando for aceite, muda apenas `toApiError`. |
+| DF-13 | A notificação `COMPANY_APPROVED` abre a página da Empresa (`/empresa`) e não o estado do pedido de registo indicado na documentação da API (secção 7.3). | Com a Empresa aprovada, a proteção da rota `/empresa/estado` encaminha para `/empresa` (secção 7.2); a página da Empresa mostra o estado «Aprovada» no separador «Dados da Empresa» (W08). A `COMPANY_REJECTED` abre `/empresa/estado`, como na API. |
 
 ---
 

@@ -20,7 +20,7 @@
 | Módulo | Frontend mobile (`katch-frontend-mobile`), aplicação Flutter 3.47.x em Dart 3.13.x, exclusiva do Candidato |
 | Issue | `I091` — Elaborar o modelo de classes do frontend mobile |
 | Executor / Revisor / Auditor | João Coelho / Roberto Baptista / João Borguem |
-| Documentos de origem | `m2-s02-i039-20261005-prototipo-baixa-fidelidade-v01.pdf` (ecrãs M01 a M21, `I039`), `m2-modelo-classes-backend-v01.md` (controllers, hubs e DTOs, `I036`), `m2-documentacao-arquitetura-v01.md` (secção 2, `I033`, e secção 3, `I034`), `m2-especificacao-requisitos-v01.md` (RF001 a RF036, RF075, RF105, RF108, RF110 e RNF002, RNF005, RNF010, RNF011, RNF014; parâmetros P01 a P11 e P17), `m2-especificacoes-casos-uso-v01.md` (UC01 a UC06 e UC13 a UC15), `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`, `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf` e `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5) |
+| Documentos de origem | `m2-s02-i039-20261005-prototipo-baixa-fidelidade-v01.pdf` (ecrãs M01 a M21, `I039`), `m2-modelo-classes-backend-v01.md` (controllers, hubs e DTOs, `I036`), `m2-documentacao-arquitetura-v01.md` (secção 2, `I033`, e secção 3, `I034`), `m2-especificacao-requisitos-v01.md` (RF001 a RF036, RF075, RF105, RF108, RF110 e RNF002, RNF005, RNF010, RNF011, RNF014; parâmetros P01 a P11 e P17), `m2-especificacoes-casos-uso-v01.md` (UC01 a UC06 e UC13 a UC15), `m2-documentacao-api-v01.md` (secções 2 a 7 e 11, `I092`), `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`, `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf` e `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.07-modelos-de-classes`: um ficheiro por módulo relevante, com classes, responsabilidades, atributos, operações, relações e multiplicidades. Corresponde à linha `OF-M2-009` — «Modelo de classes — frontend mobile v1» da Checklist de Controlo de Artefactos. É o módulo da aplicação Flutter do Candidato; o backend está em `m2-modelo-classes-backend-v01.md` e a área de gestão web tem o seu próprio módulo.
 
@@ -29,6 +29,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-08 | Criação do documento: camadas, modelos que espelham os DTOs, núcleo, serviços de acesso à API, sessão, cliente da ligação persistente, gestão de estado, ecrãs e widgets, com responsabilidades, atributos, operações, relações e multiplicidades. | `I091` |
+| v01 | 2026-10-09 | Correções da revisão da `I091` e alinhamento com a documentação da API (`I092`): motivo do início de sessão igual à `message` do `ApiErrorDto` (D01); classificação dos erros pelo código HTTP (D02); cabeçalho `X-Client-App`, enumerações em maiúsculas com `_`, rotas e parâmetro `access_token` da API (D03); pontos de coerência ligados aos pontos em aberto da API e acrescentados PC-09 a PC-12 (M01); recarga da lista de conversas ao receber `ConversationClosed` (M02); correspondência das operações com as do controller (M03). | `I091` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -98,12 +99,12 @@ Todas as camadas usam os Modelos; a seta só está desenhada a partir do Núcleo
 | Backend (C#) | Frontend (Dart) | Notas |
 | --- | --- | --- |
 | `Guid` | `String` | Texto do UUID, tal como segue no JSON. |
-| `DateTimeOffset` | `DateTime` | Em UTC; convertido para a hora local só na apresentação. |
-| `decimal` | `double` | Salários em euros brutos mensais. |
+| `DateTimeOffset` | `DateTime` | ISO 8601 em UTC com o sufixo `Z` (API, secção 2.3); convertido para a hora local só na apresentação. |
+| `decimal` | `double` | Número JSON com até 2 casas decimais; salários em euros brutos mensais. |
 | `int`, `bool`, `string` | `int`, `bool`, `String` | — |
 | `T?` | `T?` | A coluna ou o campo admite ausência. |
 | `List<T>` | `List<T>` | Imutável depois de criada. |
-| Enumerações | `enum` | Valores em `lowerCamelCase` (`WorkMode.onSite`); a conversão de e para o JSON fica em `fromWire` e `toWire` de cada enumeração, segundo a representação fixada na documentação da API (`04.11`). |
+| Enumerações | `enum` | Valores em `lowerCamelCase` (`WorkMode.onSite`); `fromWire` e `toWire` de cada enumeração convertem de e para o texto em maiúsculas com `_` da API (secções 2.3 e 2.4, DAPI-01): `WorkMode.onSite` ↔ `"ON_SITE"`, `Availability.fifteenDays` ↔ `"FIFTEEN_DAYS"`. Os nomes das propriedades JSON são os dos atributos em `camelCase`. |
 
 - **Diagramas Mermaid (`classDiagram`):** `+` público, `-` privado (em Dart, `_`); `$` = membro estático; `~T~` = tipo genérico; `Future~T~` = operação assíncrona; `<<interface>>`, `<<abstract>>`, `<<enumeration>>`, `<<model>>` (modelo imutável que espelha um DTO), `<<widget>>` e `<<mixin>>` identificam o estereótipo. As operações `fromJson` e `toJson` dos modelos, os construtores e o método `build` dos widgets não são desenhados, exceto onde são relevantes; a convenção está nesta secção.
 - **Relações:** `..>` dependência (recebida por construtor); `..|>` realização de interface; `<|--` herança; `-->` associação; `*--` composição (o filho não existe sem o pai); `o--` agregação (o estado de um controller ou store contém modelos). As multiplicidades estão nas extremidades.
@@ -232,7 +233,7 @@ classDiagram
     CandidateProfileDto "1" *-- "1" SearchPreferencesDto : preferências
 ```
 
-`LoginResponse` é a resposta de `login` e de `register`. `CandidateProfileDto` nunca contém o caminho dos ficheiros: `photoUrl` é um endereço da API que serve a imagem depois de verificar a autorização e `hasCv` só indica se existe curriculum vitae (backend, secção 7.2). O Candidato não descarrega o próprio CV: só o envia (RF011).
+`LoginResponse` é a resposta de `login` e de `register`. `CandidateProfileDto` nunca contém o caminho dos ficheiros: `photoUrl` é um endereço da API que serve a imagem depois de verificar a autorização e `hasCv` só indica se existe curriculum vitae (backend, secção 7.2). A aplicação só envia o CV (RF011): o modelo de classes do backend não tem operação para o Candidato o obter, embora o RNF007 admita esse pedido (PC-11).
 
 ### 3.2. Exploração, matches, conversas, notificações, listas e erros
 
@@ -409,7 +410,7 @@ classDiagram
     }
 ```
 
-As seis primeiras enumerações têm os mesmos valores das do backend (modelo de classes do backend, secção 3.5). `NotificationType` tem apenas os três tipos que o servidor envia ao Candidato — `MatchConfirmed` (RF031), `NewMessage` (RF032) e `InterestQuotaRestored` (RF033) — e `unknown`, para onde vai qualquer valor que a aplicação não reconheça, de modo que uma notificação nova de um tipo futuro nunca impede a leitura da lista. Os tipos `NewInterest`, `CompanyApproved` e `CompanyRejected` são dirigidos ao Recrutador (RF076 e RF079) e não chegam à aplicação móvel.
+As seis primeiras enumerações têm os mesmos valores das do backend (modelo de classes do backend, secção 3.5). `NotificationType` tem apenas os três tipos que o servidor envia ao Candidato — `MatchConfirmed` (RF031), `NewMessage` (RF032) e `InterestQuotaRestored` (RF033) — e `unknown`, para onde vai qualquer valor que a aplicação não reconheça, de modo que uma notificação nova de um tipo futuro nunca impede a leitura da lista. Os tipos `NewInterest`, `CompanyApproved` e `CompanyRejected` são dirigidos ao Recrutador (RF076 e RF079) e não chegam à aplicação móvel. Na API, os três tipos do Candidato são `MATCH_CONFIRMED`, `NEW_MESSAGE` e `INTEREST_QUOTA_RESTORED` (API, secção 7.3).
 
 As enumerações de estado do cliente (`SessionStatus`, `RealtimeState`, `LoadStatus`, `ExplorationStatus`, `RegistrationStep`, `ListFilter` e `NotificationTargetKind`) estão nas secções em que são usadas.
 
@@ -527,13 +528,26 @@ classDiagram
 | Classe | Responsabilidade | Requisitos |
 | --- | --- | --- |
 | `ApiClient` | Interface única dos pedidos à API. As operações devolvem o JSON já descodificado (`Object?`) e os serviços convertem-no em modelos. É a fronteira que os testes substituem por uma implementação simulada. | Arquitetura, secção 2.6 |
-| `HttpApiClient` | Envia cada pedido por HTTPS, em JSON, com a credencial de sessão no cabeçalho de autorização. O tempo limite de cada pedido é de 9 segundos, abaixo dos 10 segundos do RNF014. Quando não há resposta nesse tempo, regista a falha em `ConnectionMonitor` e lança `ConnectionFailure`. Quando o servidor responde com um `ApiErrorDto`, lança `ApiRejection`. Quando o servidor recusa a credencial numa operação reservada, chama `rejectCredential()` e lança `AuthenticationFailure`. Qualquer outra resposta de erro lança `UnexpectedFailure`. O código de estado de cada resposta é fixado na documentação da API (`04.11`); este modelo fixa apenas as classes. | RNF004, RNF005, RNF009, RNF014 |
+| `HttpApiClient` | Envia cada pedido por HTTPS, em JSON, com a credencial de sessão no cabeçalho de autorização. O tempo limite de cada pedido é de 9 segundos, abaixo dos 10 segundos do RNF014. Quando não há resposta nesse tempo, regista a falha em `ConnectionMonitor` e lança `ConnectionFailure`. Todas as respostas de erro da API trazem um `ApiErrorDto` (API, secção 4.1), incluindo `401` e `403`, pelo que a exceção se escolhe pelo código HTTP e pelo tipo de operação, segundo as regras abaixo. | RNF004, RNF005, RNF009, RNF014 |
 | `CredentialProvider` | Interface do Núcleo através da qual `HttpApiClient` e o cliente de tempo real obtêm a credencial e comunicam que o servidor a recusou. É implementada por `SessionManager`. | RNF004 |
 | `ConnectionMonitor` | Guarda se o último pedido falhou por falta de ligação e notifica `ConnectionBanner`. Volta a `false` no primeiro pedido que obtém resposta. | RNF014 |
-| `ApiRejection` | O servidor rejeitou o pedido e indicou o motivo, por regra de negócio (quota esgotada, vaga indisponível, conversa só de consulta, palavra-passe atual errada) ou por validação (cada campo em causa, em `fieldErrors`). | RF004, RF009, RF010 a RF012, RF020, RF026 |
-| `AuthenticationFailure` | A credencial foi recusada (expirada, inválida, conta bloqueada ou suspensa). Termina a sessão. No início de sessão, as credenciais erradas chegam como `ApiRejection` com o motivo uniforme do servidor. | RF086, RF089, RNF005, RNF009 |
+| `ApiRejection` | O servidor rejeitou o pedido e indicou o motivo, por regra de negócio (quota esgotada, vaga indisponível, conversa só de consulta, palavra-passe atual errada) ou por validação (cada campo em causa, em `fieldErrors`). | RF001, RF004, RF009, RF010 a RF012, RF020, RF026, RNF009 |
+| `AuthenticationFailure` | A credencial foi recusada numa operação reservada: expirada ou inválida (`401`, ERR-01) ou conta bloqueada ou suspensa durante a sessão (`403`, ERR-03 ou ERR-04). Termina a sessão. No início de sessão, ERR-02 a ERR-05 chegam como `ApiRejection`, com a `message` do servidor. | RF086, RF089, RNF004, RNF005 |
 | `ConnectionFailure` | O pedido não obteve resposta em 9 segundos ou a ligação não pôde ser estabelecida. Os formulários mantêm o que o Candidato escreveu e permitem voltar a submeter. | RNF014 |
 | `UnexpectedFailure` | Resposta de erro que o modelo de erros não prevê. Mostra uma mensagem genérica e permite repetir a operação. | — |
+
+Regras de classificação das respostas de erro, segundo a API (secções 3.4, 4.1, 4.2 e 4.3). As operações não reservadas são as que a API admite sem credencial: o registo do Candidato e o início de sessão (API, secção 3.3); todas as outras são reservadas.
+
+| Resposta | Operação | Exceção |
+| --- | --- | --- |
+| Sem resposta em 9 segundos ou sem ligação | Qualquer | `ConnectionFailure` (regista a falha em `ConnectionMonitor`) |
+| `401` (ERR-01) | Reservada | `AuthenticationFailure` (chama `rejectCredential()`) |
+| `403` com a mensagem de ERR-03 («A conta está bloqueada.») ou de ERR-04 («A conta está suspensa.») | Reservada | `AuthenticationFailure` (chama `rejectCredential()`) |
+| `401` (ERR-02) e `403` (ERR-03, ERR-04, ERR-05) | Início de sessão | `ApiRejection`, com a `message` do `ApiErrorDto` |
+| Restantes `4xx` (`400`, `403` de ERR-06 a ERR-08, `404`, `409`, `413`, `415`) | Qualquer | `ApiRejection` |
+| `5xx` (ERR-50) | Qualquer | `UnexpectedFailure` |
+
+O `ApiErrorDto` não tem código de erro (API, PA-05), e o ERR-03 e o ERR-04 têm o mesmo código HTTP que o ERR-06, o ERR-07 e o ERR-08. Até o PA-05 ser resolvido, o `403` de conta bloqueada ou suspensa reconhece-se pela mensagem fixa do catálogo da API (secção 4.3), o que é frágil (PC-12).
 
 ### 4.2. Relógio, validação local e dispositivo
 
@@ -611,7 +625,7 @@ Valores aplicados por `InputRules` (especificação de requisitos, secção 3):
 
 ## 5. Serviços de acesso à API
 
-Há um serviço por controller do backend usado pelo Candidato: sete serviços para sete controllers (secção 11.2). Cada serviço é uma interface (`abstract interface class`) e tem uma implementação `Http...` que recebe o `ApiClient` por construtor; os controllers de estado dependem da interface, pelo que os testes usam serviços simulados. As operações têm o mesmo nome e os mesmos parâmetros e resultados das operações do controller correspondente (modelo de classes do backend, secção 6), sem o identificador do utilizador, que o servidor obtém da credencial (backend, DC-05).
+Há um serviço por controller do backend usado pelo Candidato: sete serviços para sete controllers (secção 11.2). Cada serviço é uma interface (`abstract interface class`) e tem uma implementação `Http...` que recebe o `ApiClient` por construtor; os controllers de estado dependem da interface, pelo que os testes usam serviços simulados. Cada operação de um serviço corresponde a uma operação do controller (modelo de classes do backend, secção 6), com os mesmos parâmetros e resultados, sem o identificador do utilizador, que o servidor obtém da credencial (backend, DC-05). O nome é o da operação do controller em `lowerCamelCase`, com três exceções por legibilidade: `Get` e `Update` do perfil passam a `getProfile` e `updateProfile`, e `RegisterCandidate` passa a `register`. A correspondência completa, com o método e a rota da API, está na secção 11.2.
 
 ```mermaid
 classDiagram
@@ -681,7 +695,7 @@ classDiagram
 
 O diagrama mostra duas implementações, como exemplo da relação. As restantes cinco seguem o mesmo padrão: `HttpCandidateProfileService`, `HttpMatchService`, `HttpConversationService`, `HttpNotificationService` e `HttpReferenceListService`.
 
-| Serviço | Controller do backend | Rota base indicativa | Casos de uso | Requisitos |
+| Serviço | Controller do backend | Rota base (API, secção 5) | Casos de uso | Requisitos |
 | --- | --- | --- | --- | --- |
 | `AuthService` | `AuthController` | `/api/auth` | UC01, UC02, UC03 | RF001 a RF005, RF105 |
 | `CandidateProfileService` | `CandidateProfileController` | `/api/candidate/profile` | UC04, UC05 | RF006 a RF012, RF023 |
@@ -691,16 +705,18 @@ O diagrama mostra duas implementações, como exemplo da relação. As restantes
 | `NotificationService` | `NotificationsController` | `/api/notifications` | UC15 | RF034 a RF036 |
 | `ReferenceListService` | `ReferenceListsController` | `/api/reference-lists` | UC03, UC04 | RF003, RF006, RF008 |
 
-As rotas são as indicativas do backend (secção 6 do modelo de classes do backend); as rotas, os códigos de estado e os exemplos são fixados na documentação da API (`04.11`).
+As rotas, os métodos, os códigos de estado, os formatos e os exemplos são os da documentação da API (`m2-documentacao-api-v01.md`, secções 5 e 6), que é o contrato com o backend.
 
 Regras dos serviços:
 
-- `register` e `login` não exigem credencial de sessão; as restantes operações exigem-na. `ReferenceListService.listLocations` é usada também antes do início de sessão (ecrã de registo), o que o backend ainda não permite (secção 13, PC-01).
-- `getNextCard` devolve `null` quando nenhuma vaga cumpre as preferências de procura (RF014); o ecrã mostra então M11.
+- `register` e `login` não exigem credencial de sessão; as restantes operações exigem-na. `HttpAuthService.login` envia o cabeçalho `X-Client-App: mobile` (API, secção 3.2, DAPI-02); uma conta que não seja do Candidato recebe ERR-05. `ReferenceListService.listLocations` é usada também antes do início de sessão (ecrã de registo), o que o backend ainda não permite (secção 13, PC-01).
+- `getNextCard` devolve `null` quando nenhuma vaga cumpre as preferências de procura (RF014), a que a API responde com `204 No Content` (6.3.1); o ecrã mostra então M11.
 - `expressInterest` devolve a quota atualizada. Uma tentativa com a quota esgotada, uma segunda manifestação na mesma vaga ou uma vaga já indisponível são rejeitadas pelo servidor (`ApiRejection`) sem alterar a quota (UC05, E1 a E3).
 - `uploadPhoto` e `uploadCv` não devolvem endereço: os DTOs nunca expõem o caminho dos ficheiros. Depois de cada envio, o estado volta a pedir o perfil (`getProfile`) para obter o novo `photoUrl` e `hasCv`.
 - `open` devolve o histórico e, no servidor, marca como lidas as mensagens da outra parte (RF108). `list` devolve o número de mensagens por ler de cada conversa.
-- `markRead` não devolve valor: o contador de notificações por ler é reduzido em uma unidade no estado (RF035).
+- `markRead` não devolve valor (`204`): o contador de notificações por ler é reduzido em uma unidade no estado (RF035).
+- `uploadPhoto` e `uploadCv` enviam o ficheiro em `multipart/form-data`, no campo `file` (API, secção 2.6), e a API responde `204 No Content`.
+- `changePassword` com a palavra-passe atual errada recebe `400` com o campo `currentPassword` (API, 6.1.5), e não `401`; a aplicação não o confunde com sessão expirada.
 
 ---
 
@@ -776,7 +792,7 @@ classDiagram
 | `restore()` | Chamada no arranque, com o estado `restoring`. Lê a sessão do armazenamento seguro; se existir e ainda não tiver expirado, passa a `signedIn`; caso contrário, apaga-a e passa a `signedOut`. Permite que o ecrã «Conta» (M20) afirme que o dispositivo está ligado à conta. | RNF005, P20 |
 | `start(response)` | Chamada depois do início de sessão ou do registo. Rejeita (`AuthenticationFailure`) uma resposta cujo `userType` não seja `candidate`, porque a aplicação móvel é exclusiva do Candidato. Guarda a sessão, passa a `signedIn` e agenda a expiração para `expiresAt` (8 horas depois do início de sessão). | RF001, RF005, RNF005, P20 |
 | `end()` | Fim de sessão pedido pelo Candidato: apaga a sessão do armazenamento e passa a `signedOut`. O servidor não guarda estado de sessão; a credencial descartada fica válida até expirar (backend, secção 11). | RF105 |
-| `expire()` e `rejectCredential()` | A sessão chegou a `expiresAt` ou o servidor recusou a credencial (expirada, conta bloqueada ou suspensa). Apaga a sessão e passa a `expired`; `AuthGate` volta ao ecrã de início de sessão (M01). | RF086, RF089, RNF004, RNF005 |
+| `expire()` e `rejectCredential()` | A sessão chegou a `expiresAt` ou o servidor recusou a credencial numa operação reservada (ERR-01, ERR-03 ou ERR-04). Apaga a sessão e passa a `expired`; `AuthGate` volta ao ecrã de início de sessão (M01). | RF086, RF089, RNF004, RNF005 |
 | `accessToken` e `authHeaders` | Dão a credencial ao `HttpApiClient` (cabeçalho de autorização) e ao cliente de tempo real (abertura da ligação). | RNF004, RNF006 |
 
 Os stores e o `RealtimeCoordinator` observam `SessionManager`: quando o estado deixa de ser `signedIn`, os stores esvaziam os dados do Candidato e a ligação persistente é fechada.
@@ -860,9 +876,9 @@ classDiagram
     RealtimeCoordinator "1" ..> "1" SessionManager : observa
 ```
 
-`RealtimeCoordinator` usa o mixin `WidgetsBindingObserver` do Flutter para saber quando a aplicação passa a primeiro e a segundo plano. O contrato dos eventos é o dos hubs do backend (modelo de classes do backend, secção 6.1):
+`RealtimeCoordinator` usa o mixin `WidgetsBindingObserver` do Flutter para saber quando a aplicação passa a primeiro e a segundo plano. O contrato dos eventos é o dos hubs do backend (modelo de classes do backend, secção 6.1; API, secções 7.2 e 7.3):
 
-| Hub (rota indicativa) | Evento do servidor | Conteúdo | Stream no cliente | Requisitos |
+| Hub (rota) | Evento do servidor | Conteúdo | Stream no cliente | Requisitos |
 | --- | --- | --- | --- | --- |
 | `MessagesHub` (`/hubs/messages`) | `MessageReceived` | `MessageDto` | `messageReceived` | RF029 |
 | `MessagesHub` (`/hubs/messages`) | `ConversationClosed` | Identificador do match | `conversationClosed` | RF030, RF075 |
@@ -870,8 +886,9 @@ classDiagram
 
 Regras:
 
-- **Abertura.** Cada `HubChannel` abre a sua ligação com a credencial de sessão, no momento da abertura (backend, secção 6.1). O servidor rejeita a ligação de contas que não sejam do Candidato ou do Recrutador, ou que estejam bloqueadas ou suspensas.
+- **Abertura.** Cada `HubChannel` abre a sua ligação com a credencial de sessão, enviada no parâmetro `access_token` da consulta (API, secção 7.1), porque o WebSocket não admite cabeçalhos; a credencial não é registada em nenhum registo de diagnóstico (RNF017). O servidor rejeita a ligação de contas que não sejam do Candidato ou do Recrutador, ou que estejam bloqueadas ou suspensas.
 - **Quando liga.** `RealtimeCoordinator` liga quando a sessão está iniciada e a aplicação está em primeiro plano, e desliga quando a sessão termina ou a aplicação passa a segundo plano. É o âmbito do RF029 e do RF110: aplicação aberta com sessão iniciada. Não há notificações nativas do sistema operativo, nem envio por correio eletrónico ou SMS (arquitetura, secção 2.4).
+- **Encerramento da conversa.** Ao receber `ConversationClosed`, o cliente recarrega a lista de conversas para ler o `closeReason`, porque o evento só traz o identificador do match (API, secção 7.2). O motivo é o que o ecrã M18 apresenta (RF075).
 - **Sentido.** Os hubs só enviam eventos ao cliente. O envio de mensagens, a marcação como lida e o encerramento passam sempre pelo `ConversationService` (backend, secção 6.1).
 - **Perda e reposição da ligação.** Quando a ligação cai, `SignalRRealtimeClient` passa a `reconnecting` e volta a ligar com atrasos crescentes (`ReconnectPolicy`). Quando volta a `connected`, e também quando a aplicação regressa ao primeiro plano, `resynchronize()` pede de novo a lista de conversas, o histórico da conversa aberta e a área de notificações pelos serviços, porque os eventos enviados entretanto não se repetem (backend, secção 6.1). Não há consulta periódica.
 
@@ -976,7 +993,7 @@ classDiagram
         +load() Future~void~
         +summaryOf(String matchId) ConversationSummaryDto?
         +markOpened(String matchId) void
-        +markClosed(String matchId) void
+        +onConversationClosed(String matchId) Future~void~
         +onMessageReceived(MessageDto message) Future~void~
         +setFilter(ListFilter filter) void
         +reset() void
@@ -1021,7 +1038,7 @@ classDiagram
 | --- | --- | --- | --- |
 | `SessionScopedStore` | Base dos stores com dados do Candidato. Observa `SessionManager` e chama `reset()` quando a sessão deixa de estar iniciada, para que nenhum dado de uma conta fique em memória depois do fim de sessão. | — | RF105 |
 | `ProfileStore` | Perfil profissional do Candidato, carregado depois do início de sessão. Cada controller que altera o perfil entrega o `CandidateProfileDto` devolvido pelo serviço (`update`); depois de um envio de ficheiro volta a pedir o perfil (`refresh`) para obter `photoUrl` e `hasCv`. Expõe as preferências de procura, que a área de exploração observa. | M05 a M08, M09, M20 | RF006 a RF012, RF023 |
-| `ConversationsStore` | Lista de conversas com o número de mensagens por ler. `unreadMessages` é a soma de `unreadCount` e alimenta o cabeçalho «mensagens por ler» do ecrã M16 e o contador do separador «Conversas». `markOpened` põe a zero o contador da conversa que o Candidato abriu (o servidor já a marcou como lida, RF108) e `markClosed` passa a conversa a só de consulta. `filter` é o filtro «Todas» ou «Não lidas», aplicado só à lista já carregada. | M16, M17, M18, barra inferior | RF027, RF028, RF030, RF075, RF108 |
+| `ConversationsStore` | Lista de conversas com o número de mensagens por ler. `unreadMessages` é a soma de `unreadCount` e alimenta o cabeçalho «mensagens por ler» do ecrã M16 e o contador do separador «Conversas». `markOpened` põe a zero o contador da conversa que o Candidato abriu (o servidor já a marcou como lida, RF108) e `onConversationClosed` recarrega a lista para obter o `closeReason` e passar a conversa a só de consulta (API, secção 7.2). `filter` é o filtro «Todas» ou «Não lidas», aplicado só à lista já carregada. | M16, M17, M18, barra inferior | RF027, RF028, RF030, RF075, RF108 |
 | `NotificationsStore` | Notificações recebidas. `unreadCount` é sempre o número que o servidor indica (na lista ou no evento) e é o contador do separador «Notificações». `markRead` reduz o contador em uma unidade depois de o servidor confirmar (RF035). `apply` junta a notificação recebida pela ligação persistente, sem duplicados por `notificationId`. `targetOf` converte o tipo da notificação no destino (`matchConfirmed` → match, `newMessage` → conversa, `interestQuotaRestored` → exploração de vagas). | M19, barra inferior, M09 | RF031 a RF036, RF110 |
 | `ReferenceDataStore` | Listas pré-definidas de localidades e de competências. Não é de âmbito de sessão, porque as localidades são precisas no registo, antes do início de sessão (PC-01). | M02, M05, M07 | RF003, RF006, RF008 |
 
@@ -1095,7 +1112,7 @@ classDiagram
 
 | Controller | Ecrãs | Responsabilidade | Requisitos |
 | --- | --- | --- | --- |
-| `LoginController` | M01 | Envia o correio eletrónico e a palavra-passe; em caso de êxito, entrega a `LoginResponse` a `SessionManager.start`. Quando o servidor rejeita as credenciais, mostra o motivo uniforme que ele devolve («Credenciais inválidas»), sem distinguir correio eletrónico inexistente de palavra-passe errada, nem conta bloqueada ou suspensa. | RF001, RNF009 |
+| `LoginController` | M01 | Envia o correio eletrónico e a palavra-passe; em caso de êxito, entrega a `LoginResponse` a `SessionManager.start`. Quando o servidor rejeita o início de sessão, mostra a `message` do `ApiErrorDto` devolvido, sem a alterar nem a juntar com outras: ERR-02 (credenciais erradas, a mesma mensagem para correio inexistente e palavra-passe errada, RNF009), ERR-03 (conta bloqueada), ERR-04 (conta suspensa) e ERR-05 (ponto de acesso) (API, 6.1.3 e 4.3). O RF001 exige a indicação do motivo também quando a conta está bloqueada ou suspensa, e o RNF009 só uniformiza o das credenciais erradas; o ecrã M01 do protótipo junta os motivos num só texto (PC-09). | RF001, RNF009 |
 | `RegisterController` | M02, M03, M04 | Formulário de registo: valida localmente (`InputRules`: campos obrigatórios, correio eletrónico, contacto de 9 algarismos, palavra-passe, aceitação das condições) e, só depois, envia. Os motivos do servidor, por campo, também vão para `errors` (M03). Em caso de êxito, inicia a sessão com a `LoginResponse` do registo e passa a `step = completed` (M04, «A sua conta está ativa»). Se o Candidato sair do formulário, nada é guardado. | RF003, RF004, RF005 |
 | `ChangePasswordController` | M21 | Valida que a palavra-passe nova cumpre o P05, é diferente da atual e coincide com a confirmação; a confirmação só existe no cliente e não segue no `ChangePasswordRequest`. O servidor rejeita uma palavra-passe atual errada. | RF002 |
 | `AccountController` | M20 | Mostra o nome, o correio eletrónico e a localidade do `ProfileStore`. `signOut()` pede o fim de sessão ao servidor (`AuthService.logout`), sem depender do resultado, e termina a sessão local (`SessionManager.end`): o cliente descarta a credencial e passa a exigir novo início de sessão. | RF105 |
@@ -1262,7 +1279,7 @@ Operações:
 - `load()` pede a quota (`getQuota`) e o cartão seguinte (`getNextCard`) e escolhe o estado.
 - `decline()` recusa a vaga e pede o cartão seguinte; não altera a quota (RF018).
 - `expressInterest()` não faz nenhum pedido com a quota esgotada (RF020). Caso contrário, regista o interesse (`expressInterest`), guarda a quota devolvida (a vaga deixa de ser mostrada) e pede o cartão seguinte (RF019). Se o servidor rejeitar o interesse (segunda manifestação na mesma vaga, quota esgotada entretanto ou vaga que deixou de estar disponível, UC05 E1 a E3), mostra o motivo em `message`, atualiza a quota e passa ao cartão seguinte; a quota não é alterada.
-- Em `quotaExhausted`, um temporizador atualiza `remainingBlock` a cada minuto. Quando chega a zero, pede a quota; se o servidor ainda não a repôs, a reposição chega pela notificação de reposição (RF033), que `ExplorationController` observa em `NotificationsStore`, e a quota é pedida de novo.
+- Em `quotaExhausted`, um temporizador atualiza `remainingBlock` a cada minuto. Quando chega a zero, pede a quota (`getQuota`): se o período já terminou, o servidor aplica a reposição antes de responder (API, 6.3.6), pelo que a resposta já traz os 10 interesses. A notificação de reposição (RF033), que `ExplorationController` observa em `NotificationsStore`, também faz pedir a quota, quando a reposição ocorre com a aplicação aberta por ação da tarefa periódica.
 - Quando as preferências do `ProfileStore` mudam (M08, aberto a partir de M09 ou de M11), `load()` volta a pedir os cartões, que passam a respeitar os novos valores (RF023).
 - `quotaTotal` é 10, o valor do parâmetro P11 (PC-07).
 
@@ -1326,7 +1343,7 @@ classDiagram
 | --- | --- | --- | --- |
 | `MatchesController` | M14, M15 | Lista de matches, com a vaga e a Empresa de cada um, incluindo os de vagas encerradas ou de Empresas suspensas. Os contactos (correio eletrónico e telefone) já vêm no `MatchDto`, pelo que M15 não faz novo pedido; abrir o correio ou a chamada passa por `ExternalLauncher`. «Abrir conversa» navega para `ChatScreen` com o `matchId`. | RF024, RF025 |
 | `ConversationsStore` (M16) | M16 | Ver a secção 8.1. A lista só mostra conversas dos matches do Candidato; o Administrador não tem acesso a conversas. | RF027 |
-| `ChatController` | M17, M18 | Abre a conversa (`open`: devolve o histórico e o servidor marca as mensagens como lidas, RF108), envia (`send`) e encerra (`close`). O resumo (Empresa, vaga, estado) vem de `ConversationsStore`, porque `open` só devolve mensagens; quando a conversa é aberta a partir de uma notificação, o store é carregado primeiro. `canSend` exige conversa aberta e texto de 1 a 1000 caracteres (P03); em modo só de consulta, `isReadOnly` desativa a escrita e o ecrã passa a M18 (RF026, RF075). `isOwn` compara `senderId` com o utilizador da sessão para alinhar as mensagens. Enquanto o ecrã está aberto, ouve `messageReceived` (recarrega o histórico, secção 7.1), `conversationClosed` (passa a só de consulta) e as mudanças de estado da ligação. As mensagens são juntadas por `messageId`, sem duplicados, porque o servidor também pode entregar a mensagem enviada ao próprio remetente. | RF026, RF028, RF029, RF030, RF075, RF108 |
+| `ChatController` | M17, M18 | Abre a conversa (`open`: devolve o histórico e o servidor marca as mensagens como lidas, RF108), envia (`send`) e encerra (`close`, depois do qual recarrega a lista de conversas para obter o motivo). O resumo (Empresa, vaga, estado) vem de `ConversationsStore`, porque `open` só devolve mensagens; quando a conversa é aberta a partir de uma notificação, o store é carregado primeiro. `canSend` exige conversa aberta e texto de 1 a 1000 caracteres (P03); em modo só de consulta, `isReadOnly` desativa a escrita e o ecrã passa a M18 (RF026, RF075). `isOwn` compara `senderId` com o utilizador da sessão para alinhar as mensagens. Enquanto o ecrã está aberto, ouve `messageReceived` (recarrega o histórico, secção 7.1), `conversationClosed` (recarrega a lista de conversas em `ConversationsStore`, para obter o `closeReason`, e passa a só de consulta) e as mudanças de estado da ligação. As mensagens são juntadas por `messageId`, sem duplicados, porque o servidor também pode entregar a mensagem enviada ao próprio remetente. | RF026, RF028, RF029, RF030, RF075, RF108 |
 | `NotificationsStore` (M19) | M19 | Ver a secção 8.1. A lista mostra o texto, a data e a categoria de cada notificação, com «Marcar como lida» e o acesso ao elemento a que se refere (`targetOf`). | RF034 a RF036, RF110 |
 
 ---
@@ -1848,37 +1865,37 @@ Os 21 ecrãs do protótipo, com os requisitos e os casos de uso que o próprio p
 
 ### 11.2. Controllers e hubs do backend
 
-Cada operação dos sete controllers usados pelo Candidato tem uma operação no serviço correspondente, com o mesmo nome em `lowerCamelCase` e o sufixo `Async` do C# substituído por `Future`.
+Cada operação dos sete controllers usados pelo Candidato tem uma operação no serviço correspondente, com os mesmos parâmetros e resultados (secção 5). O método, a rota e a secção são os de `m2-documentacao-api-v01.md`.
 
-| Controller | Operação do controller | Serviço e operação na aplicação | Ecrãs |
-| --- | --- | --- | --- |
-| `AuthController` | `RegisterCandidate` | `AuthService.register` | M02, M03 |
-| `AuthController` | `Login` | `AuthService.login` | M01 |
-| `AuthController` | `Logout` | `AuthService.logout` | M20 |
-| `AuthController` | `ChangePassword` | `AuthService.changePassword` | M21 |
-| `CandidateProfileController` | `Get` | `CandidateProfileService.getProfile` | M05, M20 |
-| `CandidateProfileController` | `Update` | `CandidateProfileService.updateProfile` | M05 |
-| `CandidateProfileController` | `UpdatePreferences` | `CandidateProfileService.updatePreferences` | M08 |
-| `CandidateProfileController` | `AddSkill` | `CandidateProfileService.addSkill` | M07 |
-| `CandidateProfileController` | `RemoveSkill` | `CandidateProfileService.removeSkill` | M07 |
-| `CandidateProfileController` | `SetLinks` | `CandidateProfileService.setLinks` | M06 |
-| `CandidateProfileController` | `UploadPhoto` | `CandidateProfileService.uploadPhoto` | M05, M06 |
-| `CandidateProfileController` | `UploadCv` | `CandidateProfileService.uploadCv` | M05, M06 |
-| `JobExplorationController` | `GetNextCard` | `JobExplorationService.getNextCard` | M09, M10, M11 |
-| `JobExplorationController` | `GetDetail` | `JobExplorationService.getDetail` | M12 |
-| `JobExplorationController` | `GetCompanyPage` | `JobExplorationService.getCompanyPage` | M13 |
-| `JobExplorationController` | `Decline` | `JobExplorationService.decline` | M09, M10 |
-| `JobExplorationController` | `ExpressInterest` | `JobExplorationService.expressInterest` | M09, M10 |
-| `JobExplorationController` | `GetQuota` | `JobExplorationService.getQuota` | M09, M10 |
-| `MatchesController` | `List` | `MatchService.list` | M14, M15 |
-| `ConversationsController` | `List` | `ConversationService.list` | M16, M17, M18 |
-| `ConversationsController` | `Open` | `ConversationService.open` | M17, M18 |
-| `ConversationsController` | `Send` | `ConversationService.send` | M17 |
-| `ConversationsController` | `Close` | `ConversationService.close` | M17 |
-| `NotificationsController` | `List` | `NotificationService.list` | M19 |
-| `NotificationsController` | `MarkRead` | `NotificationService.markRead` | M19 |
-| `ReferenceListsController` | `ListLocations` | `ReferenceListService.listLocations` | M02, M05 |
-| `ReferenceListsController` | `ListSkills` | `ReferenceListService.listSkills` | M07 |
+| Controller | Operação do controller | Método e rota (API) | API | Serviço e operação na aplicação | Ecrãs |
+| --- | --- | --- | --- | --- | --- |
+| `AuthController` | `RegisterCandidate` | `POST /api/auth/candidates` | 6.1.1 | `AuthService.register` | M02, M03 |
+| `AuthController` | `Login` | `POST /api/auth/login` (cabeçalho `X-Client-App: mobile`) | 6.1.3 | `AuthService.login` | M01 |
+| `AuthController` | `Logout` | `POST /api/auth/logout` | 6.1.4 | `AuthService.logout` | M20 |
+| `AuthController` | `ChangePassword` | `PUT /api/auth/password` | 6.1.5 | `AuthService.changePassword` | M21 |
+| `CandidateProfileController` | `Get` | `GET /api/candidate/profile` | 6.2.1 | `CandidateProfileService.getProfile` | M05, M20 |
+| `CandidateProfileController` | `Update` | `PUT /api/candidate/profile` | 6.2.2 | `CandidateProfileService.updateProfile` | M05 |
+| `CandidateProfileController` | `UpdatePreferences` | `PUT /api/candidate/profile/preferences` | 6.2.3 | `CandidateProfileService.updatePreferences` | M08 |
+| `CandidateProfileController` | `AddSkill` | `POST /api/candidate/profile/skills` | 6.2.4 | `CandidateProfileService.addSkill` | M07 |
+| `CandidateProfileController` | `RemoveSkill` | `DELETE /api/candidate/profile/skills/{candidateSkillId}` | 6.2.5 | `CandidateProfileService.removeSkill` | M07 |
+| `CandidateProfileController` | `SetLinks` | `PUT /api/candidate/profile/links` | 6.2.6 | `CandidateProfileService.setLinks` | M06 |
+| `CandidateProfileController` | `UploadPhoto` | `PUT /api/candidate/profile/photo` | 6.2.7 | `CandidateProfileService.uploadPhoto` | M05, M06 |
+| `CandidateProfileController` | `UploadCv` | `PUT /api/candidate/profile/cv` | 6.2.8 | `CandidateProfileService.uploadCv` | M05, M06 |
+| `JobExplorationController` | `GetNextCard` | `GET /api/candidate/jobs/next` | 6.3.1 | `JobExplorationService.getNextCard` | M09, M10, M11 |
+| `JobExplorationController` | `GetDetail` | `GET /api/candidate/jobs/{jobId}` | 6.3.2 | `JobExplorationService.getDetail` | M12 |
+| `JobExplorationController` | `GetCompanyPage` | `GET /api/candidate/jobs/companies/{companyId}` | 6.3.3 | `JobExplorationService.getCompanyPage` | M13 |
+| `JobExplorationController` | `Decline` | `POST /api/candidate/jobs/{jobId}/decline` | 6.3.4 | `JobExplorationService.decline` | M09, M10 |
+| `JobExplorationController` | `ExpressInterest` | `POST /api/candidate/jobs/{jobId}/interest` | 6.3.5 | `JobExplorationService.expressInterest` | M09, M10 |
+| `JobExplorationController` | `GetQuota` | `GET /api/candidate/jobs/quota` | 6.3.6 | `JobExplorationService.getQuota` | M09, M10 |
+| `MatchesController` | `List` | `GET /api/matches` | 6.7.1 | `MatchService.list` | M14, M15 |
+| `ConversationsController` | `List` | `GET /api/conversations` | 6.8.1 | `ConversationService.list` | M16, M17, M18 |
+| `ConversationsController` | `Open` | `GET /api/conversations/{matchId}/messages` | 6.8.2 | `ConversationService.open` | M17, M18 |
+| `ConversationsController` | `Send` | `POST /api/conversations/{matchId}/messages` | 6.8.3 | `ConversationService.send` | M17 |
+| `ConversationsController` | `Close` | `POST /api/conversations/{matchId}/close` | 6.8.4 | `ConversationService.close` | M17 |
+| `NotificationsController` | `List` | `GET /api/notifications` | 6.9.1 | `NotificationService.list` | M19 |
+| `NotificationsController` | `MarkRead` | `POST /api/notifications/{notificationId}/read` | 6.9.2 | `NotificationService.markRead` | M19 |
+| `ReferenceListsController` | `ListLocations` | `GET /api/reference-lists/locations` | 6.13.1 | `ReferenceListService.listLocations` | M02, M05 |
+| `ReferenceListsController` | `ListSkills` | `GET /api/reference-lists/skills` | 6.13.2 | `ReferenceListService.listSkills` | M07 |
 
 São 27 operações de 7 controllers. Não são usadas pelo Candidato: `AuthController.CreateRecruiterAccount` (UC07); `ReferenceListsController.ListBenefits` (os benefícios da vaga chegam como texto em `JobDetailDto.benefits`) e as operações de acrescento e alteração de competências e benefícios, reservadas ao Administrador (UC20); e os controllers `CompanyController`, `JobsController`, `CandidateEvaluationController`, `AdminAccountsController`, `AdminCompaniesController` e `AdminIndicatorsController`, que são do Recrutador e do Administrador.
 
@@ -1981,12 +1998,12 @@ Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `Conversa
 | RF027 | `ConversationsScreen`, `ConversationsStore`, `ConversationService.list`, `ConversationTile` |
 | RF028 | `ChatScreen`, `ChatController.open`, `ConversationService.open`, `MessageBubble`, `MessageDto` |
 | RF029 | `RealtimeClient.messageReceived`, `SignalRRealtimeClient`, `RealtimeCoordinator`, `ChatController` |
-| RF030 | `ChatController.close`, `ConversationService.close`, `ConversationsStore.markClosed` |
+| RF030 | `ChatController.close`, `ConversationService.close`, `ConversationsStore.onConversationClosed` |
 | RF031 a RF033 | O servidor gera as notificações; a aplicação recebe-as em `NotificationsStore.apply` e `NotificationService.list` e mostra-as em `NotificationTile` (tipos `matchConfirmed`, `newMessage` e `interestQuotaRestored`) |
 | RF034 | `NotificationsScreen`, `NotificationsStore.load`, `NotificationService.list`, `NotificationListDto`, `KatchBottomBar` |
 | RF035 | `NotificationsStore.markRead`, `NotificationService.markRead`, `NotificationTile` |
 | RF036 | `NotificationsStore.targetOf`, `NotificationTarget`, `HomeShell` |
-| RF075 | `ChatController.isReadOnly`, `ConversationsStore.markClosed`, `MessageComposer.enabled`, `ConversationStatus`, `ConversationCloseReason`, `RealtimeClient.conversationClosed` |
+| RF075 | `ChatController.isReadOnly`, `ConversationsStore.onConversationClosed`, `MessageComposer.enabled`, `ConversationStatus`, `ConversationCloseReason`, `RealtimeClient.conversationClosed` |
 | RF105 | `AccountScreen`, `AccountController.signOut`, `AuthService.logout`, `SessionManager.end`, `SessionScopedStore.reset` |
 | RF108 | `ChatController.open` (o servidor marca as mensagens como lidas), `ConversationsStore.markOpened` |
 | RF110 | `RealtimeClient.notificationReceived`, `NotificationsStore.apply`, `RealtimeCoordinator` |
@@ -2010,7 +2027,7 @@ Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `Conversa
 | DFM-06 | Tempo limite de 9 segundos em cada pedido. | O RNF014 exige a indicação de falha de ligação em, no máximo, 10 segundos depois do envio do pedido; 9 segundos deixam 1 segundo para a apresentar. É superior aos 5 segundos do carregamento de um ficheiro de 5 MB (RNF015). |
 | DFM-07 | A sessão é guardada no armazenamento seguro do dispositivo e termina em `expiresAt` ou quando o servidor recusa a credencial. | O ecrã M20 indica que o dispositivo está ligado à conta; a credencial dura 8 horas (RNF005, P20) e o servidor não guarda estado de sessão (arquitetura, 2.6). |
 | DFM-08 | A validação local só dá o motivo ao Candidato mais depressa; o servidor aplica as mesmas regras e decide. Os motivos do servidor, por campo, prevalecem. | RNF008 e RNF016: o servidor valida 100% das regras, incluindo os pedidos diretos e o conteúdo real dos ficheiros. |
-| DFM-09 | `RemoteImage` envia a credencial de sessão ao pedir imagens. | Os endereços de fotografias e logótipos dos DTOs servem o ficheiro depois de verificar a autorização (backend, secção 7). |
+| DFM-09 | `RemoteImage` envia a credencial de sessão ao pedir imagens. | Os endereços de fotografias e logótipos dos DTOs servem o ficheiro depois de verificar a autorização (backend, secção 7). A API v01 ainda não tem a operação que serve esses endereços, nem fixa o seu formato (API, 2.6 e PA-01), pelo que a classe fica por validar até à correção (PC-10). |
 | DFM-10 | Navegação por barra inferior com os cinco separadores do protótipo; ações do cartão como botões e gestos. | RNF011 (3 interações para cada área) e RNF010 (uma interação por ação sobre o cartão). |
 | DFM-11 | `ChatController` junta as mensagens por `messageId` e, ao receber `MessageReceived`, recarrega o histórico da conversa aberta em vez de acrescentar a mensagem. | O evento não identifica a conversa (PC-02) e o servidor pode entregar ao remetente a mensagem que ele próprio enviou. Recarregar com `open` é idempotente e já marca as mensagens como lidas. |
 | DFM-12 | Os ecrãs M03, M10, M11 e M18 são estados de `RegisterScreen`, `ExplorationScreen` e `ChatScreen`, e não classes. | São variantes do mesmo ecrã que dependem do estado do controller (erros de campo, quota esgotada, sem vagas, conversa só de consulta). |
@@ -2021,18 +2038,22 @@ Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `Conversa
 
 ## 13. Pontos de coerência a resolver
 
-Os pontos seguintes são incoerências entre o protótipo (`I039`), o modelo de classes do backend (`I036`), a arquitetura (`I033`) e a especificação, detetadas ao cruzar estes documentos com o modelo da aplicação móvel. Este documento não altera esses artefactos: modela a aplicação sem inventar atributos nem operações que o backend não tem, descreve como o modelo se comporta até haver decisão e indica quem deve resolver cada ponto.
+Os pontos seguintes são incoerências entre o protótipo (`I039`), o modelo de classes do backend (`I036`), a arquitetura (`I033`) e a especificação, detetadas ao cruzar estes documentos com o modelo da aplicação móvel. Este documento não altera esses artefactos: modela a aplicação sem inventar atributos nem operações que o backend não tem, descreve como o modelo se comporta até haver decisão e indica quem deve resolver cada ponto. A documentação da API (`I092`) fixou entretanto o contrato: o PC-05 ficou resolvido e os PC-01, PC-02, PC-10, PC-11 e PC-12 correspondem a pontos em aberto da própria API (PA-04, PA-02, PA-01, PA-10 e PA-05), que têm as mesmas decisões a tomar; a coluna «Ponto da API» faz a ligação.
 
-| ID | Situação | Impacto | Tratamento neste modelo | Proposta de resolução |
-| --- | --- | --- | --- | --- |
-| PC-01 | O registo (UC03, passo 2; M02) mostra a lista pré-definida de localidades antes do início de sessão, mas o backend só permite a consulta das listas pré-definidas com sessão iniciada (`ReferenceListsController`, secção 6). | O ecrã de registo não consegue carregar as localidades; sem localidade, o registo é rejeitado (RF003, RF004). | `ReferenceListService.listLocations` e `ReferenceDataStore` funcionam sem sessão; `HttpApiClient` não exige a credencial nesta operação. | `I036` e documentação da API (`04.11`): permitir `ListLocations` sem credencial. |
-| PC-02 | O evento `MessageReceived` leva um `MessageDto`, que não tem o identificador do match. | A aplicação não sabe a que conversa pertence a mensagem; não pode atualizar o contador da lista nem acrescentar a mensagem à conversa certa. | A lista de conversas é recarregada e o histórico da conversa aberta é recarregado por `open` (DFM-11); correto mas com um pedido a mais. | `I036`: acrescentar o identificador do match ao evento (ou ao `MessageDto`). Com isso, `ChatController` passa a acrescentar a mensagem sem novo pedido. |
-| PC-03 | M14 e M15 mostram o estado do match («Match ativo», «Vaga encerrada», «Empresa suspensa»), o logótipo da Empresa e a localidade da vaga, que `MatchDto` não tem. | O RF024 exige listar também os matches de vagas encerradas e de Empresas suspensas; sem um atributo de estado, a aplicação não os distingue. | `MatchDto` espelha o backend; M14 e M15 mostram só a vaga, a Empresa e os contactos. | `I036`: acrescentar a `MatchDto` o estado da vaga e da Empresa, `logoUrl` e `locationName`; ou retirar estes elementos do protótipo (`I039`). |
-| PC-04 | M16 mostra o logótipo da Empresa e M18 indica que a conversa «foi encerrada pela Empresa», mas `ConversationSummaryDto` não tem logótipo e `closedByParty` não diz qual das partes encerrou. | A aplicação não pode mostrar o logótipo na lista nem dizer quem encerrou a conversa. | `ConversationTile` mostra o marcador sem logótipo; M18 mostra «Esta conversa foi encerrada» e, para os outros motivos, o motivo que o `closeReason` indica. | `I036`: acrescentar `logoUrl` e a indicação da parte que encerrou; ou ajustar o protótipo (`I039`). |
-| PC-05 | `IAuthService.LoginAsync(request, ClientApp)` recebe a aplicação de origem (móvel ou web), mas `AuthController.Login(LoginRequest)` e `LoginRequest` não têm esse dado. | Não está definido como o servidor sabe que o pedido vem da aplicação móvel (RF001: o Candidato só entra pela aplicação móvel). | `HttpApiClient` identifica a aplicação móvel segundo o que a documentação da API fixar; o modelo não escolhe o mecanismo. | `04.11`: fixar o mecanismo (cabeçalho, rota ou campo) e atualizar o `I036` se for um campo do `LoginRequest`. |
-| PC-06 | O RNF002 exige o cartão seguinte em 2 segundos depois do registo de uma resposta, e o RNF001 permite 2 segundos a cada operação. A aplicação faz dois pedidos em sequência (a resposta e o cartão seguinte). | No pior caso, os dois pedidos somam 4 segundos, acima do RNF002. | `ExplorationController` pede o cartão seguinte logo que o servidor confirma a resposta. | `I036`: devolver o cartão seguinte na resposta de `Decline` e de `ExpressInterest`; ou confirmar em `m3` que os dois pedidos cumprem o RNF002 com os dados de demonstração. |
-| PC-07 | `QuotaDto` só tem os interesses disponíveis, e «n de 10» (M09) exige o total. | O total fica fixo na aplicação (`quotaTotal` = 10, parâmetro P11) e deixa de estar certo se o P11 mudar. | `ExplorationController.quotaTotal` com o valor de P11. | `I036`: acrescentar o total a `QuotaDto`. |
-| PC-08 | A arquitetura (secção 2.3) não indica a F003 nas funcionalidades da aplicação móvel, mas o RF017 (F003, UC06) e o ecrã M13 são do Candidato. | A linha da aplicação móvel da secção 2.3 fica incompleta. | M13 está no modelo (`CompanyPageScreen`), segundo o RF017 e o protótipo. | `I033`: acrescentar a F003 à linha da aplicação móvel da secção 2.3. |
+| ID | Situação | Impacto | Tratamento neste modelo | Proposta de resolução | Ponto da API |
+| --- | --- | --- | --- | --- | --- |
+| PC-01 | O registo (UC03, passo 2; M02) mostra a lista pré-definida de localidades antes do início de sessão, mas o backend só permite a consulta das listas pré-definidas com sessão iniciada (`ReferenceListsController`, secção 6). | O ecrã de registo não consegue carregar as localidades; sem localidade, o registo é rejeitado (RF003, RF004). | `ReferenceListService.listLocations` e `ReferenceDataStore` funcionam sem sessão; `HttpApiClient` não exige a credencial nesta operação. | Especificação de requisitos (secção 2.2) e `I036`: acrescentar a consulta de localidades às operações não reservadas e permitir `ListLocations` sem credencial (API, PA-04). | PA-04 |
+| PC-02 | O evento `MessageReceived` leva um `MessageDto`, que não tem o identificador do match. | A aplicação não sabe a que conversa pertence a mensagem; não pode atualizar o contador da lista nem acrescentar a mensagem à conversa certa. | A lista de conversas é recarregada e o histórico da conversa aberta é recarregado por `open` (DFM-11); correto mas com um pedido a mais. | `I036`: acrescentar `Guid matchId` a `PublishMessageAsync` e enviar `MessageReceived(matchId, message)` (API, PA-02). Com isso, `ChatController` passa a acrescentar a mensagem sem novo pedido. | PA-02 |
+| PC-03 | M14 e M15 mostram o estado do match («Match ativo», «Vaga encerrada», «Empresa suspensa»), o logótipo da Empresa e a localidade da vaga, que `MatchDto` não tem. | O RF024 exige listar também os matches de vagas encerradas e de Empresas suspensas; sem um atributo de estado, a aplicação não os distingue. | `MatchDto` espelha o backend; M14 e M15 mostram só a vaga, a Empresa e os contactos. | `I036`: acrescentar a `MatchDto` o estado da vaga e da Empresa, `logoUrl` e `locationName`; ou retirar estes elementos do protótipo (`I039`). | Relacionado com PA-08: a mesma proposta serve M14 e M15 |
+| PC-04 | M16 mostra o logótipo da Empresa e M18 indica que a conversa «foi encerrada pela Empresa», mas `ConversationSummaryDto` não tem logótipo e `closedByParty` não diz qual das partes encerrou. | A aplicação não pode mostrar o logótipo na lista nem dizer quem encerrou a conversa. | `ConversationTile` mostra o marcador sem logótipo; M18 mostra «Esta conversa foi encerrada» e, para os outros motivos, o motivo que o `closeReason` indica. | `I036`: acrescentar `logoUrl` e a indicação da parte que encerrou; ou ajustar o protótipo (`I039`). | — |
+| PC-05 | `IAuthService.LoginAsync(request, ClientApp)` recebe a aplicação de origem (móvel ou web), mas `LoginRequest` não tem esse dado. | O servidor tinha de saber que o pedido vem da aplicação móvel (RF001: o Candidato só entra pela aplicação móvel). | Resolvido: a API fixou o cabeçalho `X-Client-App: mobile` no início de sessão, com ERR-05 para contas que não sejam do Candidato (API, 3.2 e DAPI-02); `HttpAuthService.login` envia-o. | Nenhuma. Ponto fechado. | Resolvido (API 3.2, DAPI-02, ERR-05) |
+| PC-06 | O RNF002 exige o cartão seguinte em 2 segundos depois do registo de uma resposta, e o RNF001 permite 2 segundos a cada operação. A aplicação faz dois pedidos em sequência (a resposta e o cartão seguinte). | No pior caso, os dois pedidos somam 4 segundos, acima do RNF002. | `ExplorationController` pede o cartão seguinte logo que o servidor confirma a resposta. | `I036`: devolver o cartão seguinte na resposta de `Decline` e de `ExpressInterest`; ou confirmar em `m3` que os dois pedidos cumprem o RNF002 com os dados de demonstração. | — |
+| PC-07 | `QuotaDto` só tem os interesses disponíveis, e «n de 10» (M09) exige o total. | O total fica fixo na aplicação (`quotaTotal` = 10, parâmetro P11) e deixa de estar certo se o P11 mudar. | `ExplorationController.quotaTotal` com o valor de P11. | `I036`: acrescentar o total a `QuotaDto`. | — |
+| PC-08 | A arquitetura (secção 2.3) não indica a F003 nas funcionalidades da aplicação móvel, mas o RF017 (F003, UC06) e o ecrã M13 são do Candidato. | A linha da aplicação móvel da secção 2.3 fica incompleta. | M13 está no modelo (`CompanyPageScreen`), segundo o RF017 e o protótipo. | `I033`: acrescentar a F003 à linha da aplicação móvel da secção 2.3. | — |
+| PC-09 | O ecrã M01 do protótipo mostra o motivo «Credenciais inválidas» e acrescenta «A conta também pode estar bloqueada ou suspensa», juntando num só texto motivos que a API devolve distintos: ERR-02 (credenciais), ERR-03 (bloqueada), ERR-04 (suspensa) e ERR-05 (ponto de acesso). | Incoerente com o RF001, que exige a indicação do motivo também quando a conta está bloqueada ou suspensa. O RNF009 só uniformiza o motivo das credenciais erradas. | `LoginController` apresenta a `message` do `ApiErrorDto` devolvido (secção 8.2). | `I039`: corrigir M01 para mostrar o motivo devolvido (API, 6.1.3 e 4.3). | — |
+| PC-10 | Não há operação da API que sirva os endereços dos ficheiros referidos nos DTOs (`photoUrl`, `logoUrl`, `photoUrls`), nem o formato do endereço está fixado (API, 2.6). | `RemoteImage` e os ecrãs M05, M09, M12 a M16 e M20 não conseguem mostrar fotografias nem logótipos. | `RemoteImage` assume um endereço da API que serve o ficheiro com a credencial de sessão (DFM-09) e mostra o marcador do protótipo sem imagem. | `I036` e documentação da API: acrescentar a operação que serve os ficheiros (API, PA-01). | PA-01 |
+| PC-11 | O RNF007 admite que o Candidato obtenha o próprio CV, mas o backend não tem essa operação. | O Candidato não consegue confirmar o curriculum vitae que enviou (RF011). | A aplicação só envia o CV e mostra `hasCv` (secção 3.1). | `I036` e `I035`: acrescentar `GET /api/candidate/profile/cv` (API, PA-10). | PA-10 |
+| PC-12 | O `ApiErrorDto` não tem código de erro, e o `403` de conta bloqueada ou suspensa (ERR-03 e ERR-04) tem o mesmo código HTTP que ERR-06, ERR-07 e ERR-08. | A aplicação só distingue a conta bloqueada ou suspensa pela mensagem fixa do catálogo da API, o que falha se a mensagem mudar. | `HttpApiClient` classifica esse `403` pela mensagem de ERR-03 e de ERR-04 (secção 4.1). | `I036`: acrescentar o código de erro ao `ApiErrorDto` (API, PA-05). | PA-05 |
 
 ---
 
@@ -2040,8 +2061,8 @@ Os pontos seguintes são incoerências entre o protótipo (`I039`), o modelo de 
 
 | Limitação | Consequência |
 | --- | --- |
-| O modelo depende do protótipo (`I039`, ainda em consolidação na `I087`), do modelo de classes do backend (`I036`) e da arquitetura (`I033`). | Uma alteração a qualquer deles obriga a rever as classes afetadas. Se a consolidação dos protótipos mudar o nome do ficheiro do protótipo da aplicação móvel, as referências deste documento têm de ser atualizadas. |
-| As rotas, os códigos de estado, o formato JSON e a representação das enumerações não estão fixados. | Ficam na documentação da API (`04.11`). O modelo fixa as classes de erro e as operações, e a conversão das enumerações fica em `fromWire` e `toWire`. |
+| O modelo depende do protótipo (`I039`, ainda em consolidação na `I087`), do modelo de classes do backend (`I036`), da documentação da API (`I092`) e da arquitetura (`I033`). | Uma alteração a qualquer deles obriga a rever as classes afetadas. Se a consolidação dos protótipos mudar o nome do ficheiro do protótipo da aplicação móvel, as referências deste documento têm de ser atualizadas. |
+| O contrato da API (`I092`) ainda tem pontos em aberto (PA-01 a PA-10), cinco dos quais afetam este modelo (PC-01, PC-02, PC-10, PC-11 e PC-12). | Se a decisão alterar o contrato, mudam os serviços, os modelos e as classes de tempo real afetados; a camada de ecrãs só muda no PC-10. |
 | A tecnologia da ligação persistente (D-08) está por ratificar em reunião formal (Regulamento da UC, secção 10.1), e a consulta periódica é uma alternativa proposta. | Só `SignalRRealtimeClient` muda (DFM-05). Com consulta periódica, o RF029 e o RF110 continuam cumpridos no limite de 5 segundos (P17), mas o cliente passa a fazer pedidos a cada 3 segundos. |
 | Os pacotes de terceiros não estão escolhidos. | A escolha fica na configuração base do repositório (`pubspec.yaml`); cada pacote fica atrás de uma interface. |
 | Algumas ações do protótipo gravam vários elementos em pedidos separados: M06 (fotografia, CV e hiperligações) e M07 (competências). A API não tem uma operação única. | A mensagem «Os dados não foram guardados» de M06 pode não ser verdadeira se um pedido falhar depois de outro ter sido aceite. Mitigação: a validação local de todos os elementos antes do primeiro pedido e a recarga do perfil depois de qualquer falha, para mostrar o que ficou gravado. |
@@ -2064,7 +2085,7 @@ Os pontos seguintes são incoerências entre o protótipo (`I039`), o modelo de 
 | Enumerações | 7 enumerações espelhadas. Secção 3.3. |
 | Casos de uso | UC01 a UC06 e UC13 a UC15. Secção 11.1. |
 | Requisitos | 40 requisitos funcionais (RF001 a RF036, RF075, RF105, RF108 e RF110) e 5 não funcionais (RNF002, RNF005, RNF010, RNF011 e RNF014). Secção 11.5. |
-| Pontos de coerência a resolver | 8 (PC-01 a PC-08). Secção 13. |
+| Pontos de coerência | 12 (PC-01 a PC-12), dos quais 1 resolvido pela API (PC-05) e 5 ligados a pontos em aberto da API (PC-01, PC-02, PC-10, PC-11 e PC-12). Secção 13. |
 | Diagramas Mermaid | 22: 19 diagramas de classes, 2 fluxogramas e 1 diagrama de sequência. |
 | Classes do módulo | 141: 136 desenhadas nos diagramas e 5 implementações `Http...` descritas na secção 5. |
 

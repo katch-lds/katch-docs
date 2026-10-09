@@ -20,7 +20,7 @@
 | Módulo | Área de gestão web (`katch-frontend-web`), React 19.3 com TypeScript 7.0 e Vite 8.3 |
 | Issue | `I090` — Elaborar o modelo de classes do frontend web |
 | Executor / Revisor / Auditor | Roberto Baptista / João Borguem / Miguel Santos |
-| Documentos de origem | `m2-documentacao-arquitetura-v01.md` (secções 2 e 3, `I033` e `I034`), `m2-modelo-classes-backend-v01.md` (`I036`), `m2-especificacao-requisitos-v01.md` (RF037 a RF118 com componente Frontend web, RNF004 a RNF009, RNF012, RNF018; parâmetros P01 a P21), `m2-especificacoes-casos-uso-v01.md` (UC01, UC02, UC07 a UC20), protótipos de baixa fidelidade aceites na `I040` (Recrutador, ecrãs W01 a W26) e na `I041` (Administrador, ecrãs A01 a A11), a consolidar em `m2-prototipo-baixa-fidelidade-v01.pdf` pela `I087`, `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5), `m2-backlog-projeto-v03.xlsx` (Issue `I090`) |
+| Documentos de origem | `m2-documentacao-arquitetura-v01.md` (secções 2 e 3, `I033` e `I034`), `m2-modelo-classes-backend-v01.md` (`I036`), `m2-especificacao-requisitos-v01.md` (RF037 a RF118 com componente Frontend web, RNF004 a RNF009, RNF012, RNF018; parâmetros P01 a P21), `m2-especificacoes-casos-uso-v01.md` (UC01, UC02, UC07 a UC20), protótipos de baixa fidelidade aceites na `I040` (Recrutador, ecrãs W01 a W26) e na `I041` (Administrador, ecrãs A01 a A11), a consolidar em `m2-prototipo-baixa-fidelidade-v01.pdf` pela `I087`, `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m2-documentacao-api-v01.md` (secções 2 a 8 e 11, `I092`), `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5), `m2-backlog-projeto-v03.xlsx` (Issue `I090`) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.07-modelos-de-classes`: um ficheiro por módulo relevante, com classes, responsabilidades, atributos, operações, relações e multiplicidades. Corresponde à linha `OF-M2-008` — «Modelo de classes — frontend web v1» da Checklist de Controlo de Artefactos.
 
@@ -29,6 +29,8 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-10-08 | Criação do documento: camadas, tipos dos DTOs e enumerações, cliente da API e serviços, ficheiros protegidos, ligação persistente, sessão, rotas protegidas por tipo de conta e por estado da Empresa, páginas e componentes do Recrutador e do Administrador, estado dos ecrãs, dependências do backend por resolver, divergências com os protótipos e rastreabilidade. | `I090` |
+| v01 | 2026-10-09 | Alinhamento com a documentação da API v01 (`I092`) antes da revisão: enumerações com os valores JSON da API, cabeçalho `X-Client-App`, tratamento dos erros do catálogo da API, carregamentos em `multipart/form-data`, pedido HTTP de cada operação dos serviços, autenticação e eventos dos hubs; dependências G1 a G10 confrontadas com os pontos em aberto PA-01 a PA-06 da API e acrescentadas G11 e G12. | `I090` |
+| v01 | 2026-10-09 | Alinhamento com a versão revista da documentação da API v01 (`I092`): lista de matches só com Empresa aprovada (6.7.1), com a rota `/matches`, a moldura do Recrutador e a divergência P2 ajustadas; ERR-35 também na abertura do perfil e na obtenção do CV; dependências G1, G2, G4, G5 e G10 confrontadas com PA-03 e PA-07 a PA-09; cabeçalho `X-Client-App` descrito como exigido no início de sessão. | `I090` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -94,7 +96,7 @@ flowchart TB
 ### 2.2. Convenções de código e de diagrama
 
 - **Nomes:** Airbnb TypeScript/React Style Guide, verificado por ESLint e Prettier (RI, secções 11.3 e 11.4). Componentes, páginas e tipos em PascalCase; funções, variáveis e propriedades em camelCase; hooks com o prefixo `use`; interfaces com o prefixo `I`.
-- **Tipos:** os tipos do cliente espelham os DTOs do backend com os mesmos nomes e os mesmos campos em camelCase (por exemplo, `CompanyStatusDto.CompanyId` ↔ `companyId`), que é a forma por omissão da serialização JSON do ASP.NET Core. Correspondências: `Guid` ↔ `string`; `DateTimeOffset` ↔ `string` em ISO 8601; `DateOnly` ↔ `string` no formato `aaaa-MM-dd`; `decimal` e `int` ↔ `number`; `bool` ↔ `boolean`; `List<T>` ↔ `T[]`; `T?` ↔ `T | null`. As enumerações são uniões de literais de texto com os nomes dos valores em C# (dependência G9 da secção 11).
+- **Tipos:** os tipos do cliente espelham os DTOs do backend com os mesmos nomes e os mesmos campos em camelCase (por exemplo, `CompanyStatusDto.CompanyId` ↔ `companyId`), que é a forma por omissão da serialização JSON do ASP.NET Core. Correspondências: `Guid` ↔ `string`; `DateTimeOffset` ↔ `string` em ISO 8601; `DateOnly` ↔ `string` no formato `aaaa-MM-dd`; `decimal` e `int` ↔ `number`; `bool` ↔ `boolean`; `List<T>` ↔ `T[]`; `T?` ↔ `T | null`. As datas e horas chegam em UTC com o sufixo `Z` e são convertidas para a hora local só na apresentação. As enumerações do backend são uniões de literais de texto com os valores JSON da API, em maiúsculas com `_` e iguais aos do PostgreSQL: `ContractType.ServiceProvision` ↔ `"SERVICE_PROVISION"` (documentação da API, secções 2.3 e 2.4, DAPI-01). As enumerações próprias do cliente (`LoginArea`, `RealtimeStatus`) não vão para a API e usam PascalCase.
 - **Diagramas Mermaid (`classDiagram`):** `+` público, `-` privado; atributos na forma `tipo nome`, como no modelo de classes do backend; `T?` = valor que pode ser `null`; `~T~` = tipo genérico. Estereótipos: `<<interface>>`, `<<enumeration>>`, `<<type>>` (tipo de dados sem lógica), `<<page>>`, `<<component>>`, `<<hook>>` e `<<context>>` (contexto React).
 - **Relações:** `--` associação com multiplicidades; `*--` composição (o elemento composto só existe dentro do todo); `..>` dependência (uso por importação ou por propriedade); `..|>` realização de interface; `<|--` especialização.
 - **Assíncrono:** as operações dos serviços, do cliente da API e dos hooks que fazem pedidos devolvem `Promise<T>`; nos diagramas indica-se apenas `T`, como no modelo de classes do backend (secção 2.2).
@@ -106,94 +108,94 @@ flowchart TB
 
 ### 3.1. Enumerações
 
-As enumerações são as do backend (modelo de classes do backend, secção 3.5) usadas pela área de gestão web.
+As enumerações são as do backend (modelo de classes do backend, secção 3.5) usadas pela área de gestão web, com os valores JSON da documentação da API (secção 2.4). Um valor fora da lista é rejeitado pelo servidor com `400`.
 
 ```mermaid
 classDiagram
     direction LR
     class UserType {
         <<enumeration>>
-        Candidate
-        Recruiter
-        Admin
+        CANDIDATE
+        RECRUITER
+        ADMIN
     }
     class AccountStatus {
         <<enumeration>>
-        Active
-        Blocked
-        Suspended
+        ACTIVE
+        BLOCKED
+        SUSPENDED
     }
     class CompanyStatus {
         <<enumeration>>
-        Pending
-        Approved
-        Rejected
-        Suspended
+        PENDING
+        APPROVED
+        REJECTED
+        SUSPENDED
     }
     class JobStatus {
         <<enumeration>>
-        Unpublished
-        Published
-        Suspended
-        Closed
+        UNPUBLISHED
+        PUBLISHED
+        SUSPENDED
+        CLOSED
     }
     class ContractType {
         <<enumeration>>
-        Permanent
-        FixedTerm
-        Internship
-        ServiceProvision
+        PERMANENT
+        FIXED_TERM
+        INTERNSHIP
+        SERVICE_PROVISION
     }
     class WorkMode {
         <<enumeration>>
-        OnSite
-        Hybrid
-        Remote
+        ON_SITE
+        HYBRID
+        REMOTE
     }
     class Availability {
         <<enumeration>>
-        Immediate
-        FifteenDays
-        OneMonth
-        ToBeAgreed
+        IMMEDIATE
+        FIFTEEN_DAYS
+        ONE_MONTH
+        TO_BE_AGREED
     }
     class Industry {
         <<enumeration>>
-        Technology
-        Healthcare
-        Retail
-        Hospitality
-        Construction
-        Manufacturing
-        Education
-        Finance
-        Logistics
-        Services
-        Other
+        TECHNOLOGY
+        HEALTHCARE
+        RETAIL
+        HOSPITALITY
+        CONSTRUCTION
+        MANUFACTURING
+        EDUCATION
+        FINANCE
+        LOGISTICS
+        SERVICES
+        OTHER
     }
     class ConversationStatus {
         <<enumeration>>
-        Open
-        Closed
+        OPEN
+        CLOSED
     }
     class ConversationCloseReason {
         <<enumeration>>
-        ClosedByParty
-        AccountBlockedOrSuspended
-        CompanySuspended
+        CLOSED_BY_PARTY
+        ACCOUNT_BLOCKED_OR_SUSPENDED
+        COMPANY_SUSPENDED
     }
     class NotificationType {
         <<enumeration>>
-        MatchConfirmed
-        NewMessage
-        NewInterest
-        CompanyApproved
-        CompanyRejected
-        InterestQuotaRestored
+        MATCH_CONFIRMED
+        NEW_MESSAGE
+        NEW_INTEREST
+        COMPANY_APPROVED
+        COMPANY_REJECTED
+        INTEREST_QUOTA_RESTORED
     }
 ```
 
-`CandidateDecision`, `RecruiterDecision`, `MatchStatus`, `JobCloseReason`, `EntityType` e `OperationType` não são usadas: nenhum DTO consumido por este módulo as contém. `InterestQuotaRestored` existe no tipo, mas nunca é dirigida ao Recrutador nem ao Administrador.
+`CandidateDecision`, `RecruiterDecision`, `MatchStatus`, `JobCloseReason`, `EntityType`, `OperationType`, `FileKind` e `ClientApp` não são usadas: nenhum DTO as contém e não fazem parte do contrato (documentação da API, secção 2.4). O ponto de acesso (`ClientApp`) é indicado no cabeçalho `X-Client-App` (secção 4.1). `INTEREST_QUOTA_RESTORED` existe no tipo, mas nunca é dirigida ao Recrutador nem ao Administrador.
 
 A língua da interface é apenas o português (arquitetura, secção 2.5). As designações apresentadas estão num único mapa de apresentação (`src/types/labels.ts`):
 
@@ -209,9 +211,9 @@ A língua da interface é apenas o português (arquitetura, secção 2.5). As de
 | `Industry` | Tecnologia; Saúde; Comércio; Hotelaria e restauração; Construção; Indústria; Educação; Finanças; Logística; Serviços; Outro | P15 |
 | `ConversationStatus` | Aberta; Encerrada | W22, W23 |
 | `ConversationCloseReason` | Encerrada por uma das partes; Conta bloqueada ou suspensa; Empresa suspensa | RF074, RF075 |
-| `NotificationType` | Ação apresentada: `NewInterest` «Ver candidatos»; `MatchConfirmed` «Ver match»; `NewMessage` «Abrir conversa»; `CompanyApproved` e `CompanyRejected` «Ver dados da Empresa» | W24, RF082 |
+| `NotificationType` | Ação apresentada: `NEW_INTEREST` «Ver candidatos»; `MATCH_CONFIRMED` «Ver match»; `NEW_MESSAGE` «Abrir conversa»; `COMPANY_APPROVED` e `COMPANY_REJECTED` «Ver dados da Empresa» | W24, RF082 |
 
-O texto de cada notificação vem pronto do servidor (`NotificationDto.text`); o cliente só escolhe a ação pelo tipo.
+O texto de cada notificação vem pronto do servidor (`NotificationDto.text`); o cliente só escolhe a ação pelo tipo e abre o elemento indicado em `targetId` (documentação da API, secção 7.3): `NEW_INTEREST` → identificador da vaga (`/candidatos?vaga=:jobId`); `MATCH_CONFIRMED` → identificador do match (`/matches`); `NEW_MESSAGE` → identificador do match (`/conversas?match=:matchId`); `COMPANY_APPROVED` e `COMPANY_REJECTED` → identificador da Empresa (`/empresa` se aprovada, `/empresa/estado` se recusada).
 
 ### 3.2. Tipos dos DTOs
 
@@ -483,7 +485,7 @@ classDiagram
 
 São 31 tipos. Os tipos próprios do Candidato (`RegisterCandidateRequest`, `CandidateProfileDto`, `ProfileSkillDto`, `UpdateCandidateProfileRequest`, `SearchPreferencesDto`, `AddSkillRequest`, `SetLinksRequest`, `JobCardDto`, `JobDetailDto`, `QuotaDto`) pertencem ao modelo de classes da aplicação móvel (`I091`).
 
-`photoUrl`, `logoUrl` e `photoUrls` são endereços da API que servem o ficheiro depois de verificar a autorização (backend, secção 7.2). O cliente nunca constrói caminhos de ficheiros; obtém o conteúdo como descrito na secção 4.2.
+`photoUrl`, `logoUrl` e `photoUrls` são endereços da API que servem o ficheiro depois de verificar a autorização (backend, secção 7.2). O cliente nunca constrói caminhos de ficheiros; obtém o conteúdo como descrito na secção 4.3. A operação que serve esses endereços ainda não existe (dependência G11; documentação da API, PA-01).
 
 ---
 
@@ -500,12 +502,13 @@ classDiagram
         +post(string path, unknown body) T
         +put(string path, unknown body) T
         +delete(string path) void
-        +upload(string path, File file) T
+        +upload(string method, string path, File file) string?
         +getFile(string path) Blob
     }
     class HttpApiClient {
         -string _baseUrl
         -number _timeoutMs
+        -string _clientApp
         -SessionStore _session
         -ConnectionMonitor _monitor
         -request(string method, string path, unknown body) Response
@@ -515,17 +518,19 @@ classDiagram
         +post(string path, unknown body) T
         +put(string path, unknown body) T
         +delete(string path) void
-        +upload(string path, File file) T
+        +upload(string method, string path, File file) string?
         +getFile(string path) Blob
     }
     class Error
     class ApiError {
         +number httpStatus
+        +string? errorId
         +string message
         +FieldErrorDto[] fields
         +fieldReason(string field) string?
         +isUnauthorized() boolean
         +isForbidden() boolean
+        +isConflict() boolean
         +isConnectionFailure() boolean
     }
     class ConnectionMonitor {
@@ -543,23 +548,54 @@ classDiagram
     HttpApiClient "1" ..> "0..*" ApiError : lança
 ```
 
-`get`, `post`, `put`, `upload` e `request` são genéricas no tipo da resposta esperada; por exemplo, `get<CompanyStatusDto>(…)` devolve `Promise<CompanyStatusDto>`. O parâmetro de tipo está omitido no diagrama.
+`get`, `post`, `put` e `request` são genéricas no tipo da resposta esperada; por exemplo, `get<CompanyStatusDto>(…)` devolve `Promise<CompanyStatusDto>`. O parâmetro de tipo está omitido no diagrama.
 
 | Elemento | Responsabilidade | Requisitos |
 | --- | --- | --- |
-| `HttpApiClient.buildHeaders` | Acrescenta a credencial de sessão no cabeçalho `Authorization` (`Bearer`) em todos os pedidos autenticados. O identificador do utilizador nunca vai no corpo do pedido: o servidor obtém-no da credencial (backend, DC-05). | RNF004, RNF006 |
+| `HttpApiClient.buildHeaders` | Acrescenta a credencial de sessão no cabeçalho `Authorization` (`Bearer`) em todos os pedidos autenticados e o cabeçalho `X-Client-App` com `_clientApp` = `web`, exigido no início de sessão (documentação da API, secção 3.2, DAPI-02). O identificador do utilizador nunca vai na rota nem no corpo do pedido: o servidor obtém-no da credencial (backend, DC-05; documentação da API, secção 2.5). | RF038, RF083, RNF004, RNF006 |
+| `HttpApiClient.upload` | Envia o ficheiro em `multipart/form-data`, num único campo `file`, com `PUT` (fotografia única: logótipo) ou `POST` (galeria e fotografias da vaga), e devolve o endereço do cabeçalho `Location` da resposta (`204` ou `201`) (documentação da API, secção 2.6, DAPI-10). | RF047, RF048, RF052 |
 | `HttpApiClient.request` | Aborta o pedido ao fim de `_timeoutMs`, que é inferior a 10 segundos, e reporta a falha ao `ConnectionMonitor`; nesse caso lança um `ApiError` com `isConnectionFailure()` verdadeiro. | RNF018, P19 |
-| `HttpApiClient.toApiError` | Converte a resposta de erro no `ApiErrorDto` do backend e expõe o motivo por campo, para a página o apresentar junto de cada campo (W04, A04d, A09b, A10b). | RF037, RF040, RF042, RF084, RF094, RF099 a RF102 |
-| `HttpApiClient.getFile` | Obtém um ficheiro protegido (fotografia, logótipo ou CV) com a credencial no cabeçalho e devolve-o como `Blob` (secção 4.2). | RNF004, RNF007 |
-| `ApiError.isUnauthorized` | Credencial em falta, inválida ou expirada: o `SessionProvider` termina a sessão e encaminha para o início de sessão. | RNF004, RNF005, P20 |
-| `ApiError.isForbidden` | Operação não autorizada ao tipo de conta ou ao titular: a página apresenta o motivo; nas rotas do Administrador o encaminhamento é para o ecrã de acesso negado. | RF104, RNF006 |
+| `HttpApiClient.toApiError` | Converte a resposta de erro no `ApiErrorDto`, que é o formato de todas as respostas de erro, incluindo `401`, `403`, `404`, `413`, `415` e `500` (documentação da API, secção 4.1), e expõe o motivo por campo, para a página o apresentar junto de cada campo (W04, A04d, A09b, A10b). O nome do campo vem em camelCase e, nas listas, com o índice (`skillIds[0]`); nos carregamentos é `file`. Preenche `errorId` (secção 4.2). | RF037, RF040, RF042, RF084, RF094, RF099 a RF102 |
+| `HttpApiClient.getFile` | Obtém um ficheiro protegido (fotografia, logótipo ou CV) com a credencial no cabeçalho e devolve-o como `Blob` (secção 4.3). | RNF004, RNF007 |
+| `ApiError.isUnauthorized` | Código `401`. Num pedido com sessão é ERR-01 (credencial em falta, inválida ou expirada): o `SessionProvider` termina a sessão e encaminha para o início de sessão. No pedido de início de sessão é ERR-02 (credenciais erradas) e só a `LoginPage` o trata. | RNF004, RNF005, RNF009, P20 |
+| `ApiError.isForbidden` | Código `403`: conta bloqueada ou suspensa, ponto de acesso errado, tipo de conta não autorizado, Empresa não aprovada ou elemento de outro titular; o tratamento depende de `errorId` (secção 4.2). | RF039, RF104, RNF006 |
+| `ApiError.isConflict` | Código `409`: a operação não é possível no estado atual do elemento; o tratamento depende de `errorId` (secção 4.2). | RF058, RF117 |
 | `ConnectionMonitor` | Mantém o estado da ligação ao servidor e notifica o `ConnectionBanner`. | RNF018 |
 
-O valor de `_timeoutMs` é fixado na configuração do repositório. Os verbos HTTP, as rotas completas e os códigos de estado de cada operação são fixados na documentação da API (`04.11`, Issue `I092`); os serviços são ajustados a essa documentação.
+O valor de `_timeoutMs` é fixado na configuração do repositório. Os verbos HTTP, as rotas completas e os códigos de estado de cada operação são os da documentação da API v01 (`I092`) e estão na tabela da secção 5.
 
-### 4.2. Ficheiros protegidos
+### 4.2. Tratamento dos erros
+
+O `ApiErrorDto` não tem código de erro (documentação da API, PA-05; dependência G12). Até essa proposta ser aceite, `toApiError` identifica o erro pelo código HTTP e pela `message`, comparada com as mensagens fixas do catálogo da API (secção 4.3 desse documento), guardadas em `src/api/errorCatalog.ts`; nas mensagens com valores preenchidos pelo servidor (ERR-07, ERR-30, ERR-31, ERR-39) a comparação é feita pelo início do texto. Quando a mensagem não corresponde a nenhuma do catálogo, `errorId` fica `null` e a página apresenta `message`. A mensagem apresentada ao utilizador é sempre a do servidor.
+
+| Erro da API | Código | Tratamento na área de gestão web | Ecrãs | Requisitos |
+| --- | --- | --- | --- | --- |
+| ERR-01 | 401 | O `SessionProvider` termina a sessão, fecha a ligação persistente e encaminha para `/entrar` ou `/admin/entrar`. | Todos | RNF004, RNF005 |
+| ERR-02 | 401 | Só no início de sessão: a `LoginPage` apresenta a mensagem única, sem distinguir correio inexistente de palavra-passe errada. | W01, A01 | RF038, RF083, RNF009 |
+| ERR-03, ERR-04 | 403 | No início de sessão, a `LoginPage` apresenta a mensagem. Durante a sessão (conta bloqueada ou suspensa depois de iniciada), o `SessionProvider` termina a sessão e a `LoginPage` apresenta a mensagem. | W01, A01 | RF086, RNF004 |
+| ERR-05 | 403 | Conta de Candidato na área de gestão web: a `LoginPage` apresenta a mensagem (secção 7.2, regra 5). | W01, A01 | RF038, RF083 |
+| ERR-06 | 403 | Encaminhamento para `/acesso-negado`. | A11 | RF103, RF104 |
+| ERR-07 | 403 | `refreshCompanyStatus`; o `RequireCompanyStatus` encaminha para `/empresa/estado`. Aplica-se também à lista de matches (documentação da API, 6.7.1). | W05, W06, W21, W26 | RF039 |
+| ERR-08, ERR-20 | 403, 404 | A página apresenta a mensagem e volta a pedir a lista de origem. `ERR-20` em `getStatus` não é erro: significa Empresa por registar (secção 5, regra 7). | Todos | RF059, RNF006 |
+| ERR-10, ERR-11 | 400 | Motivo junto de cada campo de `fields`; ERR-11 junto do campo de ficheiro. | W04, W06, W08, W10, W11, W25, A04d, A09b, A10b | RF037, RF042, RF051, RF084, RF094, RF099 a RF102 |
+| ERR-12, ERR-13 | 413, 415 | Mensagem do servidor. Na prática não ocorrem, porque o formulário verifica o formato e a dimensão antes de enviar (secção 5, regra 8). | W07, W10, W11 | RF047, RF048, RF052 |
+| ERR-30 | 409 | Transição de estado já não possível (vaga, Empresa ou conta mudou entretanto): mensagem e nova leitura da lista; no A04e, «Ver lista atualizada». | W12 a W14, A04e, A05b, A07b, A08b | RF053 a RF056, RF093 a RF095, RF115, RF116 |
+| ERR-34, ERR-35 | 409 | ERR-34: decisão sem abertura do perfil registada. ERR-35: o interesse já não está em espera, na decisão, na abertura do perfil ou na obtenção do CV (documentação da API, 6.6.2 a 6.6.5; UC12, E1 e E4). Em ambos: mensagem e nova leitura dos candidatos em espera. | W16, W17, W18, W20 | RF061, RF063, RF064, RF117, RF118, RNF007 |
+| ERR-36, ERR-37 | 409 | A conversa passa a só de consulta (W23) e a lista de conversas é lida de novo. | W22, W23 | RF069, RF070, RF075 |
+| ERR-38 | 409 | Diálogo do W15, com a alternativa de encerrar a vaga. | W15 | RF058, RF114 |
+| ERR-39 | 409 | Mensagem do número máximo de fotografias; o contador «n/6» ou «n/5» é atualizado. | W07, W10, W11 | RF048, RF052, P13 |
+| ERR-40 | 409 | `refreshCompanyStatus` e encaminhamento para `/empresa/estado`. | W03 | RF041 |
+| ERR-41 | 409 | Alteração concorrente: mensagem «Atualize e tente novamente» e nova leitura do elemento. | Todos os formulários | — |
+| ERR-50 | 500 | Mensagem do servidor; nada ficou gravado e a ação pode ser repetida. | Todos | RNF013 |
+| Sem resposta | — | `isConnectionFailure()`: o `ConnectionBanner` avisa e a página oferece «Tentar de novo». | A02d e todos | RNF018 |
+
+Os erros ERR-31 a ERR-33 são exclusivos do Candidato e não ocorrem neste módulo.
+
+### 4.3. Ficheiros protegidos
 
 Um elemento `<img>` ou uma ligação `<a href>` do browser não envia o cabeçalho `Authorization`. Como os endereços dos ficheiros só respondem depois de verificar a credencial (backend, secção 7.2; RNF007), o cliente não os usa diretamente: obtém o conteúdo com `IApiClient.getFile` e apresenta-o através de um endereço local do browser (`URL.createObjectURL`), libertado quando o componente desaparece.
+
+O modelo de classes do backend v01 não tem a operação que serve estes endereços (documentação da API, PA-01; dependência G11). A correção proposta na documentação da API (`GET /api/files/{fileId}`, autorizado pela credencial de sessão) é compatível com esta solução: o cliente usa o endereço tal como vem no DTO ou no cabeçalho `Location`, sem o construir. O CV não tem endereço: é obtido em `GET /api/recruiter/interests/{matchId}/cv` (`application/pdf`), só enquanto o interesse está em espera (RNF007).
 
 ```mermaid
 classDiagram
@@ -587,13 +623,13 @@ classDiagram
 | --- | --- | --- | --- |
 | `useProtectedFile` | Recebe o endereço devolvido pela API, obtém o ficheiro com a credencial e devolve o endereço local; revoga-o ao desmontar. | W07, W10, W11, W17, W19 | RNF004, RNF007 |
 | `ProtectedImage` | Apresenta fotografias e logótipos protegidos; sem endereço, mostra o marcador vazio do protótipo. | W07, W10, W11, W17, W19 | RF047, RF048, RF052, RF061 |
-| `CandidateEvaluationService.getCv` | Obtém o CV em PDF e abre-o num novo separador a partir do endereço local. | W17 | RF061, RNF007 |
+| `CandidateEvaluationService.getCv` | Obtém o CV em PDF e abre-o num novo separador a partir do endereço local. Sem CV, o servidor devolve `404` (ERR-20); com o interesse fora de espera, `409` (ERR-35); com a vaga de outra Empresa, `403` (ERR-08). O botão «Abrir CV (PDF)» só aparece com `hasCv` verdadeiro. | W17 | RF061, RNF007 |
 
 ---
 
 ## 5. Serviços
 
-Há um serviço por controller do backend usado pela área de gestão web, com as operações do controller em camelCase e os mesmos nomes (backend, secção 6). As operações marcadas com **G1** e **G2** não existem ainda no backend (secção 11).
+Há um serviço por controller do backend usado pela área de gestão web, com as operações do controller em camelCase e os mesmos nomes (backend, secção 6). `CompanyService.getRegistration` e `getPage` não existem ainda no backend (dependências G1 e G2; documentação da API, PA-03).
 
 ```mermaid
 classDiagram
@@ -724,20 +760,74 @@ classDiagram
 | `IndicatorService` | `AdminIndicatorsController` | `/api/admin/indicators` | Administrador | UC19 |
 | `ReferenceListService` | `ReferenceListsController` | `/api/reference-lists` | Recrutador (consulta) e Administrador | UC09, UC10, UC20 |
 
+Pedido HTTP de cada operação, segundo a documentação da API v01 (secções 5 e 6). As rotas com `{…}` recebem o identificador como texto (`Guid`).
+
+| Serviço | Operação | Pedido | Resposta de sucesso |
+| --- | --- | --- | --- |
+| `AuthService` | `createRecruiterAccount` | `POST /api/auth/recruiters` | `201` · `LoginResponse` |
+| | `login` | `POST /api/auth/login` (com `X-Client-App: web`) | `200` · `LoginResponse` |
+| | `logout` | `POST /api/auth/logout` | `204` |
+| | `changePassword` | `PUT /api/auth/password` | `204` |
+| `CompanyService` | `register` | `POST /api/recruiter/company` | `201` · `CompanyStatusDto` |
+| | `resubmit` | `POST /api/recruiter/company/resubmission` | `200` · `CompanyStatusDto` |
+| | `getStatus` | `GET /api/recruiter/company/status` | `200` · `CompanyStatusDto`; `404` sem Empresa |
+| | `getRegistration` | Proposta `GET /api/recruiter/company` (G1, PA-03) | `200` · `CompanyRegistrationDto` |
+| | `updateRegistration` | `PUT /api/recruiter/company` | `200` · `CompanyStatusDto` |
+| | `getPage` | Proposta `GET /api/recruiter/company/page` (G2, PA-03) | `200` · `CompanyPageDto` |
+| | `updatePage` | `PUT /api/recruiter/company/page` | `200` · `CompanyPageDto` |
+| | `uploadLogo` | `PUT /api/recruiter/company/logo` (`multipart/form-data`) | `204` · `Location` |
+| | `addGalleryPhoto` | `POST /api/recruiter/company/photos` (`multipart/form-data`) | `201` · `Location` |
+| `JobService` | `list` | `GET /api/recruiter/jobs` | `200` · `JobDto[]` |
+| | `create` | `POST /api/recruiter/jobs` | `201` · `JobDto` |
+| | `update` | `PUT /api/recruiter/jobs/{jobId}` | `200` · `JobDto` |
+| | `publish`, `suspend`, `republish`, `close` | `POST /api/recruiter/jobs/{jobId}/publish`, `…/suspend`, `…/republish`, `…/close` | `200` · `JobDto` |
+| | `delete` | `DELETE /api/recruiter/jobs/{jobId}` | `204` |
+| | `addPhoto` | `POST /api/recruiter/jobs/{jobId}/photos` (`multipart/form-data`) | `201` · `Location` |
+| `CandidateEvaluationService` | `listWaiting` | `GET /api/recruiter/jobs/{jobId}/waiting-candidates` | `200` · `WaitingCandidateDto[]` |
+| | `openProfile` | `GET /api/recruiter/interests/{matchId}/profile` | `200` · `CandidateFullProfileDto` |
+| | `getCv` | `GET /api/recruiter/interests/{matchId}/cv` | `200` · `application/pdf` |
+| | `accept` | `POST /api/recruiter/interests/{matchId}/accept` | `200` · `MatchDto` |
+| | `reject` | `POST /api/recruiter/interests/{matchId}/reject` | `204` |
+| `MatchService` | `list` | `GET /api/matches` | `200` · `MatchDto[]` |
+| `ConversationService` | `list` | `GET /api/conversations` | `200` · `ConversationSummaryDto[]` |
+| | `open` | `GET /api/conversations/{matchId}/messages` | `200` · `MessageDto[]` |
+| | `send` | `POST /api/conversations/{matchId}/messages` | `201` · `MessageDto` |
+| | `close` | `POST /api/conversations/{matchId}/close` | `204` |
+| `NotificationService` | `list` | `GET /api/notifications` | `200` · `NotificationListDto` |
+| | `markRead` | `POST /api/notifications/{notificationId}/read` | `204` |
+| `AdminAccountService` | `listAccounts` | `GET /api/admin/accounts` | `200` · `AccountDto[]` |
+| | `listCandidates` | `GET /api/admin/accounts/candidates` | `200` · `CandidateAdminDto[]` |
+| | `block` | `POST /api/admin/accounts/{userId}/block` | `204` |
+| | `suspendCandidate` | `POST /api/admin/accounts/candidates/{candidateId}/suspend` | `204` |
+| | `reactivate` | `POST /api/admin/accounts/{userId}/reactivate` | `204` |
+| `AdminCompanyService` | `listPending` | `GET /api/admin/companies/pending` | `200` · `PendingCompanyDto[]` |
+| | `getSubmittedData` | `GET /api/admin/companies/{companyId}/registration` | `200` · `CompanyRegistrationDto` |
+| | `approve`, `suspend`, `reactivate` | `POST /api/admin/companies/{companyId}/approve`, `…/suspend`, `…/reactivate` | `204` |
+| | `reject` | `POST /api/admin/companies/{companyId}/reject` | `204` |
+| | `listCompanies` | `GET /api/admin/companies` | `200` · `CompanyAdminDto[]` |
+| | `listPublishedJobs` | `GET /api/admin/companies/published-jobs` | `200` · `PublishedJobAdminDto[]` |
+| `IndicatorService` | `get` | `GET /api/admin/indicators?from=aaaa-MM-dd&to=aaaa-MM-dd` | `200` · `IndicatorsDto` |
+| `ReferenceListService` | `listLocations`, `listSkills`, `listBenefits` | `GET /api/reference-lists/locations`, `…/skills`, `…/benefits` | `200` · `ReferenceItemDto[]` |
+| | `addSkill`, `addBenefit` | `POST /api/reference-lists/skills`, `…/benefits` | `201` · `ReferenceItemDto` |
+| | `renameSkill`, `renameBenefit` | `PUT /api/reference-lists/skills/{skillId}`, `…/benefits/{benefitId}` | `200` · `ReferenceItemDto` |
+
 Regras dos serviços:
 
 1. `AuthService.createRecruiterAccount` devolve a credencial de sessão (`LoginResponse`), como no backend: depois de criar a conta (W02), o Recrutador fica com sessão iniciada e segue para o registo da Empresa (W03).
-2. `AuthService.logout` apenas confirma o pedido; o fim de sessão efetivo é o descarte da credencial no cliente, porque o servidor não guarda estado de sessão (backend, secção 6).
+2. `AuthService.logout` apenas confirma o pedido (`204`); o fim de sessão efetivo é o descarte da credencial no cliente, porque o servidor não guarda estado de sessão (backend, secção 6).
 3. `JobService.addPhoto` exige o identificador da vaga. Na criação (W10), as fotografias escolhidas ficam em espera no formulário e só são enviadas depois de `create` devolver a vaga.
 4. `CandidateEvaluationService.accept` e `reject` só são chamadas a partir da página do perfil completo, depois de `openProfile`, porque é essa chamada que regista a abertura exigida pelo RF118 (UC12, pré-condição 5). O servidor rejeita a decisão sem esse registo (UC12, E1).
-5. `JobService.delete` é pedido sem verificação prévia no cliente: `JobDto.waitingCandidates` só conta os interesses em espera e não todos os interesses registados. Se a vaga tiver interesses, o servidor rejeita a eliminação e a página apresenta o diálogo do W15, com a alternativa de encerrar a vaga (RF058, RF114).
-6. `IndicatorService.get` envia as datas no formato `aaaa-MM-dd` (`DateOnly` no backend).
+5. `JobService.delete` é pedido sem verificação prévia no cliente: `JobDto.waitingCandidates` só conta os interesses em espera e não todos os interesses registados. Se a vaga tiver interesses, o servidor rejeita a eliminação com `409` (ERR-38) e a página apresenta o diálogo do W15, com a alternativa de encerrar a vaga (RF058, RF114).
+6. `IndicatorService.get` envia as datas no formato `aaaa-MM-dd` (`DateOnly` no backend), como parâmetros de consulta; o servidor interpreta-as como dias completos no fuso `Europe/Lisbon` e rejeita, com `400`, a data inicial posterior à final e a data final posterior à atual (documentação da API, 6.12.1, DAPI-07). A página faz as mesmas verificações antes do pedido (A02c).
+7. `CompanyService.getStatus` devolve `404` (ERR-20) quando o Recrutador ainda não registou a Empresa (documentação da API, 6.4.3). O serviço converte essa resposta em `null`, que o `SessionProvider` guarda como «sem Empresa registada» (secção 7.1).
+8. Antes de cada carregamento, o formulário verifica o formato e a dimensão do ficheiro: logótipo JPEG ou PNG até 2 MB; fotografias da galeria e da vaga JPEG ou PNG até 5 MB; no máximo 6 fotografias na galeria e 5 por vaga (P01, P13). O servidor volta a verificar tudo, incluindo o conteúdo do ficheiro (RNF016).
+9. `AdminAccountService.reactivate` recebe o identificador da conta. Na `CandidatesPage` é usado o `candidateId`, que é o mesmo identificador, porque a tabela `candidate` partilha a chave primária com `app_user` (modelo de dados, DM-02).
 
 ---
 
 ## 6. Ligação persistente
 
-Só o Recrutador abre a ligação bidirecional persistente. O backend rejeita o Administrador no `MessagesHub` (RF103) e o `NotificationsHub` só admite Candidato ou Recrutador (backend, secção 6.1); a área de supervisão também não tem conversas nem área de notificações (protótipo da `I041`). O cliente não envia operações pela ligação: o envio de mensagens, a marcação como lida e o encerramento continuam a ser pedidos à API.
+Só o Recrutador abre a ligação bidirecional persistente. Os dois hubs só admitem Candidato ou Recrutador e rejeitam o Administrador na ligação (RF103; backend, secção 6.1; documentação da API, secção 7.1); a área de supervisão também não tem conversas nem área de notificações (protótipo da `I041`). O cliente não envia operações pela ligação: o envio de mensagens, a marcação como lida e o encerramento continuam a ser pedidos à API.
 
 ```mermaid
 classDiagram
@@ -790,17 +880,19 @@ classDiagram
 
 | Hub | Rota | Acontecimento recebido | Efeito no cliente | Requisitos |
 | --- | --- | --- | --- | --- |
-| Mensagens | `/hubs/messages` | `MessageReceived` com `MessageDto` | O `useConversations` acrescenta a mensagem à conversa aberta e atualiza o número de mensagens por ler da lista e da barra lateral. | RF071, RF073, P17 |
-| Mensagens | `/hubs/messages` | `ConversationClosed` com o identificador do match | A conversa passa a só de consulta: aparece a faixa «Conversa encerrada. Apenas consulta.», e o campo de escrita, «Enviar» e «Encerrar conversa» ficam desativados (W23). | RF074, RF075 |
-| Notificações | `/hubs/notifications` | `NotificationReceived` com `NotificationDto` e o número de não lidas | O `useNotifications` acrescenta a notificação e atualiza o contador da barra lateral; uma notificação `CompanyApproved` ou `CompanyRejected` faz também `refreshCompanyStatus`. | RF079, RF080, RF111, P17 |
+| Mensagens | `/hubs/messages` | `MessageReceived` com `MessageDto` | O `useConversations` acrescenta a mensagem à conversa aberta e atualiza o número de mensagens por ler da lista e da barra lateral (regras 2 e 3). | RF071, RF073, P17 |
+| Mensagens | `/hubs/messages` | `ConversationClosed` com o identificador do match | A conversa passa a só de consulta: aparece a faixa «Conversa encerrada. Apenas consulta.», e o campo de escrita, «Enviar» e «Encerrar conversa» ficam desativados (W23). O cliente volta a pedir a lista de conversas para ler o motivo (`closeReason`), que o acontecimento não traz. | RF074, RF075 |
+| Notificações | `/hubs/notifications` | `NotificationReceived` com `NotificationDto` e o número de não lidas | O `useNotifications` acrescenta a notificação e atualiza o contador da barra lateral; uma notificação `COMPANY_APPROVED` ou `COMPANY_REJECTED` faz também `refreshCompanyStatus`. | RF079, RF080, RF111, P17 |
 
 Regras do cliente:
 
-1. A ligação é aberta depois do início de sessão de uma conta de Recrutador, com a mesma credencial dos pedidos HTTP (fornecida por `accessTokenFactory`), e fechada no fim de sessão e quando a credencial expira (RNF004, RNF005).
-2. `MessageDto` não identifica a conversa a que pertence (dependência G6 da secção 11). Até essa dependência ser resolvida, ao receber `MessageReceived` o cliente volta a pedir a lista de conversas e, se houver uma conversa aberta, o respetivo histórico.
-3. Depois de uma reposição da ligação (`onReconnected`), o cliente volta a pedir à API a lista de conversas, o histórico da conversa aberta e a lista de notificações, porque pode ter perdido acontecimentos. Não existe consulta periódica (backend, DC-07).
-4. Enquanto o estado for `Reconnecting` ou `Disconnected`, o `ConnectionBanner` avisa o utilizador, dentro do limite de 10 segundos do RNF018.
-5. A biblioteca cliente (`@microsoft/signalr`) depende da confirmação da proposta D-08 (arquitetura, secção 3.5); a versão é fixada no `package.json`, porque o RI não a fixa.
+1. A ligação é aberta depois do início de sessão de uma conta de Recrutador, com a mesma credencial dos pedidos HTTP, fornecida por `accessTokenFactory`; o browser não permite cabeçalhos no WebSocket, pelo que a biblioteca a envia no parâmetro `access_token` (documentação da API, secção 7.1). A ligação é fechada no fim de sessão e quando a credencial expira; uma reposição recusada com `401` termina a sessão (RNF004, RNF005).
+2. `MessageDto` não identifica a conversa a que pertence (dependência G6; documentação da API, PA-02). Até essa dependência ser resolvida, ao receber `MessageReceived` o cliente volta a pedir a lista de conversas e, se houver uma conversa aberta, o respetivo histórico. Com a correção proposta (`MessageReceived(matchId, message)`), muda apenas o `MessageHandler` e o `useConversations`.
+3. O servidor entrega `MessageReceived` a todas as ligações das duas partes, incluindo a do Recrutador que enviou a mensagem. O `useConversations` ignora uma mensagem cujo `messageId` já está no histórico, porque `send` também a devolve.
+4. Depois de uma reposição da ligação (`onReconnected`), o cliente volta a pedir à API a lista de conversas, o histórico da conversa aberta e a lista de notificações, porque pode ter perdido acontecimentos. Não existe consulta periódica (backend, DC-07).
+5. Enquanto o estado for `Reconnecting` ou `Disconnected`, o `ConnectionBanner` avisa o utilizador, dentro do limite de 10 segundos do RNF018.
+6. Os acontecimentos só são emitidos depois de confirmada a transação no servidor (documentação da API, secção 7.1); o cliente não tem de os confirmar pela API.
+7. A biblioteca cliente (`@microsoft/signalr`) depende da confirmação da proposta D-08 (arquitetura, secção 3.5; documentação da API, PA-06); a versão é fixada no `package.json`, porque o RI não a fixa.
 
 ---
 
@@ -870,8 +962,8 @@ classDiagram
 | `SessionStore.isExpired` | Compara a data de expiração com o instante atual; a credencial expira ao fim de 8 horas. | RNF005, P20 |
 | `SessionProvider.signIn` | Inicia sessão e encaminha conforme a área de entrada e o tipo de conta (secção 7.2). Para o Recrutador, obtém o estado e os dados da Empresa e abre a ligação persistente. | RF038, RF083, RF104 |
 | `SessionProvider.signOut` | Pede `logout`, descarta a credencial, fecha a ligação persistente, limpa o estado e encaminha para o início de sessão da área respetiva. | RF106, RF107 |
-| `SessionProvider.companyStatus` | Estado da Empresa do Recrutador, `null` quando ainda não há Empresa registada (dependência G8). Atualizado depois de cada submissão e de cada notificação de decisão. | RF039, RF043, RF044 |
-| `SessionProvider.companyRegistration` | Dados de registo da Empresa, usados na barra superior (designação social e nome do responsável), no W05, W06, W08 e W26 (dependência G1). | RF044, RF045, RF049 |
+| `SessionProvider.companyStatus` | Estado da Empresa do Recrutador, `null` quando ainda não há Empresa registada (`getStatus` com `404`; secção 5, regra 7). Atualizado depois de cada submissão e de cada notificação de decisão. | RF039, RF043, RF044 |
+| `SessionProvider.companyRegistration` | Dados de registo da Empresa, usados na barra superior (designação social e nome do responsável), no W05, W06, W08 e W26 (dependência G1; documentação da API, PA-03). | RF044, RF045, RF049 |
 
 O estado da Empresa guardado no cliente serve apenas para escolher o que mostrar. A restrição é aplicada no servidor em cada operação reservada, pela política `ApprovedCompany` (backend, secção 6; RF039, RNF006): um estado desatualizado no cliente não permite nenhuma operação indevida, porque o pedido é rejeitado e o cliente volta a pedir o estado.
 
@@ -931,7 +1023,7 @@ classDiagram
 | `/candidatos?vaga=:jobId` | Recrutador com Empresa aprovada | `WaitingCandidatesPage` | W16 |
 | `/candidatos/:matchId` | Recrutador com Empresa aprovada | `CandidateProfilePage` | W17, W18, W20 |
 | `/candidatos/:matchId/match` | Recrutador com Empresa aprovada | `MatchConfirmedPage` | W19 |
-| `/matches` | Recrutador com Empresa aprovada ou suspensa | `MatchesPage` | W21 |
+| `/matches` | Recrutador com Empresa aprovada | `MatchesPage` | W21 |
 | `/conversas?match=:matchId` | Recrutador com Empresa aprovada ou suspensa | `ConversationsPage` | W22, W23 |
 | `/notificacoes` | Recrutador | `NotificationsPage` | W24 |
 | `/conta` | Recrutador | `AccountPage` | W25 |
@@ -954,7 +1046,7 @@ Regras de encaminhamento:
 2. Depois do início de sessão em `/entrar`: Recrutador → página inicial do Recrutador (regra 4); Administrador → `/admin/indicadores`. Depois do início de sessão em `/admin/entrar`: Administrador → `/admin/indicadores`; Recrutador → `/acesso-negado` (A01, navegação «A11 (conta de Recrutador)»).
 3. `RequireUserType`: um Recrutador que abra uma rota `/admin/...` vai para `/acesso-negado` (A11), e não para uma página em branco (RF104); um Administrador que abra uma rota do Recrutador vai para `/admin/indicadores`. O servidor rejeita sempre o pedido não autorizado (RNF006).
 4. `RequireCompanyStatus` admite `null` em `allowed`, que representa «sem Empresa registada» (rota `/empresa/registo`). Página inicial do Recrutador: sem Empresa registada → `/empresa/registo`; Empresa pendente, recusada ou suspensa → `/empresa/estado`; Empresa aprovada → `/vagas` (RF039).
-5. Uma conta de Candidato não usa a área de gestão web: o início de sessão é rejeitado pelo servidor (backend, `LoginAsync` com `ClientApp`; dependência G7) e a página apresenta o motivo devolvido pelo servidor. O texto «Os Candidatos utilizam a aplicação móvel» é uma nota fixa do ecrã A01, e não a mensagem de rejeição.
+5. Uma conta de Candidato não usa a área de gestão web: o cliente envia `X-Client-App: web` e o servidor rejeita a conta de Candidato com `403` (ERR-05), depois de verificar as credenciais e o estado da conta (documentação da API, secções 3.2 e 6.1.3); a página apresenta o motivo devolvido pelo servidor. O texto «Os Candidatos utilizam a aplicação móvel» é uma nota fixa do ecrã A01, e não a mensagem de rejeição.
 6. Nenhuma destas proteções é uma medida de segurança: são uma conveniência de navegação. A autorização é verificada no servidor em cada pedido (RNF006).
 
 ---
@@ -1095,7 +1187,7 @@ classDiagram
 
 | Componente | Responsabilidade | Ecrãs | Requisitos |
 | --- | --- | --- | --- |
-| `RecruiterShell` | Moldura do Recrutador. Com a Empresa não aprovada (`locked`), mostra Vagas e Candidatos com cadeado e o item «Estado do pedido»; Matches e Conversas ficam com cadeado nos estados pendente e recusada; Notificações e Conta ficam sempre acessíveis (divergência P1 da secção 12). | W05 a W26, exceto W03 e W04 | RF039, RF075, RF079, RF080, RF106 |
+| `RecruiterShell` | Moldura do Recrutador. Com a Empresa não aprovada (`locked`), mostra Vagas e Candidatos com cadeado e o item «Estado do pedido»; Matches fica com cadeado sempre que a Empresa não está aprovada (documentação da API, 6.7.1); Conversas fica com cadeado nos estados pendente e recusada; Notificações e Conta ficam sempre acessíveis (divergências P1 e P2 da secção 12). | W05 a W26, exceto W03 e W04 | RF039, RF075, RF079, RF080, RF106 |
 | `AdminShell` | Moldura da área de supervisão: Indicadores; Empresas (Pendentes de aprovação, com o número de pendentes; Todas as Empresas; Vagas publicadas); Utilizadores (Contas de utilizador; Candidatos); Configuração (Listas pré-definidas). Não tem conversas nem notificações. | A02 a A10 | RF103, RF104 |
 | `Sidebar` | Navegação, com o item ativo em destaque e os contadores: conversas (soma das mensagens por ler) e notificações por ler, no Recrutador; Empresas pendentes, no Administrador. | W05 a W26, A02 a A10 | RF071, RF080, RF091 |
 | `RecruiterTopBar` | Designação social e nome do responsável da Empresa (dependência G1). | W05 a W26 | RF044 |
@@ -1108,7 +1200,7 @@ classDiagram
 | `FormField`, `FileUpload` | Rótulo, ajuda, contador de caracteres e mensagem de erro por campo; escolha de ficheiro com o formato, a dimensão e o número máximo de ficheiros. | W02 a W04, W06 a W08, W10, W11, W22, W25, A09, A10 | RF037, RF042, RF046 a RF048, RF050 a RF052, RF069; P01, P03, P08, P13 |
 | `StatusBadge` | Estado da Empresa, da vaga ou da conta, com a designação do mapa de apresentação. | W05, W06, W08, W09, W21, W26, A04, A05, A07, A08 | RF044, RF053, RF085, RF097 |
 | `SkillTag` | Competência em etiqueta, em destaque quando coincide com as pretendidas na vaga. | W10, W11, W17 | RF050, RF062 |
-| `ProtectedImage` | Fotografia ou logótipo protegido (secção 4.2). | W07, W10, W11, W17, W19 | RF047, RF048, RF052, RF061 |
+| `ProtectedImage` | Fotografia ou logótipo protegido (secção 4.3). | W07, W10, W11, W17, W19 | RF047, RF048, RF052, RF061 |
 
 `BadgeStatus` é a união de `CompanyStatus`, `JobStatus` e `AccountStatus`. Todos os ecrãs são desenhados sem deslocamento horizontal entre 1280 e 1920 píxeis de largura (RNF012, P21).
 
@@ -1231,7 +1323,7 @@ A `LoginPage`, a `CreateRecruiterAccountPage` e a `CompanyRegistrationPage` não
 
 | Página | Responsabilidade | Hook | Serviço | Requisitos |
 | --- | --- | --- | --- | --- |
-| `LoginPage` | Início de sessão na área do Recrutador (W01, com «Criar conta») ou na área de supervisão (A01). Credenciais erradas: mensagem única «Credenciais inválidas», que não distingue endereço inexistente de palavra-passe errada; conta bloqueada: mensagem própria «Conta bloqueada» (W01). | `useSession` | `AuthService` | RF038, RF083, RF086, RNF009 |
+| `LoginPage` | Início de sessão na área do Recrutador (W01, com «Criar conta») ou na área de supervisão (A01). Credenciais erradas: mensagem única do servidor (ERR-02), que não distingue endereço inexistente de palavra-passe errada; conta bloqueada ou suspensa: mensagem própria (ERR-03, ERR-04; W01); conta de Candidato: ERR-05 (secção 4.2). | `useSession` | `AuthService` | RF038, RF083, RF086, RNF009 |
 | `CreateRecruiterAccountPage` | Criação da conta de Recrutador com correio eletrónico, palavra-passe e aceitação das condições; «Já tenho conta» volta ao W01. | `useSession` | `AuthService` | RF037 |
 | `CompanyRegistrationPage` | Primeiro registo da Empresa com os oito dados e o erro por campo (W04). | `useCompany` | `CompanyService`, `ReferenceListService` | RF041, RF042, RF043 |
 | `CompanyRequestStatusPage` | Estado do pedido: pendente, com os dados submetidos só de leitura (W05); recusada, com o motivo e o formulário preenchido para corrigir e «Submeter novamente» (W06); suspensa, com os dados só de leitura (W26). Indica sempre que não pode publicar vagas nem aceder a candidatos. | `useCompany` | `CompanyService`, `ReferenceListService` | RF039, RF043, RF044, RF045 |
@@ -1526,7 +1618,7 @@ classDiagram
 | `useMatches` | `MatchDto[]` | — | Pedido à API ao abrir o ecrã |
 | `useConversations` | `ConversationSummaryDto[]` | Conversa aberta, histórico e total de mensagens por ler | Pedido à API e acontecimentos da ligação persistente (secção 6) |
 | `useNotifications` | `NotificationListDto` | — (o contador é `data.unreadCount`) | Pedido à API e acontecimentos da ligação persistente (secção 6) |
-| `useProtectedFile` | — (endereço local, secção 4.2) | — | Pedido à API; libertado ao desmontar |
+| `useProtectedFile` | — (endereço local, secção 4.3) | — | Pedido à API; libertado ao desmontar |
 | `useIndicators` | `IndicatorsDto` | Período, número de dias e erro de período | Pedido à API depois de validar o período |
 | `usePendingCompanies` | `PendingCompanyDto[]` | Dados submetidos da Empresa aberta e mensagem da última decisão (A03b, A03c) | Pedido à API; nova leitura depois de cada decisão (atualiza também o contador da barra lateral e a faixa do A02) |
 | `useCompaniesAdmin` | `CompanyAdminDto[]` | Filtro por estado e linhas visíveis | Pedido à API; nova leitura depois de cada mudança de estado |
@@ -1588,14 +1680,14 @@ classDiagram
 ```
 
 1. Na `WaitingCandidatesPage` (W16), o Recrutador escolhe «Abrir perfil». A lista não tem ações de decisão (RF060).
-2. A `CandidateProfilePage` (W17) chama `useCandidateProfile.open`, que pede o perfil completo. O servidor regista a abertura para a vaga (RF118) e o hook passa `profileOpened` a verdadeiro.
+2. A `CandidateProfilePage` (W17) chama `useCandidateProfile.open`, que pede o perfil completo (`GET /api/recruiter/interests/{matchId}/profile`). O servidor regista a abertura para a vaga (RF118) e o hook passa `profileOpened` a verdadeiro.
 3. Só então «Aceitar» e «Recusar» ficam disponíveis. A confirmação (W18) enumera os efeitos e avisa que a decisão não pode ser alterada (RF117).
-4. `CandidateEvaluationService.accept` envia o pedido com a credencial de sessão no cabeçalho; o identificador do Recrutador vem da credencial e não do corpo (RNF006).
-5. O servidor executa a operação atómica (backend, secção 8) e devolve o `MatchDto`.
+4. `CandidateEvaluationService.accept` envia `POST /api/recruiter/interests/{matchId}/accept` com a credencial de sessão no cabeçalho; o identificador do Recrutador vem da credencial e não do corpo (RNF006).
+5. O servidor executa a operação atómica (backend, secção 8) e devolve `200` com o `MatchDto`.
 6. A página abre a `MatchConfirmedPage` (W19) com o contacto do Candidato e o acesso à conversa (RF066, RF067).
 7. A notificação de novo match dirigida ao Recrutador chega pela ligação persistente e o contador da barra lateral é atualizado no máximo 5 segundos depois (RF077, RF111, P17).
 
-Se o servidor rejeitar a decisão porque o Candidato já foi avaliado noutro pedido (UC12, E4), o `ApiError` é apresentado na página e a lista de candidatos em espera é recarregada; a decisão registada não muda (RF117).
+Se o servidor rejeitar a decisão com `409` porque o Candidato já foi avaliado noutro pedido (ERR-35; UC12, E4), o `ApiError` é apresentado na página e a lista de candidatos em espera é recarregada; a decisão registada não muda (RF117).
 
 ---
 
@@ -1603,20 +1695,26 @@ Se o servidor rejeitar a decisão porque o Candidato já foi avaliado noutro ped
 
 A verificação cruzada com o modelo de classes do backend (`I036`) e com os protótipos aceites (`I040`, `I041`) encontrou elementos de que a área de gestão web precisa e que o backend ainda não define. O frontend web só é implementado em `m4`, mas o contrato tem de estar fechado antes: estas dependências devem ser resolvidas na documentação da API (`I092`) e, quando alteram o modelo de classes do backend, numa nova Issue, porque a `I036` está concluída e uma tarefa Done não é reaberta (Regulamento da UC, secção 14.2).
 
-| ID | Dependência | Onde se manifesta | Proposta |
-| --- | --- | --- | --- |
-| G1 | O `CompanyController` não tem operação para o Recrutador ler os dados de registo da própria Empresa (a tabela 7.2 do backend associa `CompanyRegistrationDto` ao `CompanyController`, mas nenhuma operação o devolve). | W05, W06, W08, W26, barra superior, W25 (nome do responsável); UC07 A3 («o sistema apresenta os dados submetidos e o motivo da recusa»); RF044, RF045, RF049 | `GetRegistration() ActionResult<CompanyRegistrationDto>` no `CompanyController` e `GetRegistrationAsync` no `ICompanyService` |
-| G2 | O `CompanyController` não tem operação para o Recrutador ler a página de apresentação da própria Empresa (só o `JobExplorationController`, reservado ao Candidato, a devolve). | W07; RF046 a RF048 | `GetPage() ActionResult<CompanyPageDto>` no `CompanyController` |
-| G3 | `CompanyRegistrationDto` só tem `LocationName`; o pedido de alteração exige `LocationId`. | W06 e W08 (seleção da localidade preenchida); W10 (localidade proposta com a da Empresa, RF050) | Acrescentar `Guid LocationId` ao `CompanyRegistrationDto` |
-| G4 | `WaitingCandidateDto` não tem a função pretendida nem a localidade. | W16 (colunas «Função pretendida» e «Localidade») | Acrescentar `string? DesiredRole` e `string LocationName` |
-| G5 | `MatchDto` não tem o estado da vaga. | W21 (coluna «Estado da vaga») | Acrescentar `JobStatus JobStatus` |
-| G6 | O acontecimento `MessageReceived` envia só o `MessageDto`, que não identifica a conversa. | RF073 (acrescentar a mensagem à conversa certa) | Acrescentar `Guid MatchId` ao `MessageDto` ou enviar o identificador do match no acontecimento; até lá aplica-se a regra 2 da secção 6 |
-| G7 | `IAuthService.LoginAsync` recebe `ClientApp`, mas o contrato não define como o cliente o indica. | Rejeição do início de sessão de um Candidato na área de gestão web (A01) | Fixar na documentação da API (cabeçalho ou campo do pedido) |
-| G8 | Não está definida a resposta de `GetStatus` quando o Recrutador ainda não registou a Empresa. | Encaminhamento para `/empresa/registo` depois do W02 e no início de sessão | Fixar na documentação da API (por exemplo, resposta sem conteúdo ou código próprio) |
-| G9 | Não está definida a serialização das enumerações em JSON; por omissão, o ASP.NET Core usa números. | Todos os tipos da secção 3 | Configurar a serialização das enumerações como texto (`JsonStringEnumConverter`), com os nomes dos valores em C# |
-| G10 | `CandidateFullProfileDto` não tem a data e hora da abertura do perfil. | W17 («Abertura do perfil registada hoje às 10:32») | Acrescentar `DateTimeOffset ProfileOpenedAt` |
+| ID | Dependência | Onde se manifesta | Proposta | Estado na documentação da API v01 (`I092`) |
+| --- | --- | --- | --- | --- |
+| G1 | O `CompanyController` não tem operação para o Recrutador ler os dados de registo da própria Empresa (a tabela 7.2 do backend associa `CompanyRegistrationDto` ao `CompanyController`, mas nenhuma operação o devolve). | W05, W06, W08, W26, barra superior, W25 (nome do responsável); UC07 A3 («o sistema apresenta os dados submetidos e o motivo da recusa»); RF044, RF045, RF049 | `GetRegistration() ActionResult<CompanyRegistrationDto>` no `CompanyController` e `GetRegistrationAsync` no `ICompanyService`, com a política `Recruiter` e não `ApprovedCompany`, porque os ecrãs W05, W06 e W26 são de Empresa pendente, recusada ou suspensa | Em aberto: PA-03 propõe `GET /api/recruiter/company`, com a política `Recruiter` e `404` sem Empresa registada |
+| G2 | O `CompanyController` não tem operação para o Recrutador ler a página de apresentação da própria Empresa (só o `JobExplorationController`, reservado ao Candidato, a devolve). | W07; RF046 a RF048 | `GetPage() ActionResult<CompanyPageDto>` no `CompanyController` | Em aberto: PA-03 propõe `GET /api/recruiter/company/page`, com a política `ApprovedCompany` |
+| G3 | `CompanyRegistrationDto` só tem `LocationName`; o pedido de alteração exige `LocationId`. | W06 e W08 (seleção da localidade preenchida); W10 (localidade proposta com a da Empresa, RF050) | Acrescentar `Guid LocationId` ao `CompanyRegistrationDto` | Em aberto: incluída na proposta do PA-03 |
+| G4 | `WaitingCandidateDto` não tem a função pretendida nem a localidade. | W16 (colunas «Função pretendida» e «Localidade») | Acrescentar `string? DesiredRole` e `string LocationName` | Em aberto: PA-07 (proposta de melhoria) |
+| G5 | `MatchDto` não tem o estado da vaga. | W21 (coluna «Estado da vaga») | Acrescentar `JobStatus JobStatus` | Em aberto: PA-08 (proposta de melhoria) |
+| G6 | O acontecimento `MessageReceived` envia só o `MessageDto`, que não identifica a conversa. | RF073 (acrescentar a mensagem à conversa certa) | Enviar o identificador do match no acontecimento; até lá aplica-se a regra 2 da secção 6 | Em aberto: PA-02 propõe `MessageReceived(matchId, message)` |
+| G7 | `IAuthService.LoginAsync` recebe `ClientApp`, mas o contrato não define como o cliente o indica. | Rejeição do início de sessão de um Candidato na área de gestão web (A01) | Fixar na documentação da API | Resolvida: cabeçalho `X-Client-App: web` (secção 3.2, DAPI-02); aplicada na secção 4.1 |
+| G8 | Não estava definida a resposta de `GetStatus` quando o Recrutador ainda não registou a Empresa. | Encaminhamento para `/empresa/registo` depois do W02 e no início de sessão | Fixar na documentação da API | Resolvida: `404` com ERR-20 (6.4.3); aplicada na secção 5, regra 7 |
+| G9 | Não estava definida a serialização das enumerações em JSON. | Todos os tipos da secção 3 | Serialização das enumerações como texto | Resolvida: valores em maiúsculas com `_` (secção 2.4, DAPI-01); aplicada nas secções 2.2 e 3.1 |
+| G10 | `CandidateFullProfileDto` não tem a data e hora da abertura do perfil. | W17 («Abertura do perfil registada hoje às 10:32») | Acrescentar `DateTimeOffset ProfileOpenedAt` | Em aberto: PA-09 (proposta de melhoria) |
+| G11 | Não há operação que sirva os ficheiros referidos por `photoUrl`, `logoUrl` e `photoUrls`. | W07, W10, W11, W17, W19 (logótipo, galeria, fotografias da vaga e do Candidato); RF047, RF048, RF052, RF061 | A proposta da API, com autorização pela credencial de sessão no cabeçalho, para manter a secção 4.3 | Em aberto: PA-01 propõe `GET /api/files/{fileId}` |
+| G12 | `ApiErrorDto` não tem código de erro. | Distinção dos erros `403` e `409` (secção 4.2) | Acrescentar `string Code` com os identificadores ERR-xx | Em aberto: PA-05 (proposta de melhoria); até lá, comparação com as mensagens fixas |
 
-As operações `CompanyService.getRegistration` e `CompanyService.getPage` estão no modelo do cliente porque os ecrãs aceites as exigem; ficam dependentes de G1 e G2.
+O ponto em aberto PA-04 da documentação da API (lista de localidades só com sessão iniciada) não afeta a área de gestão web: o Recrutador obtém a credencial ao criar a conta (W02), antes de escolher a localidade no registo da Empresa (W03). O PA-06 (ratificação de D-08 e AD-01) está nas limitações (secção 14).
+
+As dependências G4, G5 e G10 correspondem aos pontos em aberto PA-07 a PA-09 da documentação da API, classificados nesse documento como propostas de melhoria. A PA-03 fixa as políticas propostas para G1 (`Recruiter`) e G2 (`ApprovedCompany`).
+
+As operações `CompanyService.getRegistration` e `CompanyService.getPage` estão no modelo do cliente porque os ecrãs aceites as exigem; ficam dependentes de G1 e G2 (PA-03).
 
 ---
 
@@ -1627,7 +1725,7 @@ O modelo segue os protótipos aceites, exceto onde contrariam os requisitos ou o
 | ID | Divergência | Decisão no modelo | Fundamento |
 | --- | --- | --- | --- |
 | P1 | Na variante bloqueada da barra lateral (W05, W06, W26) não existem os itens Notificações e Conta. | Notificações e Conta ficam sempre acessíveis ao Recrutador. | RF079 e RF080 (o Recrutador consulta a notificação da decisão sobre a Empresa); RF106 (terminar sessão) |
-| P2 | No W26 (Empresa suspensa), Matches e Conversas estão bloqueados. | Com a Empresa suspensa, Matches e Conversas ficam acessíveis, com as conversas só de consulta; nos estados pendente e recusada continuam bloqueados, porque não pode haver matches. | RF067 (matches mantêm-se), RF075 (conversas passam a só de consulta, não a inacessíveis); o backend só exige conta de Recrutador no `MatchesController` e no `ConversationsController` |
+| P2 | No W26 (Empresa suspensa), Conversas está bloqueado. | Com a Empresa suspensa, Conversas fica acessível em modo só de consulta; nos estados pendente e recusada continua bloqueado, porque não pode haver conversas. Matches fica bloqueado, como no W26, porque a lista de matches exige Empresa aprovada. | RF075 (conversas passam a só de consulta, não a inacessíveis); documentação da API, 6.7.1 (`ApprovedCompany` na lista de matches do Recrutador, RF039) e 6.8 (`CandidateOrRecruiter` nas conversas) |
 | P3 | O W01 («Backoffice do Recrutador») e o A01 («Recrutadores e Administrador») são dois ecrãs de início de sessão. | Uma `LoginPage` em duas rotas (`/entrar` e `/admin/entrar`), com o encaminhamento da secção 7.2. | Mantém os dois ecrãs aceites e a navegação do A01 para o A11 com conta de Recrutador |
 | P4 | Os botões tracejados «Simular: …» (W01, W03, W05, W22, W26) só servem para navegar no protótipo. | Não são modelados. | Não correspondem a nenhuma funcionalidade |
 
@@ -1648,6 +1746,7 @@ O modelo segue os protótipos aceites, exceto onde contrariam os requisitos ou o
 | DF-09 | As ações de decisão sobre um Candidato só existem na página do perfil completo e só ficam disponíveis depois de a abertura ser registada. | UC12, pré-condição 5 e E1; RF063, RF064, RF118. A mesma regra é verificada no servidor. |
 | DF-10 | Filtros, pesquisa e paginação das listas da área de supervisão são aplicados no cliente. | O backend devolve as listas completas, sem parâmetros de filtragem nem de paginação (backend, secção 6); os volumes de demonstração são pequenos (P18). |
 | DF-11 | As ações irreversíveis e as mudanças de estado passam por `ConfirmDialog` com a lista dos efeitos. | Ecrãs W12 a W15, W18, W20, A04b, A05b, A07b, A07c e A08b, aceites nas `I040` e `I041`; RF117. |
+| DF-12 | O cliente identifica os erros pelo código HTTP e pelas mensagens fixas do catálogo da API até existir um código de erro no `ApiErrorDto`. | A documentação da API fixa as mensagens para que os clientes as possam verificar (secção 4.3) e regista o código de erro como proposta (PA-05); quando for aceite, muda apenas `toApiError`. |
 
 ---
 
@@ -1655,11 +1754,11 @@ O modelo segue os protótipos aceites, exceto onde contrariam os requisitos ou o
 
 | Limitação | Consequência |
 | --- | --- |
-| As dependências G1 a G10 (secção 11) não estão resolvidas no backend. | Até serem resolvidas na documentação da API (`I092`) e no backend, as páginas que delas dependem não podem ser implementadas como descritas. |
-| As divergências P1 e P2 (secção 12) ficam por corrigir nos protótipos. | O comportamento implementado segue este modelo e os requisitos, e não os ecrãs W05, W06 e W26 nesses pontos. |
+| As dependências G1 a G6 e G10 a G12 (secção 11) estão em aberto. | Até serem corrigidas no modelo de classes do backend e numa nova versão da documentação da API, as páginas que delas dependem não podem ser implementadas como descritas. |
+| As divergências P1 e P2 (secção 12) ficam por corrigir nos protótipos. | O comportamento implementado segue este modelo, os requisitos e a documentação da API, e não os ecrãs W05, W06 e W26 nesses pontos. |
 | A alternativa de consulta periódica à API (`m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`) continua pendente de decisão (arquitetura, secção 2.4 e AD-02). | Se for aprovada em reunião formal, a secção 6 deixa de se aplicar: o `IRealtimeClient` é substituído por consultas periódicas nos hooks de conversas e de notificações, sem alterar páginas nem serviços. |
-| A tecnologia da ligação persistente (ASP.NET Core SignalR, D-08) está por confirmar em reunião formal. | Se for escolhida outra biblioteca, muda apenas o `SignalRRealtimeClient`; os hooks dependem de `IRealtimeClient`. |
-| As rotas indicadas são as rotas base do modelo de classes do backend. | Os verbos, as rotas completas, os códigos de estado e os exemplos são fixados na documentação da API (`04.11`); os serviços são ajustados a essa documentação. |
+| A tecnologia da ligação persistente (ASP.NET Core SignalR, D-08) está por confirmar em reunião formal (documentação da API, PA-06). | Se for escolhida outra biblioteca, muda apenas o `SignalRRealtimeClient`; os hooks dependem de `IRealtimeClient`. |
+| Os pedidos da secção 5 seguem a documentação da API v01 (`I092`). | Uma nova versão dessa documentação obriga a rever a tabela da secção 5, a secção 4.2 e a secção 6, e a acrescentar uma linha ao histórico de versões. |
 | As assinaturas mostram os tipos de retorno sem `Promise`. | Simplificação de leitura; a implementação em `m4` segue a convenção da secção 2.2. |
 | A decisão DF-05 não está fixada no Regulamento Interno. | Se o grupo decidir outra forma de persistência da credencial, muda apenas o `SessionStore`. |
 | O modelo segue os protótipos de baixa fidelidade aceites. | Um protótipo de alta fidelidade, se existir, pode alterar componentes de apresentação sem alterar páginas, hooks nem serviços. |
@@ -1693,7 +1792,8 @@ O modelo segue os protótipos aceites, exceto onde contrariam os requisitos ou o
 | Controllers do backend usados pela área de gestão web com serviço correspondente | 11 de 13; `CandidateProfileController` e `JobExplorationController` são exclusivos do Candidato |
 | Hubs do backend com cliente | 2 de 2, só para o Recrutador |
 | DTOs usados pela área de gestão web declarados como tipos | 31, com os mesmos campos dos DTOs do backend; enumerações: 11 |
-| Operações do cliente sem operação no backend | 2 (`CompanyService.getRegistration` e `getPage`), dependentes de G1 e G2 |
+| Operações dos serviços com pedido na documentação da API v01 | 53 de 55; `CompanyService.getRegistration` e `getPage` dependem de G1 e G2 (PA-03) |
+| Endpoints da documentação da API usados pela área de gestão web | 53 de 68; os restantes 15 são exclusivos do Candidato (`RegisterCandidate` e os controllers `CandidateProfileController` e `JobExplorationController`) |
 | Requisitos funcionais com componente «Frontend web» representados | 75 de 75 (RF037 a RF064, RF066 a RF104, RF106, RF107, RF109, RF111, RF114 a RF117); RF065, RF112, RF113 e RF118 são só do backend e são respeitados pelas regras das secções 5 e 10 |
 | Rotas declaradas | 26: 3 públicas, 13 do Recrutador, 9 do Administrador e 1 que exige apenas sessão |
 | Fonte textual dos diagramas incluída | Sim, em Mermaid, em todas as secções com diagrama |

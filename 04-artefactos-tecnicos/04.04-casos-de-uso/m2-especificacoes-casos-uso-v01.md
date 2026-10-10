@@ -40,13 +40,16 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
 | v01 | 2026-10-02 | Especificação do UC07 — Registar a Empresa (secção 8.2). | `I027` |
-| v01 | 2026-10-06 | Correção da revisão da I027: pré-condições do UC07 compatíveis com os fluxos A2 e A3 (D01) e unicidade do número de identificação fiscal verificada face às outras Empresas na nova submissão (D02). | `I027` |
 | v01 | 2026-10-02 | Especificação do UC11 — Consultar perfil de candidato (secção 8.7). | `I032` |
-| v01 | 2026-10-06 | Correção da revisão da `I032` (D01): pré-condições do UC11 reduzidas à sessão iniciada, porque o estado da Empresa e a pertença da vaga são tratados nas exceções E1 e E2. | `I032` |
 | v01 | 2026-10-02 | Criação da secção 8.4. UC09 — Publicar vaga | `I029` |
 | v01 | 2026-10-02 | Criação da secção 8.5 - Swipe Vaga  | `I030` |
 | v01 | 2026-10-02 | Criação da secção 8.6. — Aceitar ou recusar candidato | `I031` |
+| v01 | 2026-10-03 | Especificação do UC03 — Registar-se como Candidato (secção 8.1). | `I026` |
+| v01 | 2026-10-03 | Especificação do UC16 — Aprovar ou recusar o registo de Empresa (secção 8.3). | `I028` |
+| v01 | 2026-10-06 | Correção da revisão da I027: pré-condições do UC07 compatíveis com os fluxos A2 e A3 (D01) e unicidade do número de identificação fiscal verificada face às outras Empresas na nova submissão (D02). | `I027` |
+| v01 | 2026-10-06 | Correção da revisão da `I032` (D01): pré-condições do UC11 reduzidas à sessão iniciada, porque o estado da Empresa e a pertença da vaga são tratados nas exceções E1 e E2. | `I032` |
 | v01 | 2026-10-07 | Correção da exceção E2 do UC12 (secção 8.6): retirada a referência a conta «desativada», estado que não existe (D01). | `I031` |
+| v01 | 2026-10-08 | Reposição da secção 8.7 (UC11) aceite na I032 (commit [41499a8](https://github.com/katch-lds/katch-docs/commit/41499a83bf557b11a2b4177931b1f45ca97c8ca5)) e das linhas do histórico das I026 e I028. | `I088` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 

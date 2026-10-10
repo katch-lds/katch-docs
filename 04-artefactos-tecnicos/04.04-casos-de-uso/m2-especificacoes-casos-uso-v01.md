@@ -40,13 +40,16 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e das secções 2 a 7 (atores, objetivos, fronteira, diagrama de casos de uso geral, catálogo e cobertura). | `I025` |
 | v01 | 2026-10-02 | Especificação do UC07 — Registar a Empresa (secção 8.2). | `I027` |
-| v01 | 2026-10-06 | Correção da revisão da I027: pré-condições do UC07 compatíveis com os fluxos A2 e A3 (D01) e unicidade do número de identificação fiscal verificada face às outras Empresas na nova submissão (D02). | `I027` |
 | v01 | 2026-10-02 | Especificação do UC11 — Consultar perfil de candidato (secção 8.7). | `I032` |
-| v01 | 2026-10-06 | Correção da revisão da `I032` (D01): pré-condições do UC11 reduzidas à sessão iniciada, porque o estado da Empresa e a pertença da vaga são tratados nas exceções E1 e E2. | `I032` |
 | v01 | 2026-10-02 | Criação da secção 8.4. UC09 — Publicar vaga | `I029` |
 | v01 | 2026-10-02 | Criação da secção 8.5 - Swipe Vaga  | `I030` |
 | v01 | 2026-10-02 | Criação da secção 8.6. — Aceitar ou recusar candidato | `I031` |
+| v01 | 2026-10-03 | Especificação do UC03 — Registar-se como Candidato (secção 8.1). | `I026` |
+| v01 | 2026-10-03 | Especificação do UC16 — Aprovar ou recusar o registo de Empresa (secção 8.3). | `I028` |
+| v01 | 2026-10-06 | Correção da revisão da I027: pré-condições do UC07 compatíveis com os fluxos A2 e A3 (D01) e unicidade do número de identificação fiscal verificada face às outras Empresas na nova submissão (D02). | `I027` |
+| v01 | 2026-10-06 | Correção da revisão da `I032` (D01): pré-condições do UC11 reduzidas à sessão iniciada, porque o estado da Empresa e a pertença da vaga são tratados nas exceções E1 e E2. | `I032` |
 | v01 | 2026-10-07 | Correção da exceção E2 do UC12 (secção 8.6): retirada a referência a conta «desativada», estado que não existe (D01). | `I031` |
+| v01 | 2026-10-08 | Reposição da secção 8.7 (UC11) aceite na I032 (commit [41499a8](https://github.com/katch-lds/katch-docs/commit/41499a83bf557b11a2b4177931b1f45ca97c8ca5)) e das linhas do histórico das I026 e I028. | `I088` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -631,4 +634,41 @@ flowchart LR
 
 ### 8.7. UC11 — Consultar perfil de candidato
 
-> A preencher pela Issue `I032`.
+| Campo | Conteúdo |
+| --- | --- |
+| Identificação | `UC11` — Consultar perfil de candidato |
+| Ator principal | Recrutador |
+| Objetivo | Conhecer o perfil completo de um Candidato que manifestou interesse numa vaga da Empresa, antes de o aceitar ou recusar. |
+| Pré-condições | O Recrutador tem sessão iniciada na área de gestão web. |
+
+**Fluxo principal**
+
+1. O Recrutador seleciona uma vaga da Empresa e abre a lista de candidatos em espera.
+2. O sistema apresenta os Candidatos que manifestaram interesse na vaga e ainda não têm decisão, com a data do interesse. A lista não tem ações de aceitação nem de recusa (RF060).
+3. O Recrutador seleciona um Candidato.
+4. O sistema confirma que o Candidato está em espera nessa vaga e regista a abertura do perfil para a vaga, com a data e hora (RF118).
+5. O sistema apresenta o perfil completo do Candidato: fotografia, dados profissionais (função pretendida, localidade, disponibilidade e resumo da experiência), hiperligações profissionais, competências em etiquetas e curriculum vitae, quando exista (RF061). As competências do Candidato que coincidem com as pretendidas na vaga aparecem em destaque (RF062).
+6. O Recrutador termina a consulta. A partir do perfil aberto, pode aceitar ou recusar o Candidato (UC12).
+
+**Fluxos alternativos**
+
+* **A1 — Acesso a partir da notificação de novo interesse (passo 1).** O Recrutador abre a notificação de novo interesse e acede à vaga a que se refere (RF076, RF082). O caso de uso continua no passo 2.
+* **A2 — Nenhum Candidato em espera (passo 2).** O sistema indica que não há Candidatos em espera na vaga e o caso de uso termina.
+* **A3 — Perfil incompleto (passo 5).** O Candidato não registou fotografia, hiperligações ou curriculum vitae. O sistema apresenta os restantes dados registados, sem os elementos em falta (RF061).
+* **A4 — Consulta do curriculum vitae (passo 5).** O Recrutador abre o curriculum vitae do Candidato, em PDF (RF061).
+* **A5 — Saída sem decisão (passo 6).** O Recrutador volta à lista sem decidir. O Candidato continua em espera, sem prazo de expiração (RF113), e a abertura do perfil fica registada para uma decisão posterior.
+
+**Exceções**
+
+* **E1 — Empresa não aprovada (passo 1).** A Empresa está no estado pendente, recusada ou suspensa. O sistema rejeita o acesso aos candidatos e apresenta o estado da Empresa (RF039).
+* **E2 — Vaga de outra Empresa (passo 1).** O Recrutador tenta consultar os candidatos de uma vaga que não pertence à Empresa que representa. O sistema rejeita o acesso (RF060).
+* **E3 — Candidato sem interesse nas vagas da Empresa (passo 4).** O Recrutador tenta abrir o perfil de um Candidato que não manifestou interesse em nenhuma vaga da Empresa (por exemplo, através de uma ligação direta). O sistema rejeita a abertura do perfil (RF061).
+* **E4 — Candidato que já não está em espera na vaga (passo 4).** O Recrutador já aceitou ou recusou o Candidato nessa vaga. O sistema rejeita a abertura do perfil para essa vaga, e o Candidato deixa de constar da lista de candidatos em espera (RF060, RF061).
+
+**Pós-condições**
+
+* A abertura do perfil do Candidato para a vaga fica registada, com a data e hora (RF118). Este registo é a condição para o Recrutador aceitar ou recusar o Candidato no UC12 (RF063, RF064).
+* O interesse do Candidato continua em espera até à decisão do Recrutador (RF113). A consulta não altera o estado do interesse.
+* O endereço de correio eletrónico e o contacto telefónico do Candidato não fazem parte do perfil completo. Só ficam disponíveis ao Recrutador depois do match (UC13, RF067).
+
+**Requisitos relacionados:** RF039, RF060, RF061, RF062, RF113, RF118; parâmetros P01 e P02 da especificação de requisitos. Relacionados com outros casos de uso: RF063 e RF064 (UC12), RF076 e RF082 (UC15), RF067 (UC13).

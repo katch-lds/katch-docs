@@ -17,7 +17,7 @@
 | Curso | LEI — Licenciatura em Engenharia Informática |
 | Turma | LEI3T2 |
 | Versão do documento | v01 |
-| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, Regulamento Interno do Grupo v01 (`m1-regulamento-grupo-v01.pdf`, secções 5, 10 e 11), `m2-backlog-projeto-v02.xlsx` (Issues `I033`, `I034` e `I051`), `m2-modelo-de-dados-postgresql-v01.md` e `m2-especificacao-requisitos-v01.md` |
+| Documentos de origem | `m1-proposta-sistema-v02.pdf`, `m1-declaracao-ambito-v02.pdf`, Regulamento Interno do Grupo v01 (`m1-regulamento-grupo-v01.pdf`, secções 5, 10 e 11), `m2-backlog-projeto-v02.xlsx` (Issues `I033`, `I034` e `I051`), `m2-modelo-de-dados-katch-v01.md` e `m2-especificacao-requisitos-v01.md` |
 
 ### 1.1. Responsáveis por secção
 
@@ -34,7 +34,8 @@ O documento é consolidado por várias Issues do Sprint 02. Cada secção indica
 | --- | --- | --- | --- |
 | v01 | 2026-10-01 | Criação do documento e da secção 3 (tecnologias e decisões tecnológicas). | `I034` |
 | v01 | 2026-10-03 | Acrescento da secção 2 (arquitetura do sistema). | `I033` |
-| v01 | 2026-10-07 | Correção da secção 2 após revisão: entrega de mensagens e notificações por ligação bidirecional persistente (DA v02), com a consulta periódica como alternativa proposta e pendente de decisão; AD-01 identificada como proposta; referência à especificação de requisitos v02. | `I033` |
+| v01 | 2026-10-07 | Correção da secção 2 após revisão: entrega de mensagens e notificações por ligação bidirecional persistente (DA v02), com a consulta periódica como alternativa proposta e pendente de decisão; AD-01 identificada como proposta; referência à especificação de requisitos (`m2-especificacao-requisitos-v01.md`). | `I033` |
+| v01 | 2026-10-08 | Correção das referências documentais: o modelo de dados passa a ser citado como `m2-modelo-de-dados-katch-v01.md` na secção 1, e a referência à especificação de requisitos no histórico passa a indicar `m2-especificacao-requisitos-v01.md`, a única versão existente. | `I089` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 

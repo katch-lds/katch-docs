@@ -1215,14 +1215,14 @@ O fim de sessão (RF105 a RF107) não altera dados no servidor, porque a autenti
 
 ### 6.1. Consulta periódica das conversas
 
-Com a redução de âmbito (DA v04, F010 e secção 3), não há ligação persistente entre cliente e servidor nem hubs. Enquanto a conversa ou a lista de conversas está aberta, o cliente repete, a cada 3 a 5 segundos, os mesmos pedidos que usa para abrir a área de conversas:
+Com a redução de âmbito (DA v04, F010 e secção 3), não há ligação persistente entre cliente e servidor nem hubs. Enquanto a conversa ou a lista de conversas está aberta, o cliente repete, no intervalo fixado pelo parâmetro P17 da especificação de requisitos v02 (5 segundos, dentro dos 3 a 5 segundos da DA v04), os mesmos pedidos que usa para abrir a área de conversas:
 
 | Pedido periódico | Operação | Resposta |
 | --- | --- | --- |
 | Lista de conversas aberta | `ConversationsController.List` | Conversas com a última mensagem, o número de mensagens por ler e o estado (aberta ou só de consulta) |
 | Conversa aberta | `ConversationsController.Open(matchId, after)`, com `after` igual ao instante da última mensagem já recebida | Só as mensagens novas; as da outra parte ficam marcadas como lidas |
 
-O servidor não guarda estado de ligação: cada consulta é um pedido HTTP autenticado igual aos restantes, sujeito às mesmas regras de autorização (RNF004, RNF006). O intervalo exato e o tempo máximo até a mensagem aparecer são fixados na especificação de requisitos (parâmetro P17), a rever na sua v02; com 3 segundos de intervalo e 2 segundos por pedido (RNF001), o pior caso é de 5 segundos. A passagem da conversa a só de consulta (encerramento, bloqueio ou suspensão) chega ao cliente na consulta seguinte, pelo estado da conversa.
+O servidor não guarda estado de ligação: cada consulta é um pedido HTTP autenticado igual aos restantes, sujeito às mesmas regras de autorização (RNF004, RNF006). O intervalo e o tempo até a mensagem aparecer são os do parâmetro P17 da especificação de requisitos v02: a mensagem nova surge na primeira consulta seguinte ao envio. O backend não depende do valor do intervalo, que é configurado nos clientes. A passagem da conversa a só de consulta (encerramento, bloqueio ou suspensão) chega ao cliente na consulta seguinte, pelo estado da conversa.
 
 ---
 
@@ -1686,7 +1686,7 @@ As 17 tabelas do modelo de dados v02 têm correspondência nas 14 classes de dom
 | DC-04 | `IClock` em vez de `DateTimeOffset.UtcNow` direto. | Permite verificar com relógio simulado o período de bloqueio de 24 horas e a expiração da credencial de sessão (RF020, RF021, RNF005). |
 | DC-05 | Os identificadores do utilizador vêm sempre da credencial de sessão. | Impede que um pedido direto atue em nome de outro utilizador (RNF004, RNF006). |
 | DC-06 | Um serviço e um controller por caso de uso ou grupo de casos de uso do mesmo ator. | Cada classe tem uma responsabilidade identificável e rastreável aos casos de uso (secção 5.3). |
-| DC-07 | Mensagens novas obtidas por consulta periódica da API REST (`ConversationsController.List` e `Open` com `after`); sem hubs, sem ligação persistente e sem notificações. *(Revista na v02; na v01, ligação bidirecional persistente com `MessagesHub`, `NotificationsHub` e `IRealtimePublisher`.)* | DA v04 (F010: consulta periódica a cada 3 a 5 segundos; secção 3: sem comunicação em tempo real nem mecanismo de notificações), homologada pelo docente. O servidor fica sem estado de ligação e todas as conversas usam os mesmos pedidos e a mesma autorização. |
+| DC-07 | Mensagens novas obtidas por consulta periódica da API REST (`ConversationsController.List` e `Open` com `after`); sem hubs, sem ligação persistente e sem notificações. *(Revista na v02; na v01, ligação bidirecional persistente com `MessagesHub`, `NotificationsHub` e `IRealtimePublisher`.)* | DA v04 (F010: consulta periódica a cada 3 a 5 segundos, fixada em 5 segundos pelo P17 da especificação de requisitos v02; secção 3: sem comunicação em tempo real nem mecanismo de notificações), homologada pelo docente. O servidor fica sem estado de ligação e todas as conversas usam os mesmos pedidos e a mesma autorização. |
 | DC-08 | DTOs como `record` sem lógica. | Excluídos da cobertura pelo RI (secção 11.5) e nunca expõem dados internos. |
 | DC-09 | Competências da lista como navegação N:M (`Candidate.Skills`) e competências «Outro» em `CandidateCustomSkill`. | Modelo de dados v02, DM-16, e observação do docente: a relação com `Skill` passa a N:M pura, sem chave estrangeira anulável, igual a `Job.Skills`. |
 | DC-10 | Ficheiros servidos pelo `FilesController` a partir do caminho guardado (`<tipo>/<nome>`), sem tabela de ficheiros. | Opção (a) da PA-01, a mesma do modelo de dados v02 (sem tabela de ficheiros), e arquitetura, AD-01 (ficheiros no sistema de ficheiros do servidor). A escolha e a ratificação da AD-01 são registadas em ata de reunião formal (Regulamento da UC, secção 10.1). |
@@ -1708,7 +1708,7 @@ As 17 tabelas do modelo de dados v02 têm correspondência nas 14 classes de dom
 | A transição T7 (encerramento de interesses em espera sem decisão), proposta em `m2-decisao-encerramento-interesses-em-espera-v01.md`, não está ratificada e contraria o RF113 em vigor. | Não está representada; o `MatchStatus` não tem valor para esse encerramento. Se for ratificada e os requisitos forem alterados, uma nova versão acrescenta o valor, a operação em `Match` e as consultas em `IMatchRepository`. |
 | As assinaturas mostram os tipos de retorno sem `Task`, e as dependências de `IUnitOfWork` e `IClock` não estão todas desenhadas. | Simplificação de leitura; a implementação em `m3` segue a convenção assíncrona da secção 2.2. |
 | Depois do fim de sessão, a credencial descartada pelo cliente continua tecnicamente válida até expirar (8 horas, RNF005). | Risco aceite no ambiente académico; uma lista de credenciais revogadas pode ser acrescentada mais tarde sem alterar os Services. |
-| A consulta periódica gera um pedido a cada 3 a 5 segundos por cliente com uma conversa aberta. | Adequado aos dados de demonstração (P18); o parâmetro `after` limita a resposta às mensagens novas. |
+| A consulta periódica gera um pedido a cada 5 segundos (P17) por cliente com uma conversa ou a lista de conversas aberta. | Adequado aos dados de demonstração (P18); o parâmetro `after` limita a resposta às mensagens novas. |
 | As rotas são indicativas. | As rotas, os códigos de estado e os exemplos são fixados na documentação da API (`04.11`). |
 
 ---

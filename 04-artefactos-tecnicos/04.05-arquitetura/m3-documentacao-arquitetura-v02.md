@@ -17,7 +17,7 @@
 | Curso | LEI — Licenciatura em Engenharia Informática |
 | Turma | LEI3T2 |
 | Versão do documento | v02 |
-| Documentos de origem | `m3-proposta-sistema-v03.pdf` e `m3-declaracao-ambito-v03.pdf`, homologados pelo docente em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v01.pdf`), Regulamento Interno do Grupo v01 (`m1-regulamento-grupo-v01.pdf`, secções 5, 10 e 11), `m2-backlog-projeto-v02.xlsx` (Issues `I033`, `I034` e `I051`) e a Issue `I100` do Backlog de Projeto vigente, `m3-modelo-de-dados-katch-v02.md` e `m3-especificacao-requisitos-v02.md` |
+| Documentos de origem | `m3-proposta-sistema-v03.pdf` e `m3-declaracao-ambito-v03.pdf`, homologados pelo docente em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v01.pdf`), Regulamento Interno do Grupo v01 (`m1-regulamento-grupo-v01.pdf`, secções 5, 10 e 11), `m2-backlog-projeto-v02.xlsx` (Issues `I033`, `I034` e `I051`) e a Issue `I100` do Backlog de Projeto vigente, `m3-modelo-de-dados-katch-v02.md`, `m3-especificacao-requisitos-v02.md` e a ata da reunião formal de 2026-10-16 (`m3-20261016-reuniao-extraordinaria-ata-v01.pdf`) |
 
 ### 1.1. Responsáveis por secção
 
@@ -37,7 +37,7 @@ O documento é consolidado por várias Issues do Sprint 02. Cada secção indica
 | v01 | 2026-10-03 | Acrescento da secção 2 (arquitetura do sistema). | `I033` |
 | v01 | 2026-10-07 | Correção da secção 2 após revisão: entrega de mensagens e notificações por ligação bidirecional persistente (DA v02), com a consulta periódica como alternativa proposta e pendente de decisão; AD-01 identificada como proposta; referência à especificação de requisitos (`m2-especificacao-requisitos-v01.md`). | `I033` |
 | v01 | 2026-10-08 | Correção das referências documentais: o modelo de dados passa a ser citado como `m2-modelo-de-dados-katch-v01.md` na secção 1, e a referência à especificação de requisitos no histórico passa a indicar `m2-especificacao-requisitos-v01.md`, a única versão existente. | `I089` |
-| v02 | 2026-10-15 | Redução de âmbito (`I100`): retirada da F011 (notificações) e substituição da ligação bidirecional persistente (SignalR) pela consulta periódica do cliente à API REST, de 5 em 5 segundos, como determinam a PS v03 e a DA v03. Alteradas as secções 2.2 a 2.9 e 3.1 a 3.3, a decisão AD-02, a decisão D-08 (reformulada) e o ponto 1 da secção 3.6. Referências atualizadas para a PS v03, a DA v03, o modelo de dados v02 e a especificação de requisitos v02. | `I100` |
+| v02 | 2026-10-16 | Redução de âmbito (`I100`): retirada da F011 (notificações) e substituição da ligação bidirecional persistente (SignalR) pela consulta periódica do cliente à API REST, de 3 em 3 segundos, com o atraso máximo de 5 segundos do parâmetro P17, como determinam a PS v03, a DA v03 e a deliberação 1 da ata de 2026-10-16. Ratificação da AD-01 (ficheiros no sistema de ficheiros do servidor, opção (a) da PA-01), deliberação 3 da mesma ata. Alteradas as secções 2.2 a 2.9 e 3.1 a 3.3, as decisões AD-01 e AD-02, a decisão D-08 (reformulada) e o ponto 1 da secção 3.6. Referências atualizadas para a PS v03, a DA v03, o modelo de dados v02 e a especificação de requisitos v02. | `I100` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -53,7 +53,7 @@ Esta secção descreve a estrutura do sistema: componentes, ligações, fronteir
 
 ### 2.2. Diagrama de arquitetura
 
-Como o Mermaid não tem um tipo de diagrama de arquitetura, o diagrama usa um `flowchart`. Os atores são retângulos fora da fronteira, a fronteira é o retângulo «Sistema Katch» e o retângulo «Backend» agrupa os componentes internos do servidor. As setas são pedidos dos clientes à API REST, incluindo a consulta periódica das mensagens novas, de 5 em 5 segundos. As cores estão fixadas no próprio diagrama, para que se leia da mesma forma em tema claro e em tema escuro.
+Como o Mermaid não tem um tipo de diagrama de arquitetura, o diagrama usa um `flowchart`. Os atores são retângulos fora da fronteira, a fronteira é o retângulo «Sistema Katch» e o retângulo «Backend» agrupa os componentes internos do servidor. As setas são pedidos dos clientes à API REST, incluindo a consulta periódica das mensagens novas, de 3 em 3 segundos. As cores estão fixadas no próprio diagrama, para que se leia da mesma forma em tema claro e em tema escuro.
 
 ```mermaid
 flowchart TB
@@ -80,8 +80,8 @@ flowchart TB
     Rec --- Web
     Adm --- Web
 
-    Mobile -->|"HTTPS · JSON<br/>inclui a consulta periódica<br/>das mensagens (5 s)"| API
-    Web -->|"HTTPS · JSON<br/>inclui a consulta periódica<br/>das mensagens (5 s)"| API
+    Mobile -->|"HTTPS · JSON<br/>inclui a consulta periódica<br/>das mensagens (3 s)"| API
+    Web -->|"HTTPS · JSON<br/>inclui a consulta periódica<br/>das mensagens (3 s)"| API
 
     API --> Serv
     Jobs --> Serv
@@ -112,7 +112,7 @@ flowchart TB
 | Serviços de negócio | Regras do domínio: validação automática, quota de interesses, filtragem de vagas e cálculo de distância, confirmação do match, estados da Empresa, da vaga e da conta. | C# 14 | `katch-backend` | F001 a F010 |
 | Tarefas periódicas | Encerrar as vagas que atingiram a data-limite e repor a quota de interesses. | Serviços em segundo plano do ASP.NET Core | `katch-backend` | F005, F006 |
 | Acesso a dados | Persistência das entidades e consultas, com migrations e controlo de concorrência otimista. | Entity Framework Core (code-first), Npgsql | `katch-backend` | F001 a F010 |
-| Armazenamento de ficheiros | Guarda as fotografias, os logótipos e os CV. A base de dados guarda apenas o caminho de cada ficheiro. | Sistema de ficheiros do servidor do backend | `katch-backend` | F003, F004, F005 |
+| Armazenamento de ficheiros | Guarda as fotografias, os logótipos e os CV. A base de dados guarda apenas o nome gerado de cada ficheiro, nas colunas existentes e sem tabela de ficheiros (AD-01). | Sistema de ficheiros do servidor do backend | `katch-backend` | F003, F004, F005 |
 | Base de dados | Guarda os dados do sistema, segundo o modelo de dados. | PostgreSQL 18 | `katch-backend` (migrations) | F001 a F010 |
 
 ### 2.4. Interfaces e relações
@@ -121,12 +121,12 @@ flowchart TB
 | --- | --- | --- |
 | Aplicação móvel → API REST | HTTPS, JSON | Pedidos autenticados com o token JWT. Só o tipo de conta Candidato acede por aqui. |
 | Área de gestão web → API REST | HTTPS, JSON | Pedidos autenticados com o token JWT. Só os tipos de conta Recrutador e Administrador acedem por aqui. |
-| Aplicações → API REST (consulta periódica das mensagens) | HTTPS, JSON; pedidos periódicos do cliente | A DA v03 (F010) determina que o cliente consulta o servidor a cada 3 a 5 segundos, enquanto a conversa ou a lista de conversas estiver aberta, e exclui a ligação bidirecional persistente. A especificação de requisitos v02 (parâmetro P17, RF029 e RF073) fixa o intervalo em 5 segundos. A consulta usa a mesma interface REST e o mesmo token JWT dos restantes pedidos e devolve as mensagens novas e o número de mensagens por ler. Não há notificações (DA v03, limites transversais), nem envio por e-mail ou SMS. |
+| Aplicações → API REST (consulta periódica das mensagens) | HTTPS, JSON; pedidos periódicos do cliente | A DA v03 (F010) determina que o cliente consulta o servidor a cada 3 a 5 segundos, enquanto a conversa ou a lista de conversas estiver aberta, e exclui a ligação bidirecional persistente. A reunião formal de 2026-10-16 (deliberação 1) fixou o intervalo em 3 segundos, e a especificação de requisitos v02 (parâmetro P17, RF029 e RF073) fixa em 5 segundos o atraso máximo com que a mensagem nova é apresentada. A consulta usa a mesma interface REST e o mesmo token JWT dos restantes pedidos e devolve as mensagens novas e o número de mensagens por ler. Não há notificações (DA v03, limites transversais), nem envio por e-mail ou SMS. |
 | API REST e Tarefas periódicas → Serviços de negócio | Chamadas internas ao backend | As regras de negócio são executadas nos serviços. |
 | Serviços de negócio → Acesso a dados → Base de dados | SQL, via Entity Framework Core | Única via de acesso à base de dados. |
 | Serviços de negócio → Armazenamento de ficheiros | Leitura e escrita de ficheiros | Os clientes nunca acedem diretamente aos ficheiros nem à base de dados. |
 
-A entrega das mensagens é feita por consulta periódica à API REST, como determina a DA v03 (F010). Não é usada ligação bidirecional persistente nem biblioteca adicional nos clientes. A decisão de arquitetura é a AD-02 (secção 2.8) e a decisão tecnológica é a D-08 (secção 3.5). O antecedente é `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`, que propunha um intervalo de 3 segundos; o intervalo vigente é de 5 segundos (especificação de requisitos v02, P17), dentro dos 3 a 5 segundos da DA v03.
+A entrega das mensagens é feita por consulta periódica à API REST, como determina a DA v03 (F010). Não é usada ligação bidirecional persistente nem biblioteca adicional nos clientes. A decisão de arquitetura é a AD-02 (secção 2.8) e a decisão tecnológica é a D-08 (secção 3.5). O antecedente é `m2-decisao-consulta-periodica-mensagens-notificacoes-v01.md`, que propunha um intervalo de 3 segundos, mantido pela reunião formal de 2026-10-16 (deliberação 1); o intervalo vigente é de 3 segundos e o atraso máximo, de 5 segundos (especificação de requisitos v02, P17), dentro dos 3 a 5 segundos da DA v03.
 
 ### 2.5. Fronteiras e restrições
 
@@ -152,7 +152,7 @@ Restrições que condicionam a arquitetura:
 | Autenticação sem estado de sessão no servidor | Token JWT em cada pedido. O estado da conta e da Empresa é confirmado na base de dados em cada operação reservada (secção 3.5, D-04). |
 | Persistência code-first | Entity Framework Core, com migrations para criar e evoluir o esquema. |
 | Concorrência otimista | Coluna de sistema `xmin` nas tabelas `match` e `candidate`, para que duas alterações simultâneas ao mesmo registo não se sobreponham. |
-| Consulta periódica | Entrega das mensagens novas e do número de mensagens por ler: o cliente consulta a API REST de 5 em 5 segundos, enquanto a conversa ou a lista de conversas está aberta (DA v03, F010; especificação de requisitos v02, P17). |
+| Consulta periódica | Entrega das mensagens novas e do número de mensagens por ler: o cliente consulta a API REST de 3 em 3 segundos, enquanto a conversa ou a lista de conversas está aberta, e a mensagem nova é apresentada em 5 segundos, no máximo (DA v03, F010; especificação de requisitos v02, P17). |
 | Tarefas periódicas em segundo plano | Encerramento das vagas expiradas e reposição da quota de interesses. |
 | Base de dados única | Uma só base de dados PostgreSQL, acedida apenas pelo backend. |
 
@@ -162,7 +162,7 @@ A tabela indica, para cada atributo, os requisitos não funcionais da especifica
 
 | Atributo | Requisitos | Componentes |
 | --- | --- | --- |
-| Desempenho | RNF001 (operações do servidor em 2 segundos), RNF002 (cartão de vaga seguinte em 2 segundos), RNF015 (ficheiro de 5 MB em 5 segundos); parâmetro P17 (consulta periódica das mensagens de 5 em 5 segundos) | API REST, Serviços de negócio, Acesso a dados, Armazenamento de ficheiros |
+| Desempenho | RNF001 (operações do servidor em 2 segundos), RNF002 (cartão de vaga seguinte em 2 segundos), RNF015 (ficheiro de 5 MB em 5 segundos); parâmetro P17 (consulta periódica das mensagens de 3 em 3 segundos, com atraso máximo de 5 segundos) | API REST, Serviços de negócio, Acesso a dados, Armazenamento de ficheiros |
 | Segurança | RNF003 (palavras-passe em resumo irreversível), RNF004 a RNF006 e RNF009 (credencial de sessão, expiração e autorização de cada pedido), RNF007 e RNF016 (CV e conteúdo dos ficheiros), RNF008 (validação automática no servidor), RNF017 (dados confidenciais fora dos registos de diagnóstico) | API REST, Serviços de negócio, Armazenamento de ficheiros |
 | Usabilidade | RNF010 a RNF012 (interações na aplicação móvel e área de gestão web sem deslocamento horizontal) | Aplicação móvel, Área de gestão web |
 | Fiabilidade e disponibilidade | RNF013 (dados confirmados conservados após reinício do servidor), RNF014 e RNF018 (indicação de falha de ligação em 10 segundos) | Base de dados, Aplicação móvel, Área de gestão web |
@@ -171,12 +171,12 @@ A tabela indica, para cada atributo, os requisitos não funcionais da especifica
 
 | N.º | Decisão | Alternativas | Justificação |
 | --- | --- | --- | --- |
-| AD-01 (proposta) | Propõe-se guardar os ficheiros (fotografias, logótipos e CV) no sistema de ficheiros do servidor do backend, com a base de dados a guardar apenas o caminho. | Guardar os ficheiros na base de dados; usar um serviço externo de armazenamento. | O modelo de dados mantém os ficheiros fora da base de dados. A DA exclui os serviços externos. A solução não acrescenta tecnologia à stack. Se for aprovada, resolve o ponto 3 da secção 3.6. **Estado:** proposta, por confirmar em reunião formal do grupo (Plano de Qualidade, secção 7). Ata: a indicar quando existir. |
-| AD-02 | As mensagens são entregues por consulta periódica do cliente à API REST, de 5 em 5 segundos, enquanto a conversa ou a lista de conversas está aberta, como determina a DA v03 (F010). | Ligação bidirecional persistente com ASP.NET Core SignalR (solução da v01, excluída pela DA v03); WebSockets diretos; serviços comerciais de notificação. | A DA v03 substitui a ligação persistente pela consulta periódica e exclui os serviços comerciais externos (limites transversais). A consulta usa a API REST e o token JWT já existentes e não acrescenta tecnologia nem biblioteca cliente. **Estado:** aprovada com a homologação da PS v03 e da DA v03 em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v01.pdf`); o intervalo de 5 segundos é fixado pela especificação de requisitos v02 (P17). |
+| AD-01 | Os ficheiros (fotografias, logótipos e CV) são guardados no sistema de ficheiros do servidor do backend, com a base de dados a guardar apenas o nome gerado de cada ficheiro, nas colunas existentes e sem tabela de ficheiros (opção (a) da PA-01). Os ficheiros são servidos por uma operação da API que verifica a autorização. | Guardar os ficheiros na base de dados; usar um serviço externo de armazenamento; guardar os metadados dos ficheiros numa tabela de ficheiros (opção (b) da PA-01, rejeitada). | O modelo de dados mantém os ficheiros fora da base de dados. A DA exclui os serviços externos. A solução não acrescenta tecnologia à stack. A opção (a) não altera o modelo de dados e nenhum requisito exige os metadados que a tabela guardaria. **Estado:** ratificada na reunião formal de 2026-10-16 (deliberação 3 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`). |
+| AD-02 | As mensagens são entregues por consulta periódica do cliente à API REST, de 3 em 3 segundos, enquanto a conversa ou a lista de conversas está aberta, como determina a DA v03 (F010). | Ligação bidirecional persistente com ASP.NET Core SignalR (solução da v01, excluída pela DA v03); WebSockets diretos; serviços comerciais de notificação. | A DA v03 substitui a ligação persistente pela consulta periódica e exclui os serviços comerciais externos (limites transversais). A consulta usa a API REST e o token JWT já existentes e não acrescenta tecnologia nem biblioteca cliente. **Estado:** aprovada com a homologação da PS v03 e da DA v03 em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v01.pdf`); o intervalo de 3 segundos foi fixado na reunião formal de 2026-10-16 (deliberação 1 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`), com o atraso máximo de 5 segundos do P17 da especificação de requisitos v02. |
 
 ### 2.9. Evolução prevista
 
-- **Entrega de mensagens.** A entrega usa a consulta periódica à API REST aprovada na DA v03. Alterar o intervalo de consulta (parâmetro P17) afeta a API REST e os clientes, e não os Serviços de negócio nem o modelo de dados.
+- **Entrega de mensagens.** A entrega usa a consulta periódica à API REST aprovada na DA v03. Alterar o intervalo de consulta (3 segundos) ou o atraso máximo (parâmetro P17) afeta a API REST e os clientes, e não os Serviços de negócio nem o modelo de dados.
 - **Armazenamento de ficheiros.** O acesso aos ficheiros fica concentrado nos Serviços de negócio, o que permite mudar o local de armazenamento sem alterar as regras de negócio.
 
 ---
@@ -208,7 +208,7 @@ flowchart LR
     end
     subgraph Dados["Persistência"]
         D1[("PostgreSQL 18")]
-        D2[("Armazenamento de ficheiros<br/>fotos, CV, logótipos<br/>Sistema de ficheiros do servidor do backend — secção 3.6")]
+        D2[("Armazenamento de ficheiros<br/>fotos, CV, logótipos<br/>Sistema de ficheiros do servidor do backend — AD-01, secção 2.8")]
     end
     M1 -- "HTTPS / JSON + token JWT<br/>(inclui a consulta periódica das mensagens)" --> B1
     W1 -- "HTTPS / JSON + token JWT<br/>(inclui a consulta periódica das mensagens)" --> B1
@@ -230,9 +230,9 @@ O diagrama mostra apenas a correspondência entre componentes e tecnologias. A e
 | Backend — SDK e execução | .NET SDK 10.0 (LTS) | RI v01, secção 11.2 | Versão com suporte de longo prazo (até novembro de 2028), o que garante atualizações de segurança durante todo o semestre e depois dele. |
 | Backend — documentação da API | Swagger/OpenAPI com Swashbuckle, disponível em `/swagger` | RI v01, secções 5 e 11.2 | Permite explorar e testar os endpoints sem ferramentas externas e serve de referência à documentação da API (`04.11`). |
 | Backend — acesso a dados | Entity Framework Core, abordagem code-first com migrations (`dotnet ef migrations`), com o fornecedor Npgsql e o pacote `EFCore.NamingConventions` (`UseSnakeCaseNamingConvention()`) | EF Core: RI v01, secção 11.2 (o RI não fixa a versão). Npgsql e `EFCore.NamingConventions`: modelo de dados (`m3-modelo-de-dados-katch-v02.md`); versão não fixada no RI | O modelo de dados fica descrito em C# e versionado com o código; as migrations tornam reproduzível a criação da base de dados em qualquer máquina do grupo e na pipeline. O Npgsql é necessário para o `xmin` como controlo de concorrência otimista em `match` e `candidate`, para os arrays e para os tipos enumerados do esquema. |
-| Backend — entrega de mensagens | Consulta periódica do cliente à API REST (HTTPS, JSON), de 5 em 5 segundos, enquanto a conversa ou a lista de conversas está aberta | PS/DA v03 (F010); especificação de requisitos v02 (P17); decisão D-08 | A DA v03 determina que o cliente consulta o servidor a cada 3 a 5 segundos e exclui a comunicação em tempo real por ligação persistente. A consulta usa a API REST e o JWT já existentes, pelo que não acrescenta tecnologia ao backend nem aos clientes. |
+| Backend — entrega de mensagens | Consulta periódica do cliente à API REST (HTTPS, JSON), de 3 em 3 segundos, enquanto a conversa ou a lista de conversas está aberta | PS/DA v03 (F010); especificação de requisitos v02 (P17); ata de 2026-10-16 (deliberação 1); decisão D-08 | A DA v03 determina que o cliente consulta o servidor a cada 3 a 5 segundos e exclui a comunicação em tempo real por ligação persistente. A consulta usa a API REST e o JWT já existentes, pelo que não acrescenta tecnologia ao backend nem aos clientes. O intervalo de 3 segundos foi fixado na reunião formal de 2026-10-16, com o atraso máximo de 5 segundos do P17. |
 | Backend — tarefas periódicas | Hosted services do ASP.NET Core (`BackgroundService`) | Modelo de dados (`m3-modelo-de-dados-katch-v02.md`); framework do v01, secção 11.2 | Encerrar vagas cuja data-limite expirou (F005) e repor a quota de interesses (F006). Não exige nenhuma tecnologia adicional ao backend. |
-| Armazenamento de ficheiros | Sistema de ficheiros do servidor do backend | Modelo de dados (`m3-modelo-de-dados-katch-v02.md`: ficheiros fora da base de dados) | Fotos de perfil, CV, logótipos e galerias ficam fora da base de dados, que guarda apenas o caminho ou URL (`varchar(500)`). O local de armazenamento ainda não está decidido. |
+| Armazenamento de ficheiros | Sistema de ficheiros do servidor do backend | Modelo de dados (`m3-modelo-de-dados-katch-v02.md`: ficheiros fora da base de dados) | Fotos de perfil, CV, logótipos e galerias ficam fora da base de dados, que guarda apenas o nome gerado do ficheiro, nas colunas existentes (`varchar(500)`). O local de armazenamento está decidido: sistema de ficheiros do servidor do backend (AD-01, ratificada na reunião formal de 2026-10-16). |
 | Base de dados | PostgreSQL 18 | RI v01, secções 5 e 11.2 | Base de dados relacional robusta e gratuita, adequada às relações do domínio (Candidato, Empresa, vaga, interesse, match). Em desenvolvimento corre em `localhost`, porta 6000 (RI, secção 5). |
 | Base de dados — testes isolados | SQLite in-memory | RI v01, secções 5 e 11.2 | Usada apenas nos testes de integração do backend, para isolar cada execução. A base de dados de produção e entrega continua a ser PostgreSQL. Limitação: o SQLite não reproduz funcionalidades PostgreSQL usadas pelo esquema (ver secção 3.6, ponto 4). |
 | Autenticação e autorização | JSON Web Token (JWT) com o esquema JWT Bearer do ASP.NET Core 10 (pacote oficial `Microsoft.AspNetCore.Authentication.JwtBearer`, na versão correspondente ao .NET 10) | Backlog de Projeto (`I033`, `I034`, `I051`); não fixada no RI — ver decisão D-04 | Autenticação sem estado de sessão, adequada a dois clientes distintos (aplicação móvel e área de gestão web) que consomem a mesma API. O tipo de conta (Candidato, Recrutador ou Administrador) segue no token, que tem expiração curta. Como a F001 determina que uma conta bloqueada ou desativada, ou associada a uma empresa não aprovada, não tem acesso às operações reservadas, o backend confirma na base de dados o estado da conta (`app_user.status`) e da empresa (`company.status`) em cada operação reservada, e não confia apenas no conteúdo do token. O segredo de assinatura é guardado em variável de ambiente (desenvolvimento) ou GitHub Secrets (pipeline), nos termos do RI, secção 14.2. |
@@ -272,13 +272,13 @@ As versões das dependências que o RI não fixa ficam fixadas no momento da con
 | D-05 | Frontend web em React 19 + TypeScript + Vite. | Angular; Vue. | Ecossistema mais amplo, tipagem estática e build rápido; ferramentas de teste (Jest, Playwright) compatíveis. | RI v01, secção 11.2 |
 | D-06 | Aplicação móvel em Flutter. | React Native; Android nativo (Kotlin). | Código único para Android e iOS; o Candidato acede apenas pela aplicação móvel (DA). | RI v01, secção 11.2; DA v03 |
 | D-07 | GitHub Actions + SonarQube Server 2026.1 LTA para os quality gates. | GitLab CI; SonarCloud. | Integração direta com os repositórios GitHub e Quality Gate bloqueante em todos os componentes. | RI v01, secções 11.4 e 11.6 |
-| D-08 | Mensagens (F010) entregues por consulta periódica do cliente à API REST, de 5 em 5 segundos, reutilizando a interface REST e a autenticação JWT. A decisão substitui a proposta da v01 (ASP.NET Core SignalR). | Ligação bidirecional persistente com ASP.NET Core SignalR; WebSockets diretos sem biblioteca; serviço externo de envio de notificações. | A DA v03 e a PS v03 determinam a consulta periódica, a cada 3 a 5 segundos, e excluem a comunicação em tempo real por ligação persistente e os serviços comerciais de comunicação e de notificação. A consulta usa a API REST e o token JWT já existentes, pelo que não acrescenta tecnologia ao backend nem biblioteca aos clientes. O intervalo de 5 segundos é fixado pela especificação de requisitos v02 (P17). | PS v03 e DA v03 (F010 e limites transversais) |
+| D-08 | Mensagens (F010) entregues por consulta periódica do cliente à API REST, de 3 em 3 segundos, reutilizando a interface REST e a autenticação JWT. A decisão substitui a proposta da v01 (ASP.NET Core SignalR). | Ligação bidirecional persistente com ASP.NET Core SignalR; WebSockets diretos sem biblioteca; serviço externo de envio de notificações. | A DA v03 e a PS v03 determinam a consulta periódica, a cada 3 a 5 segundos, e excluem a comunicação em tempo real por ligação persistente e os serviços comerciais de comunicação e de notificação. A consulta usa a API REST e o token JWT já existentes, pelo que não acrescenta tecnologia ao backend nem biblioteca aos clientes. O intervalo de 3 segundos foi fixado na reunião formal de 2026-10-16 (deliberação 1 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`) e o atraso máximo de 5 segundos, pelo P17 da especificação de requisitos v02. | PS v03 e DA v03 (F010 e limites transversais); ata de 2026-10-16 (deliberação 1) |
 
 ### 3.6. Pontos a acompanhar
 
 | N.º | Ponto | Encaminhamento |
 | --- | --- | --- |
-| 1 | A entrega das mensagens (F010) é feita por consulta periódica à API REST, de 5 em 5 segundos (parâmetro P17 da especificação de requisitos v02), dentro dos 3 a 5 segundos da DA v03. O RI não fixa nenhuma tecnologia para isso e a solução não acrescenta nenhuma. | Decisão D-08. Verificar no ambiente de demonstração (parâmetro P18) que o limite de 2 segundos para as operações do servidor (RNF001) se mantém com as consultas periódicas dos clientes. |
+| 1 | A entrega das mensagens (F010) é feita por consulta periódica à API REST, de 3 em 3 segundos, com o atraso máximo de 5 segundos do parâmetro P17 da especificação de requisitos v02, dentro dos 3 a 5 segundos da DA v03. O RI não fixa nenhuma tecnologia para isso e a solução não acrescenta nenhuma. | Decisão D-08. Verificar no ambiente de demonstração (parâmetro P18) que o limite de 2 segundos para as operações do servidor (RNF001) se mantém com as consultas periódicas dos clientes. |
 | 2 | O RI não fixa versões para Jest, Playwright, Postman, Npgsql, `EFCore.NamingConventions` nem para o pacote JWT Bearer. | Versões fixadas nos ficheiros de dependências de cada repositório (secção 3.4). |
 | 4 | O SQLite in-memory dos testes de integração não reproduz o `xmin` (concorrência otimista em `match` e `candidate`), os tipos enumerados nativos, os arrays, nem as restrições `CHECK` com expressão regular do esquema. Estes aspetos não ficam cobertos pelos testes de integração. | Limitação aceite pelo RI (secções 5 e 11.2). Qualquer alternativa, como testar contra PostgreSQL, exige uma nova versão do RI. |
 | 5 | O RI prevê o Quality Profile «Sonar way» para Dart no SonarQube Server Community Build. Está por confirmar que este perfil existe para essa edição; se não existir, o QG-05 do mobile não é cumprível como está definido. | Confirmar na instalação do SonarQube antes de `m3`. Uma eventual alteração exige uma nova versão do RI (secção 11.1). |

@@ -19,7 +19,7 @@
 | Versão do documento | v02 |
 | Data | 16 de outubro de 2026 |
 | Critérios de qualidade aplicados | `m1-criterios-qualidade-requisitos-v01.md`, nos termos da secção 2.1 deste documento |
-| Documentos de origem | `m1-proposta-sistema-v02.pdf` e `m1-declaracao-ambito-v02.pdf`, homologados com reservas pelo docente em 24-09-2026 (`m1-email-homologacao-ps-da-cca-v01.pdf`); `m3-proposta-sistema-v03.pdf` e `m3-declaracao-ambito-v03.pdf`, que retiram do âmbito a funcionalidade `F011` e substituem a atualização em tempo real das mensagens pela consulta periódica (Issue `I100`), homologados pelo docente em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v01.pdf`); ata da reunião formal de 2026-10-16 (`m3-20261016-reuniao-extraordinaria-ata-v01.pdf`) |
+| Documentos de origem | `m1-proposta-sistema-v02.pdf` e `m1-declaracao-ambito-v02.pdf`, homologados com reservas pelo docente em 24-09-2026 (`m1-email-homologacao-ps-da-cca-v01.pdf`); `m3-proposta-sistema-v04.pdf` e `m3-declaracao-ambito-v04.pdf`, que retiram do âmbito a funcionalidade `F011` e substituem a atualização em tempo real das mensagens pela consulta periódica (Issue `I100`), homologados pelo docente em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v02.pdf`); ata da reunião formal de 2026-10-16 (`m3-20261016-reuniao-extraordinaria-ata-v01.pdf`) |
 
 ### 1.1. Responsáveis por secção
 
@@ -40,28 +40,29 @@
 | v01 | 04 de outubro de 2026 | Issue `I023`: acrescento dos requisitos não funcionais RNF001 a RNF018 (secção 5), dos termos complementares necessários à sua verificação (secção 2.2) e dos parâmetros P18 a P21 (secção 3); atualização da secção 2 e encaminhamento da manutenibilidade para a secção 6. Os requisitos funcionais RF001 a RF118 não foram alterados. | Avaliação registada na `m2-checklist-aprovacao-requisitos-v02.xlsx`; aprovação formal a registar na ata do Sprint Review do Sprint S02 (07-10-2026) |
 | v01 | 08 de outubro de 2026 | Issue `I089`: acrescento do ator, entre parênteses, aos títulos dos 25 requisitos cujo título se repetia (12 títulos), para coincidirem com os títulos da `m2-requirements-traceability-matrix-v01.xlsx` e da `m2-checklist-aprovacao-requisitos-v02.xlsx`. Os enunciados e os restantes campos de todos os requisitos não foram alterados. | Revisão e auditoria da Issue `I089`; aprovação formal a registar na ata do Sprint Review do Sprint S03 |
 | v02 | 16 de outubro de 2026 | Issue `I100`, redução de âmbito: retirada da funcionalidade `F011` (notificações) e descontinuação dos 15 requisitos que dela derivavam (`RF031` a `RF036`, `RF076` a `RF082`, `RF110` e `RF111`, secção 1.3); substituição da atualização em tempo real das mensagens (`F010`) pela consulta periódica ao servidor de 3 em 3 segundos, com nova redação dos requisitos `RF029` e `RF073` e do parâmetro `P17`, que fixa em 5 segundos o atraso máximo de apresentação (deliberação 1 da ata de 2026-10-16); remoção de `F011` dos parâmetros `P11`, `P18`, `P19` e `P21` e dos requisitos não funcionais `RNF001`, `RNF006`, `RNF011`, `RNF012`, `RNF013` e `RNF014`; remoção dos termos «Área de notificações» e «Notificação» e acrescento do termo «Consulta periódica» (secção 2.2); atualização da cobertura funcional (secção 7), que passa a 103 requisitos funcionais. Os identificadores dos requisitos descontinuados não são reutilizados. Os restantes requisitos não foram alterados. | Revisão e auditoria da Issue `I100`; aprovação formal na reunião de 2026-10-16 (deliberação 1 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`) |
+| v02 | 17 de outubro de 2026 | Correção da revisão da Issue `I100` (D03, D04, M03): referências à Proposta de Sistema e à Declaração de Âmbito corrigidas para a v04 e ao e-mail de homologação para `m3-email-homologacao-ps-da-cca-v02.pdf`; secção 1.3 com o estado «7 - Descontinuado» e a decisão que retirou cada requisito; condição de consulta periódica dos requisitos `RF029` e `RF073` uniformizada com o parâmetro `P17` («enquanto a conversa ou a lista de conversas estiver aberta»). Os restantes requisitos não foram alterados. | Revisão e auditoria da Issue `I100` |
 
 ### 1.3. Requisitos descontinuados
 
-Os requisitos seguintes derivavam da funcionalidade `F011` (notificações), retirada do âmbito pela Issue `I100`. Foram removidos desta versão e os respetivos identificadores não são reutilizados.
+Os requisitos seguintes derivavam da funcionalidade `F011` (notificações), retirada do âmbito pela Issue `I100`. Foram descontinuados por decisão da reunião formal de 2026-10-16 (deliberação 1 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`), que aprovou a alteração dos requisitos decorrente da redução de âmbito homologada pelo docente em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v02.pdf`). Estão no estado «7 - Descontinuado», foram removidos desta versão e os respetivos identificadores não são reutilizados.
 
-| ID | Título | Ator |
-| --- | --- | --- |
-| `RF031` | Notificar o Candidato de novo match | Candidato |
-| `RF032` | Notificar o Candidato de nova mensagem | Candidato |
-| `RF033` | Notificar o Candidato da reposição da quota | Candidato |
-| `RF034` | Consultar a área de notificações (Candidato) | Candidato |
-| `RF035` | Marcar notificação como lida (Candidato) | Candidato |
-| `RF036` | Aceder ao elemento associado à notificação (Candidato) | Candidato |
-| `RF076` | Notificar o Recrutador de novo interesse | Recrutador |
-| `RF077` | Notificar o Recrutador de novo match | Recrutador |
-| `RF078` | Notificar o Recrutador de nova mensagem | Recrutador |
-| `RF079` | Notificar o Recrutador da decisão sobre a Empresa | Recrutador |
-| `RF080` | Consultar a área de notificações (Recrutador) | Recrutador |
-| `RF081` | Marcar notificação como lida (Recrutador) | Recrutador |
-| `RF082` | Aceder ao elemento associado à notificação (Recrutador) | Recrutador |
-| `RF110` | Receber notificações sem atualização manual (Candidato) | Candidato |
-| `RF111` | Receber notificações sem atualização manual (Recrutador) | Recrutador |
+| ID | Título | Ator | Estado | Decisão que o retirou |
+| --- | --- | --- | --- | --- |
+| `RF031` | Notificar o Candidato de novo match | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF032` | Notificar o Candidato de nova mensagem | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF033` | Notificar o Candidato da reposição da quota | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF034` | Consultar a área de notificações (Candidato) | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF035` | Marcar notificação como lida (Candidato) | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF036` | Aceder ao elemento associado à notificação (Candidato) | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF076` | Notificar o Recrutador de novo interesse | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF077` | Notificar o Recrutador de novo match | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF078` | Notificar o Recrutador de nova mensagem | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF079` | Notificar o Recrutador da decisão sobre a Empresa | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF080` | Consultar a área de notificações (Recrutador) | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF081` | Marcar notificação como lida (Recrutador) | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF082` | Aceder ao elemento associado à notificação (Recrutador) | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF110` | Receber notificações sem atualização manual (Candidato) | Candidato | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
+| `RF111` | Receber notificações sem atualização manual (Recrutador) | Recrutador | 7 - Descontinuado | Deliberação 1 da ata de 2026-10-16 (Issue `I100`) |
 
 ---
 
@@ -69,12 +70,12 @@ Os requisitos seguintes derivavam da funcionalidade `F011` (notificações), ret
 
 Este documento especifica os requisitos do sistema Katch de forma verificável, consistente e rastreável, nos termos da secção 17 do Regulamento de Funcionamento da Unidade Curricular e do documento `m1-criterios-qualidade-requisitos-v01.md`. O documento contém os requisitos funcionais dos três atores (secção 4), os requisitos não funcionais de desempenho, segurança, usabilidade e disponibilidade (secção 5, Issue `I023`) e as restrições tecnológicas e normativas (secção 6). A manutenibilidade, que o Regulamento Interno do Grupo fixa como limiares de cobertura de testes e critérios de qualidade da integração contínua (secções 11.5 e 11.6), é uma imposição sobre o processo de desenvolvimento e não uma propriedade verificável pelos atores, pelo que é tratada como restrição na secção 6.
 
-Todos os requisitos derivam das funcionalidades `F001` a `F010` da Proposta de Sistema v03 e respeitam o âmbito e os elementos excluídos da Declaração de Âmbito v03. A identificação, a estrutura de cada requisito, a redação do enunciado e a terminologia seguem as secções 3.1 a 3.5 dos critérios de qualidade, com as regras de aplicação fixadas na secção 2.1.
+Todos os requisitos derivam das funcionalidades `F001` a `F010` da Proposta de Sistema v04 e respeitam o âmbito e os elementos excluídos da Declaração de Âmbito v04. A identificação, a estrutura de cada requisito, a redação do enunciado e a terminologia seguem as secções 3.1 a 3.5 dos critérios de qualidade, com as regras de aplicação fixadas na secção 2.1.
 
 ### 2.1. Convenções e regras de aplicação dos critérios
 
 1. **Estrutura dos requisitos.** Cada requisito é apresentado numa tabela com os onze campos obrigatórios da secção 3.2 dos critérios de qualidade.
-2. **Funcionalidades de origem.** Com a redução de âmbito da Issue `I100`, a Proposta de Sistema v03 homologada contém as funcionalidades `F001` a `F010`, intervalo que coincide com as referências dos critérios de qualidade (secção 2.2, regra 1 de `CQ-01`, regra 1 de `CQ-05` e regra 2 de `CQ-08`). A funcionalidade `F011` (notificações), que a Proposta de Sistema v02 homologada continha, foi retirada do âmbito e os requisitos que dela derivavam foram descontinuados (secção 1.3). Os requisitos cujo enunciado não foi alterado mantêm no campo `Origem` a referência à Proposta de Sistema v02 e à Declaração de Âmbito v02; os requisitos alterados pela Issue `I100` referem a versão v03. A Proposta de Sistema homologada é a referência do projeto nos termos da secção 7 do Regulamento de Funcionamento da Unidade Curricular, que prevalece sobre os critérios de qualidade (secção 2.1 dos critérios).
+2. **Funcionalidades de origem.** Com a redução de âmbito da Issue `I100`, a Proposta de Sistema v04 homologada contém as funcionalidades `F001` a `F010`, intervalo que coincide com as referências dos critérios de qualidade (secção 2.2, regra 1 de `CQ-01`, regra 1 de `CQ-05` e regra 2 de `CQ-08`). A funcionalidade `F011` (notificações), que a Proposta de Sistema v02 homologada continha, foi retirada do âmbito e os requisitos que dela derivavam foram descontinuados (secção 1.3). Os requisitos cujo enunciado não foi alterado mantêm no campo `Origem` a referência à Proposta de Sistema v02 e à Declaração de Âmbito v02; os requisitos alterados pela Issue `I100` referem a versão v04. A Proposta de Sistema homologada é a referência do projeto nos termos da secção 7 do Regulamento de Funcionamento da Unidade Curricular, que prevalece sobre os critérios de qualidade (secção 2.1 dos critérios).
 3. **Redação do enunciado.** A estrutura funcional da secção 3.3 dos critérios é aplicada nas três formas seguintes:
    - requisito com ator: `O sistema deve permitir que <ator> <ação> <objeto>, <condições e regras aplicáveis>.`;
    - proibição dirigida a um ator: `O sistema deve impedir que <ator> <ação> <objeto>, <condições e regras aplicáveis>.`, forma utilizada no requisito conforme do Anexo B.1 dos critérios;
@@ -144,7 +145,7 @@ A Proposta de Sistema e a Declaração de Âmbito referem limites de formato, di
 | `P14` | Disponibilidade do Candidato | Imediata; 15 dias; 1 mês; A combinar | F004 |
 | `P15` | Setor de atividade da Empresa | Tecnologia; Saúde; Comércio; Hotelaria e restauração; Construção; Indústria; Educação; Finanças; Logística; Serviços; Outro | F003 |
 | `P16` | Regimes de trabalho | Presencial; Híbrido; Remoto | F004, F005, F006 |
-| `P17` | Consulta periódica das mensagens | Intervalo de 3 segundos entre consultas ao servidor, enquanto a conversa ou a lista de conversas está aberta com sessão iniciada, em ambiente de demonstração, dentro do intervalo de 3 a 5 segundos da Declaração de Âmbito v03; a mensagem nova e o número de mensagens por ler são apresentados na primeira consulta seguinte ao envio, no máximo 5 segundos depois do envio | F010 |
+| `P17` | Consulta periódica das mensagens | Intervalo de 3 segundos entre consultas ao servidor, enquanto a conversa ou a lista de conversas está aberta com sessão iniciada, em ambiente de demonstração, dentro do intervalo de 3 a 5 segundos da Declaração de Âmbito v04; a mensagem nova e o número de mensagens por ler são apresentados na primeira consulta seguinte ao envio, no máximo 5 segundos depois do envio | F010 |
 | `P18` | Dados de demonstração | Mínimo de 20 Candidatos com conta no estado ativa, 5 Empresas no estado aprovada, 2 Empresas no estado pendente e 50 vagas no estado publicada. Todos os dados são fictícios | F001, F002, F003, F004, F005, F006, F007, F008, F009, F010 |
 | `P19` | Limites de tempo | Operação da interface do servidor, excluindo o carregamento de ficheiros: 2 segundos; carregamento de um ficheiro de 5 MB: 5 segundos; cartão de vaga seguinte: 2 segundos; indicação de falha de ligação: 10 segundos | F001, F002, F003, F004, F005, F006, F007, F008, F009, F010 |
 | `P20` | Validade da credencial de sessão | 8 horas contadas desde o início de sessão | F001 |
@@ -614,13 +615,13 @@ Requisitos `RF001` a `RF030` e `RF105`, `RF108`. Os identificadores acrescentado
 | Título | Receber mensagens sem atualização manual (Candidato) |
 | Tipo | Funcional |
 | Ator | Candidato |
-| Descrição | O sistema deve permitir que o Candidato receba na conversa aberta cada nova mensagem do Recrutador sem atualização manual da aplicação, e na lista de conversas aberta o número atualizado de mensagens por ler, através de consulta periódica ao servidor de 3 em 3 segundos, enquanto a aplicação móvel estiver aberta com sessão iniciada. |
+| Descrição | O sistema deve permitir que o Candidato receba na conversa aberta cada nova mensagem do Recrutador sem atualização manual da aplicação, e na lista de conversas aberta o número atualizado de mensagens por ler, através de consulta periódica ao servidor de 3 em 3 segundos, enquanto a conversa ou a lista de conversas estiver aberta na aplicação móvel com sessão iniciada. |
 | Funcionalidade de origem | F010 |
 | Componentes abrangidos | Backend, Frontend mobile |
 | Pré-condições | O Candidato tem sessão iniciada e existe um match entre o Candidato e a Empresa. |
 | Critério de aceitação | Com a conversa aberta, a aplicação móvel consulta o servidor de 3 em 3 segundos e uma mensagem enviada pelo Recrutador surge na conversa na primeira consulta seguinte ao envio, no máximo 5 segundos depois do envio, sem qualquer ação do Candidato. Com a lista de conversas aberta, o número de mensagens por ler dessa conversa é atualizado na primeira consulta seguinte ao envio, no máximo 5 segundos depois do envio. |
 | Prioridade | Obrigatório |
-| Origem | Proposta de Sistema v03 (F010); Declaração de Âmbito v03 (F010); parâmetros P17 da secção 3 |
+| Origem | Proposta de Sistema v04 (F010); Declaração de Âmbito v04 (F010); parâmetros P17 da secção 3 |
 
 #### RF030 — Encerrar uma conversa (Candidato)
 
@@ -1258,13 +1259,13 @@ Requisitos `RF037` a `RF075` e `RF106`, `RF109`, `RF113`, `RF114`, `RF115`, `RF1
 | Título | Receber mensagens sem atualização manual (Recrutador) |
 | Tipo | Funcional |
 | Ator | Recrutador |
-| Descrição | O sistema deve permitir que o Recrutador receba na conversa aberta cada nova mensagem do Candidato sem atualização manual da página, e na lista de conversas aberta o número atualizado de mensagens por ler, através de consulta periódica ao servidor de 3 em 3 segundos, enquanto a área de gestão web estiver aberta com sessão iniciada. |
+| Descrição | O sistema deve permitir que o Recrutador receba na conversa aberta cada nova mensagem do Candidato sem atualização manual da página, e na lista de conversas aberta o número atualizado de mensagens por ler, através de consulta periódica ao servidor de 3 em 3 segundos, enquanto a conversa ou a lista de conversas estiver aberta na área de gestão web com sessão iniciada. |
 | Funcionalidade de origem | F010 |
 | Componentes abrangidos | Backend, Frontend web |
 | Pré-condições | O Recrutador tem sessão iniciada e existe um match com o Candidato numa vaga da sua Empresa. |
 | Critério de aceitação | Com a conversa aberta, a área de gestão web consulta o servidor de 3 em 3 segundos e uma mensagem enviada pelo Candidato surge na conversa na primeira consulta seguinte ao envio, no máximo 5 segundos depois do envio, sem qualquer ação do Recrutador. Com a lista de conversas aberta, o número de mensagens por ler dessa conversa é atualizado na primeira consulta seguinte ao envio, no máximo 5 segundos depois do envio. |
 | Prioridade | Obrigatório |
-| Origem | Proposta de Sistema v03 (F010); Declaração de Âmbito v03 (F010); parâmetros P17 da secção 3 |
+| Origem | Proposta de Sistema v04 (F010); Declaração de Âmbito v04 (F010); parâmetros P17 da secção 3 |
 
 #### RF074 — Encerrar uma conversa (Recrutador)
 
@@ -1914,7 +1915,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | Não aplicável |
 | Critério de aceitação | São rejeitados um pedido direto com credencial de sessão de Candidato para registar a aceitação de um Candidato em espera e um pedido direto com credencial de sessão de Candidato para alterar o perfil profissional de outro Candidato. |
 | Prioridade | Obrigatório |
-| Origem | Backlog de Projeto v02 (I023) (controlo de acesso por perfil); Proposta de Sistema v03 (secção 3, F001, F004, F005, F007, F009 e F010) |
+| Origem | Backlog de Projeto v02 (I023) (controlo de acesso por perfil); Proposta de Sistema v04 (secção 3, F001, F004, F005, F007, F009 e F010) |
 
 #### RNF007 — Restringir a obtenção do curriculum vitae
 
@@ -1994,7 +1995,7 @@ Requisitos `RNF001` a `RNF018`. Os valores-limite e as condições de medição 
 | Pré-condições | O Candidato tem sessão iniciada na aplicação móvel. |
 | Critério de aceitação | A partir da área de exploração de vagas, cada uma das quatro áreas enumeradas é aberta com 3 interações ou menos. |
 | Prioridade | Importante |
-| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v03 (secção 3, F004, F006, F008 e F010); parâmetros P21 da secção 3 |
+| Origem | Backlog de Projeto v02 (I023); Proposta de Sistema v04 (secção 3, F004, F006, F008 e F010); parâmetros P21 da secção 3 |
 
 #### RNF012 — Apresentar a área de gestão web sem deslocamento horizontal
 

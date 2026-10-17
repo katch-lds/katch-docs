@@ -17,7 +17,7 @@
 | Curso | LEI — Licenciatura em Engenharia Informática |
 | Turma | LEI3T2 |
 | Versão do documento | v02 |
-| Documentos de origem | `m3-proposta-sistema-v03.pdf`, `m3-declaracao-ambito-v03.pdf` e `m3-especificacao-requisitos-v02.md` (103 requisitos funcionais, RF001 a RF118 sem os requisitos descontinuados da secção 1.3 daquela especificação) |
+| Documentos de origem | `m3-proposta-sistema-v04.pdf`, `m3-declaracao-ambito-v04.pdf` e `m3-especificacao-requisitos-v02.md` (103 requisitos funcionais, RF001 a RF118 sem os requisitos descontinuados da secção 1.3 daquela especificação) |
 
 O documento segue a estrutura prevista na secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.04-casos-de-uso`: atores, objetivos, fronteira e diagrama geral de casos de uso (secções 2 a 7), seguidos da especificação dos casos de uso relevantes (secção 8).
 
@@ -49,6 +49,7 @@ O documento segue a estrutura prevista na secção 19 do Regulamento de Funciona
 | v01 | 2026-10-02 | Criação da secção 8.6. — Aceitar ou recusar candidato | `I031` |
 | v01 | 2026-10-07 | Correção da exceção E2 do UC12 (secção 8.6): retirada a referência a conta «desativada», estado que não existe (D01). | `I031` |
 | v02 | 2026-10-15 | Redução de âmbito: retirada da funcionalidade F011 (notificações). Retirado o UC15 — Consultar notificações (o identificador não é reutilizado) e removidas as referências a notificações dos UC05, UC07, UC11, UC12, UC14 e UC16, do diagrama geral, do catálogo, da fronteira e da cobertura. Requisitos funcionais da cobertura: 103 (RF031 a RF036, RF076 a RF082, RF110 e RF111 descontinuados). | `I100` |
+| v02 | 2026-10-17 | Correção da revisão da `I100` (D03): referências à Proposta de Sistema e à Declaração de Âmbito corrigidas para a v04 (documentos de origem, fronteira, secções 2 e 7.2). | `I100` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -56,7 +57,7 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 
 ## 2. Atores
 
-Os três atores são os da secção 3 da Proposta de Sistema v02. Cada um acede ao sistema por um único ponto de acesso.
+Os três atores são os da secção 3 da Proposta de Sistema v04. Cada um acede ao sistema por um único ponto de acesso.
 
 | Ator | Descrição | Ponto de acesso |
 | --- | --- | --- |
@@ -86,9 +87,9 @@ Os três atores são os da secção 3 da Proposta de Sistema v02. Cada um acede 
 
 ## 4. Fronteira do sistema
 
-A fronteira segue a Declaração de Âmbito v03.
+A fronteira segue a Declaração de Âmbito v04.
 
-| Dentro da fronteira (assegurado pelo sistema Katch) | Fora da fronteira (excluído pela DA v03) |
+| Dentro da fronteira (assegurado pelo sistema Katch) | Fora da fronteira (excluído pela DA v04) |
 | --- | --- |
 | Registo, autenticação e gestão das contas dos três atores, com validação automática dos registos. | Fornecedores externos de identidade. |
 | Aprovação manual das Empresas pelo Administrador. | Integração com portais de emprego, redes profissionais e sistemas de gestão de recursos humanos. |
@@ -243,7 +244,7 @@ O UC15 — Consultar notificações foi retirado com a funcionalidade F011 (Issu
 | --- | --- |
 | Funcionalidades F001 a F010 com, pelo menos, um caso de uso | F001 (UC01, UC02, UC07, UC18), F002 (UC03, UC18), F003 (UC06, UC07, UC08, UC16, UC17), F004 (UC04, UC11), F005 (UC09, UC10, UC17), F006 (UC05), F007 (UC11, UC12), F008 (UC12, UC13), F009 (UC16, UC17, UC19, UC20), F010 (UC12, UC14) |
 | Requisitos funcionais associados a um caso de uso | 103 de 103 (colunas «Requisitos funcionais» e «Comportamento do sistema incluído» da secção 6) |
-| Atores | Candidato, Recrutador e Administrador, os três da Proposta de Sistema v02 |
+| Atores | Candidato, Recrutador e Administrador, os três da Proposta de Sistema v04 |
 | Casos de uso especificados em detalhe | UC03, UC05, UC07, UC09, UC11, UC12 e UC16 (Issues `I026` a `I032`) |
 
 ---

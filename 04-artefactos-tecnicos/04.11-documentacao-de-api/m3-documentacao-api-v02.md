@@ -18,9 +18,9 @@
 | Turma | LEI3T2 |
 | Versão do documento | v02 |
 | Módulo | Backend (`katch-backend`), API REST ASP.NET Core 10 em C# 14, com consulta periódica das conversas (sem ligação persistente) |
-| Issue | `I092` — Elaborar a documentação da API (v01); `I104` — Atualizar o contrato da API v02: DTOs e erros |
-| Executor / Revisor / Auditor | v01 (`I092`): João Borguem / João Coelho / Miguel Santos; v02 (`I104`): Miguel Santos / João Coelho / João Borguem |
-| Documentos de origem | `m3-modelo-classes-backend-v02.md` (secções 6 e 7, `I103`), `m3-documentacao-arquitetura-v02.md` (secções 2 e 3, `I100`), `m3-especificacao-requisitos-v02.md` (103 requisitos funcionais, RNF001 a RNF018, parâmetros P01 a P21; `I100`), `m3-especificacoes-casos-uso-v02.md` (`I100`), `m3-modelo-de-dados-katch-v02.md` (`I102`), `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m2-documentacao-api-v01.md` (`I092`), `m3-declaracao-ambito-v03.pdf`, Backlog de Projeto aprovado no Backlog Refinement de 2026-10-14 (Issue `I104`) |
+| Issue | `I092` — Elaborar a documentação da API (v01); `I101` — Corrigir a lista de localidades sem sessão (v02); `I104` — Atualizar o contrato da API v02: DTOs e erros |
+| Executor / Revisor / Auditor | v01 (`I092`): João Borguem / João Coelho / Miguel Santos; v02 (`I101`): João Borguem / Roberto Baptista / João Coelho; v02 (`I104`): Miguel Santos / João Coelho / João Borguem |
+| Documentos de origem | `m3-modelo-classes-backend-v02.md` (secções 6 e 7, `I103`), `m3-documentacao-arquitetura-v02.md` (secções 2 e 3, `I100`), `m3-especificacao-requisitos-v02.md` (103 requisitos funcionais, RNF001 a RNF018, parâmetros P01 a P21; `I100`; secção 2.2, termo «Operação reservada»; `I101`), `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (deliberações 1 a 4), `m3-especificacoes-casos-uso-v02.md` (`I100`), `m3-modelo-de-dados-katch-v02.md` (`I102`), `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m2-documentacao-api-v01.md` (`I092`), `m3-declaracao-ambito-v04.pdf`, Backlog de Projeto aprovado no Backlog Refinement de 2026-10-14 (Issue `I104`) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.11-documentacao-de-api` e corresponde às linhas `OF-M2-011` (v1) e `OF-M3-028` (v2) da Checklist de Controlo de Artefactos. Fixa o contrato entre o backend e os dois clientes (aplicação móvel e área de gestão web) antes da implementação em `m3`: rotas, autenticação, autorização por tipo de conta, parâmetros, formatos dos DTOs, respostas, códigos de estado, erros e consulta periódica das conversas.
 
@@ -33,7 +33,8 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | v01 | 2026-10-09 | Acrescento dos pontos em aberto PA-07 a PA-09 (atributos em falta em `WaitingCandidateDto`, `MatchDto` e `CandidateFullProfileDto`), detetados na comparação com o modelo de classes do frontend web (`I090`). | `I092` |
 | v01 | 2026-10-09 | Diagrama da secção 7.4 corrigido; ponto em aberto PA-10 (obtenção do CV pelo próprio Candidato); Empresa aprovada exigida na lista de matches do Recrutador; regra do cabeçalho `Location` nas respostas `201`; consultas `GET` com efeito identificadas (secção 2.5, DAPI-05); prevalência sobre o Swagger registada como DAPI-11; cronologia única dos dados fictícios dos exemplos; tempo em falta na mensagem do ERR-31; ERR-35 também na obtenção do CV. | `I092` |
 | v01 | 2026-10-09 | Classificação de PA-07 a PA-09 como propostas de melhoria (incoerência com o protótipo da `I040`, ecrãs W16, W21 e W17); políticas das consultas propostas na PA-03 (`Recruiter` para os dados de registo, `ApprovedCompany` para a página). | `I092` |
-| v02 | 2026-10-16 | Atualização do contrato para a v02. Redução de âmbito (Declaração de Âmbito v03; modelo de classes v02 e especificação de requisitos v02): retirados os 2 endpoints e o controller das notificações, os 2 hubs e os 3 eventos da ligação persistente, a enumeração `NotificationType`, os DTOs `NotificationDto` e `NotificationListDto` e as referências aos requisitos descontinuados (`RF031` a `RF036`, `RF076` a `RF082`, `RF110` e `RF111`); as conversas passam a consulta periódica (secção 7), com o parâmetro `after` em 6.8.2. Alinhamento com o modelo de classes v02: acrescentados `GET /api/files/{kind}/{fileName}` (6.9), o CV do próprio Candidato (6.2.9), as competências «Outro» em operações próprias (6.2.10 e 6.2.11, `CustomSkillDto` e `AddCustomSkillRequest`; `AddSkillRequest` só com `skillId`) e os dados de registo e a página da própria Empresa (6.4.8 e 6.4.9). Alinhamento com o modelo de dados v02: o contrato externo mantém-se nos enumerados que mudaram, que são internos; `matchedAt` passa a ser calculado a partir de `recruiter_action_at` e `lastMessageAt` das conversas passa a ser calculado; retirada `EntityType` das enumerações internas; regra das vagas não expiradas no filtro de 6.3.1 (DM-17). Melhorias de contrato da `I104`: `ApiErrorDto` com `code` e `blockedUntil`; `WaitingCandidateDto` com `desiredRole` e `locationName`; `MatchDto` com `jobStatus`, `locationName` e `logoUrl`; `CandidateFullProfileDto` com `profileOpenedAt`; `ConversationSummaryDto` com `closedBy`; `QuotaDto` com `total`. Pontos em aberto: resolvidos PA-01, PA-03, PA-05, PA-07, PA-08, PA-09 e PA-10, e PA-02 e PA-06 (SignalR) deixam de se aplicar; PA-01 resolvido (opção (a) e ratificação da AD-01, deliberação 3 da ata de 2026-10-16) e PA-04 mantém-se (secção 11). Consulta periódica de 3 em 3 segundos, com o P17 em 5 segundos (deliberação 1 da mesma ata). Rastreabilidade revista para os 103 requisitos funcionais da especificação v02. | `I104` |
+| v02 | 2026-10-17 | Resolução da PA-04 e da PC-01 (observação do docente), em coerência com a especificação de requisitos v02 (secção 2.2, alteração aprovada na deliberação 2 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`): `GET /api/reference-lists/locations` passa a anónimo (3.3, 5, 6.1.1, 6.13.1); rastreabilidade de RF003 e RNF004 atualizada (9.1, 9.2); nova DAPI-12; PA-04 passa para os pontos resolvidos (11.3). Referências à v01 corrigidas em 2.5 e 11.1. A autorização anónima de `ListLocations` no modelo de classes do backend é integrada na v02 produzida pela `I103` (mesma deliberação). As alterações da Issue `I104` são integradas nesta mesma versão v02 e acrescentam a sua própria linha. A v01 fica conservada no arquivo. | `I101` |
+| v02 | 2026-10-18 | Atualização do contrato para a v02. Redução de âmbito (Declaração de Âmbito v04; modelo de classes v02 e especificação de requisitos v02): retirados os 2 endpoints e o controller das notificações, os 2 hubs e os 3 eventos da ligação persistente, a enumeração `NotificationType`, os DTOs `NotificationDto` e `NotificationListDto` e as referências aos requisitos descontinuados (`RF031` a `RF036`, `RF076` a `RF082`, `RF110` e `RF111`); as conversas passam a consulta periódica (secção 7), com o parâmetro `after` em 6.8.2. Alinhamento com o modelo de classes v02: acrescentados `GET /api/files/{kind}/{fileName}` (6.9), o CV do próprio Candidato (6.2.9), as competências «Outro» em operações próprias (6.2.10 e 6.2.11, `CustomSkillDto` e `AddCustomSkillRequest`; `AddSkillRequest` só com `skillId`) e os dados de registo e a página da própria Empresa (6.4.8 e 6.4.9). Alinhamento com o modelo de dados v02: o contrato externo mantém-se nos enumerados que mudaram, que são internos; `matchedAt` passa a ser calculado a partir de `recruiter_action_at` e `lastMessageAt` das conversas passa a ser calculado; retirada `EntityType` das enumerações internas; regra das vagas não expiradas no filtro de 6.3.1 (DM-17). Melhorias de contrato da `I104`: `ApiErrorDto` com `code` e `blockedUntil`; `WaitingCandidateDto` com `desiredRole` e `locationName`; `MatchDto` com `jobStatus`, `locationName` e `logoUrl`; `CandidateFullProfileDto` com `profileOpenedAt`; `ConversationSummaryDto` com `closedBy`; `QuotaDto` com `total`. Pontos em aberto: resolvidos PA-01, PA-03, PA-05, PA-07, PA-08, PA-09 e PA-10, e PA-02 e PA-06 (SignalR) deixam de se aplicar; PA-01 resolvido (opção (a) e ratificação da AD-01, deliberação 3 da ata de 2026-10-16) e PA-04 resolvido pela `I101` (linha anterior). Consulta periódica de 3 em 3 segundos, com o P17 em 5 segundos (deliberação 1 da mesma ata). Rastreabilidade revista para os 103 requisitos funcionais da especificação v02. | `I104` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -43,9 +44,9 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 
 ### 2.1. Objeto e fontes
 
-A API documentada é a interface do servidor (especificação de requisitos, secção 2.2): o conjunto das operações que o backend disponibiliza à aplicação móvel e à área de gestão web. Cada endpoint corresponde a uma operação de um controller do modelo de classes v02 (secção 6). Os formatos são os DTOs do modelo de classes (secção 7). Não há endpoints fora da Declaração de Âmbito v03: o sistema não tem integração com serviços externos, nem envio de e-mail ou SMS, nem notificações (funcionalidade F011 retirada pela `I100`), nem comunicação em tempo real: as conversas são atualizadas por consulta periódica (secção 7).
+A API documentada é a interface do servidor (especificação de requisitos, secção 2.2): o conjunto das operações que o backend disponibiliza à aplicação móvel e à área de gestão web. Cada endpoint corresponde a uma operação de um controller do modelo de classes v02 (secção 6). Os formatos são os DTOs do modelo de classes (secção 7). Não há endpoints fora da Declaração de Âmbito v04: o sistema não tem integração com serviços externos, nem envio de e-mail ou SMS, nem notificações (funcionalidade F011 retirada pela `I100`), nem comunicação em tempo real: as conversas são atualizadas por consulta periódica (secção 7).
 
-O contrato documentado é o do modelo de classes v02 e da especificação de requisitos v02, nos aspetos que estes já fixam (operações, DTOs e autorização), com as melhorias de contrato da `I104` (secção 11.3), que o modelo de classes v02 deixou para esta versão (secção 11 do modelo). Este documento acrescenta apenas o que o modelo de classes remete para a documentação da API (secção 11 do modelo): rotas, métodos HTTP, códigos de estado, mensagens de erro, cabeçalhos e exemplos.
+O contrato documentado é o do modelo de classes v02 e da especificação de requisitos v02, nos aspetos que estes já fixam (operações, DTOs e autorização), com as melhorias de contrato da `I104` (secção 11.3), que o modelo de classes v02 deixou para esta versão (secção 11 do modelo). A autorização anónima de `GET /api/reference-lists/locations` segue a especificação de requisitos v02 (secção 2.2), nos termos da DAPI-12. Este documento acrescenta apenas o que o modelo de classes remete para a documentação da API (secção 11 do modelo): rotas, métodos HTTP, códigos de estado, mensagens de erro, cabeçalhos e exemplos.
 
 As lacunas encontradas no modelo de classes e na especificação de requisitos durante a elaboração deste documento não foram resolvidas aqui, para não alterar artefactos aprovados sem decisão formal. Ficam registadas na secção 11, com o impacto e a proposta de correção, para tratamento numa nova versão desses artefactos e, depois, deste documento.
 
@@ -160,8 +161,8 @@ Um pedido sem o cabeçalho, ou com outro valor, é rejeitado com `400`. Uma cont
 
 | Política | Regra | Onde se aplica |
 | --- | --- | --- |
-| Anónimo | Sem credencial. | Registo de Candidato, criação de conta de Recrutador, início de sessão (especificação de requisitos, secção 2.2: operações não reservadas). |
-| Qualquer conta | Credencial válida, conta ativa. | Fim de sessão, alteração da palavra-passe, consulta das listas pré-definidas (localidades, competências e benefícios), ficheiros servidos em `/api/files` (autorização por tipo de ficheiro, 6.9). |
+| Anónimo | Sem credencial. | Registo de Candidato, criação de conta de Recrutador, início de sessão e consulta da lista de localidades (especificação de requisitos v02, secção 2.2: operações não reservadas). |
+| Qualquer conta | Credencial válida, conta ativa. | Fim de sessão, alteração da palavra-passe, consulta das listas pré-definidas de competências e de benefícios, ficheiros servidos em `/api/files` (autorização por tipo de ficheiro, 6.9). |
 | `Candidate` | `role = CANDIDATE`. | `/api/candidate/**` |
 | `Recruiter` | `role = RECRUITER`. | `/api/recruiter/company/**` |
 | `ApprovedCompany` | `Recruiter` e Empresa do Recrutador no estado `APPROVED`. | `/api/recruiter/jobs/**`, `/api/recruiter/interests/**` (RF039); consulta e alteração da página, logótipo e galeria da Empresa (modelo de classes, secção 6: a galeria faz parte da página, RF048); a consulta dos dados de registo da própria Empresa (6.4.8) exige só a política `Recruiter`; alteração dos dados de registo (RF049, só sobre a Empresa aprovada); `GET /api/matches` quando pedido pelo Recrutador (RF039, RF067) |
@@ -364,7 +365,7 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | 6.11.7 | `GET` | `/api/admin/companies` | `AdminCompaniesController.ListCompanies` | `Admin` | RF097 |
 | 6.11.8 | `GET` | `/api/admin/companies/published-jobs` | `AdminCompaniesController.ListPublishedJobs` | `Admin` | RF098 |
 | 6.12.1 | `GET` | `/api/admin/indicators` | `AdminIndicatorsController.Get` | `Admin` | RF096, RF103 |
-| 6.13.1 | `GET` | `/api/reference-lists/locations` | `ReferenceListsController.ListLocations` | Qualquer conta | RF003, RF006, RF041, RF050 |
+| 6.13.1 | `GET` | `/api/reference-lists/locations` | `ReferenceListsController.ListLocations` | Anónimo | RF003, RF006, RF041, RF050 |
 | 6.13.2 | `GET` | `/api/reference-lists/skills` | `ReferenceListsController.ListSkills` | Qualquer conta | RF008, RF050 |
 | 6.13.3 | `GET` | `/api/reference-lists/benefits` | `ReferenceListsController.ListBenefits` | Qualquer conta | RF050 |
 | 6.13.4 | `POST` | `/api/reference-lists/skills` | `ReferenceListsController.AddSkill` | `Admin` | RF099, RF112 |
@@ -413,7 +414,7 @@ Casos de uso UC01, UC02, UC03 e UC07 (criação de conta). Serviço: `IAuthServi
 | Erros | `400` ERR-10: campo vazio, correio fora do formato ou já registado, telefone sem 9 algarismos, palavra-passe fora do P05, localidade fora da lista, `acceptTerms` diferente de `true` (RF004). Todos os campos em falta são indicados no mesmo pedido. |
 | Regras | A palavra-passe é guardada só como resumo (RNF003). A quota começa em 10 interesses. O correio é comparado sem distinção de maiúsculas. |
 | Requisitos | RF003, RF004, RF005; RNF003, RNF008; P04, P05 · UC03 |
-| Nota | A lista de localidades exige sessão iniciada (6.13.1), pelo que, com o modelo de classes v02, a aplicação móvel não a consegue obter antes do registo. Ponto em aberto PA-04. |
+| Nota | A aplicação móvel obtém a lista de localidades em 6.13.1, sem credencial, antes de enviar o registo, e envia no `locationId` o identificador da localidade selecionada (especificação de requisitos v02, secção 2.2). |
 
 ```http
 POST /api/auth/candidates HTTP/1.1
@@ -2452,13 +2453,14 @@ Caso de uso UC20. Serviço: `IReferenceListService`. As listas são devolvidas p
 | Campo | Conteúdo |
 | --- | --- |
 | Operação | `ReferenceListsController.ListLocations` → `IReferenceListService.ListLocationsAsync` |
-| Autorização | Qualquer conta (modelo de classes, secção 6: «consulta com sessão iniciada»). O registo do Candidato (RF003) exige a localidade antes de existir sessão: contradição registada na secção 11, PA-04. |
+| Autorização | Anónimo: operação não reservada (especificação de requisitos v02, secção 2.2), porque o registo do Candidato (RF003) exige a escolha da localidade antes de existir sessão (DAPI-12). Uma credencial enviada no pedido não é exigida nem verificada, pelo que o estado da conta (3.4) não é consultado. |
 | Resposta de sucesso | `200 OK` — `ReferenceItemDto[]`. `name` tem a forma «Localidade (Distrito)», para distinguir localidades com o mesmo nome (modelo de dados, `location`) (DAPI-08). As coordenadas não são enviadas. |
+| Erros | Só o `500` (ERR-50) comum; não há `401` nem `403`. |
+| Regras | A resposta contém apenas o identificador e a designação de cada localidade: nenhum dado pessoal, nenhuma coordenada e nenhum dado de outra conta (RNF006, RNF017). A lista é só de leitura (DA, F002). |
 | Requisitos | RF003, RF006, RF041, RF050 · UC03, UC04, UC07, UC09 |
 
 ```http
 GET /api/reference-lists/locations HTTP/1.1
-Authorization: Bearer <credencial>
 
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -2618,7 +2620,7 @@ Content-Type: application/json
 
 ## 7. Consulta periódica das conversas
 
-Com a redução de âmbito (Declaração de Âmbito v03, F010 e secção 3), não há ligação persistente nem hubs: as mensagens novas e as mudanças de estado das conversas chegam aos clientes por consulta periódica dos endpoints de 6.8, a intervalos fixos de 3 segundos (deliberação 1 da ata de 2026-10-16, `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`). O parâmetro P17 da especificação de requisitos v02 mantém-se em 5 segundos, como atraso máximo até a mensagem ser apresentada: o intervalo de 3 segundos mais a duração do pedido cabe nesse limite. O desenho segue o modelo de classes v02 (secção 6.1 e DC-07). Este documento não define endpoints nem eventos novos para a consulta periódica: usa os mesmos pedidos da área de conversas.
+Com a redução de âmbito (Declaração de Âmbito v04, F010 e secção 3), não há ligação persistente nem hubs: as mensagens novas e as mudanças de estado das conversas chegam aos clientes por consulta periódica dos endpoints de 6.8, a intervalos fixos de 3 segundos (deliberação 1 da ata de 2026-10-16, `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`). O parâmetro P17 da especificação de requisitos v02 mantém-se em 5 segundos, como atraso máximo até a mensagem ser apresentada: o intervalo de 3 segundos mais a duração do pedido cabe nesse limite. O desenho segue o modelo de classes v02 (secção 6.1 e DC-07). Este documento não define endpoints nem eventos novos para a consulta periódica: usa os mesmos pedidos da área de conversas.
 
 ### 7.1. Pedidos periódicos
 
@@ -2810,7 +2812,7 @@ Todos os requisitos funcionais abrangem o componente Backend. A tabela indica, p
 | --- | --- |
 | RF001, RF038, RF083 | 6.1.3 (com `X-Client-App`, ERR-02 a ERR-05) |
 | RF002, RF040, RF084 | 6.1.5 |
-| RF003, RF004, RF005 | 6.1.1; localidades em 6.13.1 (com sessão iniciada; ver PA-04) |
+| RF003, RF004, RF005 | 6.1.1; localidades em 6.13.1, sem sessão iniciada (operação não reservada) |
 | RF006 | 6.2.2; consulta em 6.2.1 |
 | RF007, RF023 | 6.2.3 |
 | RF008, RF009 | 6.2.4 e 6.2.5 (lista); 6.2.10 e 6.2.11 («Outro»); lista em 6.13.2 |
@@ -2883,7 +2885,7 @@ Todos os requisitos funcionais abrangem o componente Backend. A tabela indica, p
 | RF117 | 6.6.4, 6.6.5 (ERR-35) |
 | RF118 | Efeito de 6.6.2; apresentação da data em `CandidateFullProfileDto.profileOpenedAt` |
 
-Os 103 requisitos funcionais da especificação de requisitos v02 (RF001 a RF118, sem os 15 descontinuados da secção 1.3 da especificação) têm uma operação da interface do servidor ou um comportamento interno que os concretiza. O funcionamento completo do RF003 depende da decisão sobre o ponto em aberto PA-04 (secção 11). Os RF015, RF021, RF057, RF065, RF112, RF113 e RF118 não têm endpoint próprio, porque são comportamentos internos do servidor desencadeados por outros endpoints ou pelas tarefas periódicas.
+Os 103 requisitos funcionais da especificação de requisitos v02 (RF001 a RF118, sem os 15 descontinuados da secção 1.3 da especificação) têm uma operação da interface do servidor ou um comportamento interno que os concretiza. Nenhum depende de pontos em aberto: o RF003 dependia da PA-04, resolvida na v02 (secção 11.3). Os RF015, RF021, RF057, RF065, RF112, RF113 e RF118 não têm endpoint próprio, porque são comportamentos internos do servidor desencadeados por outros endpoints ou pelas tarefas periódicas.
 
 ### 9.2. Requisitos não funcionais
 
@@ -2891,7 +2893,7 @@ Os 103 requisitos funcionais da especificação de requisitos v02 (RF001 a RF118
 | --- | --- |
 | RNF001, RNF002, RNF015 | Limites de tempo verificados por pedido direto em `m3` (P19); listas sem paginação dimensionadas para os dados de demonstração (L-02). |
 | RNF003 | 6.1.1, 6.1.2, 6.1.5: palavras-passe só em resumo; nunca devolvidas em nenhum DTO. |
-| RNF004, RNF005 | Secções 3.1 e 3.4: credencial em todas as operações reservadas, expiração de 8 horas, ERR-01; também nos pedidos da consulta periódica (secção 7). |
+| RNF004, RNF005 | Secções 3.1 e 3.4: credencial em todas as operações reservadas, expiração de 8 horas, ERR-01; também nos pedidos da consulta periódica (secção 7). As operações sem credencial são apenas as quatro da política «Anónimo» (3.3), que coincidem com as operações não reservadas da especificação de requisitos v02 (secção 2.2). |
 | RNF006 | Identificador sempre da credencial (2.5); políticas e titularidade (3.3); ERR-06, ERR-08. |
 | RNF007 | 6.6.3: CV só para o Recrutador de uma vaga com o Candidato em espera; 6.2.9: só o próprio Candidato; nenhum URL público de CV. |
 | RNF008 | Validação no servidor de todos os DTOs de pedido (secção 8), com ERR-10 e ERR-11. |
@@ -2937,8 +2939,9 @@ Todas as operações dos 13 controllers da secção 6 do modelo de classes v02 e
 | DAPI-09 | Rotas, métodos, códigos de estado, mensagens de erro e cabeçalhos fixados neste documento; operações, DTOs e autorização seguem o modelo de classes v02, com as melhorias de contrato da `I104` (secção 11.3). | O modelo de classes remete para a documentação da API apenas as rotas, os códigos de estado e os exemplos (secção 11 do modelo); as melhorias de contrato que o modelo de classes v02 deixou para a revisão do contrato da API (PA-05, PA-07 a PA-09, PC-03, PC-04 e PC-07) são feitas aqui, e o modelo de classes só as acompanha numa versão posterior. |
 | DAPI-10 | Carregamentos de ficheiro único em `PUT` com `204` e `Location`; acrescentos a galerias em `POST` com `201` e `Location`. | As operações do modelo de classes devolvem `IActionResult` e o serviço devolve o URL; o cabeçalho evita criar DTOs novos. |
 | DAPI-11 | Em caso de divergência entre a documentação gerada pelo Swagger e este documento, prevalece este documento até à aprovação de uma nova versão. | Este documento é o contrato acordado entre o backend e os dois clientes (objetivo da `I092`); o Swagger é gerado a partir da implementação e reproduz também os erros dela. |
-| DAPI-12 | O parâmetro `kind` de `GET /api/files/{kind}/{fileName}` usa os valores JSON da enumeração `FileKind` (`PROFILE_PHOTO`, `COMPANY_LOGO`, `COMPANY_PHOTO`, `JOB_PHOTO`). | O modelo de classes fixa `/api/files/{kind}/{fileName}` mas não a forma textual de `kind`; usar o mesmo vocabulário das restantes enumerações (DAPI-01) evita uma segunda convenção. |
-| DAPI-13 | `after` é um parâmetro de consulta opcional de `GET /api/conversations/{matchId}/messages`, em ISO 8601. | O modelo de classes define `Open(matchId, after)` sem fixar a posição do parâmetro; num `GET`, a consulta é a posição natural, e a mesma rota serve a abertura da conversa e a consulta periódica. |
+| DAPI-12 | Autorização de `GET /api/reference-lists/locations` (6.13.1) anónima. | A especificação de requisitos v02 acrescenta a consulta da lista de localidades às operações não reservadas (secção 2.2), alteração aprovada na deliberação 2 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`, na sequência da deliberação 5 do Backlog Refinement de 14-10-2026. Pela mesma deliberação 2, a autorização anónima de `ListLocations` é integrada no modelo de classes do backend v02 produzido pela `I103`. Só a consulta das localidades fica anónima: as competências e os benefícios só são usados com sessão iniciada (RF008, RF050). |
+| DAPI-13 | O parâmetro `kind` de `GET /api/files/{kind}/{fileName}` usa os valores JSON da enumeração `FileKind` (`PROFILE_PHOTO`, `COMPANY_LOGO`, `COMPANY_PHOTO`, `JOB_PHOTO`). | O modelo de classes fixa `/api/files/{kind}/{fileName}` mas não a forma textual de `kind`; usar o mesmo vocabulário das restantes enumerações (DAPI-01) evita uma segunda convenção. |
+| DAPI-14 | `after` é um parâmetro de consulta opcional de `GET /api/conversations/{matchId}/messages`, em ISO 8601. | O modelo de classes define `Open(matchId, after)` sem fixar a posição do parâmetro; num `GET`, a consulta é a posição natural, e a mesma rota serve a abertura da conversa e a consulta periódica. |
 
 ---
 
@@ -2948,11 +2951,9 @@ Todas as operações dos 13 controllers da secção 6 do modelo de classes v02 e
 
 Lacunas ainda sem resolução nos artefactos de que este documento depende. Este documento não as resolve, para não alterar artefactos aprovados sem decisão formal: documenta o contrato v02 tal como está e indica aqui o impacto e a proposta de correção. A classificação segue a secção 5.3 do Plano de Qualidade. Os pontos da v01 já resolvidos estão na secção 11.3.
 
-| ID | Ponto | Impacto | Proposta | Origem e classificação | Decisão formal |
-| --- | --- | --- | --- | --- | --- |
-| PA-04 | A especificação de requisitos (secção 2.2) só considera não reservados o registo, a criação de conta e o início de sessão, e o modelo de classes exige sessão para consultar as listas pré-definidas; mas o registo do Candidato (RF003) exige escolher a localidade da lista antes de haver sessão. | Com os artefactos atuais, a aplicação móvel não consegue apresentar a lista de localidades no registo. | Acrescentar a consulta da lista de localidades às operações não reservadas (especificação de requisitos, secção 2.2) e tornar anónimo `GET /api/reference-lists/locations` (modelo de classes, secção 6). Alternativas rejeitadas: lista fixa na aplicação móvel (desatualiza-se); localidade em texto livre (contraria RF003 e RF015). | Especificação de requisitos (`I020`, `I023`) e modelo de classes (`I036`, `I103`) · defeito substancial; tratado na Issue `I101` (localidades sem sessão), na mesma v02 da API | Sim, porque altera requisitos aprovados. |
+Não há pontos em aberto nesta versão.
 
-Encaminhamento: a PA-01 foi decidida na reunião formal de 2026-10-16 (secção 11.3); a PA-04 é tratada na `I101`, que acrescenta a alteração de 6.13.1 a esta v02.
+Encaminhamento: a PA-01 foi decidida na reunião formal de 2026-10-16 (secção 11.3); a PA-04 foi resolvida pela `I101` na mesma v02 (secção 11.3).
 
 ### 11.2. Limitações
 
@@ -2969,13 +2970,14 @@ Encaminhamento: a PA-01 foi decidida na reunião formal de 2026-10-16 (secção 
 
 ### 11.3. Pontos resolvidos na v02
 
-Pontos em aberto da v01 e melhorias de contrato resolvidos nesta versão. Os pontos PA-01, PA-02, PA-03, PA-05, PA-06, PA-07, PA-08, PA-09 e PA-10 saíram da lista da secção 11.1.
+Pontos em aberto da v01 e melhorias de contrato resolvidos nesta versão. Os pontos PA-01, PA-02, PA-03, PA-04, PA-05, PA-06, PA-07, PA-08, PA-09 e PA-10 saíram da lista da secção 11.1.
 
 | ID | Resolução | Secções |
 | --- | --- | --- |
 | PA-01 | Opção (a) escolhida e AD-01 ratificada por unanimidade na deliberação 3 da ata de 2026-10-16 (`m3-20261016-reuniao-extraordinaria-ata-v01.pdf`): os ficheiros são identificados pelo tipo e pelo nome gerado pelo `LocalFileStorage`, nas colunas existentes do modelo de dados, sem tabela de ficheiros, e ficam no sistema de ficheiros do servidor. A operação é `GET /api/files/{kind}/{fileName}`, com autorização por tipo de ficheiro. | 2.6, 6.9 |
 | PA-02 | Deixa de se aplicar: sem ligação persistente (nem `IRealtimePublisher`), a mensagem é obtida pela conversa em 6.8.2, que já a identifica pelo `matchId`. | 6.8, 7 |
 | PA-03 | `GET /api/recruiter/company` (`CompanyRegistrationDto` com `locationId`, política `Recruiter`) e `GET /api/recruiter/company/page` (`CompanyPageDto`, política `ApprovedCompany`). | 6.4.8, 6.4.9, 8.3 |
+| PA-04 (PC-01) | `GET /api/reference-lists/locations` passa a anónimo, porque a especificação de requisitos v02 acrescenta a consulta da lista de localidades às operações não reservadas (secção 2.2; deliberação 2 da ata de 2026-10-16, `I101`). Alternativas rejeitadas: lista fixa na aplicação móvel e localidade em texto livre. A autorização anónima de `ListLocations` no modelo de classes é integrada pela `I103`. | 3.3, 5, 6.1.1, 6.13.1, 9.1, 9.2, DAPI-12 |
 | PA-05 (PC-12, G12) | `ApiErrorDto` passa a ter `code` (identificador `ERR-xx`) e `blockedUntil` (só no `ERR-31`). | 4.1, 4.3, 8.5 |
 | PA-06 | Deixa de se aplicar quanto à D-08 (SignalR): sem ligação persistente. A ratificação da AD-01 foi tratada na PA-01. | 7, 11.1 |
 | PA-07 (G4) | `WaitingCandidateDto` passa a ter `desiredRole` e `locationName`. | 6.6.1, 8.4 |

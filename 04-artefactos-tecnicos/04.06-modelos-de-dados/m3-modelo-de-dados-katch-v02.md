@@ -20,7 +20,7 @@
 | Base de dados | `katch` (PostgreSQL 18) |
 | Issue | `I102` — Produzir o modelo de dados v02 (versão anterior: `I035`) |
 | Executor / Revisor / Auditor | João Coelho / João Borguem / Roberto Baptista |
-| Documentos de origem | `m3-proposta-sistema-v03.pdf`, `m3-declaracao-ambito-v03.pdf`, `m2-modelo-de-dados-katch-v01.md`, `m2-documentacao-api-v01.md` (PA-01 e PA-10), `m2-especificacao-requisitos-v01.md` (numeração atual, RF001 a RF118, RNF001 a RNF018, parâmetros P01 a P21), `m1-regulamento-grupo-v01.pdf` (secções 5, 11.2, 14.2 e 14.3), `m2-backlog-projeto-v02.xlsx` (Issue `I035`), `m2-documentacao-arquitetura-v01.md` (secção 2, decisão AD-01), `m2-diagrama-estados-interesse-match-v01.md` |
+| Documentos de origem | `m3-proposta-sistema-v04.pdf`, `m3-declaracao-ambito-v04.pdf` (redução de âmbito homologada em 2026-10-14), `m3-especificacao-requisitos-v02.md` (RF001 a RF118, com os 15 requisitos da F011 no estado «7 - Descontinuado», RNF001 a RNF018, parâmetros P01 a P21), `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (deliberações 1, 3 e 5), `m2-modelo-de-dados-katch-v01.md`, `m2-documentacao-api-v01.md` (PA-01 e PA-10), `m1-regulamento-grupo-v01.pdf` (secções 5, 11.2, 14.2 e 14.3), `m2-backlog-projeto-v02.xlsx` (Issue `I035`), `m2-documentacao-arquitetura-v01.md` (secção 2, decisão AD-01), `m2-diagrama-estados-interesse-match-v01.md` |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.06-modelos-de-dados`: um ficheiro por base de dados, com finalidade, tecnologia, modelos conceptual, lógico e físico e dicionário de dados. Corresponde à linha `OF-M3-023` — «Modelo de dados — katch v2» da Checklist de Controlo de Artefactos (v04), gerida em code-first com o Entity Framework Core.
 
@@ -30,9 +30,25 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | --- | --- | --- | --- |
 | v01 | 2026-10-03 | Criação do documento: modelos conceptual, lógico e físico, dicionário de dados, índices, integridade, dados sensíveis, dados iniciais, decisões e limitações. | `I035` |
 | v01 | 2026-10-06 | Correções da revisão da `I035` (ciclo 1): transição T7, ainda por ratificar, retirada das regras em vigor e passada a evolução prevista (D01); `ELSE false` em `ck_notification_target` (M01); concorrência da quota de interesses (M02); fim de sessão com credencial não persistida (M03). | `I035` |
-| v02 | 2026-10-15 | Alinhamento com a redução de âmbito (PS e DA v03): retirada da funcionalidade F011 e, com ela, da tabela `notification`, do tipo `notification_type`, dos índices, das restrições e das regras associadas e da decisão DM-07. Relação Candidato–competência separada em `candidate_skill` (lista pré-definida) e `candidate_custom_skill` (opção «Outro»). Curriculum vitae acessível também ao próprio Candidato (PA-10). Vagas expiradas excluídas das vagas apresentadas (N2). PA-01 na opção (a): sem tabela de ficheiros. Simplificação: retiradas as colunas `status_changed_at` e `status_changed_by` (`app_user`, `company`), `operation_log.entity_type` e `match.last_message_at`, cuja informação consta do `operation_log` ou se calcula (DM-18 a DM-20). Segunda simplificação: retirados `created_at` e `updated_at` (exceto em `app_user`), `job.closed_at`, `job.close_reason`, `match.matched_at` e `match.profile_opened_by`; a `match` passa a ter um único `status` de quatro valores (DM-21 a DM-24). | `I102` |
+| v02 | 2026-10-15 | Alinhamento com a redução de âmbito (PS e DA v04): retirada da funcionalidade F011 e, com ela, da tabela `notification`, do tipo `notification_type`, dos índices, das restrições e das regras associadas e da decisão DM-07. Relação Candidato–competência separada em `candidate_skill` (lista pré-definida) e `candidate_custom_skill` (opção «Outro»). Curriculum vitae acessível também ao próprio Candidato (PA-10). Vagas expiradas excluídas das vagas apresentadas (N2). PA-01 na opção (a): sem tabela de ficheiros (opção escolhida e AD-01 ratificada na deliberação 3 da ata de 2026-10-16, registada na linha seguinte). Simplificação: retiradas as colunas `status_changed_at` e `status_changed_by` (`app_user`, `company`), `operation_log.entity_type` e `match.last_message_at`, cuja informação consta do `operation_log` ou se calcula (DM-18 a DM-20). Segunda simplificação: retirados `created_at` e `updated_at` (exceto em `app_user`), `job.closed_at`, `job.close_reason`, `match.matched_at` e `match.profile_opened_by`; a `match` passa a ter um único `status` de quatro valores (DM-21 a DM-24). | `I102` |
+
+| v02 | 2026-10-18 | Correções da revisão da `I102`: referências à PS e à DA v04 e à especificação de requisitos v02 (D01); descontinuação dos requisitos da F011 sem revisão da numeração (D02); decisão da PA-01 e ratificação da AD-01 registadas, com a confirmação de que não há tabela de ficheiros (D03, deliberação 3 da ata de 2026-10-16); relação do Recrutador no modelo conceptual reduzida à decisão (M02); pontos resolvidos passados para a secção 1.2, com indicação das simplificações que vão além da descrição da Issue (M01 e M03). | `I102` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
+
+### 1.2. Pontos resolvidos nesta versão
+
+| Origem | Ponto | Resolução na v02 | Secções |
+| --- | --- | --- | --- |
+| Redução de âmbito (PS e DA v04) | Retirada da F011 — Notificações na plataforma. | Tabela `notification`, tipo `notification_type`, índices, restrições, regras e decisão DM-07 retirados; a informação é consultada nas áreas de cada aplicação. Os 15 requisitos da F011 ficam descontinuados na especificação de requisitos v02, sem revisão da numeração. | 3 a 10, 12 |
+| Observação do docente (`OF-M3-023`) | Relação Candidato–competência com multiplicidade `0..1` do lado de `skill`. | `candidate_skill` (lista, N : M pura) e `candidate_custom_skill` (opção «Outro»). | 4, 5.2, 6.8, DM-16 |
+| API, PA-10 | O Candidato não obtinha o próprio CV. | Acesso ao CV também pelo próprio Candidato. | 6.4, 7.2, 8 |
+| Análise das limitações, N2 | Vagas expiradas apresentadas e aceites até a tarefa periódica correr. | Vagas expiradas excluídas pela própria data `expires_at`. | 7.2, DM-17 |
+| API, PA-01; ata de 2026-10-16, deliberação 3 | Como servir fotografias, logótipos e CV. | Opção (a) escolhida e AD-01 ratificada; ficheiros no sistema de ficheiros do servidor, identificados pelo caminho guardado. Confirmado que o modelo não tem tabela de ficheiros. | 2, 6, DM-13 |
+| Simplificação 1 (além da descrição da Issue) | Informação duplicada ou calculável. | Sem `status_changed_*`, `operation_log.entity_type` e `match.last_message_at`. | DM-18 a DM-20 |
+| Simplificação 2 (além da descrição da Issue) | Colunas que nenhum requisito usa e três colunas de estado na `match`. | Sem `created_at` e `updated_at` fora de `app_user`, sem `job.closed_at` e `job.close_reason`, sem `match.matched_at` e `match.profile_opened_by`; `match` com um único `status` de quatro valores. | DM-21 a DM-24 |
+
+As simplificações DM-18 a DM-24 não constavam da descrição da Issue `I102`. São coerentes com o modelo de classes do backend v02 (`I103`) e ficam sujeitas à aprovação na revisão e na auditoria desta Issue.
 
 ---
 
@@ -44,7 +60,7 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 | Sistema de gestão | PostgreSQL 18 (RI, secção 11.2). Em desenvolvimento corre em `localhost`, porta 6000 (RI, secção 5). |
 | Administração | João Coelho, administrador da base de dados de produção (RI, secção 14.2). |
 | Acesso | Apenas o backend acede à base de dados, através do Entity Framework Core (code-first, migrations) com o fornecedor Npgsql (RI, secção 11.2; arquitetura, secção 2). |
-| Ficheiros | Fotografias, logótipos e curriculum vitae ficam no sistema de ficheiros do servidor do backend. A base de dados guarda apenas o caminho de cada ficheiro (arquitetura, decisão AD-01). |
+| Ficheiros | Fotografias, logótipos e curriculum vitae ficam no sistema de ficheiros do servidor do backend. A base de dados guarda apenas o caminho de cada ficheiro, sem tabela de ficheiros (arquitetura, decisão AD-01, ratificada, e PA-01 na opção (a), escolhida na deliberação 3 da ata de 2026-10-16). |
 | Testes | Os testes de integração usam SQLite in-memory (RI, secções 5 e 11.2). As limitações dessa opção estão na secção 11. |
 | Dados | Apenas dados fictícios, criados pelos scripts de dados iniciais do backend; é proibida a cópia de dados reais (RI, secção 14.3; DA, secção 3). |
 | Codificação e fuso | Base de dados em UTF-8. Todas as datas e horas são `timestamptz`, guardadas em UTC. |
@@ -73,7 +89,7 @@ erDiagram
     VAGA }o--o{ BENEFICIO : "oferece"
     CANDIDATO ||--o{ RESPOSTA_A_VAGA : "dá"
     VAGA ||--o{ RESPOSTA_A_VAGA : "recebe"
-    RECRUTADOR |o--o{ RESPOSTA_A_VAGA : "abre o perfil e decide"
+    RECRUTADOR |o--o{ RESPOSTA_A_VAGA : "decide"
     RESPOSTA_A_VAGA ||--o{ MENSAGEM : "contém (conversa do match)"
     CONTA ||--o{ MENSAGEM : "envia"
     CONTA |o--o{ REGISTO_DE_OPERACAO : "realiza"
@@ -867,7 +883,7 @@ Os dados iniciais são criados por scripts do backend (RI, secção 14.3).
 | DM-10 | `job.first_published_at` separado de `job.published_at`. | RF096 conta as vagas publicadas pela primeira vez no período; `published_at` muda numa nova publicação (RF115). |
 | DM-11 | Preferências de procura opcionais: `max_distance_km` e `min_salary_expectation` sem valor predefinido, e listas vazias de regimes e tipos de contrato = sem restrição. | Nenhum requisito fixa valores iniciais e o RF003 não pede preferências no registo. Sem esta regra, um Candidato acabado de registar não veria nenhuma vaga (RF014). |
 | DM-12 | Comprimentos máximos técnicos onde a especificação não fixa limite: nomes até 150 caracteres (Empresa até 200), morada e correio eletrónico até 255, endereços e caminhos até 500, função da vaga até 150, designações das listas até 100. | Limites folgados para os dados de demonstração. Uma alteração a estes limites não altera nenhum requisito. |
-| DM-13 | Colunas de ficheiros com o caminho do ficheiro (`*_path`). | Arquitetura, decisão AD-01: os ficheiros ficam no sistema de ficheiros do servidor do backend. |
+| DM-13 | Colunas de ficheiros com o caminho do ficheiro (`*_path`), sem tabela de ficheiros. | Arquitetura, decisão AD-01: os ficheiros ficam no sistema de ficheiros do servidor do backend. A AD-01 foi ratificada e a opção (a) da PA-01 escolhida na deliberação 3 da ata da reunião de 2026-10-16 (`m3-20261016-reuniao-extraordinaria-ata-v01.pdf`), que atribuiu ao Executor da `I102` a confirmação de que o modelo não tem tabela de ficheiros: confirmado nas secções 5.2 e 6. |
 | DM-14 | Abertura do perfil guardada uma vez por resposta (`profile_opened_at`, primeira abertura). | RF118 regista a abertura do perfil por vaga; é a primeira abertura que habilita a decisão (RF063, RF064). |
 | DM-15 | Sem colunas para dados que nenhum requisito usa (por exemplo, tipo de hiperligação, desativação de competências ou benefícios, nome ou cargo do Recrutador, último início de sessão). | DA e especificação de requisitos: não guardar dados de funcionalidades não previstas. RF099 a RF102 só preveem acrescentar e alterar designações. |
 | DM-16 | Competências do Candidato em duas tabelas: `candidate_skill` (lista pré-definida, chave primária composta) e `candidate_custom_skill` (opção «Outro»). | Corrige a observação do docente sobre a relação Candidato–competência (`OF-M3-023`) e simplifica o modelo: a relação com a lista passa a N : M pura, sem chave estrangeira anulável nem restrição de exclusividade. A competência «Outro» não pertence à lista e só existe para o Candidato que a indicou (RF008, RF009). |
@@ -909,7 +925,7 @@ A decisão DM-07 (tabela `notification`) foi retirada na v02 com a funcionalidad
 | RF013 a RF023 (exploração de vagas e quota) | `job`, `company`, `location`, `job_skill`, `job_benefit`, `match`, `candidate.swipe_rights_remaining`, `candidate.next_swipe_available_at` |
 | RF024, RF025, RF067 (matches e contactos) | `match`, `company`, `app_user`, `candidate` |
 | RF026 a RF030, RF068 a RF075, RF108, RF109 (conversas) | `match` (colunas `conversation_*`), `message` |
-| RF031 a RF036, RF076 a RF082, RF110, RF111 (notificações) | Retirados com a F011 (PS e DA v03). Sem tabela: a informação é consultada nas áreas de cada aplicação. A numeração será revista na especificação de requisitos v02. |
+| RF031 a RF036, RF076 a RF082, RF110, RF111 (notificações) | Retirados com a F011 (PS e DA v04). Sem tabela: a informação é consultada nas áreas de cada aplicação. Na especificação de requisitos v02 os 15 requisitos ficam no estado «7 - Descontinuado» e os identificadores não são reutilizados (secção 1.3; deliberação 1 da ata de 2026-10-16). |
 | RF039, RF041 a RF049 (Empresa) | `company`, `recruiter` |
 | RF050 a RF059, RF114, RF115 (vagas) | `job`, `job_skill`, `job_benefit` |
 | RF060 a RF066, RF113, RF117, RF118 (decisão sobre Candidatos) | `match` |

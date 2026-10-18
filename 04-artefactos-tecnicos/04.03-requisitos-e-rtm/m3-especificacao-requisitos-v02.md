@@ -31,6 +31,7 @@
 | 5. Requisitos não funcionais | `I023` | João Borguem | Roberto Baptista | Miguel Santos |
 | 6. Restrições | A definir no Backlog Refinement | — | — | — |
 | Redução de âmbito (secções 1 a 5 e 7, versão v02) | `I100` | Miguel Santos | João Borguem | João Coelho |
+| 2.2. Termos complementares do domínio — termo «Operação reservada» (v02) | `I101` | João Borguem | Roberto Baptista | João Coelho |
 
 ### 1.2. Histórico de versões
 
@@ -41,6 +42,7 @@
 | v01 | 08 de outubro de 2026 | Issue `I089`: acrescento do ator, entre parênteses, aos títulos dos 25 requisitos cujo título se repetia (12 títulos), para coincidirem com os títulos da `m2-requirements-traceability-matrix-v01.xlsx` e da `m2-checklist-aprovacao-requisitos-v02.xlsx`. Os enunciados e os restantes campos de todos os requisitos não foram alterados. | Revisão e auditoria da Issue `I089`; aprovação formal a registar na ata do Sprint Review do Sprint S03 |
 | v02 | 16 de outubro de 2026 | Issue `I100`, redução de âmbito: retirada da funcionalidade `F011` (notificações) e descontinuação dos 15 requisitos que dela derivavam (`RF031` a `RF036`, `RF076` a `RF082`, `RF110` e `RF111`, secção 1.3); substituição da atualização em tempo real das mensagens (`F010`) pela consulta periódica ao servidor de 3 em 3 segundos, com nova redação dos requisitos `RF029` e `RF073` e do parâmetro `P17`, que fixa em 5 segundos o atraso máximo de apresentação (deliberação 1 da ata de 2026-10-16); remoção de `F011` dos parâmetros `P11`, `P18`, `P19` e `P21` e dos requisitos não funcionais `RNF001`, `RNF006`, `RNF011`, `RNF012`, `RNF013` e `RNF014`; remoção dos termos «Área de notificações» e «Notificação» e acrescento do termo «Consulta periódica» (secção 2.2); atualização da cobertura funcional (secção 7), que passa a 103 requisitos funcionais. Os identificadores dos requisitos descontinuados não são reutilizados. Os restantes requisitos não foram alterados. | Revisão e auditoria da Issue `I100`; aprovação formal na reunião de 2026-10-16 (deliberação 1 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`) |
 | v02 | 17 de outubro de 2026 | Correção da revisão da Issue `I100` (D03, D04, M03): referências à Proposta de Sistema e à Declaração de Âmbito corrigidas para a v04 e ao e-mail de homologação para `m3-email-homologacao-ps-da-cca-v02.pdf`; secção 1.3 com o estado «7 - Descontinuado» e a decisão que retirou cada requisito; condição de consulta periódica dos requisitos `RF029` e `RF073` uniformizada com o parâmetro `P17` («enquanto a conversa ou a lista de conversas estiver aberta»). Os restantes requisitos não foram alterados. | Revisão e auditoria da Issue `I100` |
+| v02 | 18 de outubro de 2026 | Issue `I101`: correção do defeito substancial PA-04 / PC-01 (observação do docente), classificado na deliberação 5 do Backlog Refinement de 14-10-2026 e registado como não conformidade NC-002. A consulta da lista pré-definida de localidades passa a operação não reservada (secção 2.2, termo «Operação reservada»), para que o Candidato a possa consultar na aplicação móvel antes do registo (RF003). Requisitos afetados pelo significado do termo, reavaliados nos onze critérios sem alteração de texto: `RF003` e `RNF004`. Os restantes termos, parâmetros e requisitos não foram alterados por esta Issue. | Deliberação 2 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (reunião formal de 16-10-2026, 20:30) |
 
 ### 1.3. Requisitos descontinuados
 
@@ -115,7 +117,7 @@ Todos os requisitos derivam das funcionalidades `F001` a `F010` da Proposta de S
 | Dados de demonstração | Dados fictícios carregados pelos scripts de dados iniciais, com os volumes mínimos fixados no parâmetro `P18`. |
 | Interface do servidor | Conjunto das operações que o Backend disponibiliza à aplicação móvel e à área de gestão web. |
 | Pedido direto | Pedido enviado à interface do servidor por um meio diferente da aplicação móvel e da área de gestão web, designadamente pela coleção de testes da interface do servidor. |
-| Operação reservada | Operação da interface do servidor que exige sessão iniciada. São operações não reservadas apenas o registo de Candidato, a criação de conta de Recrutador e o início de sessão. |
+| Operação reservada | Operação da interface do servidor que exige sessão iniciada. São operações não reservadas apenas o registo de Candidato, a criação de conta de Recrutador, o início de sessão e a consulta da lista pré-definida de localidades. |
 | Credencial de sessão | Elemento emitido pelo sistema no início de sessão e apresentado em cada pedido seguinte para identificar o utilizador e o tipo de conta. |
 | Tempo de resposta | Intervalo entre o envio de um pedido à interface do servidor e a receção da resposta completa. |
 | Interação | Um toque, um clique ou um gesto do utilizador sobre a aplicação móvel ou a área de gestão web. |

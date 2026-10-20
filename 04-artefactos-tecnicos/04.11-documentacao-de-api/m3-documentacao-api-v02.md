@@ -17,12 +17,12 @@
 | Curso | LEI — Licenciatura em Engenharia Informática |
 | Turma | LEI3T2 |
 | Versão do documento | v02 |
-| Módulo | Backend (`katch-backend`), API REST ASP.NET Core 10 em C# 14 e ligação persistente ASP.NET Core SignalR |
-| Issue | `I092` — Elaborar a documentação da API (v01); `I101` — Corrigir a lista de localidades sem sessão (v02) |
-| Executor / Revisor / Auditor | `I092`: João Borguem / João Coelho / Miguel Santos; `I101`: João Borguem / Roberto Baptista / João Coelho |
-| Documentos de origem | `m2-modelo-classes-backend-v01.md` (secções 6 e 7, `I036`), `m2-documentacao-arquitetura-v01.md` (secções 2 e 3, `I033` e `I034`), `m2-especificacao-requisitos-v01.md` (RF001 a RF118, RNF001 a RNF018, parâmetros P01 a P21; `I020` a `I023`), `m3-especificacao-requisitos-v02.md` (secção 2.2, termo «Operação reservada»; `I101`), `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (deliberação 2: aprovação da secção 2.2), `m2-especificacoes-casos-uso-v01.md`, `m2-modelo-de-dados-katch-v01.md` (`I035`), `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m1-declaracao-ambito-v02.pdf`, `m2-backlog-projeto-v03.xlsx` (Issue `I092`) |
+| Módulo | Backend (`katch-backend`), API REST ASP.NET Core 10 em C# 14, com consulta periódica das conversas (sem ligação persistente) |
+| Issue | `I092` — Elaborar a documentação da API (v01); `I101` — Corrigir a lista de localidades sem sessão (v02); `I104` — Atualizar o contrato da API v02: DTOs e erros |
+| Executor / Revisor / Auditor | v01 (`I092`): João Borguem / João Coelho / Miguel Santos; v02 (`I101`): João Borguem / Roberto Baptista / João Coelho; v02 (`I104`): Miguel Santos / João Coelho / João Borguem |
+| Documentos de origem | `m3-modelo-classes-backend-v02.md` (secções 6 e 7, `I103`), `m3-documentacao-arquitetura-v02.md` (secções 2 e 3, `I100`), `m3-especificacao-requisitos-v02.md` (103 requisitos funcionais, RNF001 a RNF018, parâmetros P01 a P21; `I100`; secção 2.2, termo «Operação reservada»; `I101`), `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (deliberações 1 a 4), `m3-especificacoes-casos-uso-v02.md` (`I100`), `m3-modelo-de-dados-katch-v02.md` (`I102`), `m2-diagrama-estados-interesse-match-v01.md` (`I086`), `m2-documentacao-api-v01.md` (`I092`), `m3-declaracao-ambito-v04.pdf`, Backlog de Projeto aprovado no Backlog Refinement de 2026-10-14 (Issue `I104`) |
 
-O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.11-documentacao-de-api` e corresponde à linha `OF-M2-011` da Checklist de Controlo de Artefactos. Fixa o contrato entre o backend e os dois clientes (aplicação móvel e área de gestão web) antes da implementação em `m3`: rotas, autenticação, autorização por tipo de conta, parâmetros, formatos dos DTOs, respostas, códigos de estado, erros e eventos da ligação persistente.
+O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.11-documentacao-de-api` e corresponde às linhas `OF-M2-011` (v1) e `OF-M3-028` (v2) da Checklist de Controlo de Artefactos. Fixa o contrato entre o backend e os dois clientes (aplicação móvel e área de gestão web) antes da implementação em `m3`: rotas, autenticação, autorização por tipo de conta, parâmetros, formatos dos DTOs, respostas, códigos de estado, erros e consulta periódica das conversas.
 
 ### 1.1. Histórico de versões
 
@@ -34,6 +34,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | v01 | 2026-10-09 | Diagrama da secção 7.4 corrigido; ponto em aberto PA-10 (obtenção do CV pelo próprio Candidato); Empresa aprovada exigida na lista de matches do Recrutador; regra do cabeçalho `Location` nas respostas `201`; consultas `GET` com efeito identificadas (secção 2.5, DAPI-05); prevalência sobre o Swagger registada como DAPI-11; cronologia única dos dados fictícios dos exemplos; tempo em falta na mensagem do ERR-31; ERR-35 também na obtenção do CV. | `I092` |
 | v01 | 2026-10-09 | Classificação de PA-07 a PA-09 como propostas de melhoria (incoerência com o protótipo da `I040`, ecrãs W16, W21 e W17); políticas das consultas propostas na PA-03 (`Recruiter` para os dados de registo, `ApprovedCompany` para a página). | `I092` |
 | v02 | 2026-10-17 | Resolução da PA-04 e da PC-01 (observação do docente), em coerência com a especificação de requisitos v02 (secção 2.2, alteração aprovada na deliberação 2 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`): `GET /api/reference-lists/locations` passa a anónimo (3.3, 5, 6.1.1, 6.13.1); rastreabilidade de RF003 e RNF004 atualizada (9.1, 9.2); nova DAPI-12; PA-04 passa para os pontos resolvidos (11.3). Referências à v01 corrigidas em 2.5 e 11.1. A autorização anónima de `ListLocations` no modelo de classes do backend é integrada na v02 produzida pela `I103` (mesma deliberação). As alterações da Issue `I104` são integradas nesta mesma versão v02 e acrescentam a sua própria linha. A v01 fica conservada no arquivo. | `I101` |
+| v02 | 2026-10-18 | Atualização do contrato para a v02. Redução de âmbito (Declaração de Âmbito v04; modelo de classes v02 e especificação de requisitos v02): retirados os 2 endpoints e o controller das notificações, os 2 hubs e os 3 eventos da ligação persistente, a enumeração `NotificationType`, os DTOs `NotificationDto` e `NotificationListDto` e as referências aos requisitos descontinuados (`RF031` a `RF036`, `RF076` a `RF082`, `RF110` e `RF111`); as conversas passam a consulta periódica (secção 7), com o parâmetro `after` em 6.8.2. Alinhamento com o modelo de classes v02: acrescentados `GET /api/files/{kind}/{fileName}` (6.9), o CV do próprio Candidato (6.2.9), as competências «Outro» em operações próprias (6.2.10 e 6.2.11, `CustomSkillDto` e `AddCustomSkillRequest`; `AddSkillRequest` só com `skillId`) e os dados de registo e a página da própria Empresa (6.4.8 e 6.4.9). Alinhamento com o modelo de dados v02: o contrato externo mantém-se nos enumerados que mudaram, que são internos; `matchedAt` passa a ser calculado a partir de `recruiter_action_at` e `lastMessageAt` das conversas passa a ser calculado; retirada `EntityType` das enumerações internas; regra das vagas não expiradas no filtro de 6.3.1 (DM-17). Melhorias de contrato da `I104`: `ApiErrorDto` com `code` e `blockedUntil`; `WaitingCandidateDto` com `desiredRole` e `locationName`; `MatchDto` com `jobStatus`, `locationName` e `logoUrl`; `CandidateFullProfileDto` com `profileOpenedAt`; `ConversationSummaryDto` com `closedBy`; `QuotaDto` com `total`. Pontos em aberto: resolvidos PA-01, PA-03, PA-05, PA-07, PA-08, PA-09 e PA-10, e PA-02 e PA-06 (SignalR) deixam de se aplicar; PA-01 resolvido (opção (a) e ratificação da AD-01, deliberação 3 da ata de 2026-10-16) e PA-04 resolvido pela `I101` (linha anterior). Consulta periódica de 3 em 3 segundos, com o P17 em 5 segundos (deliberação 1 da mesma ata). Rastreabilidade revista para os 103 requisitos funcionais da especificação v02. | `I104` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -43,9 +44,9 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 
 ### 2.1. Objeto e fontes
 
-A API documentada é a interface do servidor (especificação de requisitos, secção 2.2): o conjunto das operações que o backend disponibiliza à aplicação móvel e à área de gestão web. Cada endpoint corresponde a uma operação de um controller do modelo de classes (secção 6) e cada evento a um hub (secção 6.1). Os formatos são os DTOs do modelo de classes (secção 7). Não há endpoints fora da Declaração de Âmbito v02: o sistema não tem integração com serviços externos, nem envio de e-mail, SMS ou notificações nativas (arquitetura, secção 2.5).
+A API documentada é a interface do servidor (especificação de requisitos, secção 2.2): o conjunto das operações que o backend disponibiliza à aplicação móvel e à área de gestão web. Cada endpoint corresponde a uma operação de um controller do modelo de classes v02 (secção 6). Os formatos são os DTOs do modelo de classes (secção 7). Não há endpoints fora da Declaração de Âmbito v04: o sistema não tem integração com serviços externos, nem envio de e-mail ou SMS, nem notificações (funcionalidade F011 retirada pela `I100`), nem comunicação em tempo real: as conversas são atualizadas por consulta periódica (secção 7).
 
-O contrato documentado é exatamente o do modelo de classes v01 e da especificação de requisitos v01, nos aspetos que estes já fixam (operações, DTOs, hubs, eventos e autorização). Na v02, a autorização de `GET /api/reference-lists/locations` segue a especificação de requisitos v02 (secção 2.2), nos termos da DAPI-12. Este documento acrescenta apenas o que o modelo de classes remete para a documentação da API (secção 11 do modelo): rotas, métodos HTTP, códigos de estado, mensagens de erro, cabeçalhos e exemplos.
+O contrato documentado é o do modelo de classes v02 e da especificação de requisitos v02, nos aspetos que estes já fixam (operações, DTOs e autorização), com as melhorias de contrato da `I104` (secção 11.3), que o modelo de classes v02 deixou para esta versão (secção 11 do modelo). A autorização anónima de `GET /api/reference-lists/locations` segue a especificação de requisitos v02 (secção 2.2), nos termos da DAPI-12. Este documento acrescenta apenas o que o modelo de classes remete para a documentação da API (secção 11 do modelo): rotas, métodos HTTP, códigos de estado, mensagens de erro, cabeçalhos e exemplos.
 
 As lacunas encontradas no modelo de classes e na especificação de requisitos durante a elaboração deste documento não foram resolvidas aqui, para não alterar artefactos aprovados sem decisão formal. Ficam registadas na secção 11, com o impacto e a proposta de correção, para tratamento numa nova versão desses artefactos e, depois, deste documento.
 
@@ -58,7 +59,7 @@ A documentação interativa gerada pelo Swashbuckle (`/swagger`) é derivada do 
 | Desenvolvimento | `https://localhost:<porta>` | Porta fixada no `launchSettings.json` do `katch-backend` e indicada no manual de instalação (`04.17`). |
 | Ambiente de demonstração | `https://<endereço do servidor do grupo>:<porta>` | Rede local do grupo (especificação de requisitos, secção 2.2). |
 
-Todas as rotas da API REST começam por `/api`; as dos hubs começam por `/hubs`. A documentação interativa está em `/swagger`, disponível apenas em desenvolvimento e no ambiente de demonstração. Só é aceite HTTPS; os pedidos HTTP são redirecionados.
+Todas as rotas da API REST começam por `/api`. A documentação interativa está em `/swagger`, disponível apenas em desenvolvimento e no ambiente de demonstração. Só é aceite HTTPS; os pedidos HTTP são redirecionados.
 
 ### 2.3. Formato dos dados
 
@@ -89,9 +90,8 @@ Todas as rotas da API REST começam por `/api`; as dos hubs começam por `/hubs`
 | `JobStatus` | `UNPUBLISHED`, `PUBLISHED`, `SUSPENDED`, `CLOSED` | Não publicada, publicada, suspensa, encerrada |
 | `ConversationStatus` | `OPEN`, `CLOSED` | Aberta, modo apenas de consulta |
 | `ConversationCloseReason` | `CLOSED_BY_PARTY`, `ACCOUNT_BLOCKED_OR_SUSPENDED`, `COMPANY_SUSPENDED` | Encerrada por uma das partes; conta bloqueada ou suspensa; Empresa suspensa (RF075) |
-| `NotificationType` | `MATCH_CONFIRMED`, `NEW_MESSAGE`, `NEW_INTEREST`, `COMPANY_APPROVED`, `COMPANY_REJECTED`, `INTEREST_QUOTA_RESTORED` | Tipos de notificação (secção 7.3) |
 
-As enumerações internas (`CandidateDecision`, `RecruiterDecision`, `MatchStatus`, `JobCloseReason`, `EntityType`, `OperationType`, `FileKind`, `ClientApp`) não aparecem em nenhum DTO e não fazem parte do contrato.
+A enumeração `FileKind` aparece só na rota de `GET /api/files` (secção 6.9), com os valores `PROFILE_PHOTO`, `COMPANY_LOGO`, `COMPANY_PHOTO` e `JOB_PHOTO` (o valor `CURRICULUM_VITAE` existe no modelo, mas o CV nunca é servido por essa rota). As enumerações internas (`MatchStatus`, `OperationType`, `ClientApp`) não aparecem em nenhum DTO e não fazem parte do contrato.
 
 ### 2.5. Rotas e métodos
 
@@ -111,7 +111,7 @@ As enumerações internas (`CandidateDecision`, `RecruiterDecision`, `MatchStatu
 | Tipo de ficheiro | Formatos | Dimensão máxima | Endpoint | Requisitos |
 | --- | --- | --- | --- | --- |
 | Fotografia de perfil | JPEG, PNG | 5 MB | `PUT /api/candidate/profile/photo` | RF010, P01 |
-| Curriculum vitae | PDF | 5 MB | `PUT /api/candidate/profile/cv` | RF011, P02 |
+| Curriculum vitae | PDF | 5 MB | `PUT /api/candidate/profile/cv` (obtenção: `GET`, 6.2.9) | RF011, P02 |
 | Logótipo da Empresa | JPEG, PNG | 2 MB | `PUT /api/recruiter/company/logo` | RF047, P01 |
 | Fotografia da galeria | JPEG, PNG | 5 MB; máximo 6 | `POST /api/recruiter/company/photos` | RF048, P01, P13 |
 | Fotografia da vaga | JPEG, PNG | 5 MB; máximo 5 por vaga | `POST /api/recruiter/jobs/{jobId}/photos` | RF052, P01, P13 |
@@ -120,8 +120,8 @@ As enumerações internas (`CandidateDecision`, `RecruiterDecision`, `MatchStatu
 - O `FileValidator` verifica a assinatura do conteúdo (os primeiros bytes), a extensão e a dimensão. Um ficheiro com extensão `.png` e conteúdo de outro formato é rejeitado (RNF016).
 - O limite do pedido no Kestrel é de 6 MB nestes endpoints, para que um ficheiro acima do limite do P01 ou do P02 chegue ao validador e receba `400` com o motivo. Acima de 6 MB, o servidor devolve `413` (ERR-12).
 - Os carregamentos que substituem um ficheiro único (`PUT`) devolvem `204 No Content`. Os que acrescentam a uma galeria (`POST`) devolvem `201 Created`. Em ambos os casos, exceto no CV, o cabeçalho `Location` traz o URL do ficheiro.
-- O caminho no sistema de ficheiros nunca é enviado ao cliente. Os DTOs trazem URLs da API que servem o ficheiro depois de verificar a autorização (modelo de classes, secção 7.2). O modelo de classes v01 não tem a operação que serve esses URLs (secção 11, PA-01), pelo que o formato do URL não é fixado neste documento e os exemplos usam o marcador `<URL do ficheiro>`.
-- O CV nunca tem URL: o Candidato vê `hasCv` e o Recrutador obtém-no em `GET /api/recruiter/interests/{matchId}/cv` (RNF007). O RNF007 admite também o próprio Candidato, mas o modelo de classes v01 não tem operação para isso (secção 11, PA-10).
+- O caminho no sistema de ficheiros nunca é enviado ao cliente. Os DTOs trazem URLs da API que servem o ficheiro depois de verificar a autorização (modelo de classes, secção 7.2). Esses URLs têm a forma `/api/files/{kind}/{fileName}` e são servidos por `GET /api/files/{kind}/{fileName}` (secção 6.9); nos exemplos, o marcador `<URL do ficheiro>` representa um desses URLs.
+- O CV nunca tem URL: o Candidato vê `hasCv` e obtém o próprio CV em `GET /api/candidate/profile/cv` (6.2.9); o Recrutador obtém-no em `GET /api/recruiter/interests/{matchId}/cv` (6.6.3) (RNF007).
 
 ---
 
@@ -162,14 +162,14 @@ Um pedido sem o cabeçalho, ou com outro valor, é rejeitado com `400`. Uma cont
 | Política | Regra | Onde se aplica |
 | --- | --- | --- |
 | Anónimo | Sem credencial. | Registo de Candidato, criação de conta de Recrutador, início de sessão e consulta da lista de localidades (especificação de requisitos v02, secção 2.2: operações não reservadas). |
-| Qualquer conta | Credencial válida, conta ativa. | Fim de sessão, alteração da palavra-passe, consulta das listas pré-definidas de competências e de benefícios. |
+| Qualquer conta | Credencial válida, conta ativa. | Fim de sessão, alteração da palavra-passe, consulta das listas pré-definidas de competências e de benefícios, ficheiros servidos em `/api/files` (autorização por tipo de ficheiro, 6.9). |
 | `Candidate` | `role = CANDIDATE`. | `/api/candidate/**` |
 | `Recruiter` | `role = RECRUITER`. | `/api/recruiter/company/**` |
-| `ApprovedCompany` | `Recruiter` e Empresa do Recrutador no estado `APPROVED`. | `/api/recruiter/jobs/**`, `/api/recruiter/interests/**` (RF039); página, logótipo e galeria da Empresa (modelo de classes, secção 6: «página e logótipo também exigem Empresa aprovada»; a galeria faz parte da página, RF048); alteração dos dados de registo (RF049, só sobre a Empresa aprovada); `GET /api/matches` quando pedido pelo Recrutador (RF039, RF067) |
-| `CandidateOrRecruiter` | `role` igual a `CANDIDATE` ou `RECRUITER`; o Administrador é rejeitado. | `/api/matches`, `/api/conversations/**` (RF103), `/api/notifications/**`, `/hubs/**` |
+| `ApprovedCompany` | `Recruiter` e Empresa do Recrutador no estado `APPROVED`. | `/api/recruiter/jobs/**`, `/api/recruiter/interests/**` (RF039); consulta e alteração da página, logótipo e galeria da Empresa (modelo de classes, secção 6: a galeria faz parte da página, RF048); a consulta dos dados de registo da própria Empresa (6.4.8) exige só a política `Recruiter`; alteração dos dados de registo (RF049, só sobre a Empresa aprovada); `GET /api/matches` quando pedido pelo Recrutador (RF039, RF067) |
+| `CandidateOrRecruiter` | `role` igual a `CANDIDATE` ou `RECRUITER`; o Administrador é rejeitado. | `/api/matches`, `/api/conversations/**` (RF103) |
 | `Admin` | `role = ADMIN`. | `/api/admin/**`, escrita nas listas pré-definidas (RF104) |
 
-Além da política, os serviços verificam a titularidade do elemento: a vaga é da Empresa do Recrutador (RF059), o match é do Candidato ou de uma vaga da Empresa do Recrutador, a notificação é do utilizador. A falha de titularidade devolve `403` (ERR-08), nos termos do UC12 (exceção E3) e do RNF006.
+Além da política, os serviços verificam a titularidade do elemento: a vaga é da Empresa do Recrutador (RF059), o match é do Candidato ou de uma vaga da Empresa do Recrutador. A falha de titularidade devolve `403` (ERR-08), nos termos do UC12 (exceção E3) e do RNF006.
 
 ### 3.4. Verificação do estado em cada pedido
 
@@ -196,18 +196,22 @@ Todas as respostas de erro, de todos os controllers, usam `ApiErrorDto` (modelo 
 
 | Campo | Tipo | Conteúdo |
 | --- | --- | --- |
+| `code` | texto | Identificador do erro no catálogo da secção 4.3 (`ERR-01` a `ERR-50`). Permite aos clientes distinguir situações com o mesmo código HTTP sem depender do texto da mensagem. |
 | `message` | texto | Motivo da rejeição, em português, apresentável ao utilizador. |
 | `fields` | `FieldErrorDto[]` | Um elemento por campo em causa (RF004, RF042). Lista vazia quando o erro não é de um campo. |
 | `fields[].field` | texto | Nome JSON do campo, em camelCase; nos elementos de listas, com o índice: `urls[1]`, `skillIds[0]`. Nos carregamentos, `file`. |
 | `fields[].reason` | texto | Motivo para esse campo. |
+| `blockedUntil` | data e hora | Só no `ERR-31`: instante em que termina o período de bloqueio da quota (RF020), para o cliente calcular o tempo em falta sem novo pedido. `null` nos restantes erros. |
 
 ```json
 {
+  "code": "ERR-10",
   "message": "Os dados enviados não cumprem a validação automática.",
   "fields": [
     { "field": "email", "reason": "O endereço de correio eletrónico já está registado." },
     { "field": "phoneNumber", "reason": "O contacto telefónico tem de ter 9 algarismos." }
-  ]
+  ],
+  "blockedUntil": null
 }
 ```
 
@@ -233,7 +237,7 @@ A unicidade de correio eletrónico, NIF e designações é tratada como `400` co
 
 ### 4.3. Catálogo de erros
 
-As mensagens são fixas, para que os clientes e a collection Postman de `m3` as possam verificar. Os valores entre chavetas são preenchidos pelo serviço.
+As mensagens são fixas, para que os clientes e a collection Postman de `m3` as possam verificar. Os valores entre chavetas são preenchidos pelo serviço. O identificador da coluna «ID» é o valor do campo `code` da resposta.
 
 | ID | Código | `message` | Situação | Requisitos |
 | --- | --- | --- | --- | --- |
@@ -249,9 +253,9 @@ As mensagens são fixas, para que os clientes e a collection Postman de `m3` as 
 | ERR-11 | 400 | O ficheiro não é aceite. | Formato, conteúdo ou dimensão fora do P01 ou do P02; `fields[0].field = "file"`. | RF010, RF011, RF047, RF048, RF052, RNF016 |
 | ERR-12 | 413 | O pedido excede a dimensão máxima permitida. | Pedido acima do limite do Kestrel. | P01, P02 |
 | ERR-13 | 415 | O tipo de conteúdo do pedido não é suportado. | `Content-Type` errado. | — |
-| ERR-20 | 404 | O elemento pedido não existe ou não está disponível. | Identificador inexistente, vaga eliminada, vaga ou Empresa não visível ao Candidato. | RF014 |
+| ERR-20 | 404 | O elemento pedido não existe ou não está disponível. | Identificador inexistente, vaga eliminada, vaga ou Empresa não visível ao Candidato; ficheiro inexistente ou sem autorização (6.9); CV inexistente (6.2.9); Empresa sem registo (6.4.8, 6.4.9). | RF014 |
 | ERR-30 | 409 | A operação não é permitida no estado atual: {estado}. | Transição de estado inválida (vaga, Empresa, conta). | RF053 a RF056, RF087, RF090, RF093 a RF095, RF115, RF116 |
-| ERR-31 | 409 | Esgotou a quota de interesses. Pode voltar a manifestar interesse dentro de {h} h {min} min. | Interesse no período de bloqueio. A mensagem traz o tempo em falta pedido pelo RF020; o instante exato está em `QuotaDto.blockedUntil` (6.3.6). | RF020, P11 |
+| ERR-31 | 409 | Esgotou a quota de interesses. Pode voltar a manifestar interesse dentro de {h} h {min} min. | Interesse no período de bloqueio. A mensagem traz o tempo em falta pedido pelo RF020; o instante exato está em `blockedUntil`, na própria resposta de erro, e em `QuotaDto.blockedUntil` (6.3.6). | RF020, P11 |
 | ERR-32 | 409 | Já respondeu a esta vaga. | Segunda resposta do Candidato à mesma vaga. | RF019 |
 | ERR-33 | 409 | A vaga já não está disponível. | A vaga deixou de cumprir o RF014 entre a apresentação do cartão e a ação. | RF014; UC05, E3 |
 | ERR-34 | 409 | Abra o perfil completo do Candidato antes de registar a decisão. | Aceitação ou recusa sem abertura do perfil registada. | RF063, RF064; UC12, E1 |
@@ -279,8 +283,9 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | `currentPassword` | A palavra-passe atual está errada. | RF002, RF040, RF084 |
 | `acceptTerms` | É obrigatório aceitar as condições de utilização. | RF003, RF037 |
 | `locationId`, `skillIds[i]`, `benefitIds[i]`, `skillId` | O valor não pertence à lista pré-definida. | RF003, RF008, RF041, RF050 |
+| `after` | A data e hora não têm o formato ISO 8601. | RF029, RF073 |
 | `maxDistanceKm` | A distância máxima tem de ser um número inteiro entre 1 e 500. | P06 |
-| `customLabel` | A competência tem de ter entre 2 e 40 caracteres e conter apenas letras, algarismos, espaços e os símbolos + # . - | P07 |
+| `label` | A competência tem de ter entre 2 e 40 caracteres e conter apenas letras, algarismos, espaços e os símbolos + # . - | P07 |
 | `experienceSummary`, `description` | O texto não pode exceder 1000 caracteres. | P08 |
 | `urls`, `urls[i]`, `website` | O endereço tem de começar por http:// ou https://. / São permitidas no máximo 3 hiperligações. | P10 |
 | `minSalary`, `maxSalary` | O valor tem de ser um número positivo em euros. / O valor mínimo não pode ser superior ao valor máximo. | RF051 |
@@ -303,16 +308,19 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | 6.2.1 | `GET` | `/api/candidate/profile` | `CandidateProfileController.Get` | `Candidate` | RF006 a RF012 |
 | 6.2.2 | `PUT` | `/api/candidate/profile` | `CandidateProfileController.Update` | `Candidate` | RF006 |
 | 6.2.3 | `PUT` | `/api/candidate/profile/preferences` | `CandidateProfileController.UpdatePreferences` | `Candidate` | RF007, RF023 |
-| 6.2.4 | `POST` | `/api/candidate/profile/skills` | `CandidateProfileController.AddSkill` | `Candidate` | RF008, RF009 |
-| 6.2.5 | `DELETE` | `/api/candidate/profile/skills/{candidateSkillId}` | `CandidateProfileController.RemoveSkill` | `Candidate` | RF008, RF009 |
+| 6.2.4 | `POST` | `/api/candidate/profile/skills` | `CandidateProfileController.AddSkill` | `Candidate` | RF008 |
+| 6.2.5 | `DELETE` | `/api/candidate/profile/skills/{skillId}` | `CandidateProfileController.RemoveSkill` | `Candidate` | RF008 |
 | 6.2.6 | `PUT` | `/api/candidate/profile/links` | `CandidateProfileController.SetLinks` | `Candidate` | RF012 |
 | 6.2.7 | `PUT` | `/api/candidate/profile/photo` | `CandidateProfileController.UploadPhoto` | `Candidate` | RF010 |
 | 6.2.8 | `PUT` | `/api/candidate/profile/cv` | `CandidateProfileController.UploadCv` | `Candidate` | RF011 |
+| 6.2.9 | `GET` | `/api/candidate/profile/cv` | `CandidateProfileController.GetCv` | `Candidate` | RF011, RNF007 |
+| 6.2.10 | `POST` | `/api/candidate/profile/custom-skills` | `CandidateProfileController.AddCustomSkill` | `Candidate` | RF009 |
+| 6.2.11 | `DELETE` | `/api/candidate/profile/custom-skills/{customSkillId}` | `CandidateProfileController.RemoveCustomSkill` | `Candidate` | RF009 |
 | 6.3.1 | `GET` | `/api/candidate/jobs/next` | `JobExplorationController.GetNextCard` | `Candidate` | RF013 a RF015 |
 | 6.3.2 | `GET` | `/api/candidate/jobs/{jobId}` | `JobExplorationController.GetDetail` | `Candidate` | RF016 |
 | 6.3.3 | `GET` | `/api/candidate/jobs/companies/{companyId}` | `JobExplorationController.GetCompanyPage` | `Candidate` | RF017 |
 | 6.3.4 | `POST` | `/api/candidate/jobs/{jobId}/decline` | `JobExplorationController.Decline` | `Candidate` | RF018, RF112 |
-| 6.3.5 | `POST` | `/api/candidate/jobs/{jobId}/interest` | `JobExplorationController.ExpressInterest` | `Candidate` | RF019, RF020, RF076, RF113 |
+| 6.3.5 | `POST` | `/api/candidate/jobs/{jobId}/interest` | `JobExplorationController.ExpressInterest` | `Candidate` | RF019, RF020, RF113 |
 | 6.3.6 | `GET` | `/api/candidate/jobs/quota` | `JobExplorationController.GetQuota` | `Candidate` | RF020 a RF022 |
 | 6.4.1 | `POST` | `/api/recruiter/company` | `CompanyController.Register` | `Recruiter` | RF041 a RF043 |
 | 6.4.2 | `POST` | `/api/recruiter/company/resubmission` | `CompanyController.Resubmit` | `Recruiter` | RF045 |
@@ -321,6 +329,8 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | 6.4.5 | `PUT` | `/api/recruiter/company/page` | `CompanyController.UpdatePage` | `ApprovedCompany` | RF046 |
 | 6.4.6 | `PUT` | `/api/recruiter/company/logo` | `CompanyController.UploadLogo` | `ApprovedCompany` | RF047 |
 | 6.4.7 | `POST` | `/api/recruiter/company/photos` | `CompanyController.AddGalleryPhoto` | `ApprovedCompany` | RF048 |
+| 6.4.8 | `GET` | `/api/recruiter/company` | `CompanyController.GetRegistration` | `Recruiter` | RF044, RF045, RF049 |
+| 6.4.9 | `GET` | `/api/recruiter/company/page` | `CompanyController.GetPage` | `ApprovedCompany` | RF046 a RF048 |
 | 6.5.1 | `GET` | `/api/recruiter/jobs` | `JobsController.List` | `ApprovedCompany` | RF059, RF060 |
 | 6.5.2 | `POST` | `/api/recruiter/jobs` | `JobsController.Create` | `ApprovedCompany` | RF050, RF051 |
 | 6.5.3 | `PUT` | `/api/recruiter/jobs/{jobId}` | `JobsController.Update` | `ApprovedCompany` | RF054, RF051, RF059 |
@@ -333,15 +343,14 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | 6.6.1 | `GET` | `/api/recruiter/jobs/{jobId}/waiting-candidates` | `CandidateEvaluationController.ListWaiting` | `ApprovedCompany` | RF060, RF113 |
 | 6.6.2 | `GET` | `/api/recruiter/interests/{matchId}/profile` | `CandidateEvaluationController.OpenProfile` | `ApprovedCompany` | RF061, RF062, RF118 |
 | 6.6.3 | `GET` | `/api/recruiter/interests/{matchId}/cv` | `CandidateEvaluationController.GetCv` | `ApprovedCompany` | RF061, RNF007 |
-| 6.6.4 | `POST` | `/api/recruiter/interests/{matchId}/accept` | `CandidateEvaluationController.Accept` | `ApprovedCompany` | RF063, RF065, RF066, RF068, RF031, RF077, RF117 |
+| 6.6.4 | `POST` | `/api/recruiter/interests/{matchId}/accept` | `CandidateEvaluationController.Accept` | `ApprovedCompany` | RF063, RF065, RF066, RF068, RF117 |
 | 6.6.5 | `POST` | `/api/recruiter/interests/{matchId}/reject` | `CandidateEvaluationController.Reject` | `ApprovedCompany` | RF064, RF065, RF117 |
 | 6.7.1 | `GET` | `/api/matches` | `MatchesController.List` | `CandidateOrRecruiter`; Recrutador com `ApprovedCompany` | RF024, RF025, RF067, RF039 |
 | 6.8.1 | `GET` | `/api/conversations` | `ConversationsController.List` | `CandidateOrRecruiter` | RF027, RF071 |
-| 6.8.2 | `GET` | `/api/conversations/{matchId}/messages` | `ConversationsController.Open` | `CandidateOrRecruiter` | RF028, RF072, RF108, RF109 |
-| 6.8.3 | `POST` | `/api/conversations/{matchId}/messages` | `ConversationsController.Send` | `CandidateOrRecruiter` | RF026, RF069, RF070, RF032, RF078 |
+| 6.8.2 | `GET` | `/api/conversations/{matchId}/messages` | `ConversationsController.Open` | `CandidateOrRecruiter` | RF028, RF029, RF072, RF073, RF108, RF109 |
+| 6.8.3 | `POST` | `/api/conversations/{matchId}/messages` | `ConversationsController.Send` | `CandidateOrRecruiter` | RF026, RF069, RF070 |
 | 6.8.4 | `POST` | `/api/conversations/{matchId}/close` | `ConversationsController.Close` | `CandidateOrRecruiter` | RF030, RF074 |
-| 6.9.1 | `GET` | `/api/notifications` | `NotificationsController.List` | `CandidateOrRecruiter` | RF034, RF036, RF080, RF082 |
-| 6.9.2 | `POST` | `/api/notifications/{notificationId}/read` | `NotificationsController.MarkRead` | `CandidateOrRecruiter` | RF035, RF081 |
+| 6.9.1 | `GET` | `/api/files/{kind}/{fileName}` | `FilesController.Get` | Qualquer conta | RF010, RF013, RF017, RF047, RF048, RF052, RF061 |
 | 6.10.1 | `GET` | `/api/admin/accounts` | `AdminAccountsController.ListAccounts` | `Admin` | RF085 |
 | 6.10.2 | `GET` | `/api/admin/accounts/candidates` | `AdminAccountsController.ListCandidates` | `Admin` | RF088 |
 | 6.10.3 | `POST` | `/api/admin/accounts/{userId}/block` | `AdminAccountsController.Block` | `Admin` | RF086, RF075, RF112 |
@@ -349,8 +358,8 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | 6.10.5 | `POST` | `/api/admin/accounts/{userId}/reactivate` | `AdminAccountsController.Reactivate` | `Admin` | RF087, RF090, RF112 |
 | 6.11.1 | `GET` | `/api/admin/companies/pending` | `AdminCompaniesController.ListPending` | `Admin` | RF091 |
 | 6.11.2 | `GET` | `/api/admin/companies/{companyId}/registration` | `AdminCompaniesController.GetSubmittedData` | `Admin` | RF092 |
-| 6.11.3 | `POST` | `/api/admin/companies/{companyId}/approve` | `AdminCompaniesController.Approve` | `Admin` | RF093, RF079, RF112 |
-| 6.11.4 | `POST` | `/api/admin/companies/{companyId}/reject` | `AdminCompaniesController.Reject` | `Admin` | RF094, RF079, RF112 |
+| 6.11.3 | `POST` | `/api/admin/companies/{companyId}/approve` | `AdminCompaniesController.Approve` | `Admin` | RF093, RF112 |
+| 6.11.4 | `POST` | `/api/admin/companies/{companyId}/reject` | `AdminCompaniesController.Reject` | `Admin` | RF094, RF112 |
 | 6.11.5 | `POST` | `/api/admin/companies/{companyId}/suspend` | `AdminCompaniesController.Suspend` | `Admin` | RF095, RF075, RF112 |
 | 6.11.6 | `POST` | `/api/admin/companies/{companyId}/reactivate` | `AdminCompaniesController.Reactivate` | `Admin` | RF116, RF112 |
 | 6.11.7 | `GET` | `/api/admin/companies` | `AdminCompaniesController.ListCompanies` | `Admin` | RF097 |
@@ -364,7 +373,7 @@ Mensagens de campo (`fields[].reason`) mais frequentes:
 | 6.13.6 | `POST` | `/api/reference-lists/benefits` | `ReferenceListsController.AddBenefit` | `Admin` | RF101, RF112 |
 | 6.13.7 | `PUT` | `/api/reference-lists/benefits/{benefitId}` | `ReferenceListsController.RenameBenefit` | `Admin` | RF102, RF112 |
 
-Total: 68 endpoints em 13 controllers. A ligação persistente (secção 7) acrescenta 2 hubs e 3 eventos.
+Total: 72 endpoints em 13 controllers. Não há hubs nem ligação persistente: as conversas usam consulta periódica (secção 7).
 
 ---
 
@@ -501,7 +510,7 @@ Exemplo de rejeição por credenciais erradas:
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 
-{ "message": "O endereço de correio eletrónico ou a palavra-passe estão incorretos.", "fields": [] }
+{ "code": "ERR-02", "message": "O endereço de correio eletrónico ou a palavra-passe estão incorretos.", "fields": [], "blockedUntil": null }
 ```
 
 #### 6.1.4. `POST /api/auth/logout` — Terminar sessão
@@ -510,7 +519,7 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `AuthController.Logout` (sem serviço) |
 | Autorização | Qualquer conta |
-| Resposta de sucesso | `204 No Content`. O cliente descarta a credencial e fecha as ligações aos hubs. |
+| Resposta de sucesso | `204 No Content`. O cliente descarta a credencial e para a consulta periódica das conversas. |
 | Requisitos | RF105, RF106, RF107 · UC01 |
 
 ```http
@@ -542,23 +551,25 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
+  "code": "ERR-10",
   "message": "Os dados enviados não cumprem a validação automática.",
   "fields": [
     { "field": "newPassword", "reason": "A palavra-passe tem de ter pelo menos 8 caracteres, uma letra e um algarismo." }
-  ]
+  ],
+  "blockedUntil": null
 }
 ```
 
 ### 6.2. `CandidateProfileController` — `/api/candidate/profile`
 
-Caso de uso UC04 (e UC05, A3, nas preferências). Serviço: `ICandidateProfileService`. Autorização: `Candidate` em todos os endpoints.
+Caso de uso UC04 (e UC05, A3, nas preferências). Serviço: `ICandidateProfileService`. Autorização: `Candidate` em todos os endpoints. As competências da lista (6.2.4 e 6.2.5) e as da opção «Outro» (6.2.10 e 6.2.11) têm operações separadas, como as duas tabelas do modelo de dados (`candidate_skill` e `candidate_custom_skill`).
 
 #### 6.2.1. `GET /api/candidate/profile` — Consultar o perfil profissional
 
 | Campo | Conteúdo |
 | --- | --- |
 | Operação | `CandidateProfileController.Get` → `ICandidateProfileService.GetAsync` |
-| Resposta de sucesso | `200 OK` — `CandidateProfileDto`, com competências, hiperligações e preferências. |
+| Resposta de sucesso | `200 OK` — `CandidateProfileDto`, com as competências da lista (`skills`), as competências «Outro» (`customSkills`), as hiperligações e as preferências. |
 | Requisitos | RF006 a RF012 · UC04 |
 
 ```http
@@ -582,8 +593,10 @@ Content-Type: application/json
   "hasCv": true,
   "links": ["https://github.com/ana-ferreira-exemplo"],
   "skills": [
-    { "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d14", "name": "C#", "isCustom": false },
-    { "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15", "name": "Entity Framework", "isCustom": true }
+    { "id": "7c6b5a49-3827-4615-a0b9-c8d7e6f5a409", "name": "C#" }
+  ],
+  "customSkills": [
+    { "customSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15", "label": "Entity Framework" }
   ],
   "preferences": {
     "maxDistanceKm": 50,
@@ -636,14 +649,14 @@ Content-Type: application/json
   ],
   "skills": [
     {
-      "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d14",
-      "name": "C#",
-      "isCustom": false
-    },
+      "id": "7c6b5a49-3827-4615-a0b9-c8d7e6f5a409",
+      "name": "C#"
+    }
+  ],
+  "customSkills": [
     {
-      "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15",
-      "name": "Entity Framework",
-      "isCustom": true
+      "customSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15",
+      "label": "Entity Framework"
     }
   ],
   "preferences": {
@@ -683,22 +696,22 @@ Content-Type: application/json
 { "maxDistanceKm": 30, "minSalaryExpectation": 1500.00, "workModes": ["ON_SITE", "HYBRID"], "contractTypes": ["PERMANENT", "FIXED_TERM"] }
 ```
 
-#### 6.2.4. `POST /api/candidate/profile/skills` — Acrescentar uma competência
+#### 6.2.4. `POST /api/candidate/profile/skills` — Acrescentar uma competência da lista
 
 | Campo | Conteúdo |
 | --- | --- |
 | Operação | `CandidateProfileController.AddSkill` → `ICandidateProfileService.AddSkillAsync` |
-| Corpo do pedido | `AddSkillRequest`: exatamente um de `skillId` (competência da lista, RF008) e `customLabel` (opção «Outro», RF009). |
+| Corpo do pedido | `AddSkillRequest`: `skillId`, o identificador de uma competência da lista pré-definida (RF008). As competências da opção «Outro» têm operação própria (6.2.10). |
 | Resposta de sucesso | `201 Created` — `CandidateProfileDto` atualizado. |
-| Erros | `400` ERR-10: os dois campos preenchidos ou nenhum; `skillId` fora da lista; `customLabel` fora do P07; competência da lista já associada ao perfil. |
-| Requisitos | RF008, RF009; P07 · UC04 |
+| Erros | `400` ERR-10: `skillId` em falta ou fora da lista; competência já associada ao perfil. |
+| Requisitos | RF008 · UC04 |
 
 ```http
 POST /api/candidate/profile/skills HTTP/1.1
 Authorization: Bearer <credencial>
 Content-Type: application/json
 
-{ "skillId": null, "customLabel": "Blazor" }
+{ "skillId": "7c6b5a49-3827-4615-a0b9-c8d7e6f5a410" }
 
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -720,19 +733,18 @@ Content-Type: application/json
   ],
   "skills": [
     {
-      "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d14",
-      "name": "C#",
-      "isCustom": false
+      "id": "7c6b5a49-3827-4615-a0b9-c8d7e6f5a409",
+      "name": "C#"
     },
     {
-      "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15",
-      "name": "Entity Framework",
-      "isCustom": true
-    },
+      "id": "7c6b5a49-3827-4615-a0b9-c8d7e6f5a410",
+      "name": "SQL"
+    }
+  ],
+  "customSkills": [
     {
-      "candidateSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d16",
-      "name": "Blazor",
-      "isCustom": true
+      "customSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15",
+      "label": "Entity Framework"
     }
   ],
   "preferences": {
@@ -749,18 +761,18 @@ Content-Type: application/json
 }
 ```
 
-#### 6.2.5. `DELETE /api/candidate/profile/skills/{candidateSkillId}` — Retirar uma competência
+#### 6.2.5. `DELETE /api/candidate/profile/skills/{skillId}` — Retirar uma competência da lista
 
 | Campo | Conteúdo |
 | --- | --- |
 | Operação | `CandidateProfileController.RemoveSkill` → `ICandidateProfileService.RemoveSkillAsync` |
-| Parâmetros | `candidateSkillId` (rota, `Guid`): `ProfileSkillDto.candidateSkillId` |
+| Parâmetros | `skillId` (rota, `Guid`): identificador de uma competência da lista associada ao perfil (`CandidateProfileDto.skills[].id`); remove a linha de `candidate_skill`. As competências «Outro» retiram-se em 6.2.11. |
 | Resposta de sucesso | `204 No Content` |
-| Erros | `404` ERR-20: a competência não existe no perfil do Candidato. |
-| Requisitos | RF008, RF009 · UC04 |
+| Erros | `404` ERR-20: a competência não está associada ao perfil do Candidato. |
+| Requisitos | RF008 · UC04 |
 
 ```http
-DELETE /api/candidate/profile/skills/b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15 HTTP/1.1
+DELETE /api/candidate/profile/skills/7c6b5a49-3827-4615-a0b9-c8d7e6f5a410 HTTP/1.1
 Authorization: Bearer <credencial>
 
 HTTP/1.1 204 No Content
@@ -787,8 +799,10 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
+  "code": "ERR-10",
   "message": "Os dados enviados não cumprem a validação automática.",
-  "fields": [ { "field": "urls[1]", "reason": "O endereço tem de começar por http:// ou https://." } ]
+  "fields": [ { "field": "urls[1]", "reason": "O endereço tem de começar por http:// ou https://." } ],
+  "blockedUntil": null
 }
 ```
 
@@ -824,7 +838,7 @@ Location: <URL do ficheiro>
 | --- | --- |
 | Operação | `CandidateProfileController.UploadCv` → `ICandidateProfileService.UploadCvAsync` |
 | Corpo do pedido | `multipart/form-data`, campo `file`: PDF até 5 MB. |
-| Resposta de sucesso | `204 No Content`, sem `Location` (o CV não tem URL; `hasCv` passa a `true`). Substitui o CV anterior. O Candidato não consegue voltar a obter o CV enviado (PA-10). |
+| Resposta de sucesso | `204 No Content`, sem `Location` (o CV não tem URL; `hasCv` passa a `true`). Substitui o CV anterior. O Candidato obtém o CV enviado em 6.2.9. |
 | Erros | `400` ERR-11; `413` ERR-12; `415` ERR-13. |
 | Requisitos | RF011; RNF007, RNF015, RNF016; P02 · UC04 |
 
@@ -843,6 +857,107 @@ Content-Type: application/pdf
 HTTP/1.1 204 No Content
 ```
 
+#### 6.2.9. `GET /api/candidate/profile/cv` — Obter o próprio curriculum vitae
+
+| Campo | Conteúdo |
+| --- | --- |
+| Operação | `CandidateProfileController.GetCv` → `ICandidateProfileService.GetCvAsync` |
+| Resposta de sucesso | `200 OK` — `application/pdf`, o ficheiro enviado em 6.2.8. Não há URL do CV: o ficheiro é sempre obtido por este pedido autenticado (RNF007). |
+| Erros | `404` ERR-20: o Candidato ainda não enviou o CV. |
+| Requisitos | RF011; RNF007 · UC04 |
+
+```http
+GET /api/candidate/profile/cv HTTP/1.1
+Authorization: Bearer <credencial>
+
+HTTP/1.1 200 OK
+Content-Type: application/pdf
+
+<conteúdo binário>
+```
+
+#### 6.2.10. `POST /api/candidate/profile/custom-skills` — Acrescentar uma competência «Outro»
+
+| Campo | Conteúdo |
+| --- | --- |
+| Operação | `CandidateProfileController.AddCustomSkill` → `ICandidateProfileService.AddCustomSkillAsync` |
+| Corpo do pedido | `AddCustomSkillRequest`: `label`, a designação da opção «Outro», com 2 a 40 caracteres, só letras, algarismos, espaços e os símbolos + # . - (P07), sem ser só espaços (RF009). Fica guardada em `candidate_custom_skill`, separada da lista. |
+| Resposta de sucesso | `201 Created` — `CandidateProfileDto` atualizado. |
+| Erros | `400` ERR-10: `label` fora do P07. |
+| Requisitos | RF009; P07 · UC04 |
+
+```http
+POST /api/candidate/profile/custom-skills HTTP/1.1
+Authorization: Bearer <credencial>
+Content-Type: application/json
+
+{ "label": "Blazor" }
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "candidateId": "3f2a9c1e-7b4d-4e8a-9c21-5d6e7f8a9b01",
+  "fullName": "Ana Ferreira",
+  "email": "ana.ferreira@exemplo.pt",
+  "phoneNumber": "912345678",
+  "locationId": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c08",
+  "locationName": "Guimarães (Braga)",
+  "desiredRole": "Programadora backend",
+  "availability": "ONE_MONTH",
+  "experienceSummary": "Dois anos de desenvolvimento de APIs REST em C# e PostgreSQL.",
+  "photoUrl": "<URL do ficheiro>",
+  "hasCv": true,
+  "links": [
+    "https://github.com/ana-ferreira-exemplo"
+  ],
+  "skills": [
+    {
+      "id": "7c6b5a49-3827-4615-a0b9-c8d7e6f5a409",
+      "name": "C#"
+    }
+  ],
+  "customSkills": [
+    {
+      "customSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15",
+      "label": "Entity Framework"
+    },
+    {
+      "customSkillId": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d16",
+      "label": "Blazor"
+    }
+  ],
+  "preferences": {
+    "maxDistanceKm": 50,
+    "minSalaryExpectation": 1400.00,
+    "workModes": [
+      "HYBRID",
+      "REMOTE"
+    ],
+    "contractTypes": [
+      "PERMANENT"
+    ]
+  }
+}
+```
+
+#### 6.2.11. `DELETE /api/candidate/profile/custom-skills/{customSkillId}` — Retirar uma competência «Outro»
+
+| Campo | Conteúdo |
+| --- | --- |
+| Operação | `CandidateProfileController.RemoveCustomSkill` → `ICandidateProfileService.RemoveCustomSkillAsync` |
+| Parâmetros | `customSkillId` (rota, `Guid`): `CandidateProfileDto.customSkills[].customSkillId`; remove a linha de `candidate_custom_skill`. |
+| Resposta de sucesso | `204 No Content` |
+| Erros | `404` ERR-20: a competência «Outro» não existe no perfil do Candidato. |
+| Requisitos | RF009 · UC04 |
+
+```http
+DELETE /api/candidate/profile/custom-skills/b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d15 HTTP/1.1
+Authorization: Bearer <credencial>
+
+HTTP/1.1 204 No Content
+```
+
 ### 6.3. `JobExplorationController` — `/api/candidate/jobs`
 
 Casos de uso UC05 e UC06. Serviço: `IJobExplorationService`. Autorização: `Candidate` em todos os endpoints.
@@ -853,7 +968,7 @@ Casos de uso UC05 e UC06. Serviço: `IJobExplorationService`. Autorização: `Ca
 | --- | --- |
 | Operação | `JobExplorationController.GetNextCard` → `IJobExplorationService.GetNextCardAsync` |
 | Resposta de sucesso | `200 OK` — `JobCardDto`; ou `204 No Content` quando nenhuma vaga cumpre o filtro (UC05, A6). |
-| Regras | Filtro do RF014: vaga `PUBLISHED` e não eliminada; Empresa `APPROVED`; sem resposta anterior do Candidato; distância ≤ `maxDistanceKm`, exceto vagas `REMOTE`; `maxSalary` ≥ `minSalaryExpectation`; regime e contrato nas preferências. `distanceKm` é a distância em linha reta (Haversine) entre as localidades do Candidato e da vaga, arredondada às unidades (RF015). Com a quota esgotada, os cartões continuam a ser apresentados (UC05, A4); o estado da quota obtém-se em 6.3.6. A ordem dos cartões não é fixada pelos requisitos; fica definida na implementação. |
+| Regras | Filtro do RF014: vaga `PUBLISHED`, não eliminada e não expirada (`expires_at` nulo ou posterior ao instante do pedido, mesmo que a tarefa periódica ainda não a tenha encerrado; modelo de dados, DM-17); Empresa `APPROVED`; sem resposta anterior do Candidato; distância ≤ `maxDistanceKm`, exceto vagas `REMOTE`; `maxSalary` ≥ `minSalaryExpectation`; regime e contrato nas preferências. `distanceKm` é a distância em linha reta (Haversine) entre as localidades do Candidato e da vaga, arredondada às unidades (RF015). Com a quota esgotada, os cartões continuam a ser apresentados (UC05, A4); o estado da quota obtém-se em 6.3.6. A ordem dos cartões não é fixada pelos requisitos; fica definida na implementação. |
 | Desempenho | Resposta em 2 segundos, com os dados de demonstração (RNF002, P19). |
 | Requisitos | RF013, RF014, RF015; RNF002 · UC05 |
 
@@ -970,9 +1085,9 @@ HTTP/1.1 204 No Content
 | Operação | `JobExplorationController.ExpressInterest` → `IJobExplorationService.ExpressInterestAsync` (`Match.ExpressInterest`, `Candidate.ConsumeInterest`) |
 | Parâmetros | `jobId` (rota, `Guid`) |
 | Resposta de sucesso | `200 OK` — `QuotaDto` atualizado. Se este interesse esgotou a quota, `blockedUntil` traz o fim do período de bloqueio (24 horas depois). |
-| Efeitos | Numa transação: linha de `match` em espera (`WAITING`), sem prazo de expiração (RF113); quota reduzida em 1; notificação `NEW_INTEREST` ao Recrutador, entregue pela ligação persistente depois de confirmada a transação (RF076). Dois interesses simultâneos do mesmo Candidato são serializados pelo `xmin` de `candidate`: o serviço repete o segundo com o valor atualizado, e o cliente nunca recebe ERR-41 neste endpoint. |
+| Efeitos | Numa transação: linha de `match` em espera (`WAITING`), sem prazo de expiração (RF113); quota reduzida em 1. O Recrutador vê o novo interesse na lista de candidatos em espera (6.6.1), sem aviso ativo (F007). Dois interesses simultâneos do mesmo Candidato são serializados pelo `xmin` de `candidate`: o serviço repete o segundo com o valor atualizado, e o cliente nunca recebe ERR-41 neste endpoint. |
 | Erros | `404` ERR-20; `409` ERR-31 (quota esgotada, com a data de reposição); `409` ERR-32 (segunda resposta à vaga); `409` ERR-33 (vaga já não disponível). Em qualquer erro, nada é registado e a quota não muda. |
-| Requisitos | RF019, RF020, RF076, RF112, RF113; P11 · UC05 |
+| Requisitos | RF019, RF020, RF112, RF113; P11 · UC05 |
 
 ```http
 POST /api/candidate/jobs/5e6f7a8b-9c0d-4e1f-a2b3-c4d5e6f7a805/interest HTTP/1.1
@@ -981,7 +1096,7 @@ Authorization: Bearer <credencial>
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{ "available": 9, "blockedUntil": null }
+{ "available": 9, "total": 10, "blockedUntil": null }
 ```
 
 Rejeição de um interesse no período de bloqueio (noutro momento, com a quota esgotada):
@@ -990,7 +1105,7 @@ Rejeição de um interesse no período de bloqueio (noutro momento, com a quota 
 HTTP/1.1 409 Conflict
 Content-Type: application/json
 
-{ "message": "Esgotou a quota de interesses. Pode voltar a manifestar interesse dentro de 23 h 47 min.", "fields": [] }
+{ "code": "ERR-31", "message": "Esgotou a quota de interesses. Pode voltar a manifestar interesse dentro de 23 h 47 min.", "fields": [], "blockedUntil": "2026-10-10T16:05:00Z" }
 ```
 
 #### 6.3.6. `GET /api/candidate/jobs/quota` — Consultar os interesses disponíveis
@@ -998,8 +1113,8 @@ Content-Type: application/json
 | Campo | Conteúdo |
 | --- | --- |
 | Operação | `JobExplorationController.GetQuota` → `IJobExplorationService.GetQuotaAsync` |
-| Resposta de sucesso | `200 OK` — `QuotaDto`: `available` (0 a 10) e `blockedUntil` (`null` fora do período de bloqueio). O cliente calcula o tempo em falta a partir de `blockedUntil` (RF020). |
-| Regras | Se o período de bloqueio já terminou e a tarefa periódica ainda não correu, o serviço aplica `Candidate.RestoreQuotaIfDue` antes de responder, com a notificação `INTEREST_QUOTA_RESTORED`, para que o valor devolvido seja sempre o correto (RF021, RF033). A mesma verificação é feita em 6.3.5 antes de avaliar a quota. |
+| Resposta de sucesso | `200 OK` — `QuotaDto`: `available` (0 a 10), `total` (total da quota, 10, P11) e `blockedUntil` (`null` fora do período de bloqueio). O cliente calcula o tempo em falta a partir de `blockedUntil` (RF020). |
+| Regras | Se o período de bloqueio já terminou e a tarefa periódica ainda não correu, o serviço aplica `Candidate.RestoreQuotaIfDue` antes de responder, para que o valor devolvido seja sempre o correto (RF021). A mesma verificação é feita em 6.3.5 antes de avaliar a quota. |
 | Requisitos | RF020, RF021, RF022; P11 · UC05 |
 
 ```http
@@ -1009,7 +1124,7 @@ Authorization: Bearer <credencial>
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{ "available": 9, "blockedUntil": null }
+{ "available": 9, "total": 10, "blockedUntil": null }
 ```
 
 ### 6.4. `CompanyController` — `/api/recruiter/company`
@@ -1231,6 +1346,65 @@ HTTP/1.1 201 Created
 Location: <URL do ficheiro>
 ```
 
+#### 6.4.8. `GET /api/recruiter/company` — Consultar os dados de registo da própria Empresa
+
+| Campo | Conteúdo |
+| --- | --- |
+| Operação | `CompanyController.GetRegistration` → `ICompanyService.GetRegistrationAsync` |
+| Autorização | `Recruiter`, e não `ApprovedCompany`: os dados são lidos com a Empresa em qualquer estado (pendente, recusada para correção, aprovada ou suspensa), para pré-preencher os formulários de 6.4.2 e 6.4.4 (RF045, RF049). |
+| Resposta de sucesso | `200 OK` — `CompanyRegistrationDto`: os oito dados submetidos (com `locationId` e `locationName`), `companyId` e `submittedAt`. |
+| Erros | `404` ERR-20: o Recrutador ainda não registou a Empresa. |
+| Requisitos | RF044, RF045, RF049 · UC07, UC08 |
+
+```http
+GET /api/recruiter/company HTTP/1.1
+Authorization: Bearer <credencial>
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "companyId": "c4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f703",
+  "companyName": "Lumen Software, Lda.",
+  "taxId": "509123456",
+  "industry": "TECHNOLOGY",
+  "address": "Avenida da Liberdade, 100, 4710-000 Braga",
+  "locationId": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c07",
+  "locationName": "Braga (Braga)",
+  "contactEmail": "geral@lumen-exemplo.pt",
+  "contactPhone": "253000111",
+  "responsibleName": "Rui Matos",
+  "submittedAt": "2026-10-05T10:00:00Z"
+}
+```
+
+#### 6.4.9. `GET /api/recruiter/company/page` — Consultar a página de apresentação da própria Empresa
+
+| Campo | Conteúdo |
+| --- | --- |
+| Operação | `CompanyController.GetPage` → `ICompanyService.GetPageAsync` |
+| Autorização | `ApprovedCompany`, como a alteração da página (6.4.5). |
+| Resposta de sucesso | `200 OK` — `CompanyPageDto`, para pré-preencher o formulário de 6.4.5 (RF046). |
+| Erros | `403` ERR-07. |
+| Requisitos | RF046 a RF048 · UC08 |
+
+```http
+GET /api/recruiter/company/page HTTP/1.1
+Authorization: Bearer <credencial>
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "companyId": "c4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f703",
+  "companyName": "Lumen Software, Lda.",
+  "description": "Software de gestão de frotas e armazéns, com equipas em Braga e no Porto.",
+  "website": "https://www.lumen-exemplo.pt",
+  "logoUrl": "<URL do ficheiro>",
+  "photoUrls": ["<URL do ficheiro>"]
+}
+```
+
 ### 6.5. `JobsController` — `/api/recruiter/jobs`
 
 Casos de uso UC09 e UC10. Serviço: `IJobService`. Autorização: `ApprovedCompany` em todos os endpoints. Uma vaga de outra Empresa devolve `403` (ERR-08, RF059); uma vaga eliminada devolve `404` (ERR-20).
@@ -1246,7 +1420,7 @@ Transições de estado admitidas (as restantes devolvem `409` ERR-30, com o esta
 | 6.5.6 Voltar a publicar | `SUSPENDED` | `PUBLISHED` | `JOB_REPUBLISHED` |
 | 6.5.7 Encerrar | `UNPUBLISHED`, `PUBLISHED`, `SUSPENDED` | `CLOSED` | `JOB_CLOSED` |
 | 6.5.8 Eliminar | qualquer, sem interesses | eliminada (`deleted_at`) | `JOB_DELETED` |
-| Tarefa periódica | `PUBLISHED` com `expiresAt` atingida | `CLOSED` (`EXPIRED`) | `JOB_CLOSED`, sem autor (RF057) |
+| Tarefa periódica | `PUBLISHED` com `expiresAt` atingida | `CLOSED` | `JOB_CLOSED`, sem autor (RF057) |
 
 Suspender, encerrar ou encerrar automaticamente uma vaga não altera os interesses em espera nem os matches (RF055, RF056, RF113).
 
@@ -1324,8 +1498,10 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
+  "code": "ERR-10",
   "message": "Os dados enviados não cumprem a validação automática.",
-  "fields": [ { "field": "minSalary", "reason": "O valor mínimo não pode ser superior ao valor máximo." } ]
+  "fields": [ { "field": "minSalary", "reason": "O valor mínimo não pode ser superior ao valor máximo." } ],
+  "blockedUntil": null
 }
 ```
 
@@ -1523,7 +1699,7 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `JobsController.Close` → `IJobService.CloseAsync` (`Job.Close`) |
 | Parâmetros | `jobId` (rota, `Guid`) |
-| Resposta de sucesso | `200 OK` — `JobDto` com `status = CLOSED` (`close_reason = MANUAL`). O encerramento é definitivo; interesses e matches mantêm-se. |
+| Resposta de sucesso | `200 OK` — `JobDto` com `status = CLOSED`. O encerramento é definitivo; interesses e matches mantêm-se. |
 | Erros | `403` ERR-08; `404` ERR-20; `409` ERR-30 (vaga já `CLOSED`). |
 | Requisitos | RF056, RF059, RF112, RF113 · UC10 |
 
@@ -1577,7 +1753,7 @@ Authorization: Bearer <credencial>
 HTTP/1.1 409 Conflict
 Content-Type: application/json
 
-{ "message": "A vaga tem interesses registados e só pode ser encerrada.", "fields": [] }
+{ "code": "ERR-38", "message": "A vaga tem interesses registados e só pode ser encerrada.", "fields": [], "blockedUntil": null }
 ```
 
 #### 6.5.9. `POST /api/recruiter/jobs/{jobId}/photos` — Acrescentar uma fotografia à vaga
@@ -1633,6 +1809,8 @@ Content-Type: application/json
     "matchId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06",
     "candidateId": "3f2a9c1e-7b4d-4e8a-9c21-5d6e7f8a9b01",
     "fullName": "Ana Ferreira",
+    "desiredRole": "Programadora backend",
+    "locationName": "Guimarães (Braga)",
     "interestAt": "2026-10-09T15:12:40Z"
   }
 ]
@@ -1644,8 +1822,8 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `CandidateEvaluationController.OpenProfile` → `ICandidateEvaluationService.OpenProfileAsync` (`Match.OpenProfile`) |
 | Parâmetros | `matchId` (rota, `Guid`) |
-| Resposta de sucesso | `200 OK` — `CandidateFullProfileDto`: fotografia, dados profissionais, hiperligações, competências com `matchesJob` (RF062) e `hasCv`. Não inclui contactos, pretensão salarial nem preferências (modelo de dados, secção 8). |
-| Efeito | Na primeira chamada para este interesse, regista `profile_opened_at` e `profile_opened_by` (RF118), condição da decisão (RF063, RF064). As chamadas seguintes não alteram o registo: o pedido é idempotente, embora seja um `GET` com efeito (DAPI-05). |
+| Resposta de sucesso | `200 OK` — `CandidateFullProfileDto`: fotografia, dados profissionais, hiperligações, competências com `matchesJob` (RF062), `hasCv` e `profileOpenedAt` (data e hora da primeira abertura do perfil, RF118). Não inclui contactos, pretensão salarial nem preferências (modelo de dados, secção 8). |
+| Efeito | Na primeira chamada para este interesse, regista `profile_opened_at` (RF118), condição da decisão (RF063, RF064). As chamadas seguintes não alteram o registo: o pedido é idempotente, embora seja um `GET` com efeito (DAPI-05). |
 | Erros | `403` ERR-08; `404` ERR-20; `409` ERR-35 (o interesse já não está em espera). |
 | Requisitos | RF061, RF062, RF118 · UC11 |
 
@@ -1669,7 +1847,8 @@ Content-Type: application/json
     { "name": "C#", "matchesJob": true },
     { "name": "Entity Framework", "matchesJob": false }
   ],
-  "hasCv": true
+  "hasCv": true,
+  "profileOpenedAt": "2026-10-09T15:58:30Z"
 }
 ```
 
@@ -1701,10 +1880,10 @@ Cache-Control: no-store
 | --- | --- |
 | Operação | `CandidateEvaluationController.Accept` → `ICandidateEvaluationService.AcceptAsync` (`Match.Accept`) |
 | Parâmetros | `matchId` (rota, `Guid`) |
-| Resposta de sucesso | `200 OK` — `MatchDto`, com o contacto do Candidato (`contactEmail`, `contactPhone`) e `matchedAt`. O `matchId` passa a identificar também a conversa (`/api/conversations/{matchId}`). |
-| Efeitos | Numa única transação (UC12, passo 6): decisão `ACCEPTED` com Recrutador e data (RF065); `MATCHED` com `matchedAt` (RF066); conversa `OPEN` (RF068); duas notificações `MATCH_CONFIRMED`, uma para cada parte (RF031, RF077), entregues pela ligação persistente depois de confirmada a transação. |
+| Resposta de sucesso | `200 OK` — `MatchDto`, com o estado e a localidade da vaga, o logótipo da Empresa, o contacto do Candidato (`contactEmail`, `contactPhone`) e `matchedAt`. O `matchId` passa a identificar também a conversa (`/api/conversations/{matchId}`). |
+| Efeitos | Numa única transação (UC12, passo 6): estado `MATCHED`, com o Recrutador (`decided_by`) e a data da decisão (`recruiter_action_at`) (RF065, RF066), a partir da qual é calculado `matchedAt`; conversa `OPEN` (RF068). As duas partes consultam o novo match na lista de matches (6.7.1), sem aviso ativo (F008). |
 | Erros | `403` ERR-08; `404` ERR-20; `409` ERR-34 (perfil não aberto); `409` ERR-35 (decisão já registada, incluindo a perda na concorrência `xmin` com outro pedido de decisão). Em qualquer erro, nada é alterado (UC12, E5). |
-| Requisitos | RF063, RF065, RF066, RF068, RF031, RF077, RF117 · UC12 |
+| Requisitos | RF063, RF065, RF066, RF068, RF117 · UC12 |
 
 ```http
 POST /api/recruiter/interests/9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06/accept HTTP/1.1
@@ -1716,7 +1895,10 @@ Content-Type: application/json
 {
   "matchId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06",
   "jobTitle": "Programador Backend .NET",
+  "jobStatus": "PUBLISHED",
+  "locationName": "Braga (Braga)",
   "companyName": "Lumen Software, Lda.",
+  "logoUrl": "<URL do ficheiro>",
   "counterpartName": "Ana Ferreira",
   "contactEmail": "ana.ferreira@exemplo.pt",
   "contactPhone": "912345678",
@@ -1730,7 +1912,7 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `CandidateEvaluationController.Reject` → `ICandidateEvaluationService.RejectAsync` (`Match.Reject`) |
 | Parâmetros | `matchId` (rota, `Guid`) |
-| Resposta de sucesso | `204 No Content`. Decisão `DECLINED` com Recrutador e data (RF065); o Candidato sai da lista de espera dessa vaga, sem efeito nas outras vagas; não há conversa, contacto nem notificação ao Candidato (UC12, A1). |
+| Resposta de sucesso | `204 No Content`. Estado `REJECTED_BY_RECRUITER`, com o Recrutador (`decided_by`) e a data da decisão (`recruiter_action_at`) (RF065); o Candidato sai da lista de espera dessa vaga, sem efeito nas outras vagas; não há conversa, contacto nem notificação ao Candidato (UC12, A1). |
 | Erros | `403` ERR-08; `404` ERR-20; `409` ERR-34; `409` ERR-35. |
 | Requisitos | RF064, RF065, RF117 · UC12 |
 
@@ -1741,7 +1923,7 @@ Authorization: Bearer <credencial>
 HTTP/1.1 409 Conflict
 Content-Type: application/json
 
-{ "message": "Abra o perfil completo do Candidato antes de registar a decisão.", "fields": [] }
+{ "code": "ERR-34", "message": "Abra o perfil completo do Candidato antes de registar a decisão.", "fields": [], "blockedUntil": null }
 ```
 
 ### 6.7. `MatchesController` — `/api/matches`
@@ -1770,7 +1952,10 @@ Content-Type: application/json
   {
     "matchId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06",
     "jobTitle": "Programador Backend .NET",
+    "jobStatus": "PUBLISHED",
+    "locationName": "Braga (Braga)",
     "companyName": "Lumen Software, Lda.",
+    "logoUrl": "<URL do ficheiro>",
     "counterpartName": "Rui Matos",
     "contactEmail": "recrutamento@lumen-exemplo.pt",
     "contactPhone": "253000222",
@@ -1781,7 +1966,7 @@ Content-Type: application/json
 
 ### 6.8. `ConversationsController` — `/api/conversations`
 
-Caso de uso UC14. Serviço: `IConversationService`. Autorização: `CandidateOrRecruiter` em todos os endpoints; o Administrador recebe `403` (ERR-06), sem acesso ao conteúdo das conversas (RF103). A conversa é identificada pelo `matchId`. Só são partes da conversa o Candidato do match e o Recrutador da Empresa da vaga; qualquer outro utilizador recebe `403` (ERR-08). As mensagens novas, os encerramentos e as notificações chegam pela ligação persistente (secção 7); estes endpoints servem o histórico, o envio e a recuperação depois de uma reconexão.
+Caso de uso UC14. Serviço: `IConversationService`. Autorização: `CandidateOrRecruiter` em todos os endpoints; o Administrador recebe `403` (ERR-06), sem acesso ao conteúdo das conversas (RF103). A conversa é identificada pelo `matchId`. Só são partes da conversa o Candidato do match e o Recrutador da Empresa da vaga; qualquer outro utilizador recebe `403` (ERR-08). Não há ligação persistente: as mensagens novas e as mudanças de estado da conversa chegam ao cliente por consulta periódica destes endpoints (secção 7).
 
 #### 6.8.1. `GET /api/conversations` — Consultar a lista de conversas
 
@@ -1789,7 +1974,8 @@ Caso de uso UC14. Serviço: `IConversationService`. Autorização: `CandidateOrR
 | --- | --- |
 | Operação | `ConversationsController.List` → `IConversationService.ListAsync` |
 | Resposta de sucesso | `200 OK` — `ConversationSummaryDto[]`: todas as conversas do utilizador (abertas e em modo apenas de consulta), com `unreadCount` (mensagens da outra parte por ler, RF027, RF071), ordenadas por `lastMessageAt` decrescente; as conversas sem mensagens aparecem primeiro, pela data do match. |
-| Requisitos | RF027, RF071 · UC14 |
+| Consulta periódica | Repetido de 3 em 3 segundos enquanto a lista de conversas está aberta (secção 7; P17), para atualizar `unreadCount`, `lastMessageAt` e o estado de cada conversa (RF029, RF073). |
+| Requisitos | RF027, RF029, RF071, RF073 · UC14 |
 
 ```http
 GET /api/conversations HTTP/1.1
@@ -1806,6 +1992,7 @@ Content-Type: application/json
     "companyName": "Lumen Software, Lda.",
     "status": "OPEN",
     "closeReason": null,
+    "closedBy": null,
     "lastMessageAt": "2026-10-09T16:20:05Z",
     "unreadCount": 1
   }
@@ -1817,11 +2004,12 @@ Content-Type: application/json
 | Campo | Conteúdo |
 | --- | --- |
 | Operação | `ConversationsController.Open` → `IConversationService.OpenAsync` |
-| Parâmetros | `matchId` (rota, `Guid`) |
-| Resposta de sucesso | `200 OK` — `MessageDto[]`, da mais antiga para a mais recente, com texto, data de envio e `readAt` (indicação de leitura pelo destinatário, RF028, RF072). |
+| Parâmetros | `matchId` (rota, `Guid`); `after` (consulta, data e hora ISO 8601, opcional): instante da última mensagem já recebida pelo cliente. |
+| Resposta de sucesso | `200 OK` — `MessageDto[]`, da mais antiga para a mais recente, com texto, data de envio e `readAt` (indicação de leitura pelo destinatário, RF028, RF072). Sem `after`, devolve o histórico completo; com `after`, só as mensagens enviadas depois desse instante (lista vazia se não houver novas). |
 | Efeito | Marca como lidas todas as mensagens da outra parte ainda por ler (RF108, RF109); repetir o pedido não muda nada. Funciona também com a conversa em modo apenas de consulta. |
-| Erros | `403` ERR-08; `404` ERR-20; `409` ERR-37 (o `matchId` não corresponde a um match confirmado). |
-| Requisitos | RF028, RF072, RF108, RF109 · UC14 |
+| Consulta periódica | Com a conversa aberta, o cliente repete o pedido de 3 em 3 segundos com `after` igual ao `sentAt` da última mensagem recebida (secção 7; P17): a mensagem nova surge na primeira consulta seguinte ao envio (RF029, RF073). |
+| Erros | `400` ERR-10 (`after` mal formado); `403` ERR-08; `404` ERR-20; `409` ERR-37 (o `matchId` não corresponde a um match confirmado). |
+| Requisitos | RF028, RF029, RF072, RF073, RF108, RF109; P17 · UC14 |
 
 ```http
 GET /api/conversations/9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06/messages HTTP/1.1
@@ -1848,17 +2036,37 @@ Content-Type: application/json
 ]
 ```
 
+Consulta periódica, só com as mensagens posteriores a `after`:
+
+```http
+GET /api/conversations/9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06/messages?after=2026-10-09T16:10:00Z HTTP/1.1
+Authorization: Bearer <credencial do Recrutador>
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+  {
+    "messageId": "2e3f4a5b-6c7d-4e8f-9a0b-1c2d3e4f5a13",
+    "senderId": "3f2a9c1e-7b4d-4e8a-9c21-5d6e7f8a9b01",
+    "content": "Bom dia. Sim, de manhã é ideal para mim.",
+    "sentAt": "2026-10-09T16:20:05Z",
+    "readAt": null
+  }
+]
+```
+
 #### 6.8.3. `POST /api/conversations/{matchId}/messages` — Enviar uma mensagem
 
 | Campo | Conteúdo |
 | --- | --- |
-| Operação | `ConversationsController.Send` → `IConversationService.SendAsync` (`Match.CanSendMessages`, `Match.RegisterMessage`) |
+| Operação | `ConversationsController.Send` → `IConversationService.SendAsync` (`Match.CanSendMessages`) |
 | Parâmetros | `matchId` (rota, `Guid`) |
 | Corpo do pedido | `SendMessageRequest`: `content`, com 1 a 1000 caracteres, não só espaços. |
 | Resposta de sucesso | `201 Created` — `MessageDto` gravado (`readAt = null`). |
-| Efeitos | Atualiza `last_message_at`; cria a notificação `NEW_MESSAGE` para o destinatário (RF032, RF078); depois de confirmada a transação, entrega `MessageReceived` às duas partes e `NotificationReceived` ao destinatário (secção 7), em 5 segundos (P17). |
+| Efeitos | Grava a mensagem, sem gravar a data da última mensagem, que é calculada (`lastMessageAt`); a outra parte recebe a mensagem na primeira consulta periódica seguinte (6.8.2 com `after`; secção 7), no máximo 3 segundos mais a duração do pedido, dentro dos 5 segundos do P17. |
 | Erros | `400` ERR-10 (`content` vazio ou acima de 1000 caracteres); `403` ERR-08; `404` ERR-20; `409` ERR-36 (conversa em modo apenas de consulta); `409` ERR-37 (sem match, RF070). |
-| Requisitos | RF026, RF069, RF070, RF032, RF078, RF029, RF073; P03, P17 · UC14 |
+| Requisitos | RF026, RF069, RF070, RF029, RF073; P03, P17 · UC14 |
 
 ```http
 POST /api/conversations/9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06/messages HTTP/1.1
@@ -1885,7 +2093,7 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `ConversationsController.Close` → `IConversationService.CloseAsync` (`Match.CloseConversation`) |
 | Parâmetros | `matchId` (rota, `Guid`) |
-| Resposta de sucesso | `204 No Content`. A conversa passa a `CLOSED` com `CLOSED_BY_PARTY`, data e autor, para as duas partes; o histórico continua visível. `ConversationClosed` é entregue às duas partes (secção 7.2). |
+| Resposta de sucesso | `204 No Content`. A conversa passa a `CLOSED` com `CLOSED_BY_PARTY`, data e autor, para as duas partes (`closedBy` em 6.8.1); o histórico continua visível. A outra parte vê o novo estado na consulta seguinte da lista de conversas (secção 7). |
 | Erros | `403` ERR-08; `404` ERR-20; `409` ERR-36 (já encerrada, incluindo a perda na concorrência `xmin` com um bloqueio ou suspensão simultâneos); `409` ERR-37. |
 | Requisitos | RF030, RF074, RF075 · UC14 |
 
@@ -1896,65 +2104,32 @@ Authorization: Bearer <credencial>
 HTTP/1.1 204 No Content
 ```
 
-### 6.9. `NotificationsController` — `/api/notifications`
+### 6.9. `FilesController` — `/api/files`
 
-Caso de uso UC15. Serviço: `INotificationService`. Autorização: `CandidateOrRecruiter` (o Administrador não recebe notificações; DA, F011).
+Casos de uso UC04 a UC08 e UC11. Serviço: `IFileAccessService`. Autorização: qualquer conta com sessão iniciada; a autorização por tipo de ficheiro é verificada no serviço (modelo de classes v02, secção 5.1). Serve as fotografias e os logótipos referidos pelos URL dos DTOs (`photoUrl`, `logoUrl`, `photoUrls`); o CV não é servido por este controller (6.2.9 e 6.6.3).
 
-#### 6.9.1. `GET /api/notifications` — Consultar a área de notificações
-
-| Campo | Conteúdo |
-| --- | --- |
-| Operação | `NotificationsController.List` → `INotificationService.ListAsync` |
-| Resposta de sucesso | `200 OK` — `NotificationListDto`: `items`, da mais recente para a mais antiga, e `unreadCount` (RF034, RF080). |
-| Acesso ao elemento | O cliente usa `type` e `targetId` para abrir o elemento a que a notificação se refere (RF036, RF082), segundo a tabela da secção 7.3. |
-| Requisitos | RF034, RF036, RF080, RF082 · UC15 |
-
-```http
-GET /api/notifications HTTP/1.1
-Authorization: Bearer <credencial do Recrutador>
-
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "items": [
-    {
-      "notificationId": "4f5a6b7c-8d9e-4f0a-b1c2-d3e4f5a6b713",
-      "type": "NEW_MESSAGE",
-      "text": "Nova mensagem de Ana Ferreira na conversa sobre a vaga Programador Backend .NET.",
-      "targetId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06",
-      "createdAt": "2026-10-09T16:20:05Z",
-      "isRead": false
-    },
-    {
-      "notificationId": "4f5a6b7c-8d9e-4f0a-b1c2-d3e4f5a6b714",
-      "type": "NEW_INTEREST",
-      "text": "Novo interesse na vaga Programador Backend .NET.",
-      "targetId": "5e6f7a8b-9c0d-4e1f-a2b3-c4d5e6f7a805",
-      "createdAt": "2026-10-09T15:12:40Z",
-      "isRead": true
-    }
-  ],
-  "unreadCount": 1
-}
-```
-
-#### 6.9.2. `POST /api/notifications/{notificationId}/read` — Marcar uma notificação como lida
+#### 6.9.1. `GET /api/files/{kind}/{fileName}` — Obter uma fotografia ou um logótipo
 
 | Campo | Conteúdo |
 | --- | --- |
-| Operação | `NotificationsController.MarkRead` → `INotificationService.MarkReadAsync` (`Notification.MarkRead`) |
-| Parâmetros | `notificationId` (rota, `Guid`) |
-| Resposta de sucesso | `204 No Content`. O número de não lidas desce uma unidade (RF035, RF081). Marcar uma notificação já lida não muda nada e devolve também `204`. |
-| Erros | `403` ERR-08 (notificação de outro utilizador); `404` ERR-20. |
-| Requisitos | RF035, RF081 · UC15 |
+| Operação | `FilesController.Get` → `IFileAccessService.GetAsync` |
+| Parâmetros | `kind` (rota): tipo de ficheiro (`FileKind`, secção 2.4), um de `PROFILE_PHOTO`, `COMPANY_LOGO`, `COMPANY_PHOTO` e `JOB_PHOTO`; `fileName` (rota): nome gerado no carregamento, tal como vem no URL do DTO. |
+| Resposta de sucesso | `200 OK` — o ficheiro (`image/jpeg` ou `image/png`). |
+| Autorização por tipo | `COMPANY_LOGO`, `COMPANY_PHOTO` e `JOB_PHOTO`: qualquer conta com sessão iniciada (são apresentados nos cartões, no detalhe da vaga e na página da Empresa). `PROFILE_PHOTO`: o próprio Candidato e o Recrutador de uma Empresa em cuja vaga o Candidato tem um interesse registado (RF061). |
+| Erros | `404` ERR-20: nome inexistente, de outro tipo, `kind` fora dos valores indicados ou sem autorização; a mesma resposta nos três casos, para não revelar a existência do ficheiro. |
+| Requisitos | RF010, RF013, RF017, RF047, RF048, RF052, RF061; RNF007 · UC04 a UC08, UC11 |
 
 ```http
-POST /api/notifications/4f5a6b7c-8d9e-4f0a-b1c2-d3e4f5a6b713/read HTTP/1.1
+GET /api/files/COMPANY_LOGO/e5a1c9b37d2f4086a3b1c0d9e8f7a6b5.png HTTP/1.1
 Authorization: Bearer <credencial>
 
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
+Content-Type: image/png
+
+<conteúdo binário>
 ```
+
+---
 
 ### 6.10. `AdminAccountsController` — `/api/admin/accounts`
 
@@ -2014,7 +2189,7 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `AdminAccountsController.Block` → `IAccountAdminService.BlockAsync` (`AppUser.Block`) |
 | Parâmetros | `userId` (rota, `Guid`): conta de Candidato ou de Recrutador. |
-| Resposta de sucesso | `204 No Content`. A conta passa a `BLOCKED`; numa transação, as conversas abertas da conta passam a `CLOSED` com `ACCOUNT_BLOCKED_OR_SUSPENDED` (RF075) e fica registado `ACCOUNT_BLOCKED` (RF112). Depois de confirmada, `ConversationClosed` é entregue às partes. Os interesses em espera mantêm-se (RF113). |
+| Resposta de sucesso | `204 No Content`. A conta passa a `BLOCKED`; numa transação, as conversas abertas da conta passam a `CLOSED` com `ACCOUNT_BLOCKED_OR_SUSPENDED` (RF075) e fica registado `ACCOUNT_BLOCKED` (RF112). As partes veem o novo estado das conversas na consulta periódica seguinte (secção 7). Os interesses em espera mantêm-se (RF113). |
 | Erros | `404` ERR-20; `409` ERR-30 (conta de Administrador, ou conta fora de `ACTIVE`). |
 | Requisitos | RF086, RF075, RF112 · UC18 |
 
@@ -2065,12 +2240,12 @@ Casos de uso UC16 e UC17. Serviço: `ICompanyAdminService`. Autorização: `Admi
 
 Transições do estado da Empresa (as restantes devolvem `409` ERR-30):
 
-| Endpoint | Estado de origem | Estado de destino | Notificação ao Recrutador | Operação registada |
-| --- | --- | --- | --- | --- |
-| 6.11.3 Aprovar | `PENDING` | `APPROVED` | `COMPANY_APPROVED` (RF079) | `COMPANY_APPROVED` |
-| 6.11.4 Recusar | `PENDING` | `REJECTED`, com motivo | `COMPANY_REJECTED`, com o motivo (RF079) | `COMPANY_REJECTED` |
-| 6.11.5 Suspender | `APPROVED` | `SUSPENDED`; conversas a `CLOSED` com `COMPANY_SUSPENDED` (RF075) | — | `COMPANY_SUSPENDED` |
-| 6.11.6 Reativar | `SUSPENDED` | `APPROVED`; conversas mantêm-se em consulta | — | `COMPANY_REACTIVATED` |
+| Endpoint | Estado de origem | Estado de destino | Operação registada |
+| --- | --- | --- | --- |
+| 6.11.3 Aprovar | `PENDING` | `APPROVED` | `COMPANY_APPROVED` |
+| 6.11.4 Recusar | `PENDING` | `REJECTED`, com motivo | `COMPANY_REJECTED` |
+| 6.11.5 Suspender | `APPROVED` | `SUSPENDED`; conversas a `CLOSED` com `COMPANY_SUSPENDED` (RF075) | `COMPANY_SUSPENDED` |
+| 6.11.6 Reativar | `SUSPENDED` | `APPROVED`; conversas mantêm-se em consulta | `COMPANY_REACTIVATED` |
 
 #### 6.11.1. `GET /api/admin/companies/pending` — Consultar as Empresas pendentes
 
@@ -2098,7 +2273,7 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `AdminCompaniesController.GetSubmittedData` → `ICompanyAdminService.GetSubmittedDataAsync` |
 | Parâmetros | `companyId` (rota, `Guid`) |
-| Resposta de sucesso | `200 OK` — `CompanyRegistrationDto`: os oito dados submetidos e a data de submissão. |
+| Resposta de sucesso | `200 OK` — `CompanyRegistrationDto`: os oito dados submetidos (com `locationId` e `locationName`) e a data de submissão. |
 | Erros | `404` ERR-20. |
 | Requisitos | RF092 · UC16 |
 
@@ -2115,6 +2290,7 @@ Content-Type: application/json
   "taxId": "509123456",
   "industry": "TECHNOLOGY",
   "address": "Avenida da Liberdade, 100, 4710-000 Braga",
+  "locationId": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c07",
   "locationName": "Braga (Braga)",
   "contactEmail": "geral@lumen-exemplo.pt",
   "contactPhone": "253000111",
@@ -2129,9 +2305,9 @@ Content-Type: application/json
 | --- | --- |
 | Operação | `AdminCompaniesController.Approve` → `ICompanyAdminService.ApproveAsync` (`Company.Approve`) |
 | Parâmetros | `companyId` (rota, `Guid`) |
-| Resposta de sucesso | `204 No Content`. O Recrutador passa a cumprir a política `ApprovedCompany` no pedido seguinte. |
+| Resposta de sucesso | `204 No Content`. O Recrutador passa a cumprir a política `ApprovedCompany` no pedido seguinte e consulta o novo estado em 6.4.3, sem aviso ativo (F003). |
 | Erros | `404` ERR-20; `409` ERR-30 (Empresa fora de `PENDING`). |
-| Requisitos | RF093, RF079, RF112 · UC16 |
+| Requisitos | RF093, RF112 · UC16 |
 
 ```http
 POST /api/admin/companies/c4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f703/approve HTTP/1.1
@@ -2147,9 +2323,9 @@ HTTP/1.1 204 No Content
 | Operação | `AdminCompaniesController.Reject` → `ICompanyAdminService.RejectAsync` (`Company.Reject`) |
 | Parâmetros | `companyId` (rota, `Guid`) |
 | Corpo do pedido | `RejectCompanyRequest`: `reason`, com 10 a 500 caracteres. |
-| Resposta de sucesso | `204 No Content`. O motivo fica em `status_reason` e é copiado para a notificação (RF079). |
+| Resposta de sucesso | `204 No Content`. O motivo fica em `status_reason`; o Recrutador consulta-o em 6.4.3 (`rejectionReason`), sem aviso ativo (F003). |
 | Erros | `400` ERR-10 (motivo em falta ou fora do P12); `404` ERR-20; `409` ERR-30. |
-| Requisitos | RF094, RF079, RF112; P12 · UC16 |
+| Requisitos | RF094, RF112; P12 · UC16 |
 
 ```http
 POST /api/admin/companies/c4e5f6a7-b8c9-4d0e-a1f2-b3c4d5e6f703/reject HTTP/1.1
@@ -2167,7 +2343,7 @@ HTTP/1.1 204 No Content
 | --- | --- |
 | Operação | `AdminCompaniesController.Suspend` → `ICompanyAdminService.SuspendAsync` (`Company.Suspend`) |
 | Parâmetros | `companyId` (rota, `Guid`) |
-| Resposta de sucesso | `204 No Content`. As vagas da Empresa deixam de ser apresentadas aos Candidatos (RF014); as conversas abertas passam a consulta e `ConversationClosed` é entregue às partes; o Recrutador recebe ERR-07 nas operações `ApprovedCompany`. |
+| Resposta de sucesso | `204 No Content`. As vagas da Empresa deixam de ser apresentadas aos Candidatos (RF014); as conversas abertas passam a consulta, e as partes veem o novo estado na consulta periódica seguinte (secção 7); o Recrutador recebe ERR-07 nas operações `ApprovedCompany`. |
 | Erros | `404` ERR-20; `409` ERR-30 (Empresa fora de `APPROVED`). |
 | Requisitos | RF095, RF075, RF112 · UC17 |
 
@@ -2384,8 +2560,10 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
+  "code": "ERR-10",
   "message": "Os dados enviados não cumprem a validação automática.",
-  "fields": [ { "field": "name", "reason": "A designação já existe na lista." } ]
+  "fields": [ { "field": "name", "reason": "A designação já existe na lista." } ],
+  "blockedUntil": null
 }
 ```
 
@@ -2440,104 +2618,30 @@ Content-Type: application/json
 
 ---
 
-## 7. Ligação persistente (hubs)
+## 7. Consulta periódica das conversas
 
-As mensagens e as notificações novas são entregues por uma ligação bidirecional persistente entre cada cliente e o backend, como exige a DA v02 (F010 e F011), com ASP.NET Core SignalR (arquitetura, AD-02 e D-08; modelo de classes, secção 6.1 e DC-07). Não há consulta periódica. Os hubs só enviam eventos do servidor para o cliente: não expõem métodos invocáveis, e o envio de mensagens, a marcação como lida e o encerramento continuam nos endpoints da secção 6.
+Com a redução de âmbito (Declaração de Âmbito v04, F010 e secção 3), não há ligação persistente nem hubs: as mensagens novas e as mudanças de estado das conversas chegam aos clientes por consulta periódica dos endpoints de 6.8, a intervalos fixos de 3 segundos (deliberação 1 da ata de 2026-10-16, `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`). O parâmetro P17 da especificação de requisitos v02 mantém-se em 5 segundos, como atraso máximo até a mensagem ser apresentada: o intervalo de 3 segundos mais a duração do pedido cabe nesse limite. O desenho segue o modelo de classes v02 (secção 6.1 e DC-07). Este documento não define endpoints nem eventos novos para a consulta periódica: usa os mesmos pedidos da área de conversas.
 
-### 7.1. Ligação e autenticação
+### 7.1. Pedidos periódicos
+
+| Situação do cliente | Pedido repetido | Resposta |
+| --- | --- | --- |
+| Lista de conversas aberta | `GET /api/conversations` (6.8.1) | Para cada conversa: última mensagem (`lastMessageAt`), número de mensagens por ler (`unreadCount`) e estado (`status`, `closeReason`, `closedBy`). |
+| Conversa aberta | `GET /api/conversations/{matchId}/messages?after=<sentAt da última mensagem recebida>` (6.8.2) | Só as mensagens enviadas depois de `after`, com as da outra parte marcadas como lidas. A primeira consulta, ao abrir a conversa, é feita sem `after` e devolve o histórico completo. |
+
+### 7.2. Regras
 
 | Aspeto | Regra |
 | --- | --- |
-| Hubs | `/hubs/messages` (`MessagesHub`) e `/hubs/notifications` (`NotificationsHub`). |
-| Bibliotecas cliente | Área de gestão web: `@microsoft/signalr`. Aplicação móvel: cliente SignalR para Dart (a fixar no `pubspec.yaml`, com a ratificação de D-08). |
-| Transporte | WebSockets sobre TLS (`wss://`), com recurso automático a Server-Sent Events e long polling se o WebSocket falhar, gerido pela biblioteca; o contrato dos eventos é o mesmo. |
-| Protocolo | JSON, com as mesmas convenções da secção 2.3 (camelCase e enumerações em maiúsculas; `AddJsonProtocol` com as opções da API). |
-| Negociação | `POST /hubs/{hub}/negotiate?negotiateVersion=1`, seguida da ligação. |
-| Credencial | A mesma credencial JWT dos pedidos HTTP. Os navegadores não permitem cabeçalhos no WebSocket, pelo que a biblioteca a envia no parâmetro `access_token` da consulta (`accessTokenFactory`); o backend lê-o apenas nas rotas `/hubs/**` (evento `OnMessageReceived` do JWT Bearer). |
-| Autorização | Política `CandidateOrRecruiter` e conta ativa, verificadas em `OnConnectedAsync`. O Administrador é recusado na ligação (RF103). Credencial inválida ou expirada → a negociação devolve `401`. |
-| Associação ao utilizador | Cada ligação fica associada ao `sub` da credencial (`IUserIdProvider`). Os eventos são enviados com `Clients.User(userId)`, pelo que chegam a todas as ligações abertas do mesmo utilizador e só a ele (RNF006). |
-| Registo de diagnóstico | O parâmetro `access_token` é retirado dos registos de pedidos HTTP e do SignalR, tal como o cabeçalho `Authorization` e o texto das mensagens (RNF017). |
-| Expiração | A credencial é validada na ligação; ao fim das 8 horas, a reconexão falha com `401` e o cliente pede novo início de sessão (RNF005). |
-| Reconexão | `withAutomaticReconnect`. Depois de reconectar, o cliente volta a obter a lista de conversas (6.8.1), o histórico aberto (6.8.2) e a área de notificações (6.9.1), para recuperar o que foi emitido enquanto estava desligado (modelo de classes, secção 6.1). |
-| Momento da entrega | O `IRealtimePublisher` só é chamado depois de confirmada a transação, para que nunca se entregue um elemento que não ficou gravado; a entrega cumpre os 5 segundos do P17. |
+| Estado no servidor | Nenhum: cada consulta é um pedido HTTP autenticado igual aos restantes. |
+| Credencial e autorização | A mesma credencial JWT e as mesmas verificações de 3.4 e da política `CandidateOrRecruiter` em cada pedido. O Administrador recebe `403` (ERR-06) (RF103). |
+| Intervalo | 3 segundos entre consultas (P17 em 5 segundos como atraso máximo), enquanto a conversa ou a lista de conversas está aberta com sessão iniciada (P17; RF029, RF073). O intervalo é configurado nos clientes; o backend não depende do seu valor. |
+| Mensagem nova | Surge na primeira consulta seguinte ao envio (RF029, RF073). O próprio remetente recebe a mensagem gravada na resposta de 6.8.3. |
+| Encerramento, bloqueio e suspensão | A passagem da conversa a modo apenas de consulta chega ao cliente na consulta seguinte, pelo `status` e pelo `closeReason` de 6.8.1. Uma conta bloqueada ou suspensa recebe `403` (ERR-03 ou ERR-04) no pedido seguinte (secção 3.4). |
+| Expiração da credencial | Ao fim das 8 horas, a consulta devolve `401` (ERR-01) e o cliente pede novo início de sessão (RNF005). |
+| Registo de diagnóstico | O cabeçalho `Authorization` e o texto das mensagens ficam fora dos registos de diagnóstico (RNF017). |
 
-```javascript
-// Área de gestão web — exemplo de ligação ao hub de mensagens
-const connection = new signalR.HubConnectionBuilder()
-  .withUrl("https://<servidor>/hubs/messages", { accessTokenFactory: () => token })
-  .withAutomaticReconnect()
-  .build();
-connection.on("MessageReceived", (message) => { /* acrescentar a mensagem; ver PA-02 */ });
-connection.on("ConversationClosed", (matchId) => { /* passar a conversa a modo apenas de consulta */ });
-await connection.start();
-```
-
-### 7.2. `MessagesHub` — `/hubs/messages`
-
-| Evento | Argumentos | Destinatários | Origem | Requisitos |
-| --- | --- | --- | --- | --- |
-| `MessageReceived` | `message` (`MessageDto`) | As duas partes da conversa (o remetente recebe-o nas suas outras ligações abertas) | `POST /api/conversations/{matchId}/messages` (6.8.3) | RF029, RF073, RF070; P17 |
-| `ConversationClosed` | `matchId` (`Guid`) | As duas partes | Encerramento por uma das partes (6.8.4); bloqueio ou suspensão de conta (6.10.3, 6.10.4); suspensão de Empresa (6.11.5) | RF030, RF074, RF075 |
-
-Os eventos e os argumentos são os do modelo de classes v01 (secção 6.1; `IRealtimePublisher.PublishMessageAsync(recipientId, MessageDto)`). O `MessageDto` não identifica a conversa: com o contrato v01, o cliente só consegue apresentar a mensagem na conversa que tem aberta e tem de voltar a obter a lista de conversas (6.8.1) para atualizar os contadores das restantes. Esta limitação afeta o RF029 e o RF073 e está registada na secção 11, PA-02. Ao receber `ConversationClosed`, o cliente volta a obter a lista de conversas para ler o motivo (`closeReason`).
-
-Exemplo de mensagem do protocolo JSON do SignalR (o carácter final `0x1E` é o separador do protocolo):
-
-```json
-{
-  "type": 1,
-  "target": "MessageReceived",
-  "arguments": [
-    {
-      "messageId": "2e3f4a5b-6c7d-4e8f-9a0b-1c2d3e4f5a13",
-      "senderId": "3f2a9c1e-7b4d-4e8a-9c21-5d6e7f8a9b01",
-      "content": "Bom dia. Sim, de manhã é ideal para mim.",
-      "sentAt": "2026-10-09T16:20:05Z",
-      "readAt": null
-    }
-  ]
-}
-```
-
-### 7.3. `NotificationsHub` — `/hubs/notifications`
-
-| Evento | Argumentos | Destinatário | Requisitos |
-| --- | --- | --- | --- |
-| `NotificationReceived` | `notification` (`NotificationDto`), `unreadCount` (`int`, número de não lidas já com esta) | O destinatário da notificação | RF110, RF111, RF034, RF080; P17 |
-
-Tipos de notificação, texto gerado pelo `NotificationService` e elemento de acesso (`targetId`) para o RF036 e o RF082:
-
-| `type` | Destinatário | Acontecimento (endpoint) | `text` | `targetId` | O cliente abre | Requisitos |
-| --- | --- | --- | --- | --- | --- | --- |
-| `MATCH_CONFIRMED` | Candidato | Aceitação (6.6.4) | Novo match: {função} — {Empresa}. | `matchId` | Lista de matches, no match | RF031, RF036 |
-| `MATCH_CONFIRMED` | Recrutador | Aceitação (6.6.4) | Novo match: {Candidato} — {função}. | `matchId` | Lista de matches, no match | RF077, RF082 |
-| `NEW_MESSAGE` | Destinatário da mensagem | Envio (6.8.3) | Nova mensagem de {remetente} na conversa sobre a vaga {função}. | `matchId` | Conversa | RF032, RF078 |
-| `NEW_INTEREST` | Recrutador | Interesse (6.3.5) | Novo interesse na vaga {função}. | `jobId` | Candidatos em espera da vaga | RF076, RF082 |
-| `COMPANY_APPROVED` | Recrutador | Aprovação (6.11.3) | O registo da Empresa {designação} foi aprovado. | `companyId` | Estado do pedido de registo | RF079, RF082 |
-| `COMPANY_REJECTED` | Recrutador | Recusa (6.11.4) | O registo da Empresa {designação} foi recusado. Motivo: {motivo}. | `companyId` | Estado do pedido de registo | RF079, RF082 |
-| `INTEREST_QUOTA_RESTORED` | Candidato | Tarefa periódica `QuotaRestoreWorker` | A sua quota de interesses foi reposta: tem 10 interesses disponíveis. | `null` | Área de exploração de vagas | RF033, RF036 |
-
-O texto da notificação `NEW_MESSAGE` identifica a conversa e não reproduz o conteúdo da mensagem. Os nomes de Candidato só aparecem em notificações do Recrutador depois de existir match ou interesse.
-
-```json
-{
-  "type": 1,
-  "target": "NotificationReceived",
-  "arguments": [
-    {
-      "notificationId": "4f5a6b7c-8d9e-4f0a-b1c2-d3e4f5a6b713",
-      "type": "NEW_MESSAGE",
-      "text": "Nova mensagem de Ana Ferreira na conversa sobre a vaga Programador Backend .NET.",
-      "targetId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b06",
-      "createdAt": "2026-10-09T16:20:05Z",
-      "isRead": false
-    },
-    1
-  ]
-}
-```
-
-### 7.4. Sequência do envio de uma mensagem
+### 7.3. Sequência do envio de uma mensagem
 
 ```mermaid
 sequenceDiagram
@@ -2546,19 +2650,22 @@ sequenceDiagram
     participant API as ConversationsController
     participant S as ConversationService
     participant DB as PostgreSQL
-    participant P as IRealtimePublisher
     participant W as Área de gestão web<br/>(Recrutador)
     M->>API: POST /api/conversations/{matchId}/messages
     API->>S: SendAsync(userId, matchId, request)
-    S->>DB: verifica match e conversa aberta,<br/>grava message, last_message_at e notificação NEW_MESSAGE
+    S->>DB: verifica match e conversa aberta,<br/>grava message
     DB-->>S: transação confirmada
-    S->>P: PublishMessageAsync(...) e PublishNotificationAsync(...)
-    P-->>W: MessagesHub · MessageReceived(message)
-    P-->>M: MessagesHub · MessageReceived(message)
-    P-->>W: NotificationsHub · NotificationReceived(notification, unreadCount)
     S-->>API: MessageDto
     API-->>M: 201 Created · MessageDto
-    Note over P,W: entrega em ≤ 5 s após o envio (P17)
+    loop de 3 em 3 segundos, com a conversa aberta
+        W->>API: GET /api/conversations/{matchId}/messages?after=<última mensagem recebida>
+        API->>S: OpenAsync(userId, matchId, after)
+        S->>DB: mensagens posteriores a after,<br/>marca como lidas as da outra parte
+        DB-->>S: mensagens
+        S-->>API: MessageDto[]
+        API-->>W: 200 OK · mensagens novas (ou lista vazia)
+    end
+    Note over M,W: a mensagem surge na primeira consulta seguinte ao envio
 ```
 
 ---
@@ -2595,11 +2702,11 @@ Os DTOs são os `record` do modelo de classes (secção 7). Os nomes das proprie
 | | `photoUrl` | texto | Não | URL da API (secção 2.6). |
 | | `hasCv` | booleano | Sim | |
 | | `links` | texto[] | Sim | 0 a 3, pela ordem de `position`. |
-| | `skills` | `ProfileSkillDto[]` | Sim | |
+| | `skills` | `ReferenceItemDto[]` | Sim | Competências da lista: `id` = `skill_id` (6.2.5), `name` = designação. |
+| | `customSkills` | `CustomSkillDto[]` | Sim | Competências «Outro» (6.2.10 e 6.2.11). |
 | | `preferences` | `SearchPreferencesDto` | Sim | |
-| `ProfileSkillDto` | `candidateSkillId` | `Guid` | Sim | Usado em 6.2.5. |
-| | `name` | texto | Sim | Designação da lista ou texto «Outro». |
-| | `isCustom` | booleano | Sim | `true` nas competências «Outro». |
+| `CustomSkillDto` | `customSkillId` | `Guid` | Sim | Identificador da competência «Outro» (`candidate_custom_skill.id`), usado em 6.2.11. |
+| | `label` | texto | Sim | Designação introduzida pelo Candidato (P07). |
 | `UpdateCandidateProfileRequest` | `desiredRole` | texto | Não | Até 150. |
 | | `locationId` | `Guid` | Sim | Localidade da lista. |
 | | `availability` | `Availability` | Não | P14. |
@@ -2608,8 +2715,8 @@ Os DTOs são os `record` do modelo de classes (secção 7). Os nomes das proprie
 | | `minSalaryExpectation` | número | Não | ≥ 0, 2 casas decimais; `null` = sem filtro. |
 | | `workModes` | `WorkMode[]` | Sim | Sem repetidos; `[]` = todos. |
 | | `contractTypes` | `ContractType[]` | Sim | Sem repetidos; `[]` = todos. |
-| `AddSkillRequest` | `skillId` | `Guid` | Um dos dois | Competência da lista, ainda não associada. |
-| | `customLabel` | texto | Um dos dois | P07. |
+| `AddSkillRequest` | `skillId` | `Guid` | Sim | Competência da lista, ainda não associada. |
+| `AddCustomSkillRequest` | `label` | texto | Sim | 2 a 40 caracteres, só letras, algarismos, espaços e + # . -, não só espaços (P07). |
 | `SetLinksRequest` | `urls` | texto[] | Sim | 0 a 3; cada um com `http://` ou `https://`, até 500. |
 | `JobCardDto` | `jobId`, `title`, `companyName`, `minSalary`, `maxSalary`, `locationName`, `distanceKm`, `contractType`, `workMode`, `isUrgent`, `photoUrls` | | Sim | `distanceKm` inteiro em km (RF015); `photoUrls` 0 a 5. |
 | | `logoUrl` | texto | Não | Só quando registado (RF013). |
@@ -2620,6 +2727,7 @@ Os DTOs são os `record` do modelo de classes (secção 7). Os nomes das proprie
 | `CompanyPageDto` | `companyId`, `companyName`, `photoUrls` | | Sim | `photoUrls` 0 a 6, pela ordem da galeria. |
 | | `description`, `website`, `logoUrl` | texto | Não | |
 | `QuotaDto` | `available` | inteiro | Sim | 0 a 10. |
+| | `total` | inteiro | Sim | Total da quota de interesses (P11): 10. |
 | | `blockedUntil` | data e hora | Não | Só com `available = 0`. |
 
 ### 8.3. Empresa e vagas
@@ -2634,7 +2742,7 @@ Os DTOs são os `record` do modelo de classes (secção 7). Os nomes das proprie
 | | `contactEmail` | texto | Sim | local@domínio, até 255. |
 | | `contactPhone` | texto | Sim | 9 algarismos. |
 | | `responsibleName` | texto | Sim | Até 150. |
-| `CompanyRegistrationDto` | os oito dados (com `locationName` em vez de `locationId`), `companyId`, `submittedAt` | | Sim | |
+| `CompanyRegistrationDto` | os oito dados (incluindo `locationId`), `locationName`, `companyId`, `submittedAt` | | Sim | `locationId` serve para pré-preencher os formulários de 6.4.2 e 6.4.4. |
 | `CompanyStatusDto` | `companyId`, `status`, `submittedAt` | | Sim | |
 | | `rejectionReason` | texto | Não | Só no estado `REJECTED`. |
 | `CompanyPageRequest` | `description` | texto | Não | Até 1000 (P08). |
@@ -2653,24 +2761,26 @@ Os DTOs são os `record` do modelo de classes (secção 7). Os nomes das proprie
 | `ReferenceItemDto` | `id`, `name` | `Guid` / texto | Sim | |
 | `ReferenceItemRequest` | `name` | texto | Sim | Até 100; única na lista, sem distinção de maiúsculas. |
 
-### 8.4. Avaliação, matches, conversas e notificações
+### 8.4. Avaliação, matches e conversas
 
 | DTO | Campo | Tipo JSON | Obrig. | Regras |
 | --- | --- | --- | --- | --- |
-| `WaitingCandidateDto` | `matchId`, `candidateId`, `fullName`, `interestAt` | | Sim | `interestAt` = `candidate_action_at`. |
+| `WaitingCandidateDto` | `matchId`, `candidateId`, `fullName`, `locationName`, `interestAt` | | Sim | `interestAt` = `candidate_action_at`. |
+| | `desiredRole` | texto | Não | Função pretendida do Candidato; `null` se não indicada. |
 | `CandidateFullProfileDto` | `matchId`, `fullName`, `locationName`, `links`, `skills`, `hasCv` | | Sim | Sem contactos nem preferências. |
+| | `profileOpenedAt` | data e hora | Sim | Primeira abertura do perfil para este interesse (`match.profile_opened_at`, RF118). |
 | | `photoUrl`, `desiredRole`, `availability`, `experienceSummary` | | Não | |
 | `SkillTagDto` | `name`, `matchesJob` | texto / booleano | Sim | `matchesJob` só pode ser `true` em competências da lista (modelo de dados, 6.8). |
-| `MatchDto` | `matchId`, `jobTitle`, `companyName`, `counterpartName`, `contactEmail`, `contactPhone`, `matchedAt` | | Sim | Contactos da outra parte (secção 6.7.1). |
+| `MatchDto` | `matchId`, `jobTitle`, `locationName`, `companyName`, `counterpartName`, `contactEmail`, `contactPhone`, `matchedAt` | | Sim | Contactos da outra parte (secção 6.7.1). `locationName` é a localidade da vaga. `matchedAt` é calculado a partir de `recruiter_action_at`. |
+| | `jobStatus` | `JobStatus` | Sim | Estado da vaga do match. |
+| | `logoUrl` | texto | Não | URL do logótipo da Empresa; `null` sem logótipo. |
 | `ConversationSummaryDto` | `matchId`, `counterpartName`, `jobTitle`, `companyName`, `status`, `unreadCount` | | Sim | |
 | | `closeReason` | `ConversationCloseReason` | Não | Só com `status = CLOSED`. |
-| | `lastMessageAt` | data e hora | Não | `null` sem mensagens. |
+| | `closedBy` | `Guid` | Não | `userId` da parte que encerrou a conversa (`conversation_closed_by`); `null` com a conversa `OPEN` e no encerramento automático. O cliente compara-o com o seu `userId`. |
+| | `lastMessageAt` | data e hora | Não | `null` sem mensagens. Calculado a partir da última mensagem da conversa. |
 | `MessageDto` | `messageId`, `senderId`, `content`, `sentAt` | | Sim | `senderId` = `userId` do remetente. |
 | | `readAt` | data e hora | Não | Leitura pelo destinatário. |
 | `SendMessageRequest` | `content` | texto | Sim | 1 a 1000 (P03). |
-| `NotificationDto` | `notificationId`, `type`, `text`, `createdAt`, `isRead` | | Sim | |
-| | `targetId` | `Guid` | Não | Secção 7.3. |
-| `NotificationListDto` | `items`, `unreadCount` | | Sim | |
 
 ### 8.5. Supervisão
 
@@ -2683,8 +2793,10 @@ Os DTOs são os `record` do modelo de classes (secção 7). Os nomes das proprie
 | `PublishedJobAdminDto` | `jobId`, `title`, `companyName`, `publishedAt`, `interestCount` | | Sim | |
 | `RejectCompanyRequest` | `reason` | texto | Sim | 10 a 500 (P12). |
 | `IndicatorsDto` | `activeCandidates`, `approvedCompanies`, `pendingCompanies`, `jobsFirstPublished`, `interestsExpressed`, `matchesConfirmed`, `conversationsStarted` | inteiro | Sim | ≥ 0 (RF096). |
-| `ApiErrorDto` | `message` | texto | Sim | Secção 4.1. |
+| `ApiErrorDto` | `code` | texto | Sim | Identificador do catálogo (secção 4.3), `ERR-01` a `ERR-50`. |
+| | `message` | texto | Sim | Secção 4.1. |
 | | `fields` | `FieldErrorDto[]` | Sim | `[]` quando o erro não é de um campo. |
+| | `blockedUntil` | data e hora | Não | Só no `ERR-31`; `null` nos restantes erros. |
 | `FieldErrorDto` | `field` | texto | Sim | Nome JSON do campo, com índice nas listas. |
 | | `reason` | texto | Sim | Motivo para esse campo. |
 
@@ -2703,38 +2815,32 @@ Todos os requisitos funcionais abrangem o componente Backend. A tabela indica, p
 | RF003, RF004, RF005 | 6.1.1; localidades em 6.13.1, sem sessão iniciada (operação não reservada) |
 | RF006 | 6.2.2; consulta em 6.2.1 |
 | RF007, RF023 | 6.2.3 |
-| RF008, RF009 | 6.2.4, 6.2.5; lista em 6.13.2 |
+| RF008, RF009 | 6.2.4 e 6.2.5 (lista); 6.2.10 e 6.2.11 («Outro»); lista em 6.13.2 |
 | RF010 | 6.2.7 |
-| RF011 | 6.2.8; obtenção do CV pelo próprio Candidato: ver PA-10 |
+| RF011 | 6.2.8; obtenção do CV pelo próprio Candidato em 6.2.9 |
 | RF012 | 6.2.6 |
-| RF013, RF014, RF015 | 6.3.1 (filtro e distância calculados no servidor; RF015 sem endpoint próprio); apresentação do logótipo e das fotografias depende de PA-01 |
+| RF013, RF014, RF015 | 6.3.1 (filtro e distância calculados no servidor; RF015 sem endpoint próprio); logótipo e fotografias em 6.9 |
 | RF016 | 6.3.2 |
-| RF017 | 6.3.3; apresentação das imagens depende de PA-01 |
+| RF017 | 6.3.3; imagens em 6.9 |
 | RF018 | 6.3.4 |
 | RF019, RF020 | 6.3.5 (ERR-31, ERR-32) |
 | RF021 | Tarefa periódica `QuotaRestoreWorker`; verificação em 6.3.5 e 6.3.6 |
 | RF022 | 6.3.6 |
-| RF024, RF025 | 6.7.1; estado da vaga do match: ver PA-08 |
+| RF024, RF025 | 6.7.1; estado da vaga do match em `MatchDto.jobStatus` |
 | RF026, RF069 | 6.8.3 |
 | RF027, RF071 | 6.8.1 |
 | RF028, RF072 | 6.8.2 |
-| RF029, RF073 | Evento `MessageReceived` (7.2); limitação PA-02 |
-| RF030, RF074 | 6.8.4; evento `ConversationClosed` |
-| RF031, RF077 | Notificação `MATCH_CONFIRMED` criada em 6.6.4; evento `NotificationReceived` |
-| RF032, RF078 | Notificação `NEW_MESSAGE` criada em 6.8.3 |
-| RF033 | Notificação `INTEREST_QUOTA_RESTORED` da tarefa periódica |
-| RF034, RF080 | 6.9.1 |
-| RF035, RF081 | 6.9.2 |
-| RF036, RF082 | `type` e `targetId` de `NotificationDto` (7.3); navegação no cliente |
+| RF029, RF073 | Consulta periódica de 6.8.1 e 6.8.2 (com `after`), de 3 em 3 segundos (secção 7; P17) |
+| RF030, RF074 | 6.8.4; o estado da conversa chega à outra parte na consulta seguinte de 6.8.1 |
 | RF037 | 6.1.2 |
 | RF039 | Política `ApprovedCompany` (ERR-07), também na lista de matches do Recrutador (6.7.1); estado em 6.4.3 |
 | RF041, RF042, RF043 | 6.4.1 |
-| RF044 | 6.4.3 |
-| RF045 | 6.4.2; pré-preenchimento do formulário depende de PA-03 |
-| RF046 | 6.4.5; pré-preenchimento depende de PA-03 |
+| RF044 | 6.4.3; dados de registo em 6.4.8 |
+| RF045 | 6.4.2; pré-preenchimento do formulário em 6.4.8 |
+| RF046 | 6.4.5; pré-preenchimento em 6.4.9 |
 | RF047 | 6.4.6 |
 | RF048 | 6.4.7 |
-| RF049 | 6.4.4; pré-preenchimento depende de PA-03 |
+| RF049 | 6.4.4; pré-preenchimento em 6.4.8 |
 | RF050, RF051 | 6.5.2; RF051 também em 6.5.3 |
 | RF052 | 6.5.9 |
 | RF053 | 6.5.4 |
@@ -2744,17 +2850,15 @@ Todos os requisitos funcionais abrangem o componente Backend. A tabela indica, p
 | RF057 | Tarefa periódica `JobExpirationWorker` (sem endpoint) |
 | RF058, RF114 | 6.5.8 (ERR-38) |
 | RF059 | Verificação de titularidade em 6.5.1 a 6.5.9 (ERR-08) |
-| RF060 | 6.6.1; contagem em `JobDto.waitingCandidates`; dados apresentados na lista: ver PA-07 |
-| RF061 | 6.6.2, 6.6.3; apresentação da fotografia depende de PA-01 |
+| RF060 | 6.6.1; contagem em `JobDto.waitingCandidates`; dados apresentados na lista em `WaitingCandidateDto` (`desiredRole`, `locationName`) |
+| RF061 | 6.6.2, 6.6.3; fotografia em 6.9 |
 | RF062 | `SkillTagDto.matchesJob` em 6.6.2 |
 | RF063, RF066, RF068 | 6.6.4 |
 | RF064 | 6.6.5 |
 | RF065 | Efeito interno de 6.6.4 e 6.6.5 (`decided_by`, `recruiter_action_at`) |
-| RF067 | 6.7.1; estado da vaga do match: ver PA-08 |
-| RF070 | Regra de 6.8.2 a 6.8.4 (ERR-37); hub só para as partes |
-| RF075 | Efeito interno de 6.10.3, 6.10.4 e 6.11.5; evento `ConversationClosed`; `closeReason` em 6.8.1 |
-| RF076 | Notificação `NEW_INTEREST` criada em 6.3.5 |
-| RF079 | Notificações `COMPANY_APPROVED` e `COMPANY_REJECTED` criadas em 6.11.3 e 6.11.4 |
+| RF067 | 6.7.1; estado da vaga do match em `MatchDto.jobStatus` |
+| RF070 | Regra de 6.8.2 a 6.8.4 (ERR-37) |
+| RF075 | Efeito interno de 6.10.3, 6.10.4 e 6.11.5; `closeReason` em 6.8.1 |
 | RF085 | 6.10.1 |
 | RF086 | 6.10.3 |
 | RF087, RF090 | 6.10.5 |
@@ -2770,19 +2874,18 @@ Todos os requisitos funcionais abrangem o componente Backend. A tabela indica, p
 | RF098 | 6.11.8 |
 | RF099, RF100 | 6.13.4, 6.13.5 |
 | RF101, RF102 | 6.13.6, 6.13.7 |
-| RF103 | Política `CandidateOrRecruiter` em 6.8 e nos hubs (ERR-06); 6.12.1 só com contagens |
+| RF103 | Política `CandidateOrRecruiter` em 6.8 (ERR-06); 6.12.1 só com contagens |
 | RF104 | Política `Admin` em `/api/admin/**` e na escrita das listas |
 | RF105, RF106, RF107 | 6.1.4 |
 | RF108, RF109 | Efeito de 6.8.2 |
-| RF110, RF111 | Evento `NotificationReceived` (7.3) |
 | RF112 | Efeito interno das operações indicadas em cada endpoint (`operation_log`; interesse, recusa e decisão na linha de `match`) |
 | RF113 | Ausência de expiração: nenhum endpoint nem tarefa altera um interesse `WAITING` além de 6.6.4 e 6.6.5 |
 | RF115 | 6.5.6 |
 | RF116 | 6.11.6 |
 | RF117 | 6.6.4, 6.6.5 (ERR-35) |
-| RF118 | Efeito de 6.6.2; apresentação da data: ver PA-09 |
+| RF118 | Efeito de 6.6.2; apresentação da data em `CandidateFullProfileDto.profileOpenedAt` |
 
-Os 118 requisitos funcionais têm uma operação da interface do servidor, um evento ou um comportamento interno que os concretiza. Em oito deles (RF013, RF017, RF029, RF045, RF046, RF049, RF061, RF073), o funcionamento completo depende da correção dos pontos em aberto PA-01 a PA-03 (secção 11), que residem no modelo de classes. O RF003 deixou de depender de pontos em aberto com a resolução da PA-04 na v02 (secção 11.3). Os RF015, RF021, RF033, RF057, RF065, RF112, RF113 e RF118 não têm endpoint próprio, porque são comportamentos internos do servidor desencadeados por outros endpoints ou pelas tarefas periódicas.
+Os 103 requisitos funcionais da especificação de requisitos v02 (RF001 a RF118, sem os 15 descontinuados da secção 1.3 da especificação) têm uma operação da interface do servidor ou um comportamento interno que os concretiza. Nenhum depende de pontos em aberto: o RF003 dependia da PA-04, resolvida na v02 (secção 11.3). Os RF015, RF021, RF057, RF065, RF112, RF113 e RF118 não têm endpoint próprio, porque são comportamentos internos do servidor desencadeados por outros endpoints ou pelas tarefas periódicas.
 
 ### 9.2. Requisitos não funcionais
 
@@ -2790,36 +2893,34 @@ Os 118 requisitos funcionais têm uma operação da interface do servidor, um ev
 | --- | --- |
 | RNF001, RNF002, RNF015 | Limites de tempo verificados por pedido direto em `m3` (P19); listas sem paginação dimensionadas para os dados de demonstração (L-02). |
 | RNF003 | 6.1.1, 6.1.2, 6.1.5: palavras-passe só em resumo; nunca devolvidas em nenhum DTO. |
-| RNF004, RNF005 | Secções 3.1 e 3.4: credencial em todas as operações reservadas, expiração de 8 horas, ERR-01; também nos hubs. As operações sem credencial são apenas as quatro da política «Anónimo» (3.3), que coincidem com as operações não reservadas da especificação de requisitos v02 (secção 2.2). |
+| RNF004, RNF005 | Secções 3.1 e 3.4: credencial em todas as operações reservadas, expiração de 8 horas, ERR-01; também nos pedidos da consulta periódica (secção 7). As operações sem credencial são apenas as quatro da política «Anónimo» (3.3), que coincidem com as operações não reservadas da especificação de requisitos v02 (secção 2.2). |
 | RNF006 | Identificador sempre da credencial (2.5); políticas e titularidade (3.3); ERR-06, ERR-08. |
-| RNF007 | 6.6.3: CV só para o Recrutador de uma vaga com o Candidato em espera; nenhum URL público de CV. A obtenção pelo próprio Candidato, que o RNF007 admite, não tem operação no modelo de classes v01 (PA-10). |
+| RNF007 | 6.6.3: CV só para o Recrutador de uma vaga com o Candidato em espera; 6.2.9: só o próprio Candidato; nenhum URL público de CV. |
 | RNF008 | Validação no servidor de todos os DTOs de pedido (secção 8), com ERR-10 e ERR-11. |
 | RNF009 | ERR-02, mensagem única. |
-| RNF013 | Respostas de sucesso só depois de confirmada a transação; o mesmo para os eventos (7.1). |
+| RNF013 | Respostas de sucesso só depois de confirmada a transação. |
 | RNF016 | Validação da assinatura dos ficheiros (2.6). |
-| RNF017 | Respostas de erro sem dados internos (4.1); `access_token`, `Authorization` e texto das mensagens fora dos registos de diagnóstico (7.1). |
+| RNF017 | Respostas de erro sem dados internos (4.1); cabeçalho `Authorization` e texto das mensagens fora dos registos de diagnóstico (7.2). |
 
-### 9.3. Controllers, hubs e casos de uso
+### 9.3. Controllers e casos de uso
 
-| Controller ou hub | Endpoints ou eventos | Casos de uso |
+| Controller | Endpoints | Casos de uso |
 | --- | --- | --- |
 | `AuthController` | 5 | UC01, UC02, UC03, UC07 |
-| `CandidateProfileController` | 8 | UC04, UC05 |
+| `CandidateProfileController` | 11 | UC04, UC05 |
 | `JobExplorationController` | 6 | UC05, UC06 |
-| `CompanyController` | 7 | UC07, UC08 |
+| `CompanyController` | 9 | UC07, UC08 |
 | `JobsController` | 9 | UC09, UC10 |
 | `CandidateEvaluationController` | 5 | UC11, UC12 |
 | `MatchesController` | 1 | UC13 |
 | `ConversationsController` | 4 | UC14 |
-| `NotificationsController` | 2 | UC15 |
+| `FilesController` | 1 | UC04 a UC08, UC11 |
 | `AdminAccountsController` | 5 | UC18 |
 | `AdminCompaniesController` | 8 | UC16, UC17 |
 | `AdminIndicatorsController` | 1 | UC19 |
 | `ReferenceListsController` | 7 | UC20 |
-| `MessagesHub` | 2 eventos | UC14 |
-| `NotificationsHub` | 1 evento | UC15 |
 
-Todas as operações dos 13 controllers da secção 6 do modelo de classes estão documentadas, e não há endpoints sem operação correspondente.
+Todas as operações dos 13 controllers da secção 6 do modelo de classes v02 estão documentadas, e não há endpoints sem operação correspondente. O UC15 (notificações) foi retirado com a F011 (especificação de casos de uso v02).
 
 ---
 
@@ -2832,13 +2933,15 @@ Todas as operações dos 13 controllers da secção 6 do modelo de classes estã
 | DAPI-03 | Unicidade de dados de formulário em `400` com o campo; `409` só para conflitos de estado. | RF004, RF037 e RF042 tratam o endereço ou o NIF já registados como parte da validação automática, com indicação do campo. |
 | DAPI-04 | `403` (e não `404`) para elementos de outro utilizador ou Empresa. | UC12, exceção E3 («rejeita a operação por falta de autorização»); os identificadores são `Guid` aleatórios, pelo que a resposta não facilita a enumeração. |
 | DAPI-05 | Três consultas em `GET` com efeito registado no servidor: 6.3.6 (reposição da quota vencida), 6.6.2 (primeira abertura do perfil) e 6.8.2 (marcação das mensagens como lidas). | Os três efeitos são idempotentes e decorrem do próprio ato de consultar, como os requisitos os descrevem (RF021, RF118, RF108, RF109); o modelo de classes modela-os como operações de consulta (`GetQuota`, `OpenProfile`, `Open`). Um `POST` obrigaria o cliente a dois pedidos para uma só consulta. |
-| DAPI-06 | Ações de mudança de estado como `POST …/{id}/<ação>`. | Cada transição tem pré-condições e efeitos próprios (notificações, `operation_log`, conversas), que um `PATCH` genérico do estado esconderia. |
+| DAPI-06 | Ações de mudança de estado como `POST …/{id}/<ação>`. | Cada transição tem pré-condições e efeitos próprios (`operation_log`, conversas), que um `PATCH` genérico do estado esconderia. |
 | DAPI-07 | Datas dos indicadores interpretadas no fuso `Europe/Lisbon`. | O RF096 fala em datas do calendário do Administrador; o armazenamento continua em UTC. |
 | DAPI-08 | Localidades apresentadas como «Localidade (Distrito)» no `ReferenceItemDto`. | O `ReferenceItemDto` só tem `name`; o modelo de dados admite localidades com o mesmo nome em distritos diferentes. |
-| DAPI-09 | Rotas, métodos, códigos de estado, mensagens de erro e cabeçalhos fixados neste documento; operações, DTOs, eventos e autorização seguem sem alterações o modelo de classes v01, exceto a autorização de 6.13.1 (DAPI-12). | O modelo de classes remete para a documentação da API apenas as rotas, os códigos de estado e os exemplos (secção 11); alterar o resto exige uma nova versão do modelo de classes (secção 11, pontos em aberto). |
+| DAPI-09 | Rotas, métodos, códigos de estado, mensagens de erro e cabeçalhos fixados neste documento; operações, DTOs e autorização seguem o modelo de classes v02, com as melhorias de contrato da `I104` (secção 11.3). | O modelo de classes remete para a documentação da API apenas as rotas, os códigos de estado e os exemplos (secção 11 do modelo); as melhorias de contrato que o modelo de classes v02 deixou para a revisão do contrato da API (PA-05, PA-07 a PA-09, PC-03, PC-04 e PC-07) são feitas aqui, e o modelo de classes só as acompanha numa versão posterior. |
 | DAPI-10 | Carregamentos de ficheiro único em `PUT` com `204` e `Location`; acrescentos a galerias em `POST` com `201` e `Location`. | As operações do modelo de classes devolvem `IActionResult` e o serviço devolve o URL; o cabeçalho evita criar DTOs novos. |
 | DAPI-11 | Em caso de divergência entre a documentação gerada pelo Swagger e este documento, prevalece este documento até à aprovação de uma nova versão. | Este documento é o contrato acordado entre o backend e os dois clientes (objetivo da `I092`); o Swagger é gerado a partir da implementação e reproduz também os erros dela. |
 | DAPI-12 | Autorização de `GET /api/reference-lists/locations` (6.13.1) anónima. | A especificação de requisitos v02 acrescenta a consulta da lista de localidades às operações não reservadas (secção 2.2), alteração aprovada na deliberação 2 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`, na sequência da deliberação 5 do Backlog Refinement de 14-10-2026. Pela mesma deliberação 2, a autorização anónima de `ListLocations` é integrada no modelo de classes do backend v02 produzido pela `I103`. Só a consulta das localidades fica anónima: as competências e os benefícios só são usados com sessão iniciada (RF008, RF050). |
+| DAPI-13 | O parâmetro `kind` de `GET /api/files/{kind}/{fileName}` usa os valores JSON da enumeração `FileKind` (`PROFILE_PHOTO`, `COMPANY_LOGO`, `COMPANY_PHOTO`, `JOB_PHOTO`). | O modelo de classes fixa `/api/files/{kind}/{fileName}` mas não a forma textual de `kind`; usar o mesmo vocabulário das restantes enumerações (DAPI-01) evita uma segunda convenção. |
+| DAPI-14 | `after` é um parâmetro de consulta opcional de `GET /api/conversations/{matchId}/messages`, em ISO 8601. | O modelo de classes define `Open(matchId, after)` sem fixar a posição do parâmetro; num `GET`, a consulta é a posição natural, e a mesma rota serve a abertura da conversa e a consulta periódica. |
 
 ---
 
@@ -2846,21 +2949,11 @@ Todas as operações dos 13 controllers da secção 6 do modelo de classes estã
 
 ### 11.1. Pontos em aberto
 
-Lacunas encontradas na elaboração deste documento, nos artefactos de que ele depende. Este documento não as resolve, para não alterar artefactos aprovados sem decisão formal: documenta o contrato v01 tal como está e indica aqui o impacto e a proposta de correção. A classificação segue a secção 5.3 do Plano de Qualidade. Os defeitos de tarefas já concluídas (`Done`) são defeitos escapados (métrica M-05) e são comunicados para registo como não conformidades (Plano de Qualidade, secção 10). As incoerências entre dois artefactos aprovados em que nenhum deles está em falta isoladamente (PA-07 a PA-09) são classificadas como propostas de melhoria e não constituem não conformidade.
+Lacunas ainda sem resolução nos artefactos de que este documento depende. Este documento não as resolve, para não alterar artefactos aprovados sem decisão formal: documenta o contrato v02 tal como está e indica aqui o impacto e a proposta de correção. A classificação segue a secção 5.3 do Plano de Qualidade. Os pontos da v01 já resolvidos estão na secção 11.3.
 
-| ID | Ponto | Impacto | Proposta | Origem e classificação | Decisão formal |
-| --- | --- | --- | --- | --- | --- |
-| PA-01 | Não há operação para servir os ficheiros referidos pelos URL dos DTOs (`photoUrl`, `logoUrl`, `photoUrls`), embora o modelo de classes diga que são «endereços da API que servem o ficheiro depois de verificar a autorização» (secção 7.2). | Os clientes não conseguem apresentar fotografias nem logótipos (RF013, RF017, RF061). | Acrescentar `FilesController` com `GET /api/files/{fileId}`: imagens de Empresa e de vaga para qualquer conta; fotografia de perfil só para o próprio Candidato e para Recrutadores de vagas onde tenha interesse; o CV continua só em 6.6.3. Identificador do ficheiro: (a) o nome gerado pelo `LocalFileStorage`, sem mudar o modelo de dados (recomendada); (b) uma tabela de ficheiros. | Modelo de classes (`I036`) · defeito substancial | Sim, na escolha entre (a) e (b), porque (b) altera o modelo de dados. |
-| PA-02 | `IRealtimePublisher.PublishMessageAsync(recipientId, MessageDto)` e o `MessageDto` não identificam a conversa. | O cliente não sabe em que conversa mostrar a mensagem recebida nem que contador atualizar (RF029, RF073). | Acrescentar `Guid matchId` a `PublishMessageAsync` e enviar `MessageReceived(matchId, message)`. | Modelo de classes (`I036`) · defeito substancial | Não; correção de desenho. |
-| PA-03 | O Recrutador não tem operação para consultar os dados de registo nem a página de apresentação da própria Empresa: `GetCompanyPage` é do Candidato e `GetSubmittedData` do Administrador. | A área de gestão web não consegue preencher os formulários de 6.4.2, 6.4.4 e 6.4.5 com os valores atuais (RF045, RF046, RF049). | Acrescentar ao `CompanyController`: `GET /api/recruiter/company` (`CompanyRegistrationDto`, com `LocationId` acrescentado ao DTO), com a política `Recruiter`, e não `ApprovedCompany`, porque os dados de registo são lidos com a Empresa em qualquer estado (pendente, recusada para correção, RF045, aprovada ou suspensa; ecrãs W05, W06 e W26 do protótipo da `I040`), com `404` sem Empresa registada; e `GET /api/recruiter/company/page` (`CompanyPageDto`), com a política `ApprovedCompany`, igual à da alteração da página (6.4.5). | Modelo de classes (`I036`) · defeito substancial | Não; correção de desenho. |
-| PA-05 | `ApiErrorDto` só tem `message` e `fields`, sem código de erro. | Os clientes distinguem situações com o mesmo código HTTP pelo texto da mensagem (por exemplo, ERR-31 e ERR-32 são ambos `409`). | Acrescentar ao `ApiErrorDto` `string Code` (os identificadores ERR-xx da secção 4.3) e um campo opcional com o instante de reposição da quota no ERR-31, para o cliente calcular o tempo em falta sem novo pedido. Até lá, as mensagens da secção 4.3 são fixas e o instante obtém-se em 6.3.6. | Modelo de classes (`I036`) · proposta de melhoria | Não. |
-| PA-06 | A tecnologia da ligação persistente (D-08, ASP.NET Core SignalR) e o armazenamento de ficheiros no servidor (AD-01) estão por ratificar em reunião formal. | Se for escolhida outra biblioteca, a secção 7 muda; os endpoints da secção 6 não. | Ratificar D-08 e AD-01 e registar a decisão em ata (Regulamento da UC, secção 10.1). | Arquitetura (`I033`, `I034`) · decisão pendente, não é defeito | Sim. |
-| PA-07 | `WaitingCandidateDto` não tem a função pretendida nem a localidade do Candidato, que o ecrã W16 «Candidatos em espera» do protótipo apresenta em colunas próprias. | A lista de candidatos em espera não consegue apresentar as colunas «Função pretendida» e «Localidade» do protótipo aceite. | Acrescentar `string? DesiredRole` e `string LocationName` ao `WaitingCandidateDto`. | Incoerência entre o modelo de classes (`I036`) e o protótipo do Recrutador aceite na `I040` (`m2-s02-i040-20261005-prototipo-baixa-fidelidade-v01.pdf`), detetada na comparação com o modelo de classes do frontend web (`I090`) · proposta de melhoria: nenhum dos artefactos está em falta isoladamente, porque o RF060 só exige a data do interesse, e a `I036` não teve os protótipos como documento de origem (as duas tarefas decorreram em paralelo no Sprint 02); não é não conformidade | Não |
-| PA-08 | `MatchDto` não tem o estado da vaga, que o ecrã W21 «Matches da Empresa» do protótipo apresenta na coluna «Estado da vaga». | A lista de matches do Recrutador não consegue distinguir os matches de vagas encerradas, como no protótipo aceite. | Acrescentar `JobStatus JobStatus` ao `MatchDto`. | Incoerência entre o modelo de classes (`I036`) e o protótipo do Recrutador aceite na `I040` (`m2-s02-i040-20261005-prototipo-baixa-fidelidade-v01.pdf`), detetada na comparação com o modelo de classes do frontend web (`I090`) · proposta de melhoria: nenhum dos artefactos está em falta isoladamente, porque o RF067 só exige a vaga, o Candidato e os contactos, e a `I036` não teve os protótipos como documento de origem (as duas tarefas decorreram em paralelo no Sprint 02); não é não conformidade | Não |
-| PA-09 | `CandidateFullProfileDto` não tem a data da primeira abertura do perfil, que o ecrã W17 «Perfil completo do Candidato» do protótipo apresenta («Abertura do perfil registada hoje às 10:32»). | O perfil completo não consegue apresentar a indicação de abertura do protótipo aceite. | Acrescentar `DateTimeOffset ProfileOpenedAt` (valor de `match.profile_opened_at`) ao `CandidateFullProfileDto`. | Incoerência entre o modelo de classes (`I036`) e o protótipo do Recrutador aceite na `I040` (`m2-s02-i040-20261005-prototipo-baixa-fidelidade-v01.pdf`), detetada na comparação com o modelo de classes do frontend web (`I090`) · proposta de melhoria: nenhum dos artefactos está em falta isoladamente, porque o RF118 exige o registo da abertura, não a sua apresentação, e a `I036` não teve os protótipos como documento de origem (as duas tarefas decorreram em paralelo no Sprint 02); não é não conformidade | Não |
-| PA-10 | Não há operação para o Candidato obter o próprio CV: o `CandidateProfileController` só tem `UploadCv`, e o modelo de dados (secção 7.2) diz «acesso ao CV apenas pelo Recrutador». | O RNF007 admite expressamente o pedido do próprio Candidato, que não consegue confirmar o CV que enviou (RF011). | Acrescentar `GET /api/candidate/profile/cv` (`application/pdf`; `404` sem CV): operação `GetCv` no `CandidateProfileController` e `GetCvAsync` no `ICandidateProfileService`; alinhar a frase do modelo de dados com o RNF007. | Modelo de classes (`I036`) e modelo de dados (`I035`) · defeito | Não |
+Não há pontos em aberto nesta versão.
 
-Encaminhamento: as decisões de PA-01 e PA-06 são levadas à próxima reunião formal, preparadas nos termos da secção 15.1 do Regulamento Interno; as correções são feitas em novas versões do modelo de classes, da especificação de requisitos e da arquitetura e, por fim, numa versão seguinte deste documento, através de Issues a criar no Backlog Refinement seguinte.
+Encaminhamento: a PA-01 foi decidida na reunião formal de 2026-10-16 (secção 11.3); a PA-04 foi resolvida pela `I101` na mesma v02 (secção 11.3).
 
 ### 11.2. Limitações
 
@@ -2869,14 +2962,29 @@ Encaminhamento: as decisões de PA-01 e PA-06 são levadas à próxima reunião 
 | L-01 | O contrato não tem prefixo de versão (`/api/v1`). | Uma alteração incompatível exige atualizar ao mesmo tempo o backend e os dois clientes. |
 | L-02 | As listas não têm paginação nem filtros. | Adequado aos volumes dos dados de demonstração (P18); com volumes maiores, a paginação teria de ser acrescentada aos DTOs e aos repositórios. |
 | L-03 | A credencial descartada no fim de sessão continua válida até expirar (8 horas). | Risco aceite no modelo de classes (secção 11); uma lista de credenciais revogadas pode ser acrescentada sem mudar o contrato. |
-| L-04 | Uma ligação ao hub aberta antes de um bloqueio ou suspensão só é rejeitada na reconexão seguinte. | Não recebe elementos novos, porque as conversas da conta passam a consulta e o envio é rejeitado na API; o pedido HTTP seguinte devolve ERR-03 ou ERR-04. |
+| L-04 | A mudança de estado de uma conversa, de uma conta ou de uma Empresa só chega ao cliente na consulta periódica seguinte (até 3 segundos mais a duração do pedido, dentro dos 5 segundos do P17). | Adequado ao ambiente de demonstração: o pedido seguinte devolve o estado da conversa (`status`, `closeReason`, `closedBy`) ou ERR-03 / ERR-04. |
 | L-05 | A ordem dos cartões de vaga não é fixada pelos requisitos. | Fica definida na implementação de `ListEligibleForCandidateAsync` em `m3`. |
-| L-06 | O documento depende do modelo de classes (`I036`), da arquitetura (`I033`) e do modelo de dados (`I035`). | Uma alteração a qualquer deles obriga a rever as secções afetadas e a acrescentar uma linha ao histórico de versões. |
+| L-06 | O documento depende do modelo de classes v02 (`I103`), da arquitetura v02 (`I100`) e do modelo de dados v02 (`I102`), e só é integrado depois deles, pela ordem aprovada na deliberação 4 da ata de 2026-10-16 (I100, I101, I102, I103 e I104). | Uma alteração a qualquer deles obriga a rever as secções afetadas e a acrescentar uma linha ao histórico de versões. |
+| L-07 | A consulta periódica gera um pedido a cada 3 segundos por cliente com uma conversa ou a lista de conversas aberta. | Adequado aos dados de demonstração (P18); o parâmetro `after` limita a resposta às mensagens novas. |
+| L-08 | O modelo de classes v02 mantém os DTOs como na v01 nos pontos PA-05, PA-07 a PA-09, PC-03, PC-04 e PC-07 (secção 11 do modelo). | O contrato desta versão tem esses campos a mais do que o modelo de classes v02; o modelo só os acompanha numa versão posterior. |
 
-### 11.3. Pontos resolvidos
+### 11.3. Pontos resolvidos na v02
 
-Pontos em aberto das versões anteriores resolvidos neste documento. O identificador não é reutilizado.
+Pontos em aberto da v01 e melhorias de contrato resolvidos nesta versão. Os pontos PA-01, PA-02, PA-03, PA-04, PA-05, PA-06, PA-07, PA-08, PA-09 e PA-10 saíram da lista da secção 11.1.
 
-| ID | Ponto | Resolução | Versão e Issue | Decisão formal |
-| --- | --- | --- | --- | --- |
-| PA-04 (e PC-01, observação do docente sobre o mesmo defeito) | A especificação de requisitos v01 (secção 2.2) só considerava não reservados o registo, a criação de conta e o início de sessão, e a consulta das localidades exigia sessão; mas o registo do Candidato (RF003) exige escolher a localidade da lista antes de haver sessão. | A especificação de requisitos v02 acrescenta a consulta da lista pré-definida de localidades às operações não reservadas (secção 2.2). Neste documento, `GET /api/reference-lists/locations` passa a anónimo (3.3, 5, 6.1.1, 6.13.1, 9.1, 9.2, DAPI-12). Alternativas rejeitadas: lista fixa na aplicação móvel (desatualiza-se em relação à lista carregada no servidor) e localidade em texto livre (contraria RF003 e RF015). A autorização anónima de `ListLocations` no modelo de classes do backend é integrada na v02 produzida pela `I103`. | v02 · `I101`; não conformidade NC-002 (especificação de requisitos, `I020` e `I023`); a parte da PA-04 na NC-001 (modelo de classes do backend, `I036`) é corrigida na `I103` | Classificação como defeito substancial e correção na `I101`: deliberação 5 da ata `m3-20261014-backlog-refinement-ata-v01.pdf`. Aprovação da alteração da secção 2.2 da especificação e integração de `ListLocations` anónima na `I103`: deliberação 2 da ata `m3-20261016-reuniao-extraordinaria-ata-v01.pdf`. |
+| ID | Resolução | Secções |
+| --- | --- | --- |
+| PA-01 | Opção (a) escolhida e AD-01 ratificada por unanimidade na deliberação 3 da ata de 2026-10-16 (`m3-20261016-reuniao-extraordinaria-ata-v01.pdf`): os ficheiros são identificados pelo tipo e pelo nome gerado pelo `LocalFileStorage`, nas colunas existentes do modelo de dados, sem tabela de ficheiros, e ficam no sistema de ficheiros do servidor. A operação é `GET /api/files/{kind}/{fileName}`, com autorização por tipo de ficheiro. | 2.6, 6.9 |
+| PA-02 | Deixa de se aplicar: sem ligação persistente (nem `IRealtimePublisher`), a mensagem é obtida pela conversa em 6.8.2, que já a identifica pelo `matchId`. | 6.8, 7 |
+| PA-03 | `GET /api/recruiter/company` (`CompanyRegistrationDto` com `locationId`, política `Recruiter`) e `GET /api/recruiter/company/page` (`CompanyPageDto`, política `ApprovedCompany`). | 6.4.8, 6.4.9, 8.3 |
+| PA-04 (PC-01) | `GET /api/reference-lists/locations` passa a anónimo, porque a especificação de requisitos v02 acrescenta a consulta da lista de localidades às operações não reservadas (secção 2.2; deliberação 2 da ata de 2026-10-16, `I101`). Alternativas rejeitadas: lista fixa na aplicação móvel e localidade em texto livre. A autorização anónima de `ListLocations` no modelo de classes é integrada pela `I103`. | 3.3, 5, 6.1.1, 6.13.1, 9.1, 9.2, DAPI-12 |
+| PA-05 (PC-12, G12) | `ApiErrorDto` passa a ter `code` (identificador `ERR-xx`) e `blockedUntil` (só no `ERR-31`). | 4.1, 4.3, 8.5 |
+| PA-06 | Deixa de se aplicar quanto à D-08 (SignalR): sem ligação persistente. A ratificação da AD-01 foi tratada na PA-01. | 7, 11.1 |
+| PA-07 (G4) | `WaitingCandidateDto` passa a ter `desiredRole` e `locationName`. | 6.6.1, 8.4 |
+| PA-08 (PC-03, G5) | `MatchDto` passa a ter `jobStatus`, `locationName` e `logoUrl`. | 6.6.4, 6.7.1, 8.4 |
+| PA-09 (G10) | `CandidateFullProfileDto` passa a ter `profileOpenedAt`. | 6.6.2, 8.4 |
+| PA-10 | `GET /api/candidate/profile/cv` (`application/pdf`; `404` sem CV). | 2.6, 6.2.9 |
+| PC-04 | `ConversationSummaryDto` passa a ter `closedBy` (`conversation_closed_by`). | 6.8.1, 8.4 |
+| PC-07 | `QuotaDto` passa a ter `total`. | 6.3.5, 6.3.6, 8.2 |
+| Redução de âmbito (I100) | Retirados o controller e os endpoints das notificações, os 2 hubs e os 3 eventos, `NotificationType`, `NotificationDto` e `NotificationListDto`; consulta periódica das conversas com o parâmetro `after`. | 2.4, 5, 6.8, 7, 8.4, 9 |
+| Modelo de classes v02 (DM-16) | Competências «Outro» separadas das da lista: `AddSkillRequest` só com `skillId`, `AddCustomSkillRequest`, `CustomSkillDto` e `customSkills` no perfil; rotas 6.2.10 e 6.2.11. | 6.2, 8.2 |

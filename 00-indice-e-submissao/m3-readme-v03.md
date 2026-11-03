@@ -11,7 +11,7 @@
 | Sistema | Katch |
 | Milestone desta submissão | m3 |
 | Momento de Avaliação | m3 |
-| Versão do README | v04 |
+| Versão do README | v03 |
 
 ## 2. Apresentação da entrega
 
@@ -23,11 +23,11 @@ O README é cumulativo (Regulamento da UC, secção 18.3). Esta versão apresent
 
 ### 3.1. Milestone m3
 
-1. O estado de cada compromisso de `m3` é o da Checklist de Controlo de Artefactos `m3-checklist-controlo-artefactos-v05.xlsx` (versão de trabalho): 22 «Previsto», 9 «Pronto para entrega» (total 31). Os artefactos ainda não concluídos, revistos e auditados constam do índice como «Não entregue» e, quando existe um ficheiro provisório na pasta, o rótulo indica que o compromisso da CCA continua «Previsto». A coluna «Verificado» confirma apenas a existência do ficheiro ligado (ou a ausência do ficheiro nas linhas «Não entregue»), não a aceitação do artefacto.
+1. O estado de cada compromisso de `m3` é o da Checklist de Controlo de Artefactos `m3-checklist-controlo-artefactos-v05.xlsx`: 17 «Previsto» e 14 «Pronto para entrega» (total 31). Os artefactos ainda não concluídos, revistos e auditados constam do índice como «Não entregue» e, quando existe um ficheiro provisório na pasta, o rótulo indica que o compromisso da CCA continua «Previsto». A coluna «Verificado» confirma a existência do ficheiro ligado ou, nas linhas «Não entregue», a ausência de ficheiro na pasta; não confirma a aceitação do artefacto. Nas linhas «Não entregue» em que existe um ficheiro provisório na pasta, que não é ligado por ainda não estar aceite, o Verificado é «Não»: `m3-s06-i058-20261030-relatorio-revisao-v01.pdf`, `m3-s06-i060-20261030-relatorio-revisao-v01.pdf`, `m3-s06-i062-20261029-relatorio-revisao-v01.pdf`, `m3-s06-i064-20261101-relatorio-revisao-v01.pdf`, `m3-s06-i105-20261030-relatorio-revisao-v01.pdf`, `m3-s06-i116-20261030-relatorio-revisao-v01.pdf`, `m3-s06-i055-20261030-checklist-auditoria-v01.pdf`, `m3-s06-i060-20261030-checklist-auditoria-v01.pdf`, `m3-s06-i105-20261030-checklist-auditoria-v01.pdf`, `m3-s06-i111-20261029-checklist-auditoria-v01.pdf`, `m3-s06-i117-20261101-checklist-auditoria-v01.pdf`, `m3-requirements-traceability-matrix-v02.xlsx`, `m3-checklist-aprovacao-requisitos-v03.xlsx`. Os compromissos OF-M3-002, OF-M3-003 e OF-M3-004 (código do backend, scripts das bases de dados e configuração da pipeline) estão «Previsto» porque as pastas `04.12-backend/m3-v01`, `04.13-scripts-de-base-de-dados/m3-v01` e `04.16-ci-cd/m3-v01` ainda não têm o conteúdo do repositório `katch-backend`.
 2. Os relatórios de revisão e as checklists de auditoria das tarefas ainda sem aceitação final constam do índice como não entregues e não obrigatórios (precedente da secção 3.1 do README de `m2`); a aprovação das tarefas como `Done` só ocorre no Sprint Review (Regulamento da UC, secção 14.2).
-3. O README de `m2` existe na pasta em duas cópias, `m2-readme-v02.md` e `m2-readme-v03.md`, que só diferem na coluna «Obrigatório» de três diagramas (Diagrama de Estados - Interesse e Match, Diagrama de Atividades - Aprovação de Empresa e Diagrama de Atividades - Fluxo de Match: «Não» na `v02`, «Sim» na `v03`). O índice de `m2` desta versão parte da `v03`, que coincide com a CCA (os artefactos «Compromisso do grupo» são obrigatórios). O número `v03` do README já estava ocupado por essa cópia, pelo que este README é a `v04`.
-4. A Proposta de Sistema e a Declaração de Âmbito de `m3` existem nas versões `v03` e `v04`. O docente homologou-as a 2026-10-14 (`04.02-homologacao-ps-da-cca`). O texto da Proposta de Sistema `v04` é igual ao da `v03` e a Declaração de Âmbito `v04` só difere na referência à Proposta de Sistema (`v04` em vez de `v03`). As `v03` são conservadas na pasta e constam do índice. Os compromissos OF-M3-017 e OF-M3-018 constam da CCA como «Pronto para entrega» com base na homologação do docente, sem revisão nem auditoria de Issue.
-5. O PDF da CCA da versão de trabalho ainda não está assinado digitalmente: a assinatura ocorre na reunião autónoma de controlo final de `m3`. Os índices de `m3`, `m2` e `m1` são regenerados e as ligações voltam a ser verificadas antes da submissão.
+3. O README de `m2` existe na pasta em duas cópias, `m2-readme-v02.md` e `m2-readme-v03.md`, que só diferem na coluna «Obrigatório» de três diagramas (Diagrama de Estados - Interesse e Match, Diagrama de Atividades - Aprovação de Empresa e Diagrama de Atividades - Fluxo de Match: «Não» na `v02`, «Sim» na `v03`). O campo «Versão do README» dentro do `m2-readme-v03.md` indica `v02`. O índice de `m2` desta versão parte da `v03`, que coincide com a CCA (os artefactos «Compromisso do grupo» são obrigatórios). O número `v03` do README já estava ocupado por essa cópia, pelo que este README é a `v04`. O Backlog de Projeto `m3-backlog-projeto-v06.xlsx` refere-o como `m3-readme-v03.md`.
+4. A Proposta de Sistema e a Declaração de Âmbito de `m3` existem nas versões `v03` e `v04` em `04.01-proposta-de-sistema-e-declaracao-de-ambito`. O e-mail do docente de 2026-10-14 (`m3-email-homologacao-ps-da-cca-v02.pdf`, em `04.02-homologacao-ps-da-cca`) homologa a Proposta de Sistema `v03`, a Declaração de Âmbito `v03` e a Checklist de Controlo de Artefactos `v04`, e indica a preferência por todos os documentos na mesma versão (exemplo `v04`). Na comparação do texto extraído dos PDFs, o texto da Proposta de Sistema `v04` é igual ao da `v03` e a Declaração de Âmbito `v04` difere da `v03` numa única linha, a referência à Proposta de Sistema (`m3-proposta-sistema-v04.pdf` em vez de `m3-proposta-sistema-v03.pdf`). As `v03` são conservadas na pasta e constam do índice. Os compromissos OF-M3-017 e OF-M3-018 constam da CCA como «Pronto para entrega» com base nesse e-mail e na existência da `v04` em `04.01`, sem revisão nem auditoria de Issue.
+5. O PDF da CCA `v05` ainda não está assinado digitalmente: a assinatura ocorre na reunião autónoma de controlo final de `m3`. Os índices de `m3`, `m2` e `m1` são regenerados e as ligações voltam a ser verificadas antes da submissão.
 
 ### 3.2. Milestone m2 (conservado de `m2-readme-v03.md`, com atualizações)
 
@@ -141,15 +141,15 @@ O índice seguinte identifica os artefactos previstos para esta milestone e o re
 | Relatório de Revisão - Sprint 06, I056 | Sim | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `v01` | [m3-s06-i056-20261029-relatorio-revisao-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.04-revisoes/m3-s06-i056-20261029-relatorio-revisao-v01.pdf) | Sim |
 | Relatório de Revisão - Sprint 06, I111 | Sim | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `v01` | [m3-s06-i111-20261029-relatorio-revisao-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.04-revisoes/m3-s06-i111-20261029-relatorio-revisao-v01.pdf) | Sim |
 | Relatório de Revisão - Sprint 06, I055 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
-| Relatório de Revisão - Sprint 06, I058 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
+| Relatório de Revisão - Sprint 06, I058 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Não |
 | Relatório de Revisão - Sprint 06, I059 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
-| Relatório de Revisão - Sprint 06, I060 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
-| Relatório de Revisão - Sprint 06, I062 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
+| Relatório de Revisão - Sprint 06, I060 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Não |
+| Relatório de Revisão - Sprint 06, I062 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Não |
 | Relatório de Revisão - Sprint 06, I063 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
-| Relatório de Revisão - Sprint 06, I064 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
+| Relatório de Revisão - Sprint 06, I064 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Não |
 | Relatório de Revisão - Sprint 06, I065 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 06, I066 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
-| Relatório de Revisão - Sprint 06, I105 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
+| Relatório de Revisão - Sprint 06, I105 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Não |
 | Relatório de Revisão - Sprint 06, I106 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 06, I108 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 06, I110 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
@@ -157,7 +157,7 @@ O índice seguinte identifica os artefactos previstos para esta milestone e o re
 | Relatório de Revisão - Sprint 06, I113 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 06, I114 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 06, I115 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
-| Relatório de Revisão - Sprint 06, I116 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
+| Relatório de Revisão - Sprint 06, I116 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Não |
 | Relatório de Revisão - Sprint 06, I117 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Relatório de Revisão - Sprint 06, I118 | Não | `02-artefactos-de-qualidade-de-processo/02.04-revisoes` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 03, I089 | Sim | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `v01` | [m3-s03-i089-20261012-checklist-auditoria-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade/m3-s03-i089-20261012-checklist-auditoria-v01.pdf) | Sim |
@@ -185,27 +185,27 @@ O índice seguinte identifica os artefactos previstos para esta milestone e o re
 | Checklist de Auditoria - Sprint 05, I061 | Sim | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `v01` | [m3-s05-i061-20261027-checklist-auditoria-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade/m3-s05-i061-20261027-checklist-auditoria-v01.pdf) | Sim |
 | Checklist de Auditoria - Sprint 05, I098 | Sim | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `v01` | [m3-s05-i098-20261025-checklist-auditoria-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade/m3-s05-i098-20261025-checklist-auditoria-v01.pdf) | Sim |
 | Checklist de Auditoria - Sprint 05, I099 | Sim | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `v01` | [m3-s05-i099-20261025-checklist-auditoria-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade/m3-s05-i099-20261025-checklist-auditoria-v01.pdf) | Sim |
-| Checklist de Auditoria - Sprint 06, I055 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
+| Checklist de Auditoria - Sprint 06, I055 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Não |
 | Checklist de Auditoria - Sprint 06, I056 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I058 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I059 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
-| Checklist de Auditoria - Sprint 06, I060 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
+| Checklist de Auditoria - Sprint 06, I060 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Não |
 | Checklist de Auditoria - Sprint 06, I062 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I063 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I064 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I065 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I066 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
-| Checklist de Auditoria - Sprint 06, I105 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
+| Checklist de Auditoria - Sprint 06, I105 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Não |
 | Checklist de Auditoria - Sprint 06, I106 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I108 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I110 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
-| Checklist de Auditoria - Sprint 06, I111 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
+| Checklist de Auditoria - Sprint 06, I111 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Não |
 | Checklist de Auditoria - Sprint 06, I112 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I113 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I114 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I115 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Checklist de Auditoria - Sprint 06, I116 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
-| Checklist de Auditoria - Sprint 06, I117 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
+| Checklist de Auditoria - Sprint 06, I117 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Não |
 | Checklist de Auditoria - Sprint 06, I118 | Não | `02-artefactos-de-qualidade-de-processo/02.05-auditorias-de-qualidade` | `-` | Não entregue | Sim |
 | Registo de Não Conformidades - PDF | Não | `02-artefactos-de-qualidade-de-processo/02.06-nao-conformidades-e-acoes-corretivas` | `v01` | [m3-registo-nao-conformidades-v01.pdf](../02-artefactos-de-qualidade-de-processo/02.06-nao-conformidades-e-acoes-corretivas/m3-registo-nao-conformidades-v01.pdf) | Sim |
 | Registo de Não Conformidades - Editável | Não | `02-artefactos-de-qualidade-de-processo/02.06-nao-conformidades-e-acoes-corretivas` | `v01` | [m3-registo-nao-conformidades-v01.xlsx](../02-artefactos-de-qualidade-de-processo/02.06-nao-conformidades-e-acoes-corretivas/m3-registo-nao-conformidades-v01.xlsx) | Sim |
@@ -214,12 +214,9 @@ O índice seguinte identifica os artefactos previstos para esta milestone e o re
 | Plano de Testes do Backend [CCA OF-M3-009: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.01-plano-de-testes` | `-` | Não entregue | Sim |
 | Especificação dos Testes Unitários do Backend [CCA OF-M3-010: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.02-testes-unitarios` | `-` | Não entregue | Sim |
 | Resultados dos Testes Unitários do Backend [CCA OF-M3-011: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.02-testes-unitarios` | `-` | Não entregue | Sim |
-| Especificação dos Testes de Integração do Backend (v01) [CCA OF-M3-012: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao` | `v01` | [m3-especificacao-testes-integracao-backend-v01.md](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao/m3-especificacao-testes-integracao-backend-v01.md) | Sim |
-| Especificação dos Testes de Integração do Backend (v02) [CCA OF-M3-012: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao` | `v02` | [m3-especificacao-testes-integracao-backend-v02.md](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao/m3-especificacao-testes-integracao-backend-v02.md) | Sim |
-| Resultados dos Testes de Integração do Backend (v01) [CCA OF-M3-013: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao` | `v01` | [m3-resultados-testes-integracao-backend-v01.pdf](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao/m3-resultados-testes-integracao-backend-v01.pdf) | Sim |
-| Resultados dos Testes de Integração do Backend (v02) [CCA OF-M3-013: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao` | `v02` | [m3-resultados-testes-integracao-backend-v02.pdf](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao/m3-resultados-testes-integracao-backend-v02.pdf) | Sim |
-| Relatório de Cobertura dos Testes do Backend (v01) [CCA OF-M3-014: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.04-cobertura-de-testes` | `v01` | [m3-relatorio-cobertura-testes-backend-v01.pdf](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.04-cobertura-de-testes/m3-relatorio-cobertura-testes-backend-v01.pdf) | Sim |
-| Relatório de Cobertura dos Testes do Backend (v02) [CCA OF-M3-014: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.04-cobertura-de-testes` | `v02` | [m3-relatorio-cobertura-testes-backend-v02.pdf](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.04-cobertura-de-testes/m3-relatorio-cobertura-testes-backend-v02.pdf) | Sim |
+| Especificação dos Testes de Integração do Backend [CCA OF-M3-012: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao` | `v01` | [m3-especificacao-testes-integracao-backend-v01.md](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao/m3-especificacao-testes-integracao-backend-v01.md) | Sim |
+| Resultados dos Testes de Integração do Backend [CCA OF-M3-013: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao` | `v01` | [m3-resultados-testes-integracao-backend-v01.pdf](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.03-testes-de-integracao/m3-resultados-testes-integracao-backend-v01.pdf) | Sim |
+| Relatório de Cobertura dos Testes do Backend [CCA OF-M3-014: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.04-cobertura-de-testes` | `v01` | [m3-relatorio-cobertura-testes-backend-v01.pdf](../03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.04-cobertura-de-testes/m3-relatorio-cobertura-testes-backend-v01.pdf) | Sim |
 | Collection Postman [CCA OF-M3-015: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.05-postman` | `-` | Não entregue | Sim |
 | Relatório de Análise Estática do Backend [CCA OF-M3-016: Previsto] | Sim | `03-artefactos-de-qualidade-de-produto/03.01-backend/03.01.06-analise-estatica` | `-` | Não entregue | Sim |
 | Proposta de Sistema (v03) | Sim | `04-artefactos-tecnicos/04.01-proposta-de-sistema-e-declaracao-de-ambito` | `v03` | [m3-proposta-sistema-v03.pdf](../04-artefactos-tecnicos/04.01-proposta-de-sistema-e-declaracao-de-ambito/m3-proposta-sistema-v03.pdf) | Sim |
@@ -227,27 +224,27 @@ O índice seguinte identifica os artefactos previstos para esta milestone e o re
 | Declaração de Âmbito (v03) | Sim | `04-artefactos-tecnicos/04.01-proposta-de-sistema-e-declaracao-de-ambito` | `v03` | [m3-declaracao-ambito-v03.pdf](../04-artefactos-tecnicos/04.01-proposta-de-sistema-e-declaracao-de-ambito/m3-declaracao-ambito-v03.pdf) | Sim |
 | Declaração de Âmbito (v04) | Sim | `04-artefactos-tecnicos/04.01-proposta-de-sistema-e-declaracao-de-ambito` | `v04` | [m3-declaracao-ambito-v04.pdf](../04-artefactos-tecnicos/04.01-proposta-de-sistema-e-declaracao-de-ambito/m3-declaracao-ambito-v04.pdf) | Sim |
 | E-mail de Homologação da PS, DA e CCA (v02) | Sim | `04-artefactos-tecnicos/04.02-homologacao-ps-da-cca` | `v02` | [m3-email-homologacao-ps-da-cca-v02.pdf](../04-artefactos-tecnicos/04.02-homologacao-ps-da-cca/m3-email-homologacao-ps-da-cca-v02.pdf) | Sim |
-| Requirements Traceability Matrix (v2) [CCA OF-M3-001: Previsto] | Sim | `04-artefactos-tecnicos/04.03-requisitos-e-rtm` | `-` | Não entregue | Sim |
+| Requirements Traceability Matrix (v2) [CCA OF-M3-001: Previsto] | Sim | `04-artefactos-tecnicos/04.03-requisitos-e-rtm` | `-` | Não entregue | Não |
 | Especificação de Requisitos | Sim | `04-artefactos-tecnicos/04.03-requisitos-e-rtm` | `v02` | [m3-especificacao-requisitos-v02.md](../04-artefactos-tecnicos/04.03-requisitos-e-rtm/m3-especificacao-requisitos-v02.md) | Sim |
-| Checklist de Aprovação dos Requisitos [CCA OF-M3-020: Previsto] | Sim | `04-artefactos-tecnicos/04.03-requisitos-e-rtm` | `-` | Não entregue | Sim |
+| Checklist de Aprovação dos Requisitos [CCA OF-M3-020: Previsto] | Sim | `04-artefactos-tecnicos/04.03-requisitos-e-rtm` | `-` | Não entregue | Não |
 | Especificações dos Casos de Uso | Sim | `04-artefactos-tecnicos/04.04-casos-de-uso` | `v02` | [m3-especificacoes-casos-uso-v02.md](../04-artefactos-tecnicos/04.04-casos-de-uso/m3-especificacoes-casos-uso-v02.md) | Sim |
 | Documentação da Arquitetura | Sim | `04-artefactos-tecnicos/04.05-arquitetura` | `v02` | [m3-documentacao-arquitetura-v02.md](../04-artefactos-tecnicos/04.05-arquitetura/m3-documentacao-arquitetura-v02.md) | Sim |
 | Modelo de Dados PostgreSQL (katch) | Sim | `04-artefactos-tecnicos/04.06-modelos-de-dados` | `v02` | [m3-modelo-de-dados-katch-v02.md](../04-artefactos-tecnicos/04.06-modelos-de-dados/m3-modelo-de-dados-katch-v02.md) | Sim |
 | Modelo de Classes - Backend | Sim | `04-artefactos-tecnicos/04.07-modelos-de-classes` | `v02` | [m3-modelo-classes-backend-v02.md](../04-artefactos-tecnicos/04.07-modelos-de-classes/m3-modelo-classes-backend-v02.md) | Sim |
-| Modelo de Classes - Frontend Web [CCA OF-M3-025: Previsto] | Sim | `04-artefactos-tecnicos/04.07-modelos-de-classes` | `-` | Não entregue | Sim |
-| Modelo de Classes - Frontend Mobile [CCA OF-M3-026: Previsto] | Sim | `04-artefactos-tecnicos/04.07-modelos-de-classes` | `-` | Não entregue | Sim |
-| Diagrama de Atividades - Fluxo de Match [CCA AD-008: Previsto] | Sim | `04-artefactos-tecnicos/04.08-modelos-de-comportamento` | `-` | Não entregue | Sim |
-| Diagrama de Atividades - Aprovação de Empresa [CCA AD-009: Previsto] | Sim | `04-artefactos-tecnicos/04.08-modelos-de-comportamento` | `-` | Não entregue | Sim |
-| Diagrama de Estados - Interesse e Match [CCA AD-010: Previsto] | Sim | `04-artefactos-tecnicos/04.08-modelos-de-comportamento` | `-` | Não entregue | Sim |
+| Modelo de Classes - Frontend Web | Sim | `04-artefactos-tecnicos/04.07-modelos-de-classes` | `v02` | [m3-modelo-classes-frontend-web-v02.md](../04-artefactos-tecnicos/04.07-modelos-de-classes/m3-modelo-classes-frontend-web-v02.md) | Sim |
+| Modelo de Classes - Frontend Mobile | Sim | `04-artefactos-tecnicos/04.07-modelos-de-classes` | `v02` | [m3-modelo-classes-frontend-mobile-v02.md](../04-artefactos-tecnicos/04.07-modelos-de-classes/m3-modelo-classes-frontend-mobile-v02.md) | Sim |
+| Diagrama de Atividades - Fluxo de Match | Sim | `04-artefactos-tecnicos/04.08-modelos-de-comportamento` | `v02` | [m3-diagrama-atividades-fluxo-match-v02.md](../04-artefactos-tecnicos/04.08-modelos-de-comportamento/m3-diagrama-atividades-fluxo-match-v02.md) | Sim |
+| Diagrama de Atividades - Aprovação de Empresa | Sim | `04-artefactos-tecnicos/04.08-modelos-de-comportamento` | `v02` | [m3-diagrama-atividades-aprovacao-empresa-v02.md](../04-artefactos-tecnicos/04.08-modelos-de-comportamento/m3-diagrama-atividades-aprovacao-empresa-v02.md) | Sim |
+| Diagrama de Estados - Interesse e Match | Sim | `04-artefactos-tecnicos/04.08-modelos-de-comportamento` | `v02` | [m3-diagrama-estados-interesse-match-v02.md](../04-artefactos-tecnicos/04.08-modelos-de-comportamento/m3-diagrama-estados-interesse-match-v02.md) | Sim |
 | Diagrama de Sequência | Não | `04-artefactos-tecnicos/04.09-modelos-de-interacao` | `-` | Não entregue | Sim |
 | Protótipo de Baixa Fidelidade | Sim | `04-artefactos-tecnicos/04.10-prototipos-de-interfaces` | `v02` | [m3-prototipo-baixa-fidelidade-v02.pdf](../04-artefactos-tecnicos/04.10-prototipos-de-interfaces/m3-prototipo-baixa-fidelidade-v02.pdf) | Sim |
 | Protótipo de Alta Fidelidade | Não | `04-artefactos-tecnicos/04.10-prototipos-de-interfaces` | `-` | Não entregue | Sim |
 | Documentação da API | Sim | `04-artefactos-tecnicos/04.11-documentacao-de-api` | `v02` | [m3-documentacao-api-v02.md](../04-artefactos-tecnicos/04.11-documentacao-de-api/m3-documentacao-api-v02.md) | Sim |
-| Backend (código) [CCA OF-M3-002: Previsto] | Sim | `04-artefactos-tecnicos/04.12-backend/m3-v01` | `-` | Não entregue | Não |
-| Scripts das Bases de Dados [CCA OF-M3-003: Previsto] | Sim | `04-artefactos-tecnicos/04.13-scripts-de-base-de-dados/m3-v01` | `-` | Não entregue | Não |
+| Backend (código) [CCA OF-M3-002: Previsto] | Sim | `04-artefactos-tecnicos/04.12-backend/m3-v01` | `-` | Não entregue | Sim |
+| Scripts das Bases de Dados [CCA OF-M3-003: Previsto] | Sim | `04-artefactos-tecnicos/04.13-scripts-de-base-de-dados/m3-v01` | `-` | Não entregue | Sim |
 | Descrição da Pipeline CI/CD [CCA OF-M3-005: Previsto] | Sim | `04-artefactos-tecnicos/04.16-ci-cd` | `-` | Não entregue | Sim |
 | Relatório de Evidências da Pipeline CI/CD [CCA OF-M3-006: Previsto] | Sim | `04-artefactos-tecnicos/04.16-ci-cd` | `-` | Não entregue | Sim |
-| Configuração da Pipeline CI/CD do Backend [CCA OF-M3-004: Previsto] | Sim | `04-artefactos-tecnicos/04.16-ci-cd/m3-v01` | `-` | Não entregue | Não |
+| Configuração da Pipeline CI/CD do Backend [CCA OF-M3-004: Previsto] | Sim | `04-artefactos-tecnicos/04.16-ci-cd/m3-v01` | `-` | Não entregue | Sim |
 | Manual de Instalação e Configuração [CCA OF-M3-007: Previsto] | Sim | `04-artefactos-tecnicos/04.17-manual-de-instalacao-e-configuracao` | `-` | Não entregue | Sim |
 | Notas de Release do Backend [CCA OF-M3-008: Previsto] | Sim | `04-artefactos-tecnicos/04.19-releases-e-deployment` | `-` | Não entregue | Sim |
 | Documentação Complementar | Não | `04-artefactos-tecnicos/04.20-documentacao-complementar` | `-` | Não entregue | Sim |

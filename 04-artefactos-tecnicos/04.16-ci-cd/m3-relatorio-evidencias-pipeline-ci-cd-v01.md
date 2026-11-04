@@ -26,7 +26,7 @@
 
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
-| v01 | 2026-11-04 | Criação do documento: execução de sucesso, quatro execuções bloqueadas (erro de build, teste falhado, cobertura insuficiente e análise estática falhada) e regra de proteção da `main`. | `I066` |
+| v01 | 2026-11-04 | Criação do documento: execução de sucesso, quatro execuções bloqueadas (erro de build, teste falhado, cobertura insuficiente e análise estática falhada) e regra de proteção da `main`, com as capturas do Quality Gate e das medidas do SonarQube da execução de sucesso e do ruleset «Protect main». | `I066` |
 
 ---
 
@@ -65,6 +65,11 @@ Todas as execuções são do evento `pull_request` de 2026-11-03.
 
 <!-- CAPTURA E1: Merge Request #40 com os três checks obrigatórios a verde («All checks have passed») -->
 ![E1 — execução de sucesso](evidencias/01-execucao-sucesso.png)
+
+O resumo da execução E1 (job `static-analysis`, passo «Exportar o relatório SonarQube») mostra o Quality Gate «Katch QG-05» aprovado e as medidas da análise. A instância SonarQube da pipeline é efémera, por isso este resumo e o artefacto `sonarqube-report` da execução são o registo da análise. A cobertura de 99,7% é a que o SonarQube calcula a partir do relatório importado; o passo «QG-04» do `build-and-test` calcula 99,6% com o ReportGenerator, no mesmo âmbito. Na linha «Fiabilidade», o número de problemas aparece como «?» porque o `export-report.sh` não encontrou essa medida na resposta da API; a classificação A e a condição do Quality Gate não dependem dela.
+
+<!-- CAPTURA E1-QG: resumo da execução 41737499711 com o Quality Gate «Katch QG-05» (Passed) e as medidas -->
+![E1 — Quality Gate e medidas do SonarQube](evidencias/06-quality-gate-sonarqube.png)
 
 ---
 
@@ -126,7 +131,10 @@ Todas as execuções são do evento `pull_request` de 2026-11-03.
 
 ## 6. Regra de proteção da `main`
 
-A regra de proteção da `main` do `katch-backend` exige os checks `build-and-test`, `static-analysis` e `database-scripts` com sucesso antes do merge, além da aprovação do code owner. Nas capturas E1 a E5, os três checks aparecem com a marca *Required*. Nas execuções E2 a E5, o Merge Request mostra *Some checks were not successful* com o check obrigatório falhado e *Merging is blocked*, com o botão de merge indisponível.
+A regra de proteção da `main` do `katch-backend` (ruleset «Protect main», captura abaixo) exige os checks `build-and-test`, `static-analysis` e `database-scripts` com sucesso antes do merge, além da aprovação do code owner. Nas capturas E1 a E5, os três checks aparecem com a marca *Required*. Nas execuções E2 a E5, o Merge Request mostra *Some checks were not successful* com o check obrigatório falhado e *Merging is blocked*, com o botão de merge indisponível.
+
+<!-- CAPTURA RULESET: ruleset «Protect main» do katch-backend, com o alvo `main` e os checks obrigatórios -->
+![Ruleset «Protect main» do katch-backend](evidencias/07-regra-protecao-main.png)
 
 A mensagem *Merging is blocked* refere também a revisão do code owner, que é outra condição da mesma regra. Mesmo com a aprovação, o merge continuaria impedido enquanto um check obrigatório falhasse.
 

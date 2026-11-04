@@ -1,0 +1,594 @@
+// Copyright (c) Grupo G11. Katch, LDS 2026/2027.
+
+using System.Text.Json;
+using Katch.Backend.Domain.Enums;
+using Katch.Backend.Dtos;
+using Katch.Backend.Services;
+
+namespace Katch.Backend.Infrastructure.Errors;
+
+/// <summary>
+/// Único sítio que escreve uma resposta de erro em <see cref="ApiErrorDto"/> (JSON em camelCase), com as mensagens
+/// fixas do catálogo de erros. Um erro novo (por exemplo o ERR-07) acrescenta-se aqui.
+/// </summary>
+public static class ApiErrorResponse
+{
+    /// <summary>
+    /// Código do erro de sessão em falta, inválida ou expirada.
+    /// </summary>
+    public const string InvalidSessionCode = "ERR-01";
+
+    /// <summary>
+    /// Código do erro de credenciais erradas no início de sessão.
+    /// </summary>
+    public const string InvalidCredentialsCode = "ERR-02";
+
+    /// <summary>
+    /// Código do erro de conta bloqueada.
+    /// </summary>
+    public const string AccountBlockedCode = "ERR-03";
+
+    /// <summary>
+    /// Código do erro de conta suspensa.
+    /// </summary>
+    public const string AccountSuspendedCode = "ERR-04";
+
+    /// <summary>
+    /// Código do erro de tipo de conta que entra pelo ponto de acesso errado.
+    /// </summary>
+    public const string WrongAccessPointCode = "ERR-05";
+
+    /// <summary>
+    /// Código do erro de operação não disponível para o tipo de conta.
+    /// </summary>
+    public const string AccountTypeNotAllowedCode = "ERR-06";
+
+    /// <summary>
+    /// Código do erro de Empresa não aprovada.
+    /// </summary>
+    public const string CompanyNotApprovedCode = "ERR-07";
+
+    /// <summary>
+    /// Código do erro de elemento de outro utilizador ou de outra Empresa.
+    /// </summary>
+    public const string ElementForbiddenCode = "ERR-08";
+
+    /// <summary>
+    /// Código do erro de validação automática dos campos.
+    /// </summary>
+    public const string ValidationFailedCode = "ERR-10";
+
+    /// <summary>
+    /// Código do erro de ficheiro não aceite.
+    /// </summary>
+    public const string FileRejectedCode = "ERR-11";
+
+    /// <summary>
+    /// Código do erro de pedido acima da dimensão máxima.
+    /// </summary>
+    public const string RequestTooLargeCode = "ERR-12";
+
+    /// <summary>
+    /// Código do erro de tipo de conteúdo do pedido não suportado.
+    /// </summary>
+    public const string UnsupportedContentTypeCode = "ERR-13";
+
+    /// <summary>
+    /// Código do erro de elemento inexistente ou não disponível.
+    /// </summary>
+    public const string NotFoundCode = "ERR-20";
+
+    /// <summary>
+    /// Código do erro de transição de estado inválida.
+    /// </summary>
+    public const string InvalidStateCode = "ERR-30";
+
+    /// <summary>
+    /// Código do erro de quota de interesses esgotada.
+    /// </summary>
+    public const string QuotaExhaustedCode = "ERR-31";
+
+    /// <summary>
+    /// Código do erro de segunda resposta à mesma vaga.
+    /// </summary>
+    public const string AlreadyAnsweredCode = "ERR-32";
+
+    /// <summary>
+    /// Código do erro de vaga que já não está disponível.
+    /// </summary>
+    public const string JobUnavailableCode = "ERR-33";
+
+    /// <summary>
+    /// Código do erro de decisão sobre um Candidato cujo perfil completo ainda não foi aberto.
+    /// </summary>
+    public const string ProfileNotOpenedCode = "ERR-34";
+
+    /// <summary>
+    /// Código do erro de Candidato que já não está em espera na vaga.
+    /// </summary>
+    public const string CandidateAlreadyEvaluatedCode = "ERR-35";
+
+    /// <summary>
+    /// Código do erro de conversa em modo apenas de consulta.
+    /// </summary>
+    public const string ConversationReadOnlyCode = "ERR-36";
+
+    /// <summary>
+    /// Código do erro de conversa sem match.
+    /// </summary>
+    public const string ConversationWithoutMatchCode = "ERR-37";
+
+    /// <summary>
+    /// Código do erro de fotografia acima do número máximo da galeria ou da vaga.
+    /// </summary>
+    public const string PhotoLimitReachedCode = "ERR-39";
+
+    /// <summary>
+    /// Código do erro de eliminação de uma vaga com interesses registados.
+    /// </summary>
+    public const string JobHasInterestsCode = "ERR-38";
+
+    /// <summary>
+    /// Código do erro de segundo registo de Empresa pelo mesmo Recrutador.
+    /// </summary>
+    public const string CompanyAlreadyRegisteredCode = "ERR-40";
+
+    /// <summary>
+    /// Código do erro de alteração concorrente.
+    /// </summary>
+    public const string ConcurrencyConflictCode = "ERR-41";
+
+    /// <summary>
+    /// Mensagem do ERR-01.
+    /// </summary>
+    public const string InvalidSessionMessage = "A sessão expirou ou não é válida. Inicie sessão novamente.";
+
+    /// <summary>
+    /// Mensagem do ERR-02, a mesma para o correio inexistente e para a palavra-passe errada (RNF009).
+    /// </summary>
+    public const string InvalidCredentialsMessage = "O endereço de correio eletrónico ou a palavra-passe estão incorretos.";
+
+    /// <summary>
+    /// Mensagem do ERR-03.
+    /// </summary>
+    public const string AccountBlockedMessage = "A conta está bloqueada.";
+
+    /// <summary>
+    /// Mensagem do ERR-04.
+    /// </summary>
+    public const string AccountSuspendedMessage = "A conta está suspensa.";
+
+    /// <summary>
+    /// Mensagem do ERR-05.
+    /// </summary>
+    public const string WrongAccessPointMessage = "Esta conta não tem acesso por este ponto de acesso.";
+
+    /// <summary>
+    /// Mensagem do ERR-06.
+    /// </summary>
+    public const string AccountTypeNotAllowedMessage = "A operação não está disponível para este tipo de conta.";
+
+    /// <summary>
+    /// Mensagem do ERR-08.
+    /// </summary>
+    public const string ElementForbiddenMessage = "Não tem autorização para aceder a este elemento.";
+
+    /// <summary>
+    /// Mensagem do ERR-10.
+    /// </summary>
+    public const string ValidationFailedMessage = "Os dados enviados não cumprem a validação automática.";
+
+    /// <summary>
+    /// Mensagem do ERR-11.
+    /// </summary>
+    public const string FileRejectedMessage = "O ficheiro não é aceite.";
+
+    /// <summary>
+    /// Mensagem do ERR-12.
+    /// </summary>
+    public const string RequestTooLargeMessage = "O pedido excede a dimensão máxima permitida.";
+
+    /// <summary>
+    /// Mensagem do ERR-13.
+    /// </summary>
+    public const string UnsupportedContentTypeMessage = "O tipo de conteúdo do pedido não é suportado.";
+
+    /// <summary>
+    /// Mensagem do ERR-20.
+    /// </summary>
+    public const string NotFoundMessage = "O elemento pedido não existe ou não está disponível.";
+
+    /// <summary>
+    /// Mensagem do ERR-38.
+    /// </summary>
+    public const string JobHasInterestsMessage = "A vaga tem interesses registados e só pode ser encerrada.";
+
+    /// <summary>
+    /// Mensagem do ERR-32.
+    /// </summary>
+    public const string AlreadyAnsweredMessage = "Já respondeu a esta vaga.";
+
+    /// <summary>
+    /// Mensagem do ERR-33.
+    /// </summary>
+    public const string JobUnavailableMessage = "A vaga já não está disponível.";
+
+    /// <summary>
+    /// Mensagem do ERR-34.
+    /// </summary>
+    public const string ProfileNotOpenedMessage = "Abra o perfil completo do Candidato antes de registar a decisão.";
+
+    /// <summary>
+    /// Mensagem do ERR-35.
+    /// </summary>
+    public const string CandidateAlreadyEvaluatedMessage = "O Candidato já foi avaliado nesta vaga.";
+
+    /// <summary>
+    /// Mensagem do ERR-36.
+    /// </summary>
+    public const string ConversationReadOnlyMessage = "A conversa está em modo apenas de consulta.";
+
+    /// <summary>
+    /// Mensagem do ERR-37.
+    /// </summary>
+    public const string ConversationWithoutMatchMessage = "Não existe match para esta conversa.";
+
+    /// <summary>
+    /// Mensagem do ERR-40.
+    /// </summary>
+    public const string CompanyAlreadyRegisteredMessage = "O Recrutador já registou uma Empresa.";
+
+    /// <summary>
+    /// Mensagem do ERR-41.
+    /// </summary>
+    public const string ConcurrencyConflictMessage = "O elemento foi alterado por outro pedido. Atualize e tente novamente.";
+
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+
+    /// <summary>
+    /// Escreve o ERR-01 (401): credencial em falta, mal formada, com assinatura inválida ou expirada, ou conta inexistente.
+    /// </summary>
+    /// <param name="context">Contexto do pedido.</param>
+    /// <returns>Tarefa que termina quando a resposta está escrita.</returns>
+    public static Task WriteInvalidSessionAsync(HttpContext context)
+    {
+        return WriteAsync(context, StatusCodes.Status401Unauthorized, InvalidSessionCode, InvalidSessionMessage);
+    }
+
+    /// <summary>
+    /// Escreve o ERR-03 (403): conta bloqueada.
+    /// </summary>
+    /// <param name="context">Contexto do pedido.</param>
+    /// <returns>Tarefa que termina quando a resposta está escrita.</returns>
+    public static Task WriteAccountBlockedAsync(HttpContext context)
+    {
+        return WriteAsync(context, StatusCodes.Status403Forbidden, AccountBlockedCode, AccountBlockedMessage);
+    }
+
+    /// <summary>
+    /// Escreve o ERR-04 (403): conta suspensa.
+    /// </summary>
+    /// <param name="context">Contexto do pedido.</param>
+    /// <returns>Tarefa que termina quando a resposta está escrita.</returns>
+    public static Task WriteAccountSuspendedAsync(HttpContext context)
+    {
+        return WriteAsync(context, StatusCodes.Status403Forbidden, AccountSuspendedCode, AccountSuspendedMessage);
+    }
+
+    /// <summary>
+    /// Escreve o ERR-06 (403): a política não é cumprida pelo tipo de conta.
+    /// </summary>
+    /// <param name="context">Contexto do pedido.</param>
+    /// <returns>Tarefa que termina quando a resposta está escrita.</returns>
+    public static Task WriteAccountTypeNotAllowedAsync(HttpContext context)
+    {
+        return WriteAsync(context, StatusCodes.Status403Forbidden, AccountTypeNotAllowedCode, AccountTypeNotAllowedMessage);
+    }
+
+    /// <summary>
+    /// Escreve o ERR-07 (403): a operação exige a Empresa aprovada.
+    /// </summary>
+    /// <param name="context">Contexto do pedido.</param>
+    /// <param name="message">Mensagem, obtida com <see cref="CompanyNotApprovedMessage"/>.</param>
+    /// <returns>Tarefa que termina quando a resposta está escrita.</returns>
+    public static Task WriteCompanyNotApprovedAsync(HttpContext context, string message)
+    {
+        return WriteAsync(context, StatusCodes.Status403Forbidden, CompanyNotApprovedCode, message);
+    }
+
+    /// <summary>
+    /// Cria o corpo do erro que corresponde ao motivo da recusa de um início de sessão: ERR-02 (401), ERR-03, ERR-04 ou
+    /// ERR-05 (403).
+    /// </summary>
+    /// <param name="reason">Motivo da recusa.</param>
+    /// <returns>O código de estado HTTP e o corpo da resposta.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Se o motivo não for conhecido.</exception>
+    public static (int StatusCode, ApiErrorDto Body) LoginRejected(LoginRejection reason)
+    {
+        return reason switch
+        {
+            LoginRejection.InvalidCredentials => (
+                StatusCodes.Status401Unauthorized,
+                new ApiErrorDto(InvalidCredentialsCode, InvalidCredentialsMessage)),
+            LoginRejection.AccountBlocked => (
+                StatusCodes.Status403Forbidden,
+                new ApiErrorDto(AccountBlockedCode, AccountBlockedMessage)),
+            LoginRejection.AccountSuspended => (
+                StatusCodes.Status403Forbidden,
+                new ApiErrorDto(AccountSuspendedCode, AccountSuspendedMessage)),
+            LoginRejection.WrongAccessPoint => (
+                StatusCodes.Status403Forbidden,
+                new ApiErrorDto(WrongAccessPointCode, WrongAccessPointMessage)),
+            _ => throw new ArgumentOutOfRangeException(nameof(reason), reason, "Motivo de recusa desconhecido."),
+        };
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-01 (401): credencial em falta, inválida ou expirada, ou conta inexistente.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto InvalidSession()
+    {
+        return new ApiErrorDto(InvalidSessionCode, InvalidSessionMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-08 (403): o elemento é de outro utilizador ou de outra Empresa (RF059, RNF006).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto ElementForbidden()
+    {
+        return new ApiErrorDto(ElementForbiddenCode, ElementForbiddenMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-10 (400): um ou mais campos não cumprem a validação automática (RF004, RF042, RNF008).
+    /// </summary>
+    /// <param name="fields">Um erro por campo em causa.</param>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto ValidationFailed(IReadOnlyList<FieldErrorDto> fields)
+    {
+        ArgumentNullException.ThrowIfNull(fields);
+
+        return new ApiErrorDto(ValidationFailedCode, ValidationFailedMessage, fields);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-11 (400): o ficheiro enviado não é aceite (RNF015, RNF016).
+    /// </summary>
+    /// <param name="reason">Motivo da recusa, indicado no campo <c>file</c>.</param>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto FileRejected(string reason)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(reason);
+
+        return new ApiErrorDto(FileRejectedCode, FileRejectedMessage, [new FieldErrorDto("file", reason)]);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-12 (413): o pedido excede a dimensão máxima permitida.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto RequestTooLarge()
+    {
+        return new ApiErrorDto(RequestTooLargeCode, RequestTooLargeMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-13 (415): o tipo de conteúdo do pedido não é suportado.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto UnsupportedContentType()
+    {
+        return new ApiErrorDto(UnsupportedContentTypeCode, UnsupportedContentTypeMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-20 (404): o elemento pedido não existe ou não está disponível.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto NotFound()
+    {
+        return new ApiErrorDto(NotFoundCode, NotFoundMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-30 (409): a operação não é permitida no estado atual do elemento.
+    /// </summary>
+    /// <param name="stateLabel">Estado atual, como é apresentado ao utilizador (por exemplo «pendente»).</param>
+    /// <returns>O corpo da resposta, por exemplo «A operação não é permitida no estado atual: pendente.».</returns>
+    public static ApiErrorDto InvalidState(string stateLabel)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(stateLabel);
+
+        return new ApiErrorDto(InvalidStateCode, $"A operação não é permitida no estado atual: {stateLabel}.");
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-31 (409): quota de interesses esgotada (RF020, P11), com o fim do bloqueio em
+    /// <see cref="ApiErrorDto.BlockedUntil"/>.
+    /// </summary>
+    /// <param name="blockedUntil">Instante em que termina o período de bloqueio.</param>
+    /// <param name="remaining">Tempo em falta até esse instante.</param>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto QuotaExhausted(DateTimeOffset blockedUntil, TimeSpan remaining)
+    {
+        return new ApiErrorDto(QuotaExhaustedCode, QuotaExhaustedMessage(remaining), BlockedUntil: blockedUntil);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-32 (409): segunda resposta do Candidato à mesma vaga (RF019).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto AlreadyAnswered()
+    {
+        return new ApiErrorDto(AlreadyAnsweredCode, AlreadyAnsweredMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-33 (409): a vaga deixou de cumprir o RF014 entre a apresentação do cartão e a ação.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto JobUnavailable()
+    {
+        return new ApiErrorDto(JobUnavailableCode, JobUnavailableMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-36 (409): a conversa está em modo apenas de consulta (RF028, RF075).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto ConversationReadOnly()
+    {
+        return new ApiErrorDto(ConversationReadOnlyCode, ConversationReadOnlyMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-37 (409): o identificador não corresponde a um match confirmado (RF026).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto ConversationWithoutMatch()
+    {
+        return new ApiErrorDto(ConversationWithoutMatchCode, ConversationWithoutMatchMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-39 (409): a galeria ou a vaga já tem o número máximo de fotografias (RF048, RF052, P13).
+    /// </summary>
+    /// <param name="maxPhotos">Número máximo de fotografias, indicado na mensagem.</param>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto PhotoLimitReached(int maxPhotos)
+    {
+        return new ApiErrorDto(PhotoLimitReachedCode, $"Foi atingido o número máximo de fotografias ({maxPhotos}).");
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-34 (409): a aceitação ou a recusa foi pedida sem a abertura do perfil completo do Candidato
+    /// registada para a vaga (RF063, RF064; UC12, E1).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto ProfileNotOpened()
+    {
+        return new ApiErrorDto(ProfileNotOpenedCode, ProfileNotOpenedMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-35 (409): o interesse já não está em espera, porque o Recrutador já registou a decisão
+    /// (RF117; UC12, E4), na abertura do perfil, na obtenção do curriculum vitae ou na decisão.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto CandidateAlreadyEvaluated()
+    {
+        return new ApiErrorDto(CandidateAlreadyEvaluatedCode, CandidateAlreadyEvaluatedMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-38 (409): a vaga tem pelo menos um interesse registado e só pode ser encerrada (RF058).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto JobHasInterests()
+    {
+        return new ApiErrorDto(JobHasInterestsCode, JobHasInterestsMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-40 (409): o Recrutador já registou uma Empresa.
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto CompanyAlreadyRegistered()
+    {
+        return new ApiErrorDto(CompanyAlreadyRegisteredCode, CompanyAlreadyRegisteredMessage);
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-41 (409): falha do controlo de concorrência otimista (<c>xmin</c>).
+    /// </summary>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto ConcurrencyConflict()
+    {
+        return new ApiErrorDto(ConcurrencyConflictCode, ConcurrencyConflictMessage);
+    }
+
+    /// <summary>
+    /// Compõe a mensagem do ERR-31 com o tempo em falta, em horas e minutos, arredondado para cima ao minuto e com o
+    /// mínimo de 1 minuto.
+    /// </summary>
+    /// <param name="remaining">Tempo em falta até ao fim do bloqueio.</param>
+    /// <returns>A mensagem, por exemplo «Esgotou a quota de interesses. Pode voltar a manifestar interesse dentro de 23 h 47 min.».</returns>
+    public static string QuotaExhaustedMessage(TimeSpan remaining)
+    {
+        long totalMinutes = Math.Max(1, (long)Math.Ceiling(remaining.TotalMinutes));
+
+        return $"Esgotou a quota de interesses. Pode voltar a manifestar interesse dentro de {totalMinutes / 60} h {totalMinutes % 60} min.";
+    }
+
+    /// <summary>
+    /// Compõe a mensagem do ERR-07 com o estado atual da Empresa.
+    /// </summary>
+    /// <param name="status">Estado da Empresa, ou <see langword="null"/> se o Recrutador não tem Empresa.</param>
+    /// <returns>A mensagem, por exemplo «A operação exige a Empresa aprovada. Estado atual da Empresa: pendente.».</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Se o estado não for conhecido.</exception>
+    public static string CompanyNotApprovedMessage(CompanyStatus? status)
+    {
+        return $"A operação exige a Empresa aprovada. Estado atual da Empresa: {CompanyStatusLabel(status)}.";
+    }
+
+    /// <summary>
+    /// Cria o corpo do ERR-07 (403) para uma Empresa que deixou de estar aprovada durante a operação.
+    /// </summary>
+    /// <param name="status">Estado atual da Empresa.</param>
+    /// <returns>O corpo da resposta.</returns>
+    public static ApiErrorDto CompanyNotApproved(CompanyStatus? status)
+    {
+        return new ApiErrorDto(CompanyNotApprovedCode, CompanyNotApprovedMessage(status));
+    }
+
+    /// <summary>
+    /// Designação do estado da Empresa nas mensagens do catálogo (ERR-07 e ERR-30).
+    /// </summary>
+    /// <param name="status">Estado da Empresa, ou <see langword="null"/> se o Recrutador não tem Empresa.</param>
+    /// <returns>«pendente», «aprovada», «recusada», «suspensa» ou «não registada».</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Se o estado não for conhecido.</exception>
+    public static string CompanyStatusLabel(CompanyStatus? status)
+    {
+        return status switch
+        {
+            null => "não registada",
+            CompanyStatus.Pending => "pendente",
+            CompanyStatus.Approved => "aprovada",
+            CompanyStatus.Rejected => "recusada",
+            CompanyStatus.Suspended => "suspensa",
+            _ => throw new ArgumentOutOfRangeException(nameof(status), status, "Estado de Empresa desconhecido."),
+        };
+    }
+
+    /// <summary>
+    /// Designação do estado da vaga nas mensagens do ERR-30 (documentação da API v02, secção 2.4).
+    /// </summary>
+    /// <param name="status">Estado da vaga.</param>
+    /// <returns>«não publicada», «publicada», «suspensa» ou «encerrada».</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Se o estado não for conhecido.</exception>
+    public static string JobStatusLabel(JobStatus status)
+    {
+        return status switch
+        {
+            JobStatus.Unpublished => "não publicada",
+            JobStatus.Published => "publicada",
+            JobStatus.Suspended => "suspensa",
+            JobStatus.Closed => "encerrada",
+            _ => throw new ArgumentOutOfRangeException(nameof(status), status, "Estado de vaga desconhecido."),
+        };
+    }
+
+    private static Task WriteAsync(HttpContext context, int statusCode, string code, string message)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        context.Response.StatusCode = statusCode;
+        return context.Response.WriteAsJsonAsync(
+            new ApiErrorDto(code, message),
+            JsonOptions,
+            contentType: "application/json",
+            context.RequestAborted);
+    }
+}

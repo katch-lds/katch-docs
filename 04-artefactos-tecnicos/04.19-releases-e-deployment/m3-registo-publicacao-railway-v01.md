@@ -1,3 +1,4 @@
+```text
 Registo da publicacao do backend no Railway (I119)
 Servico katch-backend, projeto easygoing-freedom, ambiente production
 Extraido com o CLI do Railway em 2026-11-04. Nenhum segredo consta deste registo.
@@ -114,3 +115,4 @@ Cannot load library libgssapi_krb5.so.2
 Error: libgssapi_krb5.so.2: cannot open shared object file: No such file or directory
       Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
 warn: Microsoft.EntityFrameworkCore.Query[20504]
+```

@@ -1,4 +1,5 @@
-﻿I119 - Evidencia da publicacao do backend no Railway
+```text
+I119 - Evidencia da publicacao do backend no Railway
 
 URL publico:        https://katch-backend-production.up.railway.app
 Versao publicada:   tag v0.3.0 (anotada), commit 3f4a070946035440e8ad9c746b83a7b904478881 (clone limpo, HEAD confirmado)
@@ -99,3 +100,4 @@ Admin: indicadores (sucesso, repetido com to = hoje)       GET    /api/admin/ind
 Verificacao a partir de fora do ambiente de desenvolvimento (2026-11-04)
 Declarada pelo Executor: todos os elementos do grupo acederam ao URL publico, em computador e em telemovel, e conseguiram usar o Swagger e iniciar sessao.
 Por registar: dispositivo/rede de cada teste (ex.: dados moveis) e capturas de ecra, se existirem.
+```

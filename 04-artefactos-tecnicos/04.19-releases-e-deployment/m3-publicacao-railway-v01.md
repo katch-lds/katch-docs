@@ -97,11 +97,11 @@ O Administrador não se cria por endpoint: é a conta `admin@katch.pt` da migrat
 | Swagger | `GET /swagger/v1/swagger.json` | `200`, com 62 caminhos |
 | Início de sessão | `POST /api/auth/login` com o cabeçalho `X-Client-App` | `200` com `token`; palavra-passe errada devolve `401` (`ERR-02`) |
 
-O registo completo dos pedidos de sucesso e de erro está em `m3-registo-verificacao-url-publico-v01.txt`. O log de build e de arranque está em `m3-registo-publicacao-railway-v01.txt`.
+O registo completo dos pedidos de sucesso e de erro está em `m3-registo-verificacao-url-publico-v01.md`. O log de build e de arranque está em `m3-registo-publicacao-railway-v01.md`.
 
 ## 6. Avisos do log
 
-O log de build e de arranque (`m3-registo-publicacao-railway-v01.txt`) tem avisos que não afetam o funcionamento da API:
+O log de build e de arranque (`m3-registo-publicacao-railway-v01.md`) tem avisos que não afetam o funcionamento da API:
 
 | Aviso | Causa | Efeito |
 | --- | --- | --- |

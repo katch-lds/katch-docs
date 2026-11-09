@@ -30,6 +30,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-11-06 | Criação do documento: objetivos, âmbito, níveis e técnicas de teste, ambiente, dados, cenários de sistema automáticos, simulação dos testes de aceitação, responsabilidades, âmbito da cobertura, critérios de entrada, de saída, de suspensão e de retoma, quality gates, rastreabilidade aos requisitos, entregáveis, riscos e referências. | `I123` |
+| v01 (revisão) | 2026-11-09 | Correção da revisão da `I123`: responsável da pipeline segundo a secção 11.6 do Regulamento Interno (D01); tempo máximo de apresentação das mensagens novas nos cenários de conversas igual ao `P17` (M01). | `I123` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas.
 
@@ -141,7 +142,7 @@ Cada cenário é um ficheiro ou um grupo `group` em `integration_test/`, identif
 | `SM-10` | Quota esgotada | Ao 10.º interesse, novos interesses são bloqueados e é indicado o instante da reposição; a recusa continua disponível | RF020, RF022 |
 | `SM-11` | Ajuste das preferências na exploração | Alterar as preferências na área de exploração altera os cartões seguintes | RF023 |
 | `SM-12` | Matches e dados de contacto | Depois da aceitação pelo Recrutador (pedido direto), o match aparece na lista com a vaga e os dados de contacto | RF024, RF025, RF068 |
-| `SM-13` | Conversas do Candidato | A lista indica as mensagens por ler; abrir a conversa marca-as como lidas e mostra o histórico ordenado; envia uma mensagem; uma mensagem do Recrutador enviada por pedido direto aparece sem atualização manual (consulta periódica, no máximo 3 segundos mais o tempo de resposta); mensagem com 1001 caracteres é rejeitada | RF026 a RF029, RF108 |
+| `SM-13` | Conversas do Candidato | A lista indica as mensagens por ler; abrir a conversa marca-as como lidas e mostra o histórico ordenado; envia uma mensagem; uma mensagem do Recrutador enviada por pedido direto aparece sem atualização manual (consulta periódica de 3 em 3 segundos; a mensagem aparece no máximo 5 segundos depois do envio, P17); mensagem com 1001 caracteres é rejeitada | RF026 a RF029, RF108 |
 | `SM-14` | Encerramento e modo apenas de consulta | Encerrar a conversa deixa o histórico visível e impede o envio; a suspensão da Empresa (pedido direto do Administrador) passa a conversa a modo apenas de consulta; sem match não há conversa | RF030, RF070, RF075 |
 | `SM-15` | Navegação em 3 interações | A partir do ecrã principal, o perfil, a exploração, os matches e as conversas são alcançados em 3 interações, no máximo | RNF011 |
 | `SM-16` | Cartão seguinte em 2 segundos | Depois de recusar ou de manifestar interesse, o cartão seguinte é apresentado em 2 segundos, no máximo (medição com `Stopwatch`) | RNF002 |
@@ -172,7 +173,7 @@ A simulação dos testes de aceitação é feita na Issue `I081` (Sprint previsi
 | Testes de sistema automáticos (`integration_test`), especificação e resultados | Executor da `I080` (a atribuir no Sprint Planning do S09) | Revisor e Auditor da `I080` |
 | Simulação dos testes de aceitação, especificação e relatório | Executor da `I081` (a atribuir no Sprint Planning do S10) | Revisor e Auditor da `I081` |
 | Análise estática (relatório do Dart analyzer e do `dart format`) | Executor da `I124` | Revisor e Auditor da `I124` |
-| Configuração e manutenção da pipeline e dos quality gates | Roberto Baptista, responsável da pipeline em `m4` (Regulamento Interno, secção 11.6); a configuração inicial dos frontends foi feita por João Borguem na `I120` | Revisor e Auditor de cada Issue que altera a pipeline |
+| Configuração e manutenção da pipeline e dos quality gates | João Borguem, responsável pela configuração e manutenção técnica da pipeline (Regulamento Interno, secção 11.6; configuração dos frontends na `I120`) | Revisor e Auditor de cada Issue que altera a pipeline |
 | Verificação independente da configuração e dos resultados da pipeline | Líder em funções em `m4`, João Borguem (Regulamento Interno, secções 6.2 e 11.6) | — |
 | Registo de defeitos encontrados pelos testes | Quem encontra o defeito, na Issue correspondente e em `03.03.07-defeitos` | Revisor da Issue |
 

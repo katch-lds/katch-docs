@@ -30,6 +30,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-11-06 | Criação do documento: objetivos, âmbito, níveis e técnicas de teste, ambiente, dados, cenários de sistema automáticos, simulação dos testes de aceitação, responsabilidades, âmbito da cobertura, critérios de entrada, de saída, de suspensão e de retoma, quality gates, rastreabilidade aos requisitos, entregáveis, riscos e referências. | `I123` |
+| v01 (revisão) | 2026-11-09 | Correção da revisão da `I123`: responsável da pipeline segundo a secção 11.6 do Regulamento Interno (D01); tempo máximo de apresentação das mensagens novas nos cenários de conversas igual ao `P17` (M01). | `I123` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas.
 
@@ -145,7 +146,7 @@ Cada cenário é um ficheiro ou um grupo `test.describe` do Playwright, identifi
 | `SW-09` | Candidatos em espera e perfil completo | Lista por vaga os candidatos em espera, sem ações de decisão na lista; abre o perfil com fotografia, hiperligações e competências coincidentes destacadas; descarrega o curriculum vitae; vaga sem interessados mostra o estado vazio | RF060 a RF062 |
 | `SW-10` | Decisão sobre o Candidato e match | Aceitar confirma o match e mostra os dados de contacto; recusar retira o Candidato da lista; a decisão registada não pode ser alterada | RF063, RF064, RF066, RF117 |
 | `SW-11` | Matches da Empresa | A lista mostra só os matches da Empresa, com a vaga, o Candidato e o contacto; abrir um match leva à conversa criada automaticamente | RF067, RF068 |
-| `SW-12` | Conversas do Recrutador | A lista indica as mensagens por ler; abrir a conversa marca-as como lidas e mostra o histórico ordenado; envia uma mensagem; uma mensagem enviada pelo Candidato por pedido direto aparece sem recarregar a página (consulta periódica, no máximo 3 segundos mais o tempo de resposta); mensagem com 1001 caracteres é rejeitada | RF069 a RF073, RF109 |
+| `SW-12` | Conversas do Recrutador | A lista indica as mensagens por ler; abrir a conversa marca-as como lidas e mostra o histórico ordenado; envia uma mensagem; uma mensagem enviada pelo Candidato por pedido direto aparece sem recarregar a página (consulta periódica de 3 em 3 segundos; a mensagem aparece no máximo 5 segundos depois do envio, P17); mensagem com 1001 caracteres é rejeitada | RF069 a RF073, RF109 |
 | `SW-13` | Encerramento e modo apenas de consulta | Encerrar a conversa deixa o histórico visível e impede o envio; bloquear a conta do Candidato ou suspender a Empresa passa a conversa a modo apenas de consulta; sem match não há conversa | RF070, RF074, RF075 |
 | `SW-14` | Contas e Candidatos (Administrador) | Consulta as contas, bloqueia e reativa uma conta; consulta a lista de Candidatos, suspende e reativa um Candidato; o Candidato suspenso não consegue iniciar sessão por pedido direto | RF085 a RF090 |
 | `SW-15` | Empresas e vagas (Administrador) | Suspende e reativa uma Empresa aprovada; consulta a lista global de Empresas e a lista global de vagas publicadas | RF095, RF097, RF098, RF116 |
@@ -179,7 +180,7 @@ A simulação dos testes de aceitação é feita na Issue `I081` (Sprint previsi
 | Testes de sistema automáticos (Playwright), especificação e resultados | Executor da `I079` (a atribuir no Sprint Planning do S09) | Revisor e Auditor da `I079` |
 | Simulação dos testes de aceitação, especificação e relatório | Executor da `I081` (a atribuir no Sprint Planning do S10) | Revisor e Auditor da `I081` |
 | Análise estática (relatório SonarQube e ESLint) | Executor da `I124` | Revisor e Auditor da `I124` |
-| Configuração e manutenção da pipeline e dos quality gates | Roberto Baptista, responsável da pipeline em `m4` (Regulamento Interno, secção 11.6); a configuração inicial dos frontends foi feita por João Borguem na `I120` | Revisor e Auditor de cada Issue que altera a pipeline |
+| Configuração e manutenção da pipeline e dos quality gates | João Borguem, responsável pela configuração e manutenção técnica da pipeline (Regulamento Interno, secção 11.6; configuração dos frontends na `I120`) | Revisor e Auditor de cada Issue que altera a pipeline |
 | Verificação independente da configuração e dos resultados da pipeline | Líder em funções em `m4`, João Borguem (Regulamento Interno, secções 6.2 e 11.6) | — |
 | Registo de defeitos encontrados pelos testes | Quem encontra o defeito, na Issue correspondente e em `03.02.07-defeitos` | Revisor da Issue |
 

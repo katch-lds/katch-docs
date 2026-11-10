@@ -28,6 +28,7 @@
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
 | v01 | 2026-11-05 | Criação do documento: pipelines dos dois frontends, uma execução de sucesso e três execuções bloqueadas em cada repositório (erro de build, cobertura inferior a 40% e análise estática falhada) e regras de proteção da `main`. | `I120` |
+| v01 (revisão) | 2026-11-10 | Melhorias da revisão da `I120`: ligações das execuções M3 e M4 corrigidas (M01); W3 com 5 dos 7 ficheiros de testes retirados (M03); M1 sobre `6e467f0`, com a função sem expressão regular do mobile (M02) e sem o passo que gerava `android/` (M04); rulesets recriados sem «Restrict updates» e code owners (M06); verificação do CI do backend depois da reescrita do secret (M07). | `I120` |
 
 ---
 
@@ -92,14 +93,14 @@ Os ficheiros são cópias exatas dos ramos da I120 nas versões indicadas na sec
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | W1 | web | Sucesso | [#2](https://github.com/katch-lds/katch-frontend-web/pull/2) | `3b9c1ae38f1a0130d22f23bf0a021003a78fcd72` | Versão entregue da `I120` | Dois jobs com sucesso; Quality Gate OK | [42114963370](https://github.com/katch-lds/katch-frontend-web/actions/runs/42114963370) |
 | W2 | web | Bloqueio por build falhado (QG-01) | [#3](https://github.com/katch-lds/katch-frontend-web/pull/3) | `c487c25ea5c4508f00db4a5e3b4f4687963cb718` | `const erroDeCompilacao: number = 'I120';` em `App.tsx` | `build-and-test` falha no QG-01; merge bloqueado | [42116725708](https://github.com/katch-lds/katch-frontend-web/actions/runs/42116725708) |
-| W3 | web | Bloqueio por cobertura inferior a 40% | [#4](https://github.com/katch-lds/katch-frontend-web/pull/4) | `d13c1eb9818092d2f9c780c2a3095852555cb52b` | Retirados 5 dos 6 ficheiros de testes | `build-and-test` e `static-analysis` falham nos testes com cobertura; merge bloqueado | [42116777547](https://github.com/katch-lds/katch-frontend-web/actions/runs/42116777547) |
+| W3 | web | Bloqueio por cobertura inferior a 40% | [#4](https://github.com/katch-lds/katch-frontend-web/pull/4) | `d13c1eb9818092d2f9c780c2a3095852555cb52b` | Retirados 5 dos 7 ficheiros de testes | `build-and-test` e `static-analysis` falham nos testes com cobertura; merge bloqueado | [42116777547](https://github.com/katch-lds/katch-frontend-web/actions/runs/42116777547) |
 | W4 | web | Bloqueio por análise estática falhada (QG-05) | [#5](https://github.com/katch-lds/katch-frontend-web/pull/5) | `9516a4f93cdcd0809fdd1025bc8336b1bc17085a` | `HttpApiClientCopia.ts`, cópia integral do cliente da API | `static-analysis` falha no Quality Gate (duplicação acima de 3%); merge bloqueado | [42123724658](https://github.com/katch-lds/katch-frontend-web/actions/runs/42123724658) |
-| M1 | mobile | Sucesso | [#2](https://github.com/katch-lds/katch-frontend-mobile/pull/2) | `f6595791d64702b377bce1a82eb770f8c06bb815` | Versão entregue da `I120` | Dois jobs com sucesso | [42078961190](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42078961190) |
+| M1 | mobile | Sucesso | [#2](https://github.com/katch-lds/katch-frontend-mobile/pull/2) | `6e467f0` (antes: `f6595791d64702b377bce1a82eb770f8c06bb815`) | Versão entregue da `I120` | Dois jobs com sucesso | [checks do PR #2](https://github.com/katch-lds/katch-frontend-mobile/pull/2/checks) (antes: [42078961190](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42078961190)) |
 | M2 | mobile | Bloqueio por build falhado (QG-01) | [#3](https://github.com/katch-lds/katch-frontend-mobile/pull/3) | `7afc7edec242caf2e7955bd23e21dfe2864c82ac` | `final int erroDeCompilacao = 'I120';` em `main.dart` | `build-and-test` falha no QG-01; `static-analysis` também, pela mesma causa; merge bloqueado | [42116440559](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116440559) |
-| M3 | mobile | Bloqueio por cobertura inferior a 40% | [#5](https://github.com/katch-lds/katch-frontend-mobile/pull/5) | `090ec6434fb5efd50b4c832f84fc792d5b908252` | Retirados os testes do cliente da API, dos modelos, do monitor, da consulta periódica e da configuração | `build-and-test` falha no passo da cobertura; merge bloqueado | [42116557654](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116557654) |
-| M4 | mobile | Bloqueio por análise estática falhada (QG-05) | [#4](https://github.com/katch-lds/katch-frontend-mobile/pull/4) | `8d6d313428aca59b3229b964689f274eea8d0858` | `print('Prova de bloqueio da I120');` em `main.dart` | `static-analysis` falha no `flutter analyze` (`avoid_print`); merge bloqueado | [42116616608](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116616608) |
+| M3 | mobile | Bloqueio por cobertura inferior a 40% | [#5](https://github.com/katch-lds/katch-frontend-mobile/pull/5) | `090ec6434fb5efd50b4c832f84fc792d5b908252` | Retirados os testes do cliente da API, dos modelos, do monitor, da consulta periódica e da configuração | `build-and-test` falha no passo da cobertura; merge bloqueado | [42116616608](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116616608) |
+| M4 | mobile | Bloqueio por análise estática falhada (QG-05) | [#4](https://github.com/katch-lds/katch-frontend-mobile/pull/4) | `8d6d313428aca59b3229b964689f274eea8d0858` | `print('Prova de bloqueio da I120');` em `main.dart` | `static-analysis` falha no `flutter analyze` (`avoid_print`); merge bloqueado | [42116557654](https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116557654) |
 
-Todas as execuções são do evento `pull_request` de 2026-11-05.
+Todas as execuções são do evento `pull_request` de 2026-11-05, exceto a M1 final, de 2026-11-06, sobre `6e467f0`.
 
 ---
 
@@ -140,7 +141,7 @@ A primeira execução sobre `2b6bb46` falhou no Quality Gate com fiabilidade C: 
 | Merge Request | <https://github.com/katch-lds/katch-frontend-web/pull/4> (fechado sem merge) |
 | Execução | <https://github.com/katch-lds/katch-frontend-web/actions/runs/42116777547> |
 | Commit | `d13c1eb` — «[I120] test(ci): prova de bloqueio da cobertura, testes retirados no frontend web (não integrar)» (2026-11-05 21:47) |
-| Alteração | Retirados `ApiError.test.ts`, `ConnectionMonitor.test.ts`, `HttpApiClient.test.ts`, `PollingLoop.test.ts` e `SessionStore.test.ts`; fica só o teste da `App` |
+| Alteração | Retirados `ApiError.test.ts`, `ConnectionMonitor.test.ts`, `HttpApiClient.test.ts`, `PollingLoop.test.ts` e `SessionStore.test.ts`; ficam os testes da `App` e de `utils/url` |
 | Causa do bloqueio | Os testes que restam passam, mas o Jest termina sem sucesso porque a cobertura de linhas fica abaixo do limiar de 40% (`coverageThreshold`): `build-and-test` falha no passo dos testes com cobertura. O `static-analysis` falha também, no passo que corre os mesmos testes para a cobertura importada, pela mesma causa (como na execução E3 do backend). |
 
 ![W3 — bloqueio por cobertura inferior a 40%](evidencias/i120-web-04-bloqueio-cobertura.png)
@@ -168,12 +169,12 @@ A primeira versão desta prova (`14aa07b`) copiou o cliente da API anterior à c
 | Campo | Informação |
 | --- | --- |
 | Merge Request | <https://github.com/katch-lds/katch-frontend-mobile/pull/2> |
-| Execução | <https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42078961190> |
-| Commit | `f659579` — «[I120] style(mobile): formatar o teste do ApiErrorDto com o dart format» (2026-11-05 17:53), sobre `a57f0ae` (estrutura inicial, 17:31) |
-| `build-and-test` | Sucesso: testes unitários e de widget, cobertura de linhas acima de 40% e APK de depuração |
-| `static-analysis` | Sucesso: `dart format` sem alterações e `flutter analyze` sem ocorrências |
+| Execução | Checks do PR #2 sobre `6e467f0`: <https://github.com/katch-lds/katch-frontend-mobile/pull/2/checks>. Primeira execução de sucesso, sobre `f659579`: <https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42078961190> |
+| Commit | `6e467f0` — «[I120] ci(mobile): retirar o passo que gerava a pasta android/, já integrada no repositório» (2026-11-06 16:18), sobre `67277b7` — «[I120] fix(mobile): retirar as barras finais do endereço sem expressão regular, como no web» (16:18), `f659579` (formatação, 2026-11-05 17:53) e `a57f0ae` (estrutura inicial, 17:31) |
+| `build-and-test` | Sucesso: 16 testes unitários e de widget, cobertura de linhas acima de 40% e APK de depuração (3 min) |
+| `static-analysis` | Sucesso: `dart format` sem alterações e `flutter analyze` sem ocorrências (36 s) |
 
-A primeira execução sobre `a57f0ae` falhou no `dart format` (um ficheiro de teste por formatar); o commit `f659579` corrigiu-o.
+A primeira execução sobre `a57f0ae` falhou no `dart format` (um ficheiro de teste por formatar); o commit `f659579` corrigiu-o. Depois da revisão, o `67277b7` substituiu a expressão regular `/+$` do `AppConfig` e do `HttpApiClient` pela função `trimTrailingSlashes` (`lib/core/url.dart`, com teste), como no web (W1), e o `6e467f0` retirou os passos que geravam e publicavam a pasta `android/`, já integrada no repositório. A captura mostra os dois checks com sucesso e a marca *Required*, e o merge à espera da revisão do code owner.
 
 ![M1 — execução de sucesso](evidencias/i120-mobile-01-execucao-sucesso.png)
 
@@ -194,7 +195,7 @@ A primeira execução sobre `a57f0ae` falhou no `dart format` (um ficheiro de te
 | Campo | Informação |
 | --- | --- |
 | Merge Request | <https://github.com/katch-lds/katch-frontend-mobile/pull/5> (fechado sem merge) |
-| Execução | <https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116557654> |
+| Execução | <https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116616608> |
 | Commit | `090ec64` — «[I120] test(ci): prova de bloqueio da cobertura, testes retirados no frontend mobile (não integrar)» (2026-11-05 21:49) |
 | Alteração | Retirados os testes do `ApiErrorDto`, do `ConnectionMonitor`, do `PollingLoop` e do `AppConfig`; o teste do cliente da API fica reduzido à criação do cliente |
 | Causa do bloqueio | Os testes que restam passam, mas `build-and-test` falha no passo «Cobertura de linhas ≥ 40%», com a anotação «Cobertura insuficiente». O `static-analysis` passa. |
@@ -206,7 +207,7 @@ A primeira execução sobre `a57f0ae` falhou no `dart format` (um ficheiro de te
 | Campo | Informação |
 | --- | --- |
 | Merge Request | <https://github.com/katch-lds/katch-frontend-mobile/pull/4> (fechado sem merge) |
-| Execução | <https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116616608> |
+| Execução | <https://github.com/katch-lds/katch-frontend-mobile/actions/runs/42116557654> |
 | Commit | `8d6d313` — «[I120] test(ci): prova de bloqueio QG-05, print no código do frontend mobile (não integrar)» (2026-11-05 21:50) |
 | Alteração | `print('Prova de bloqueio da I120');` em `lib/main.dart` |
 | Causa do bloqueio | O build e os testes passam (`build-and-test` com sucesso), mas o `static-analysis` falha no passo «QG-05 Análise estática (Dart analyzer com flutter_lints)»: a regra `avoid_print` gera uma ocorrência de nível info, tratada como erro por `--fatal-infos`. |
@@ -217,11 +218,13 @@ A primeira execução sobre `a57f0ae` falhou no `dart format` (um ficheiro de te
 
 ## 7. Regras de proteção da `main`
 
-Cada repositório tem o ruleset «Protect main», aplicado ao ramo predefinido (`main`): «Restrict updates» e «Restrict deletions», Pull Request obrigatório com 1 aprovação e revisão do code owner, os checks `build-and-test` e `static-analysis` obrigatórios, com o ramo atualizado antes do merge, e «Block force pushes». Nas capturas W1 a W4 e M1 a M4, os dois checks aparecem com a marca *Required*; nas execuções de bloqueio, o Merge Request mostra o check obrigatório falhado e *Merging is blocked*, com o botão de merge indisponível.
+Cada repositório tem o ruleset «Protect main», ativo e aplicado ao ramo predefinido (`main`), sem lista de bypass: «Restrict deletions»; Pull Request obrigatório com 1 aprovação e revisão do code owner; os checks `build-and-test` e `static-analysis` obrigatórios (GitHub Actions), com o ramo atualizado antes do merge; e «Block force pushes». Os métodos de merge permitidos pelo ruleset são Merge, Squash e Rebase; o Merge Commit pelo Revisor é regra do grupo (Regulamento Interno, secção 10.4). Nas capturas W1 a W4 e M1 a M4, os dois checks aparecem com a marca *Required*; nas execuções de bloqueio, o Merge Request mostra o check obrigatório falhado e *Merging is blocked*, com o botão de merge indisponível.
 
 A mensagem *Merging is blocked* refere também a revisão do code owner, que é outra condição da mesma regra. Mesmo com a aprovação, o merge continuaria impedido enquanto um check obrigatório falhasse. Nos Merge Requests W1 e M1, os dois checks passaram e o merge fica dependente só da revisão e da aceitação da `I120`.
 
-Os dois rulesets incluem a regra «Restrict updates», que só deixa atualizar a `main` a quem tem permissão de bypass. Foi esta regra que, no backend, impediu o merge pelo Revisor e levou à NC-014, depois da qual foi retirada do ruleset do `katch-backend`. Se se mantiver nos frontends, o Revisor da `I120` (e das Issues seguintes) não consegue fazer o merge sem bypass; a regra deve ser revista pelo administrador antes da aceitação.
+Os rulesets foram recriados a 2026-11-06 sem a regra «Restrict updates», que só deixava atualizar a `main` a quem tivesse permissão de bypass e que, no backend, impediu o merge pelo Revisor (NC-014). Assim, o Revisor pode integrar o Merge Request depois das aprovações exigidas.
+
+Os code owners (`.github/CODEOWNERS`) diferem entre os repositórios porque seguem os responsáveis de cada repositório (Regulamento Interno, secções 10.1 e 14.2): `@RobertoBatista28` (Roberto Baptista) no `katch-frontend-web` e `@djDARKWAY` (João Coelho) no `katch-frontend-mobile`. No web, a revisão do code owner é pedida a Roberto Baptista, além da aprovação do Revisor da Issue.
 
 ![Ruleset «Protect main» do katch-frontend-web](evidencias/i120-web-06-regra-protecao-main.png)
 
@@ -232,6 +235,7 @@ Os dois rulesets incluem a regra «Restrict updates», que só deixa atualizar a
 ## 8. Credenciais e limitações
 
 - **Credenciais:** o único secret é o `SONAR_ADMIN_PASSWORD` do `katch-frontend-web`; o token da análise é gerado em cada execução. Ambos ficam mascarados nos logs, e nenhuma captura mostra segredos. O mobile não usa secrets. A configuração por ambiente (`.env.development` e `.env.example` no web; `--dart-define=API_BASE_URL` no mobile) não contém segredos.
+- **Secret do backend:** o `SONAR_ADMIN_PASSWORD` do `katch-backend` foi reescrito durante a `I120`. O CI do backend foi executado depois na `main` (execução n.º 144 do workflow `CI`, manual) e terminou com sucesso, incluindo a análise SonarQube e o Quality Gate.
 - **SonarQube no mobile:** ver a secção 3.2 e a NC-033.
 - **QG-06 e QG-07:** os passos estão preparados e correm logo que existam os testes de sistema (`playwright.config.ts` no web; `integration_test/*_test.dart` no mobile). Não foram exercitados nesta Issue.
 - **Versões:** TypeScript 6.0 em vez da 7.0.x das convenções (o `typescript-eslint` 8 não suporta a 7) e ESLint 10 com `eslint.config.js` em vez de `.eslintrc.json`. Ficam abrangidos pela ação corretiva da NC-033.

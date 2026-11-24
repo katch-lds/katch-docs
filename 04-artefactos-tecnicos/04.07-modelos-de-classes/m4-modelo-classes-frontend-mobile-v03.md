@@ -18,9 +18,9 @@
 | Turma | LEI3T2 |
 | Versão do documento | v03 |
 | Módulo | Frontend mobile (`katch-frontend-mobile`), aplicação Flutter 3.47.x em Dart 3.13.x, exclusiva do Candidato |
-| Issue | `I137` — Atualizar os requisitos funcionais, os diagramas de classes (backend, web e mobile), a arquitetura e a RTM às notas do docente de 17-11-2026 e às refatorações `I136` (backend), `I134` (web) e `I135` (mobile); versões anteriores: `I111` (v02) e `I091` (v01) |
+| Issue | `I137` — Atualizar os requisitos funcionais, os diagramas de classes (backend, web e mobile), a arquitetura e a RTM às notas do docente de 17-11-2026 e às refatorações `I136` (backend) e `I134` (web), com o frontend mobile alinhado ao código da `main` (commit `7eac590`, que inclui a `I078`); a refatoração `I135` (mobile) é do Sprint 10 e ainda não está integrada; versões anteriores: `I111` (v02) e `I091` (v01) |
 | Executor / Revisor / Auditor | v01 (`I091`): João Coelho / Roberto Baptista / João Borguem; v02 (`I111`): João Borguem / Roberto Baptista / João Coelho; v03 (`I137`): Miguel Santos / João Borguem / Roberto Baptista |
-| Documentos de origem | `m3-proposta-sistema-v04.pdf` e `m3-declaracao-ambito-v04.pdf` (F010, F006, F008 e limites transversais), homologados em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v02.pdf`); `m3-prototipo-baixa-fidelidade-v02.pdf` (secção A, ecrãs M01 a M18, M20 e M21; sem o M19); `m3-modelo-classes-backend-v02.md` (controllers e DTOs, secção 6.1 e DC-07, `I103`); `m3-documentacao-arquitetura-v02.md` (secções 2 e 3, decisão AD-02); `m3-especificacao-requisitos-v02.md` (RF001 a RF030, RF068, RF070, RF075, RF105, RF108 e RNF002, RNF005, RNF010, RNF011, RNF014; parâmetros P01 a P11 e P17; secção 1.3, requisitos descontinuados); `m3-especificacoes-casos-uso-v02.md` (UC01 a UC06, UC13 e UC14); `m3-documentacao-api-v02.md` (secções 2 a 8, 10 e 11, `I101` e `I104`); `m3-modelo-de-dados-katch-v02.md`; `m3-diagrama-atividades-fluxo-match-v02.md`; `m3-diagrama-estados-interesse-match-v02.md`; `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (deliberação 1: consulta periódica de 3 em 3 segundos); `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5); `m2-modelo-classes-frontend-mobile-v01.md` (versão anterior, conservada); `m4-relatorio-refatoracao-frontend-mobile-v01.md` (`I135`, relatório da refatoração) e o código do `katch-frontend-mobile` (ramo `i135`, commit `931c94f`, tratado como fundido na `main`). Na v03, quando o modelo e o código divergem, vale o código (R-043 do relatório da `I135`) |
+| Documentos de origem | `m3-proposta-sistema-v04.pdf` e `m3-declaracao-ambito-v04.pdf` (F010, F006, F008 e limites transversais), homologados em 14-10-2026 (`m3-email-homologacao-ps-da-cca-v02.pdf`); `m3-prototipo-baixa-fidelidade-v02.pdf` (secção A, ecrãs M01 a M18, M20 e M21; sem o M19); `m3-modelo-classes-backend-v02.md` (controllers e DTOs, secção 6.1 e DC-07, `I103`); `m3-documentacao-arquitetura-v02.md` (secções 2 e 3, decisão AD-02); `m3-especificacao-requisitos-v02.md` (RF001 a RF030, RF068, RF070, RF075, RF105, RF108 e RNF002, RNF005, RNF010, RNF011, RNF014; parâmetros P01 a P11 e P17; secção 1.3, requisitos descontinuados); `m3-especificacoes-casos-uso-v02.md` (UC01 a UC06, UC13 e UC14); `m3-documentacao-api-v02.md` (secções 2 a 8, 10 e 11, `I101` e `I104`); `m3-modelo-de-dados-katch-v02.md`; `m3-diagrama-atividades-fluxo-match-v02.md`; `m3-diagrama-estados-interesse-match-v02.md`; `m3-20261016-reuniao-extraordinaria-ata-v01.pdf` (deliberação 1: consulta periódica de 3 em 3 segundos); `m1-regulamento-grupo-v01.pdf` (secções 11.2 a 11.5); `m2-modelo-classes-frontend-mobile-v01.md` (versão anterior, conservada); e o código do `katch-frontend-mobile` na `main`, commit `7eac590` (inclui a `I078`, matches e conversas, fundida a 23-11-2026). O relatório da `I135` (`m4-relatorio-refatoracao-frontend-mobile-v01.md`) descreve uma refatoração do Sprint 10 que ainda não está na `main` e não é fonte deste modelo. Na v03, quando o modelo e o código divergem, vale o código |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `04.07-modelos-de-classes`: um ficheiro por módulo relevante, com classes, responsabilidades, atributos, operações, relações e multiplicidades. Corresponde à linha `OF-M3-026` — «Modelo de classes — frontend mobile v2» da Checklist de Controlo de Artefactos (v04); a v01 corresponde à linha `OF-M2-009`. É o módulo da aplicação Flutter do Candidato; o backend está em `m3-modelo-classes-backend-v02.md` e a área de gestão web tem o seu próprio módulo (`m3-modelo-classes-frontend-web-v02.md`).
 
@@ -31,7 +31,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | v01 | 2026-10-08 | Criação do documento: camadas, modelos que espelham os DTOs, núcleo, serviços de acesso à API, sessão, cliente da ligação persistente, gestão de estado, ecrãs e widgets, com responsabilidades, atributos, operações, relações e multiplicidades. | `I091` |
 | v01 | 2026-10-09 | Correções da revisão da `I091` e alinhamento com a documentação da API (`I092`): motivo do início de sessão igual à `message` do `ApiErrorDto` (D01); classificação dos erros pelo código HTTP (D02); cabeçalho `X-Client-App`, enumerações em maiúsculas com `_`, rotas e parâmetro `access_token` da API (D03); pontos de coerência ligados aos pontos em aberto da API e acrescentados PC-09 a PC-12 (M01); recarga da lista de conversas ao receber `ConversationClosed` (M02); correspondência das operações com as do controller (M03). | `I091` |
 | v02 | 2026-10-29 | Atualização à Declaração de Âmbito v04 (redução de âmbito, `I100`): retirados a área e o contador de notificações (ecrã M19, separador «Notificações», `NotificationsScreen`, `NotificationsStore`, `NotificationService`, `NotificationTile`, `NotificationDto`, `NotificationListDto`, `NotificationType`, `NotificationTarget` e `NotificationTargetKind`) e a ligação persistente (camada Tempo real, `RealtimeClient`, `SignalRRealtimeClient`, `HubChannel`, `ReconnectPolicy`, `RealtimeCoordinator`, `RealtimeState` e `NotificationReceivedEvent`); acrescentada a atualização periódica das conversas do Candidato por consulta à API de 3 em 3 segundos, só com a aplicação em primeiro plano e com a lista de conversas ou uma conversa aberta (camada Consulta periódica, `PollingScheduler`, `TimerPollingScheduler`, `PollingLoop`, `PollingConfig` e `AppLifecycleMonitor`; secção 7; decisões DFM-05, DFM-11, DFM-15 e DFM-16). Alinhamento com a documentação da API v02: competências «Outro» em operações próprias (`CustomSkillDto`, `AddCustomSkillRequest`, `addCustomSkill`, `removeCustomSkill`; `AddSkillRequest` só com `skillId`; `ProfileSkillDto` retirado), `QuotaDto.total`, `MatchDto.jobStatus`, `locationName` e `logoUrl` (com a enumeração `JobStatus`), `ConversationSummaryDto.closedBy`, `ApiErrorDto.code` e `blockedUntil`, parâmetro `after` na consulta das mensagens, lista de localidades sem sessão e ficheiros em `/api/files/{kind}/{fileName}`; pontos de coerência PC-01, PC-02, PC-05, PC-07, PC-10, PC-11 e PC-12 resolvidos ou sem aplicação, PC-03 e PC-04 resolvidos em parte. Protótipo v02 (20 ecrãs, 4 separadores) e rastreabilidade aos 35 requisitos funcionais da especificação v02 com componente Frontend mobile. Lista das alterações na secção 16. | `I111` |
-| v03 | 2026-11-23 | Alinhamento com o código da `main` depois da refatoração da `I135` (relatório R-001 a R-052) e com as notas do docente de 17-11-2026: estrutura de pastas real; `FormController`, `SafeChangeNotifier`, `LoadStatusView`, `FormTextField`, `DropdownField`, `SaveButton`, `FormMessage`, `PhotoGrid`, `KatchScaffold`, `WireValue` e `LinkDraft` acrescentados; `PollingScheduler`, `TimerPollingScheduler`, `PollingConfig`, `AppRoutes`, `KatchBottomBar` e `PasswordField` retirados; `CredentialProvider` sem `authHeaders`; expiração da sessão verificada no acesso à credencial; `InputRules` e `FileSelection` com a validação do formato pelos primeiros bytes; stores com pedido em curso partilhado; `ExplorationController` com a geração de pedidos e a contagem decrescente. As classes de matches e conversas (M14 a M18) ficam assinaladas como previstas para a `I078`, porque ainda não existem no código. | `I137` |
+| v03 | 2026-11-24 | Alinhamento com o código da `main` (commit `7eac590`, que inclui a `I078`) e com as notas do docente de 17-11-2026: estrutura de pastas real; `MatchesController`, `ChatController`, `ConversationsStore`, `MatchService`, `ConversationService`, `MatchDto`, `ConversationSummaryDto`, `MessageDto`, `SendMessageRequest`, `ConversationStatus`, `ConversationCloseReason`, `JobStatus` e os ecrãs e widgets de matches e conversas passam de previstos a implementados; `LoadStateView`, `SaveButton`, `FormMessage`, `PhotoGrid` e `LinkDraft` documentados; `PollingScheduler`, `TimerPollingScheduler`, `PollingConfig`, `AppRoutes`, `KatchBottomBar`, `PasswordField` e o `_PendingArea` retirados; `CredentialProvider` sem `authHeaders`; `ExplorationController` com a geração de pedidos e a contagem decrescente; operações e atributos de todas as classes conferidos com o código. A refatoração `I135` (`FormController`, `SafeChangeNotifier`, `KatchScaffold`, `FormTextField`, `DropdownField`) é do Sprint 10 e não consta deste modelo. | `I137` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas, nos termos da secção 18.2 do Regulamento de Funcionamento da Unidade Curricular.
 
@@ -48,7 +48,7 @@ A arquitetura não fixa a estrutura interna da aplicação Flutter. As classes s
 | Camada | Pasta em `lib/` | Responsabilidade | Depende de |
 | --- | --- | --- | --- |
 | Ecrãs e widgets | `app/`, `screens/`, `widgets/` | Apresentar os 20 ecrãs do protótipo v02, captar a interação e mostrar o estado dos controllers e dos stores. Não chamam serviços nem o `ApiClient`. | Estado, Modelos |
-| Estado | `state/` | Estado de apresentação de cada ecrã e estado partilhado entre ecrãs: carregamento, erros por campo, filtros, contadores. Valida o que o utilizador escreve, orquestra os serviços e decide quando a consulta periódica corre. | Serviços, Sessão, Consulta periódica, Núcleo, Modelos |
+| Estado | `state/` | Estado de apresentação de cada ecrã e estado partilhado entre ecrãs: carregamento, erros por campo, contadores. Valida o que o utilizador escreve, orquestra os serviços e decide quando a consulta periódica corre. | Serviços, Sessão, Consulta periódica, Núcleo, Modelos |
 | Serviços | `services/` | Um serviço por controller do backend usado pelo Candidato. Traduz cada operação num pedido e devolve modelos. Não tem estado de apresentação. | Núcleo, Modelos |
 | Consulta periódica | `polling/` | Repetição de uma tarefa a intervalo fixo (3 segundos), sem sobreposição de pedidos; o estado liga-a e desliga-a consoante a aplicação esteja em primeiro plano. Não conhece a API: repete a tarefa que o estado lhe entrega. | Núcleo |
 | Sessão | `session/` | Guardar, restaurar e terminar a credencial de sessão; fornecer a credencial ao `ApiClient` e ao `RemoteImage`. | Núcleo, Modelos |
@@ -94,7 +94,7 @@ Todas as camadas usam os Modelos; a seta só está desenhada a partir do Núcleo
 
 - **Nomes:** Effective Dart (RI, secção 11.3): tipos em `UpperCamelCase`; membros, parâmetros e constantes em `lowerCamelCase`; ficheiros e pastas em `lowercase_with_underscores` (por exemplo, `JobCardDto` em `job_card_dto.dart`); membros privados com o prefixo `_`. As interfaces não têm o prefixo `I` do C#: são `abstract interface class` e a implementação tem um prefixo que a identifica (`HttpAuthService` implementa `AuthService`). A formatação é verificada com `dart format` e a análise estática com `flutter_lints` (RI, secções 11.3 e 11.4).
 - **Sufixos:** `...Screen` (ecrã), `...Controller` (estado de um ecrã), `...Store` (estado partilhado entre ecrãs), `...Service` (acesso a um controller da API), `...Dto`, `...Request` e `...Response` (modelos que espelham os DTOs do backend, com o mesmo nome).
-- **Tipos:** o mapeamento dos tipos do backend (modelo de classes do backend, secção 2.2) é o da tabela seguinte. `Json` é o `typedef` de `Map<String, Object?>` usado nas operações `fromJson` e `toJson`; `readList` e `readStrings` (`models/json.dart`) leem listas de um JSON.
+- **Tipos:** o mapeamento dos tipos do backend (modelo de classes do backend, secção 2.2) é o da tabela seguinte. `Json` é o `typedef` de `Map<String, Object?>` usado nas operações `fromJson` e `toJson`; `readObject`, `readList` e `readModel` (`services/response_reader.dart`) leem as respostas dos serviços.
 
 | Backend (C#) | Frontend (Dart) | Notas |
 | --- | --- | --- |
@@ -104,14 +104,14 @@ Todas as camadas usam os Modelos; a seta só está desenhada a partir do Núcleo
 | `int`, `bool`, `string` | `int`, `bool`, `String` | — |
 | `T?` | `T?` | A coluna ou o campo admite ausência. |
 | `List<T>` | `List<T>` | Imutável depois de criada. |
-| Enumerações | 7 enumerações do contrato desenhadas (4 implementadas: `UserType`, `Availability`, `WorkMode` e `ContractType`). Secção 3.3. | Valores em `lowerCamelCase` (`WorkMode.onSite`); cada enumeração usa o mixin `WireValue` (`wire` e `toWire`) e `fromWire` para converter de e para o texto em maiúsculas com `_` da API (secções 2.3 e 2.4, DAPI-01): `WorkMode.onSite` ↔ `"ON_SITE"`, `Availability.fifteenDays` ↔ `"FIFTEEN_DAYS"`. Os nomes das propriedades JSON são os dos atributos em `camelCase`. |
+| Enumerações | 7 enumerações do contrato, todas implementadas: `UserType`, `Availability`, `WorkMode`, `ContractType`, `ConversationStatus`, `ConversationCloseReason` e `JobStatus`. Secção 3.3. | Valores em `lowerCamelCase` (`WorkMode.onSite`); cada enumeração tem o atributo `wire`, a operação `toWire()` e a fábrica estática `fromWire` para converter de e para o texto em maiúsculas com `_` da API (secções 2.3 e 2.4, DAPI-01): `WorkMode.onSite` ↔ `"ON_SITE"`, `Availability.fifteenDays` ↔ `"FIFTEEN_DAYS"`. Os nomes das propriedades JSON são os dos atributos em `camelCase`. |
 
-- **Diagramas Mermaid (`classDiagram`):** `+` público, `-` privado (em Dart, `_`); `$` = membro estático; `~T~` = tipo genérico; `Future~T~` = operação assíncrona; `<<interface>>`, `<<abstract>>`, `<<enumeration>>`, `<<model>>` (modelo imutável que espelha um DTO), `<<widget>>` e `<<mixin>>` identificam o estereótipo. Uma classe prevista que ainda não existe no código tem o sufixo « · I078» no nome apresentado (por exemplo, `ChatController · I078`). As operações `fromJson` e `toJson` dos modelos, os construtores e o método `build` dos widgets não são desenhados, exceto onde são relevantes; a convenção está nesta secção.
+- **Diagramas Mermaid (`classDiagram`):** `+` público, `-` privado (em Dart, `_`); `$` = membro estático; `~T~` = tipo genérico; `Future~T~` = operação assíncrona; `<<interface>>`, `<<abstract>>`, `<<enumeration>>`, `<<model>>` (modelo imutável que espelha um DTO), `<<widget>>` e `<<mixin>>` identificam o estereótipo. As operações `fromJson` e `toJson` dos modelos, os construtores e o método `build` dos widgets não são desenhados, exceto onde são relevantes; a convenção está nesta secção.
 - **Relações:** `..>` dependência (recebida por construtor); `..|>` realização de interface; `<|--` herança; `-->` associação; `*--` composição (o filho não existe sem o pai); `o--` agregação (o estado de um controller ou store contém modelos). As multiplicidades estão nas extremidades.
 
 ### 2.3. Estrutura de pastas do repositório `katch-frontend-mobile`
 
-O modelo orienta a estrutura do código de `m4`. Cada pasta de `lib/` corresponde a uma camada da secção 2.1 e cada classe deste documento tem o seu ficheiro, nomeado segundo a convenção de nomes. Na v03, a estrutura é a do código da `main`: não há subpastas `stores/` e `controllers/` em `state/`, nem `device/` em `core/`, e `AppRoutes` e a pasta `screens/matches/` não existem.
+O modelo orienta a estrutura do código de `m4`. Cada pasta de `lib/` corresponde a uma camada da secção 2.1 e cada classe deste documento tem o seu ficheiro, nomeado segundo a convenção de nomes. Na v03, a estrutura é a do código da `main`: não há subpastas `stores/` e `controllers/` em `state/`, nem `device/` em `core/`, e `AppRoutes` não existe.
 
 ```text
 katch-frontend-mobile/
@@ -121,15 +121,15 @@ katch-frontend-mobile/
 │   ├── core/                # api_client, http_api_client, api_exception, credential_provider, clock,
 │   │                        # connection_monitor, input_rules, url, device_file_picker,
 │   │                        # platform_file_picker, external_launcher, platform_external_launcher
-│   ├── models/              # um ficheiro por DTO, json (Json, WireValue), profile_enums, user_type,
+│   ├── models/              # um ficheiro por DTO, json (o `typedef` Json), profile_enums, user_type,
 │   │                        # file_selection e field_errors
 │   ├── services/            # uma interface e uma implementação Http por serviço; response_reader
 │   ├── session/             # session, session_status, session_storage, secure_session_storage,
 │   │                        # session_manager
 │   ├── polling/             # polling_loop, app_lifecycle_monitor
-│   ├── state/               # controllers e stores, sem subpastas; bases: form_controller,
-│   │                        # safe_change_notifier, session_scoped_store; load_status, failure_messages
-│   ├── screens/             # auth/, profile/, exploration/, account/ (matches/ e conversations/ na I078)
+│   ├── state/               # controllers e stores, sem subpastas; base: session_scoped_store;
+│   │                        # load_status, failure_messages
+│   ├── screens/             # auth/, profile/, exploration/, account/, matches/, conversations/
 │   └── widgets/             # widgets reutilizados por mais de um ecrã
 ├── test/                    # flutter_test: app, core, models, polling, screens e state
 ├── integration_test/        # integration_test: testes de sistema (QG-07)
@@ -141,16 +141,16 @@ Os pacotes de terceiros necessários (cliente HTTP, armazenamento seguro, seleto
 
 ### 2.4. Estado de implementação
 
-O código da `main` (ramo `i135`, commit `931c94f`) implementa a conta, o perfil e a exploração de vagas. As áreas de matches e de conversas estão desenhadas neste modelo, mas só são codificadas na `I078`. Quando o código e o desenho divergem, vale o código (R-043 do relatório da `I135`).
+O código da `main` (commit `7eac590`) implementa as cinco áreas do Candidato: a conta, o perfil, a exploração de vagas e, desde a `I078` (fundida a 23-11-2026), os matches e as conversas. Nada do que este modelo descreve está por codificar. A refatoração `I135` (Sprint 10) ainda não está na `main`: este modelo não inclui as classes que ela introduz (`FormController`, `SafeChangeNotifier`, `KatchScaffold`, `FormTextField`, `DropdownField`) e descreve as classes como estão. Quando o código e o desenho divergem, vale o código.
 
-| Área | Implementado | Previsto para a `I078` (sem código) |
-| --- | --- | --- |
-| Ecrãs | M01 a M13, M20 e M21 (15 ecrãs, 12 classes de ecrã) | M14 a M18 (`MatchesScreen`, `MatchContactScreen`, `ConversationsScreen`, `ChatScreen`) |
-| Estado | Controllers de início de sessão, registo, conta, perfil, preferências, competências, ficheiros, exploração, detalhe e página da Empresa; `ProfileStore`, `ReferenceDataStore` | `MatchesController`, `ChatController`, `ConversationsStore`, `ListFilter` |
-| Serviços | `AuthService`, `CandidateProfileService`, `JobExplorationService`, `ReferenceListService` (22 das 27 operações) | `MatchService`, `ConversationService` (5 operações) |
-| Modelos | 18 dos 22 modelos de DTO; `UserType`, `Availability`, `WorkMode`, `ContractType` | `MatchDto`, `ConversationSummaryDto`, `MessageDto`, `SendMessageRequest`; `ConversationStatus`, `ConversationCloseReason`, `JobStatus` |
-| Consulta periódica | `PollingLoop` e `AppLifecycleMonitor`, ainda sem consumidores | Ligação ao `ConversationsStore` e ao `ChatController` |
-| Navegação | `HomeShell` com os quatro separadores; «Matches» e «Conversas» mostram uma área provisória | Ecrãs de M14 a M18 nos separadores; leitura da lista de conversas ao mudar de separador (DFM-16) |
+| Área | Implementado na `main` |
+| --- | --- |
+| Ecrãs | M01 a M18, M20 e M21 (20 ecrãs, 16 classes de ecrã), incluindo `MatchesScreen`, `MatchContactScreen`, `ConversationsScreen` e `ChatScreen` |
+| Estado | Controllers de início de sessão, registo, conta, perfil, preferências, competências, ficheiros, exploração, detalhe, página da Empresa, matches e conversa (`MatchesController`, `ChatController`); `ProfileStore`, `ReferenceDataStore` e `ConversationsStore` |
+| Serviços | `AuthService`, `CandidateProfileService`, `JobExplorationService`, `ReferenceListService`, `MatchService` e `ConversationService` (27 operações) |
+| Modelos | Os 22 modelos de DTO, incluindo `MatchDto`, `ConversationSummaryDto`, `MessageDto` e `SendMessageRequest`; as 7 enumerações do contrato |
+| Consulta periódica | `PollingLoop` e `AppLifecycleMonitor`, usados pelo `ConversationsStore` e pelo `ChatController` |
+| Navegação | `HomeShell` com os quatro separadores («Explorar», «Matches», «Conversas» e «Perfil»); a lista de conversas é pedida ao entrar e ao escolher o separador «Matches», para o contador do separador «Conversas»; a consulta periódica corre quando o separador «Conversas» está ativo |
 
 ---
 
@@ -211,6 +211,7 @@ classDiagram
         +List~CustomSkillDto~ customSkills
         +SearchPreferencesDto preferences
         +fromJson(Json json)$ CandidateProfileDto
+        +withPreferences(SearchPreferencesDto value) CandidateProfileDto
     }
     class CustomSkillDto {
         <<model>>
@@ -262,7 +263,7 @@ classDiagram
 
 `LoginResponse` é a resposta de `login` e de `register`. `CandidateProfileDto` nunca contém o caminho dos ficheiros: `photoUrl` é um URL da API (`/api/files/{kind}/{fileName}`) que serve a imagem depois de verificar a autorização e `hasCv` só indica se existe curriculum vitae (documentação da API v02, 2.6). As competências da lista (`skills`, com o `id` da competência) e as competências «Outro» (`customSkills`, com o `customSkillId`) chegam em listas separadas e são acrescentadas e retiradas por operações próprias (API v02, 6.2.4, 6.2.5, 6.2.10 e 6.2.11; modelo de dados v02, DM-16). `ReferenceItemDto` está descrito na secção 3.2. A API v02 permite ao Candidato obter o próprio CV (`GET /api/candidate/profile/cv`, 6.2.9), mas o protótipo v02 não tem nenhuma ação para o abrir; a aplicação só envia o CV (RF011) e mostra `hasCv` (PC-11).
 
-Estado de implementação (secção 2.4): `MatchDto`, `ConversationSummaryDto`, `MessageDto` e `SendMessageRequest`, desenhados na secção 3.2, e as enumerações `ConversationStatus`, `ConversationCloseReason` e `JobStatus`, desenhadas na secção 3.3, ainda não existem no código; ficam previstos para a `I078`. Todos os outros modelos existem e têm os atributos descritos.
+Estado de implementação (secção 2.4): todos os modelos desta secção existem no código da `main` e têm os atributos descritos.
 
 ### 3.2. Exploração, matches, conversas, listas e erros
 
@@ -309,6 +310,7 @@ classDiagram
         +int available
         +int total
         +DateTime? blockedUntil
+        +bool isExhausted
         +fromJson(Json json)$ QuotaDto
     }
     class MatchDto {
@@ -323,6 +325,7 @@ classDiagram
         +String contactEmail
         +String contactPhone
         +DateTime matchedAt
+        +bool isJobClosed
         +fromJson(Json json)$ MatchDto
     }
     class ConversationSummaryDto {
@@ -336,6 +339,7 @@ classDiagram
         +String? closedBy
         +DateTime? lastMessageAt
         +int unreadCount
+        +bool isReadOnly
         +fromJson(Json json)$ ConversationSummaryDto
     }
     class MessageDto {
@@ -364,7 +368,8 @@ classDiagram
         +String message
         +List~FieldErrorDto~ fields
         +DateTime? blockedUntil
-        +fromJson(Json json)$ ApiErrorDto
+        +tryParse(Object? json)$ ApiErrorDto?
+        +reasonFor(String field) String?
     }
     class FieldErrorDto {
         <<model>>
@@ -376,7 +381,7 @@ classDiagram
     ApiErrorDto "1" *-- "0..*" FieldErrorDto : campos
 ```
 
-`MessageDto` é a resposta da abertura da conversa e da consulta periódica (`open`, com ou sem `after`) e do envio (secção 7). `MatchDto.contactEmail` e `contactPhone` são os contactos da Empresa (RF025); `jobStatus` e `locationName` são o estado e a localidade da vaga, e `logoUrl` o logótipo da Empresa (M14, M15). `ConversationSummaryDto.closedBy` é o `userId` de quem encerrou a conversa (`null` com a conversa aberta e no encerramento automático), que a aplicação compara com o utilizador da sessão (M18). `QuotaDto.total` é o total da quota (10, P11). `ApiErrorDto` é o formato único dos erros que o servidor devolve; `code` identifica o erro no catálogo da API (`ERR-01` a `ERR-50`), `message` indica o motivo e, quando a rejeição é de validação, `fields` tem cada campo em causa (RF004); `blockedUntil` só vem no ERR-31 (quota esgotada) e dá o fim do bloqueio (RF020).
+`MessageDto` é a resposta da abertura da conversa e da consulta periódica (`open`, com ou sem `after`) e do envio (secção 7). `MatchDto.contactEmail` e `contactPhone` são os contactos da Empresa (RF025); `jobStatus` e `locationName` são o estado e a localidade da vaga, e `logoUrl` o logótipo da Empresa (M14, M15). `ConversationSummaryDto.closedBy` é o `userId` de quem encerrou a conversa (`null` com a conversa aberta e no encerramento automático), que a aplicação compara com o utilizador da sessão (M18). `QuotaDto.total` é o total da quota (10, P11). `ApiErrorDto` é o formato único dos erros que o servidor devolve e é lido por `tryParse`, que devolve `null` quando o corpo da resposta não tem esse formato (`reasonFor` dá o motivo de um campo); `code` identifica o erro no catálogo da API (`ERR-01` a `ERR-50`), `message` indica o motivo e, quando a rejeição é de validação, `fields` tem cada campo em causa (RF004); `blockedUntil` só vem no ERR-31 (quota esgotada) e dá o fim do bloqueio (RF020).
 
 ### 3.3. Enumerações
 
@@ -429,9 +434,9 @@ classDiagram
     }
 ```
 
-As sete enumerações têm os mesmos valores das do contrato da API (documentação da API v02, secção 2.4). `JobStatus` passou a ser usada pela aplicação com o campo `MatchDto.jobStatus` (M14, «Vaga encerrada»). A enumeração `NotificationType` da v01 foi retirada com a funcionalidade F011.
+As sete enumerações têm os mesmos valores das do contrato da API (documentação da API v02, secção 2.4). `JobStatus` é usada pelo campo `MatchDto.jobStatus` (M14, «Vaga encerrada»). Todas têm o atributo `wire` (texto da API), a operação `toWire()` e a fábrica estática `fromWire`, que lança `FormatException` com um valor desconhecido; `Availability`, `WorkMode`, `ContractType` e `JobStatus` têm ainda `label`, o texto apresentado ao Candidato. A enumeração `NotificationType` da v01 foi retirada com a funcionalidade F011.
 
-As enumerações de estado do cliente (`SessionStatus`, `LoadStatus`, `ExplorationStatus`, `RegistrationStep` e `ListFilter`) estão nas secções em que são usadas.
+As enumerações de estado do cliente (`SessionStatus`, `LoadStatus`, `ExplorationStatus` e `RegistrationStep`) estão nas secções em que são usadas.
 
 ### 3.4. Modelos auxiliares do cliente
 
@@ -449,6 +454,7 @@ classDiagram
         +int sizeBytes
         +List~int~ header
         +String extension
+        +String mimeType
         +fromBytes(String name, List~int~ bytes)$ FileSelection
     }
     class FieldErrors {
@@ -459,21 +465,14 @@ classDiagram
         +Iterable~String~ fields
         +reasonFor(String field) String?
         +add(String field, String reason) void
-        +set(String field, String? reason) void
         +remove(String field) void
-    }
-    class WireValue {
-        <<mixin>>
-        +String wire
-        +toWire() String
     }
 ```
 
 | Classe | Responsabilidade | Requisitos |
 | --- | --- | --- |
-| `FileSelection` | Ficheiro escolhido no dispositivo (fotografia ou curriculum vitae), com o nome, o caminho local (ou os `bytes`, quando o seletor não dá caminho), a dimensão e os primeiros 8 bytes (`header`). `extension` é a extensão do nome, em minúsculas. `InputRules` usa a extensão e o `header` para confirmar o formato antes do envio. | RF010, RF011 |
-| `FieldErrors` | Motivo de rejeição por campo de um formulário, obtido de `ApiErrorDto` (`fromApi`) ou da validação local. O atributo `_reasons` é um mapa do nome do campo para o motivo. `add` não substitui um motivo já existente; `set` substitui ou, com `null`, remove-o. Cada ecrã com formulário mostra o motivo junto do campo. | RF004, RF009 |
-| `WireValue` | Mixin das enumerações do contrato: `wire` é o valor em texto da API, `toWire()` devolve-o e a extensão `byWire` (`models/json.dart`) converte o texto na enumeração, ou lança `FormatException` quando o valor é desconhecido. | RNF008 |
+| `FileSelection` | Ficheiro escolhido no dispositivo (fotografia ou curriculum vitae), com o nome, o caminho local (ou os `bytes`, quando o seletor não dá caminho), a dimensão e os primeiros 8 bytes (`header`). `extension` é a extensão do nome, em minúsculas, e `mimeType` o tipo do ficheiro (`image/jpeg`, `image/png` ou `application/pdf`). `InputRules` usa a extensão e o `header` para confirmar o formato antes do envio. | RF010, RF011 |
+| `FieldErrors` | Motivo de rejeição por campo de um formulário, obtido de `ApiErrorDto` (`fromApi`) ou da validação local. O atributo `_reasons` é um mapa do nome do campo para o motivo. `add` não substitui um motivo já existente; `remove` retira o motivo de um campo; `reasonFor` devolve o motivo de um campo. Cada ecrã com formulário mostra o motivo junto do campo. | RF004, RF009 |
 
 Os modelos auxiliares `NotificationTarget` e `NotificationTargetKind` da v01 foram retirados com a funcionalidade F011.
 
@@ -511,11 +510,17 @@ classDiagram
         +String clientApp$
         +String uploadField$
         +String loginPath$
+        +Duration defaultUploadTimeout$
         -String _baseUrl
         -Duration _requestTimeout
         -Duration _uploadTimeout
         -CredentialProvider _credentials
         -ConnectionMonitor _monitor
+        +get(String path) Future~Object?~
+        +post(String path, Object? body) Future~Object?~
+        +put(String path, Object? body) Future~Object?~
+        +delete(String path) Future~void~
+        +upload(String path, FileSelection file) Future~void~
         -send(String method, String path, Object? body) Future~Object?~
         -dispatch(String method, String path, BaseRequest request, Duration timeout) Future~Object?~
         -headers() Map
@@ -587,9 +592,24 @@ classDiagram
         +now() DateTime
     }
     class InputRules {
+        +String requiredReason$
+        +String emailReason$
+        +String phoneReason$
+        +String passwordReason$
+        +String acceptTermsReason$
+        +String customSkillReason$
+        +String distanceReason$
+        +String salaryReason$
+        +String tooManyLinksReason$
+        +String linkReason$
+        +String linkRepeatedReason$
+        +String photoFormatReason$
+        +String cvFormatReason$
+        +String fileTooLargeReason$
         +int summaryMaxLength$
         +int desiredRoleMaxLength$
         +int maxDistanceKm$
+        +int maxMessageLength$
         +int maxLinks$
         +int linkMaxLength$
         +double maxSalaryExpectation$
@@ -602,6 +622,8 @@ classDiagram
         +isValidDistanceKm(int value)$ bool
         +isValidSalary(double value)$ bool
         +isValidSummary(String value)$ bool
+        +isValidMessage(String value)$ bool
+        +isValidLink(String value)$ bool
         +linkError(String value)$ String?
         +photoError(FileSelection file)$ String?
         +cvError(FileSelection file)$ String?
@@ -619,9 +641,16 @@ classDiagram
     class ExternalLauncher {
         <<interface>>
         +openUrl(String url) Future~bool~
+        +openEmail(String address) Future~bool~
+        +openPhone(String number) Future~bool~
     }
     class PlatformExternalLauncher {
         +openUrl(String url) Future~bool~
+        +openEmail(String address) Future~bool~
+        +openPhone(String number) Future~bool~
+        +emailUri(String address)$ Uri
+        +phoneUri(String number)$ Uri
+        -launch(Uri uri) Future~bool~
     }
     SystemClock ..|> Clock
     PlatformFilePicker ..|> DeviceFilePicker
@@ -634,7 +663,7 @@ classDiagram
 | `Clock` e `SystemClock` | Data e hora atuais em UTC. Nos testes é substituído por um relógio simulado, para verificar o tempo em falta até ao fim do bloqueio da quota e a expiração da sessão. Mesma razão do `IClock` do backend (DC-04). | RF020, RNF005 |
 | `InputRules` | Regras de validação local, só para dar ao Candidato o motivo antes de enviar o pedido. É uma classe de membros estáticos que também guarda os limites (`summaryMaxLength`, `maxLinks`, `maxFileBytes`, entre outros) e os textos dos motivos (constantes `...Reason`). Para as fotografias e o CV confirma o formato pela extensão e pelos primeiros bytes do ficheiro (`FileSelection.header`: JPEG, PNG e PDF). O servidor aplica as mesmas regras e é a autoridade (RNF008); o formato real dos ficheiros é verificado no servidor (RNF016). | RF003, RF004, RF007 a RF012; P01 a P08, P10 |
 | `DeviceFilePicker` | Abre o seletor de ficheiros do dispositivo para a fotografia (JPEG ou PNG) e para o curriculum vitae (PDF). Devolve `null` quando o Candidato desiste. | RF010, RF011 |
-| `ExternalLauncher` | Abre uma aplicação externa do dispositivo: na `main`, o navegador para o sítio da Empresa (`openUrl`). O correio eletrónico e a chamada telefónica para os contactos do match (`openEmail` e `openPhone`) são acrescentados na `I078`. A plataforma nunca envia correio eletrónico nem SMS por si própria (arquitetura, secção 2.5). | RF017, RF025 |
+| `ExternalLauncher` | Abre uma aplicação externa do dispositivo: o navegador para o sítio da Empresa (`openUrl`, só com `http` ou `https`) e, para os contactos do match, o correio eletrónico (`openEmail`, esquema `mailto`) e a chamada telefónica (`openPhone`, esquema `tel`, só com algarismos e `+`). Cada operação devolve `false` quando a aplicação externa não abre. A plataforma nunca envia correio eletrónico nem SMS por si própria (arquitetura, secção 2.5). | RF017, RF025 |
 | `trimTrailingSlashes` | Função de `core/url.dart` que retira as barras finais do endereço base da API (`AppConfig.apiBaseUrl`), para que a junção com as rotas não duplique a barra. | — |
 
 Valores aplicados por `InputRules` (especificação de requisitos, secção 3):
@@ -651,13 +680,13 @@ Valores aplicados por `InputRules` (especificação de requisitos, secção 3):
 | `isValidSummary` e `summaryMaxLength` | No máximo 1000 caracteres | P08 | `ProfileFormController` |
 | `photoError` | JPEG ou PNG (extensão e assinatura), no máximo 5 MB, não vazio | P01 | `ProfileFilesController` |
 | `cvError` | PDF (extensão e assinatura), no máximo 5 MB, não vazio | P02 | `ProfileFilesController` |
-| `isValidMessage` (prevista, `I078`) | 1 a 1000 caracteres | P03 | `ChatController` |
+| `isValidMessage` e `maxMessageLength` | Não vazia (sem contar espaços) e com no máximo 1000 caracteres | P03 | `ChatController` |
 
 ---
 
 ## 5. Serviços de acesso à API
 
-Há um serviço por controller do backend usado pelo Candidato: seis serviços para seis controllers (secção 11.2), dos quais quatro existem na `main` (`AuthService`, `CandidateProfileService`, `JobExplorationService` e `ReferenceListService`) e dois estão previstos para a `I078` (`MatchService` e `ConversationService`). O `FilesController` não tem serviço: os seus URL chegam prontos nos DTOs e são obtidos pelo `RemoteImage` (secção 9.4). O `NotificationsController` deixou de existir com a funcionalidade F011 e, com ele, o `NotificationService` da v01. Cada serviço é uma interface (`abstract interface class`) e tem uma implementação `Http...` que recebe o `ApiClient` por construtor; os controllers de estado dependem da interface, pelo que os testes usam serviços simulados. Cada operação de um serviço corresponde a uma operação do controller (modelo de classes do backend v02, secção 6; documentação da API v02, secção 6), com os mesmos parâmetros e resultados, sem o identificador do utilizador, que o servidor obtém da credencial (backend, DC-05). O nome é o da operação do controller em `lowerCamelCase`, com três exceções por legibilidade: `Get` e `Update` do perfil passam a `getProfile` e `updateProfile`, e `RegisterCandidate` passa a `register`. A correspondência completa, com o método e a rota da API, está na secção 11.2.
+Há um serviço por controller do backend usado pelo Candidato: seis serviços para seis controllers (secção 11.2), todos existentes na `main` (`AuthService`, `CandidateProfileService`, `JobExplorationService`, `ReferenceListService`, `MatchService` e `ConversationService`, os dois últimos desde a `I078`). O `FilesController` não tem serviço: os seus URL chegam prontos nos DTOs e são obtidos pelo `RemoteImage` (secção 9.4). O `NotificationsController` deixou de existir com a funcionalidade F011 e, com ele, o `NotificationService` da v01. Cada serviço é uma interface (`abstract interface class`) e tem uma implementação `Http...` que recebe o `ApiClient` por construtor; os controllers de estado dependem da interface, pelo que os testes usam serviços simulados. Cada operação de um serviço corresponde a uma operação do controller (modelo de classes do backend v02, secção 6; documentação da API v02, secção 6), com os mesmos parâmetros e resultados, sem o identificador do utilizador, que o servidor obtém da credencial (backend, DC-05). O nome é o da operação do controller em `lowerCamelCase`, com três exceções por legibilidade: `Get` e `Update` do perfil passam a `getProfile` e `updateProfile`, e `RegisterCandidate` passa a `register`. A correspondência completa, com o método e a rota da API, está na secção 11.2.
 
 ```mermaid
 classDiagram
@@ -711,10 +740,28 @@ classDiagram
         <<interface>>
     }
     class HttpAuthService {
+        +String registerPath$
+        +String loginPath$
+        +String logoutPath$
+        +String passwordPath$
         -ApiClient _api
+        +register(RegisterCandidateRequest request) Future~LoginResponse~
+        +login(LoginRequest request) Future~LoginResponse~
+        +logout() Future~void~
+        +changePassword(ChangePasswordRequest request) Future~void~
     }
     class HttpJobExplorationService {
+        +String jobsPath$
+        +String nextPath$
+        +String quotaPath$
+        +String companiesPath$
         -ApiClient _api
+        +getNextCard() Future~JobCardDto?~
+        +getDetail(String jobId) Future~JobDetailDto~
+        +getCompanyPage(String companyId) Future~CompanyPageDto~
+        +decline(String jobId) Future~void~
+        +expressInterest(String jobId) Future~QuotaDto~
+        +getQuota() Future~QuotaDto~
     }
     HttpAuthService ..|> AuthService
     HttpJobExplorationService ..|> JobExplorationService
@@ -722,15 +769,15 @@ classDiagram
     HttpJobExplorationService "1" ..> "1" ApiClient : usa
 ```
 
-O diagrama mostra duas implementações, como exemplo da relação. As outras duas implementadas, `HttpCandidateProfileService` e `HttpReferenceListService`, seguem o mesmo padrão; `HttpMatchService` e `HttpConversationService` serão as implementações dos serviços previstos. Os serviços leem as respostas com `readObject`, `readList` e `readModel` (`services/response_reader.dart`): uma resposta com outra forma ou com campos do tipo errado dá `UnexpectedFailure`.
+O diagrama mostra duas implementações, como exemplo da relação. As outras quatro, `HttpCandidateProfileService`, `HttpReferenceListService`, `HttpMatchService` e `HttpConversationService`, seguem o mesmo padrão: cada uma guarda o `ApiClient` (`_api`), tem a rota base como constante estática (por exemplo, `HttpConversationService.conversationsPath`, `/api/conversations`) e implementa as operações da interface. Os serviços leem as respostas com `readObject`, `readList` e `readModel` (`services/response_reader.dart`): uma resposta com outra forma ou com campos do tipo errado dá `UnexpectedFailure`.
 
 | Serviço | Controller do backend | Rota base (API, secção 5) | Casos de uso | Requisitos |
 | --- | --- | --- | --- | --- |
 | `AuthService` | `AuthController` | `/api/auth` | UC01, UC02, UC03 | RF001 a RF005, RF105 |
 | `CandidateProfileService` | `CandidateProfileController` | `/api/candidate/profile` | UC04, UC05 | RF006 a RF012, RF023 |
 | `JobExplorationService` | `JobExplorationController` | `/api/candidate/jobs` | UC05, UC06 | RF013, RF014, RF016 a RF022 |
-| `MatchService` (previsto, `I078`) | `MatchesController` | `/api/matches` | UC13 | RF024, RF025 |
-| `ConversationService` (previsto, `I078`) | `ConversationsController` | `/api/conversations` | UC14 | RF026 a RF030, RF068, RF070, RF075, RF108 |
+| `MatchService` | `MatchesController` | `/api/matches` | UC13 | RF024, RF025 |
+| `ConversationService` | `ConversationsController` | `/api/conversations` | UC14 | RF026 a RF030, RF068, RF070, RF075, RF108 |
 | `ReferenceListService` | `ReferenceListsController` | `/api/reference-lists` | UC03, UC04 | RF003, RF006, RF008 |
 
 As rotas, os métodos, os códigos de estado, os formatos e os exemplos são os da documentação da API v02 (`m3-documentacao-api-v02.md`, secções 5 e 6), que é o contrato com o backend.
@@ -741,7 +788,7 @@ Regras dos serviços:
 - `getNextCard` devolve `null` quando nenhuma vaga cumpre as preferências de procura (RF014), a que a API responde com `204 No Content` (6.3.1); o ecrã mostra então M11.
 - `expressInterest` devolve a quota atualizada. Uma tentativa com a quota esgotada, uma segunda manifestação na mesma vaga ou uma vaga já indisponível são rejeitadas pelo servidor (`ApiRejection`) sem alterar a quota (UC05, E1 a E3).
 - `uploadPhoto` e `uploadCv` não devolvem endereço: os DTOs nunca expõem o caminho dos ficheiros. Depois de cada envio, o estado volta a pedir o perfil (`getProfile`) para obter o novo `photoUrl` e `hasCv`.
-- (Previsto, `I078`.) `open(matchId, null)` devolve o histórico completo e `open(matchId, after)` só as mensagens enviadas depois de `after`, que é sempre o `sentAt` de uma mensagem recebida do servidor (API v02, 6.8.2, DAPI-14). Em ambos os casos o servidor marca como lidas as mensagens da outra parte (RF108). `list` devolve o número de mensagens por ler e o estado de cada conversa. São as duas operações que a consulta periódica repete (secção 7).
+- `open(matchId)` devolve o histórico completo e `open(matchId, after: ...)` só as mensagens enviadas depois de `after`, parâmetro nomeado opcional que é sempre o `sentAt` de uma mensagem recebida do servidor (API v02, 6.8.2, DAPI-14). Em ambos os casos o servidor marca como lidas as mensagens da outra parte (RF108). `list` devolve o número de mensagens por ler e o estado de cada conversa. São as duas operações que a consulta periódica repete (secção 7).
 - `addSkill` e `removeSkill` tratam as competências da lista, pelo identificador da competência (`skillId`); `addCustomSkill` e `removeCustomSkill` tratam as competências «Outro», pelo `customSkillId` (API v02, 6.2.4, 6.2.5, 6.2.10 e 6.2.11).
 - `uploadPhoto` e `uploadCv` enviam o ficheiro em `multipart/form-data`, no campo `file` (API, secção 2.6), e a API responde `204 No Content`.
 - `changePassword` com a palavra-passe atual errada recebe `400` com o campo `currentPassword` (API, 6.1.5), e não `401`; a aplicação não o confunde com sessão expirada.
@@ -793,6 +840,7 @@ classDiagram
         +Session? current
         +SessionStatus status
         +String? userId
+        +bool isAuthenticated
         +String? accessToken
         +restore() Future~void~
         +start(LoginResponse response) Future~void~
@@ -830,7 +878,7 @@ Os stores observam `SessionManager`: quando o estado deixa de ser `signedIn`, os
 
 A Declaração de Âmbito v04 substitui a ligação bidirecional persistente pela consulta periódica do cliente ao servidor (F010) e retira as notificações (limites transversais). Enquanto a lista de conversas (M16) ou uma conversa (M17, M18) está aberta, com a aplicação em primeiro plano e a sessão iniciada, a aplicação repete de 3 em 3 segundos os mesmos pedidos que usa para abrir essas áreas (documentação da API v02, secção 7; backend v02, secção 6.1 e DC-07; arquitetura v02, AD-02; especificação de requisitos v02, RF029 e P17; ata de 2026-10-16, deliberação 1). A DA v04 exclui «a atualização das conversas quando a aplicação não está aberta»: com a aplicação em segundo plano não há consultas.
 
-Estado de implementação: `PollingLoop` e `AppLifecycleMonitor` existem no código (`I135`), mas ainda não têm consumidores. O `ConversationsStore` e o `ChatController`, que os ligam, são da `I078`; o comportamento descrito nas regras e na sequência desta secção é o previsto para essa issue.
+Estado de implementação: `PollingLoop`, `AppLifecycleMonitor`, `ConversationsStore` e `ChatController` existem no código da `main`, desde a `I078`; o comportamento descrito nas regras e na sequência desta secção é o do código.
 
 ```mermaid
 classDiagram
@@ -849,7 +897,7 @@ classDiagram
     class PollingLoop {
         +Duration defaultInterval$
         +Duration interval
-        -PollingTask _task
+        -Function _task
         -Timer? _timer
         -bool _running
         +bool isRunning
@@ -858,13 +906,16 @@ classDiagram
         -schedule(Duration delay) void
         -tick() Future~void~
     }
-    class ConversationsStore["ConversationsStore · I078"] {
-        -PollingLoop _listPolling
+    class ConversationsStore {
+        -PollingLoop _polling
+        -bool _watching
+        -bool _inForeground
         +watchList(bool active) void
     }
-    class ChatController["ChatController · I078"] {
+    class ChatController {
         -PollingLoop _messagesPolling
-        -poll() Future~void~
+        +bool isPolling
+        +poll() Future~void~
     }
     AppLifecycleMonitor ..|> WidgetsBindingObserver
     ChangeNotifier <|-- AppLifecycleMonitor
@@ -877,9 +928,9 @@ classDiagram
 | Classe | Responsabilidade | Requisitos |
 | --- | --- | --- |
 | `AppLifecycleMonitor` | Observa o ciclo de vida da aplicação com o `WidgetsBindingObserver` do Flutter e indica se está em primeiro plano (`resumed`). Avisa quem o observa (stores e controllers) quando a aplicação muda de plano; é criado uma vez, em `AppDependencies`. | RF029 |
-| `PollingLoop` | Repete uma tarefa assíncrona (`PollingTask`, `typedef` de `Future<void> Function()`) a intervalo fixo (`interval`, por omissão `defaultInterval`, 3 segundos): `start()` executa-a logo e, depois de cada execução, com êxito ou não, agenda a seguinte para `interval` depois, só se o ciclo continuar ativo; assim nunca há pedidos sobrepostos (regra 2). Os erros da tarefa são ignorados, para que o ciclo continue. `stop()` cancela a execução agendada. Não observa o `AppLifecycleMonitor`: quem o usa começa e para o ciclo consoante a aplicação esteja em primeiro plano, e executa a tarefa logo ao regressar. | RF029, P17 |
-| `ConversationsStore` (consulta da lista; previsto, `I078`) | Ativa o seu `PollingLoop` com `watchList(true)` quando `ConversationsScreen` (M16) é apresentado e desativa-o com `watchList(false)` quando deixa de o ser. A tarefa é `ConversationService.list()` (secção 8.1). | RF027, RF029, RF075 |
-| `ChatController` (consulta das mensagens; previsto, `I078`) | Ativa o seu `PollingLoop` quando `ChatScreen` (M17, M18) abre a conversa e para-o em `dispose`. A tarefa (`poll`) é `ConversationService.open(matchId, after)` com o `sentAt` da última mensagem recebida (secção 8.5). | RF028, RF029, RF108 |
+| `PollingLoop` | Repete uma tarefa assíncrona (uma função `Future<void> Function()`) a intervalo fixo (`interval`, por omissão `defaultInterval`, 3 segundos): `start()` executa-a logo e, depois de cada execução, com êxito ou não, agenda a seguinte para `interval` depois, só se o ciclo continuar ativo; assim nunca há pedidos sobrepostos (regra 2). Os erros da tarefa são ignorados, para que o ciclo continue. `stop()` cancela a execução agendada. Não observa o `AppLifecycleMonitor`: quem o usa começa e para o ciclo consoante a aplicação esteja em primeiro plano, e executa a tarefa logo ao regressar. | RF029, P17 |
+| `ConversationsStore` (consulta da lista) | Ativa o seu `PollingLoop` com `watchList(true)` quando `ConversationsScreen` (M16) é apresentado e desativa-o com `watchList(false)` quando deixa de o ser. A tarefa é `ConversationService.list()` (secção 8.1). | RF027, RF029, RF075 |
+| `ChatController` (consulta das mensagens) | Ativa o seu `PollingLoop` quando `ChatScreen` (M17, M18) abre a conversa e para-o em `dispose`. A tarefa (`poll`) é `ConversationService.open(matchId, after: ...)` seguida de `ConversationService.list()`, para atualizar o resumo da conversa (secção 8.5). | RF028, RF029, RF108 |
 
 Pedidos repetidos (documentação da API v02, 7.1):
 
@@ -892,16 +943,16 @@ Regras:
 
 1. **Quando consulta.** Só com a sessão iniciada, a aplicação em primeiro plano e M16 ou M17/M18 apresentado. Com a aplicação em segundo plano, noutro separador ou com a sessão terminada não há consultas (DA v04, F010; P17). Não há notificações nativas do sistema operativo, nem envio por correio eletrónico ou SMS (DA v04, limites transversais).
 2. **Sem sobreposição.** O pedido seguinte só é agendado depois da resposta (ou da falha) do anterior, 3 segundos depois. Uma mensagem enviada pelo Recrutador logo a seguir a uma consulta surge, no pior caso, na consulta seguinte, 3 segundos mais a duração do pedido depois, dentro dos 5 segundos do P17, com as operações do servidor dentro dos 2 segundos do RNF001 (documentação da API v02, 7.2).
-3. **Primeira consulta e `after`.** Ao abrir a conversa, `ChatController` pede o histórico completo (`open` sem `after`) e guarda o `sentAt` da última mensagem. Daí em diante, cada consulta envia esse valor em `after`; uma resposta vazia não altera o histórico. O valor é sempre o recebido do servidor, nunca a hora do dispositivo, para que a diferença entre os relógios não faça perder mensagens.
+3. **Primeira consulta e `after`.** Ao abrir a conversa, `ChatController` pede o histórico completo (`open` sem `after`). Daí em diante, cada consulta envia em `after` o `sentAt` da última mensagem recebida ou, quando há mensagens próprias ainda sem leitura (`readAt` nulo), o da mensagem anterior à primeira delas, para que o servidor devolva essas mensagens com o estado de leitura atualizado; se a primeira mensagem do histórico é própria e não lida, não envia `after`. Uma resposta vazia não altera o histórico. O valor é sempre o recebido do servidor, nunca a hora do dispositivo, para que a diferença entre os relógios não faça perder mensagens.
 4. **Mensagens próprias.** A mensagem enviada pelo Candidato chega pela resposta de `send` e é acrescentada logo ao histórico; se a consulta seguinte a devolver também, é ignorada, porque o histórico é juntado por `messageId` (DFM-11).
 5. **Mudança de estado da conversa.** O encerramento pela Empresa, o bloqueio ou a suspensão de uma conta e a suspensão da Empresa chegam na consulta seguinte, pelo `status`, `closeReason` e `closedBy` do resumo da conversa em `list()` (documentação da API v02, 7.2). Por isso, com a conversa aberta, cada consulta pede as mensagens e a lista; a resposta da lista atualiza também o `ConversationsStore`. Um `409` (ERR-36 ou ERR-37) num envio antecipa essa leitura.
 6. **Erros.** Um `401` (ERR-01) ou um `403` de conta bloqueada ou suspensa (ERR-03, ERR-04) chega como `AuthenticationFailure`: `SessionManager` termina a sessão, `AuthGate` volta a M01 e os ecrãs com consulta periódica são fechados. Uma falha de ligação (`ConnectionFailure`) é registada no `ConnectionMonitor`, que mostra o `ConnectionBanner`, e o ciclo continua: a consulta seguinte é feita 3 segundos depois.
-7. **Contador do separador «Conversas».** Fora de M16 e de M17/M18 não há consulta periódica: `ConversationsStore` pede a lista uma vez no início de sessão, quando o Candidato escolhe os separadores «Matches» ou «Conversas» e quando a aplicação volta ao primeiro plano, e o contador mostra o valor dessa leitura (DFM-16).
+7. **Contador do separador «Conversas».** Fora de M16 e de M17/M18 não há consulta periódica: `ConversationsStore` pede a lista uma vez ao entrar em `HomeShell` (início de sessão), quando o Candidato escolhe o separador «Matches» e quando a aplicação volta ao primeiro plano (se a lista já foi pedida e não está a ser consultada), e o contador mostra o valor dessa leitura (DFM-16).
 8. **Sem notificações.** A informação que na v01 chegava por notificação é consultada na área correspondente: a quota de interesses reposta na área de exploração (M09, RF022), os novos matches na lista de matches (M14, RF024) e as mensagens novas na lista de conversas (M16, RF027) (DA v04, F006, F008 e limites transversais).
 
 ### 7.1. Sequência: receção de uma mensagem
 
-O diagrama descreve o comportamento previsto para a `I078`.
+O diagrama descreve o comportamento do código da `main`.
 
 ```mermaid
 sequenceDiagram
@@ -967,11 +1018,6 @@ classDiagram
         loaded
         failed
     }
-    class ListFilter["ListFilter · I078"] {
-        <<enumeration>>
-        all
-        unread
-    }
     class ChangeNotifier {
         <<abstract>>
     }
@@ -983,34 +1029,38 @@ classDiagram
     class ProfileStore {
         -CandidateProfileService _service
         -int _generation
-        -Future _request
         +CandidateProfileDto? profile
         +String? photoUrl
         +SearchPreferencesDto? preferences
         +LoadStatus status
         +ApiException? error
-        +String? errorMessage
         +load() Future~void~
         +refresh() Future~void~
         +update(CandidateProfileDto updated) void
         +updatePreferences(SearchPreferencesDto updated) void
         +reset() void
     }
-    class ConversationsStore["ConversationsStore · I078"] {
+    class ConversationsStore {
         -ConversationService _service
-        -PollingLoop _listPolling
         -AppLifecycleMonitor _lifecycle
+        -PollingLoop _polling
+        -List~ConversationSummaryDto~ _conversations
+        -LoadStatus _status
+        -String? _message
+        -bool _watching
+        -bool _inForeground
+        -int _generation
         +List~ConversationSummaryDto~ conversations
-        +ListFilter filter
+        +LoadStatus status
+        +String? message
         +int unreadMessages
-        +List~ConversationSummaryDto~ visible
+        +bool isPolling
+        +find(String matchId) ConversationSummaryDto?
         +load() Future~void~
-        +replace(List~ConversationSummaryDto~ conversations) void
         +watchList(bool active) void
-        +summaryOf(String matchId) ConversationSummaryDto?
-        +markOpened(String matchId) void
-        +setFilter(ListFilter filter) void
+        +replace(List~ConversationSummaryDto~ conversations) void
         +reset() void
+        +dispose() void
     }
     class ReferenceDataStore {
         -ReferenceListService _service
@@ -1023,12 +1073,6 @@ classDiagram
         +loadLocations() Future~void~
         +loadSkills() Future~void~
     }
-    class ReferenceList["_ReferenceList"] {
-        +List~ReferenceItemDto~ items
-        +LoadStatus status
-        +ApiException? error
-        +load() Future~void~
-    }
     ChangeNotifier <|-- SessionScopedStore
     ChangeNotifier <|-- ReferenceDataStore
     SessionScopedStore <|-- ProfileStore
@@ -1040,19 +1084,17 @@ classDiagram
     ConversationsStore "1" o-- "0..*" ConversationSummaryDto : conversas
     ConversationsStore "1" *-- "1" PollingLoop : consulta periódica da lista
     ConversationsStore "1" ..> "1" AppLifecycleMonitor : regresso ao primeiro plano
-    ReferenceDataStore "1" *-- "2" ReferenceList : localidades e competências
-    ReferenceList "1" o-- "0..*" ReferenceItemDto : itens
-    ConversationsStore "1" --> "1" ListFilter : filtro
+    ReferenceDataStore "1" o-- "0..*" ReferenceItemDto : localidades e competências
 ```
 
 | Store | Responsabilidade | Usado em | Requisitos |
 | --- | --- | --- | --- |
-| `SessionScopedStore` | Base dos stores com dados do Candidato. Observa `SessionManager` e chama `reset()` quando a sessão deixa de estar iniciada, para que nenhum dado de uma conta fique em memória depois do fim de sessão; no `ConversationsStore` (`I078`), `reset()` também para a consulta periódica. | — | RF105 |
-| `ProfileStore` | Perfil profissional do Candidato, carregado depois do início de sessão: `load()` não repete o pedido se o perfil já está carregado e reutiliza o pedido em curso. Cada controller que altera o perfil entrega o `CandidateProfileDto` devolvido pelo serviço (`update`); depois de um envio de ficheiro volta a pedir o perfil (`refresh`) para obter `photoUrl` e `hasCv`. Uma resposta que chega depois de `reset()` é descartada (`_generation`), e uma falha ao atualizar mantém o perfil já carregado. Expõe as preferências de procura, que a área de exploração observa. | M05 a M08, M09, M20 | RF006 a RF012, RF023 |
-| `ConversationsStore` (previsto, `I078`) | Lista de conversas com o número de mensagens por ler e o estado de cada uma. `unreadMessages` é a soma de `unreadCount` e alimenta o cabeçalho «mensagens por ler» do ecrã M16 e o contador do separador «Conversas». `watchList(true)`, chamado quando M16 é apresentado, ativa a consulta periódica da lista de 3 em 3 segundos (`_listPolling`, secção 7); `watchList(false)` desativa-a. Fora de M16, a lista é pedida uma vez no início de sessão, ao escolher os separadores «Matches» ou «Conversas» e quando a aplicação volta ao primeiro plano (`onForeground`, DFM-16). `replace` substitui a lista com a resposta obtida pelo `ChatController` (secção 8.5). `markOpened` põe a zero o contador da conversa que o Candidato abriu (o servidor já a marcou como lida, RF108). Uma conversa que passa a `closed` fica só de consulta, com o motivo (`closeReason`) e a parte que a encerrou (`closedBy`). Uma conversa nova aparece na lista na leitura seguinte à confirmação do match (RF068). `filter` é o filtro «Todas» ou «Não lidas», aplicado só à lista já carregada. | M16, M17, M18, barra inferior | RF027, RF028, RF029, RF030, RF068, RF075, RF108 |
-| `ReferenceDataStore` | Listas pré-definidas de localidades e de competências, cada uma com o seu estado e erro (`_ReferenceList`); cada lista é pedida uma só vez e um pedido em curso é reutilizado. Não é de âmbito de sessão, porque as localidades são precisas no registo, antes do início de sessão; a API v02 serve a lista de localidades sem credencial (6.13.1; PC-01 resolvido). | M02, M05, M07 | RF003, RF006, RF008 |
+| `SessionScopedStore` | Base dos stores com dados do Candidato. Observa `SessionManager` e chama `reset()` quando a sessão deixa de estar iniciada, para que nenhum dado de uma conta fique em memória depois do fim de sessão; no `ConversationsStore`, `reset()` também para a consulta periódica. | — | RF105 |
+| `ProfileStore` | Perfil profissional do Candidato, carregado depois do início de sessão: `load()` não faz um segundo pedido se o perfil já está carregado ou a ser pedido (nesse caso regressa logo, sem esperar pelo pedido em curso). Cada controller que altera o perfil entrega o `CandidateProfileDto` devolvido pelo serviço (`update`); depois de um envio de ficheiro volta a pedir o perfil (`refresh`) para obter `photoUrl` e `hasCv`. Uma resposta que chega depois de `reset()` é descartada (`_generation`), e uma falha ao atualizar mantém o perfil já carregado; o motivo fica em `error`. Expõe as preferências de procura, que a área de exploração observa. | M05 a M08, M09, M20 | RF006 a RF012, RF023 |
+| `ConversationsStore` | Lista de conversas com o número de mensagens por ler e o estado de cada uma. `unreadMessages` é a soma de `unreadCount` e alimenta o contador do separador «Conversas». `watchList(true)`, chamado quando M16 é apresentado, ativa a consulta periódica da lista de 3 em 3 segundos (`_polling`, secção 7); `watchList(false)` desativa-a (também enquanto uma conversa está aberta, porque o `ChatController` faz a sua própria consulta). Fora de M16, a lista é pedida uma vez ao entrar em `HomeShell`, ao escolher o separador «Matches» e quando a aplicação volta ao primeiro plano (DFM-16). `find` devolve o resumo de uma conversa pelo `matchId`. `replace` substitui a lista com a resposta obtida pelo `ChatController` (secção 8.5). O contador da conversa que o Candidato abriu volta a zero na leitura seguinte da lista, porque o servidor já a marcou como lida (RF108). Uma conversa que passa a `closed` fica só de consulta, com o motivo (`closeReason`) e a parte que a encerrou (`closedBy`). Uma conversa nova aparece na lista na leitura seguinte à confirmação do match (RF068). `status` e `message` dão o estado do carregamento e o motivo da falha (sem dados em memória, a falha é mostrada em M16; com dados, mantém-se a lista). `reset()` para a consulta e esvazia a lista. | M16, M17, M18, barra inferior | RF027, RF028, RF029, RF030, RF068, RF075, RF108 |
+| `ReferenceDataStore` | Listas pré-definidas de localidades e de competências, cada uma com o seu estado e erro; cada lista é pedida uma só vez e, enquanto uma lista está a ser pedida ou já está carregada, `loadLocations` e `loadSkills` regressam logo. Não é de âmbito de sessão, porque as localidades são precisas no registo, antes do início de sessão; a API v02 serve a lista de localidades sem credencial (6.13.1; PC-01 resolvido). | M02, M05, M07 | RF003, RF006, RF008 |
 
-O `NotificationsStore` da v01 foi retirado com a funcionalidade F011. O `ListFilter` e o `ConversationsStore` estão previstos para a `I078`.
+O `NotificationsStore` da v01 foi retirado com a funcionalidade F011.
 
 ### 8.2. Autenticação, registo e conta
 
@@ -1084,9 +1126,18 @@ classDiagram
         +String? locationId
         +String password
         +bool acceptTerms
+        +FieldErrors errors
+        +LoadStatus status
         +RegistrationStep step
+        +String? errorMessage
         +List~ReferenceItemDto~ locations
         +LoadStatus locationsStatus
+        +String fullNameField$
+        +String emailField$
+        +String phoneNumberField$
+        +String locationIdField$
+        +String passwordField$
+        +String acceptTermsField$
         +loadLocations() Future~void~
         +validate() bool
         +submit() Future~void~
@@ -1096,6 +1147,14 @@ classDiagram
         +String currentPassword
         +String newPassword
         +String confirmation
+        +FieldErrors errors
+        +LoadStatus status
+        +String? errorMessage
+        +String currentPasswordField$
+        +String newPasswordField$
+        +String confirmationField$
+        +String sameAsCurrentReason$
+        +String confirmationReason$
         +validate() bool
         +submit() Future~bool~
     }
@@ -1108,19 +1167,13 @@ classDiagram
     class AuthService {
         <<interface>>
     }
-    class FormController {
-        <<abstract>>
-    }
-    class SafeChangeNotifier {
-        <<abstract>>
-    }
     class ChangeNotifier {
         <<abstract>>
     }
     ChangeNotifier <|-- LoginController
-    FormController <|-- RegisterController
-    FormController <|-- ChangePasswordController
-    SafeChangeNotifier <|-- AccountController
+    ChangeNotifier <|-- RegisterController
+    ChangeNotifier <|-- ChangePasswordController
+    ChangeNotifier <|-- AccountController
     LoginController "1" ..> "1" AuthService
     RegisterController "1" ..> "1" AuthService
     ChangePasswordController "1" ..> "1" AuthService
@@ -1134,9 +1187,9 @@ classDiagram
 
 | Controller | Ecrãs | Responsabilidade | Requisitos |
 | --- | --- | --- | --- |
-| `LoginController` | M01 | Envia o correio eletrónico e a palavra-passe (`canSubmit` só é verdadeiro com o correio preenchido e a palavra-passe não vazia e sem pedido em curso); em caso de êxito, entrega a `LoginResponse` a `SessionManager.start`. Quando o servidor rejeita o início de sessão, mostra a `message` do `ApiErrorDto` devolvido, sem a alterar nem a juntar com outras: ERR-02 (credenciais erradas, a mesma mensagem para correio inexistente e palavra-passe errada, RNF009), ERR-03 (conta bloqueada), ERR-04 (conta suspensa) e ERR-05 (ponto de acesso) (API, 6.1.3 e 4.3). O RF001 exige a indicação do motivo também quando a conta está bloqueada ou suspensa, e o RNF009 só uniformiza o das credenciais erradas; o ecrã M01 do protótipo junta os motivos num só texto (PC-09). Não é um `FormController`: não tem erros por campo. | RF001, RNF009 |
-| `RegisterController` | M02, M03, M04 | Formulário de registo (`FormController`): valida localmente (`InputRules`: campos obrigatórios, correio eletrónico, contacto de 9 algarismos, palavra-passe, aceitação das condições) e, só depois, envia. Os motivos do servidor, por campo, também vão para `errors` (M03). Em caso de êxito, inicia a sessão com a `LoginResponse` do registo e passa a `step = completed` (M04, «A sua conta está ativa»). Pede a lista de localidades ao `ReferenceDataStore` (`loadLocations`). Se o Candidato sair do formulário, nada é guardado. | RF003, RF004, RF005 |
-| `ChangePasswordController` | M21 | Formulário (`FormController`) que valida que a palavra-passe nova cumpre o P05, é diferente da atual e coincide com a confirmação; a confirmação só existe no cliente e não segue no `ChangePasswordRequest`. O servidor rejeita uma palavra-passe atual errada, com o campo `currentPassword`. | RF002 |
+| `LoginController` | M01 | Envia o correio eletrónico e a palavra-passe (`canSubmit` só é verdadeiro com o correio preenchido e a palavra-passe não vazia e sem pedido em curso); em caso de êxito, entrega a `LoginResponse` a `SessionManager.start`. Quando o servidor rejeita o início de sessão, mostra a `message` do `ApiErrorDto` devolvido, sem a alterar nem a juntar com outras: ERR-02 (credenciais erradas, a mesma mensagem para correio inexistente e palavra-passe errada, RNF009), ERR-03 (conta bloqueada), ERR-04 (conta suspensa) e ERR-05 (ponto de acesso) (API, 6.1.3 e 4.3). O RF001 exige a indicação do motivo também quando a conta está bloqueada ou suspensa, e o RNF009 só uniformiza o das credenciais erradas; o ecrã M01 do protótipo junta os motivos num só texto (PC-09). Não tem erros por campo. | RF001, RNF009 |
+| `RegisterController` | M02, M03, M04 | Formulário de registo: valida localmente (`InputRules`: campos obrigatórios, correio eletrónico, contacto de 9 algarismos, palavra-passe, aceitação das condições) e, só depois, envia. Os motivos do servidor, por campo, também vão para `errors` (M03). Em caso de êxito, inicia a sessão com a `LoginResponse` do registo e passa a `step = completed` (M04, «A sua conta está ativa»). Pede a lista de localidades ao `ReferenceDataStore` (`loadLocations`). Se o Candidato sair do formulário, nada é guardado. | RF003, RF004, RF005 |
+| `ChangePasswordController` | M21 | Formulário que valida que a palavra-passe nova cumpre o P05, é diferente da atual e coincide com a confirmação; a confirmação só existe no cliente e não segue no `ChangePasswordRequest`. O servidor rejeita uma palavra-passe atual errada, com o campo `currentPassword`. | RF002 |
 | `AccountController` | M20 | `signOut()` pede o fim de sessão ao servidor (`AuthService.logout`), sem depender do resultado (uma falha da API é ignorada), e termina a sessão local (`SessionManager.end`): o cliente descarta a credencial e passa a exigir novo início de sessão. `signingOut` impede um segundo pedido enquanto o primeiro decorre. Na `main`, o ecrã M20 só tem as ações «Alterar palavra-passe» e «Terminar sessão»: o nome, o correio eletrónico e a localidade do protótipo não são mostrados (secção 14). | RF105 |
 
 ### 8.3. Perfil profissional
@@ -1154,7 +1207,14 @@ classDiagram
         +String experienceSummary
         +int summaryLength
         +List~ReferenceItemDto~ locations
+        +FieldErrors errors
         +LoadStatus loadStatus
+        +LoadStatus status
+        +String? errorMessage
+        +String desiredRoleField$
+        +String locationIdField$
+        +String availabilityField$
+        +String experienceSummaryField$
         +load() Future~void~
         +validate() bool
         +save() Future~bool~
@@ -1174,6 +1234,9 @@ classDiagram
         +FieldErrors errors
         +LoadStatus status
         +String? errorMessage
+        +String photoField$
+        +String cvField$
+        +String linksField$
         +linkField(int index)$ String
         +load() void
         +pickPhoto() Future~void~
@@ -1196,11 +1259,14 @@ classDiagram
         +LoadStatus loadStatus
         +LoadStatus status
         +String? errorMessage
+        +String customLabel
+        +String labelField$
+        +String skillIdField$
+        +String alreadyAddedReason$
         +load() Future~void~
         +toggle(ReferenceItemDto skill) void
         +showCustom(bool enabled) void
-        +customLabelChanged() void
-        +addCustom(String text) bool
+        +addCustom() bool
         +removeCustom(CustomSkillDto skill) void
         +save() Future~bool~
     }
@@ -1213,16 +1279,18 @@ classDiagram
         +double? minSalaryExpectation
         +Set~WorkMode~ workModes
         +Set~ContractType~ contractTypes
+        +FieldErrors errors
+        +LoadStatus status
+        +String? errorMessage
+        +String maxDistanceKmField$
+        +String minSalaryExpectationField$
         +load() void
         +toggleWorkMode(WorkMode mode) void
         +toggleContractType(ContractType type) void
         +validate() bool
         +save() Future~bool~
     }
-    class FormController {
-        <<abstract>>
-    }
-    class SafeChangeNotifier {
+    class ChangeNotifier {
         <<abstract>>
     }
     class ProfileStore {
@@ -1231,10 +1299,10 @@ classDiagram
     class CandidateProfileService {
         <<interface>>
     }
-    FormController <|-- ProfileFormController
-    FormController <|-- PreferencesController
-    SafeChangeNotifier <|-- ProfileFilesController
-    SafeChangeNotifier <|-- SkillsController
+    ChangeNotifier <|-- ProfileFormController
+    ChangeNotifier <|-- PreferencesController
+    ChangeNotifier <|-- ProfileFilesController
+    ChangeNotifier <|-- SkillsController
     ProfileFormController "1" ..> "1" ProfileStore
     ProfileFilesController "1" ..> "1" ProfileStore
     SkillsController "1" ..> "1" ProfileStore
@@ -1249,10 +1317,10 @@ classDiagram
 
 | Controller | Ecrãs | Responsabilidade | Requisitos |
 | --- | --- | --- | --- |
-| `ProfileFormController` | M05 | Formulário (`FormController`): função pretendida, localidade (da lista), disponibilidade (imediata, 15 dias, 1 mês ou a combinar) e resumo da experiência com o contador «n/1000» (`summaryLength`). Valida o limite do resumo (P08) e grava com `updateProfile`; `load()` preenche os campos a partir do `ProfileStore`. | RF006 |
+| `ProfileFormController` | M05 | Formulário: função pretendida, localidade (da lista), disponibilidade (imediata, 15 dias, 1 mês ou a combinar) e resumo da experiência com o contador «n/1000» (`summaryLength`). Valida o limite do resumo (P08) e grava com `updateProfile`; `load()` preenche os campos a partir do `ProfileStore`. | RF006 |
 | `ProfileFilesController` | M06 | Fotografia, curriculum vitae e até 3 hiperligações (ecrã M06, aberto a partir de M05), cada uma num `LinkDraft` com chave própria, para que a lista de campos se mantenha estável ao remover uma. Valida localmente o formato e a dimensão (P01, P02) e os endereços (P10) **antes do primeiro pedido**, para que nenhum envio se faça com dados que já se sabe estarem errados; depois envia a fotografia, o CV e as hiperligações por esta ordem e volta a pedir o perfil. Os motivos, por campo (`urls[n]` para as hiperligações), ficam em `errors` e são os que M06 mostra («Só JPEG ou PNG até 5 MB», «Só PDF até 5 MB», «A hiperligação tem de começar por http:// ou https://»). | RF010, RF011, RF012 |
-| `SkillsController` | M07 | Competências como etiquetas: escolhe da lista pré-definida (`toggle`), acrescenta uma competência «Outro» (`addCustom`: 2 a 40 caracteres, P07, devolve se foi aceite) ou remove uma etiqueta (`removeCustom`). `save()` envia ao serviço só as diferenças: `addSkill` e `removeSkill` (pelo `skillId`) para as competências da lista, e `addCustomSkill` e `removeCustomSkill` (pelo `customSkillId`) para as competências «Outro» (API v02, 6.2.4, 6.2.5, 6.2.10 e 6.2.11). | RF008, RF009 |
-| `PreferencesController` | M08 | Formulário (`FormController`): distância máxima (1 a 500 km, P06), pretensão salarial mínima, regimes de trabalho e tipos de contrato. Os campos de texto (`maxDistanceText`, `minSalaryText`) são convertidos em `maxDistanceKm` e `minSalaryExpectation`. Grava com `updatePreferences` e entrega as novas preferências ao `ProfileStore`, que a área de exploração observa. | RF007, RF023 |
+| `SkillsController` | M07 | Competências como etiquetas: escolhe da lista pré-definida (`toggle`), acrescenta uma competência «Outro» (o texto escrito fica em `customLabel`; `addCustom()` valida 2 a 40 caracteres, P07, e devolve se foi aceite) ou remove uma etiqueta (`removeCustom`). `save()` envia ao serviço só as diferenças: `addSkill` e `removeSkill` (pelo `skillId`) para as competências da lista, e `addCustomSkill` e `removeCustomSkill` (pelo `customSkillId`) para as competências «Outro» (API v02, 6.2.4, 6.2.5, 6.2.10 e 6.2.11). | RF008, RF009 |
+| `PreferencesController` | M08 | Formulário: distância máxima (1 a 500 km, P06), pretensão salarial mínima, regimes de trabalho e tipos de contrato. Os campos de texto (`maxDistanceText`, `minSalaryText`) são convertidos em `maxDistanceKm` e `minSalaryExpectation`. Grava com `updatePreferences` e entrega as novas preferências ao `ProfileStore`, que a área de exploração observa. | RF007, RF023 |
 
 ### 8.4. Exploração de vagas
 
@@ -1301,21 +1369,22 @@ classDiagram
     class CompanyPageController {
         -JobExplorationService _service
         -ExternalLauncher _launcher
+        +String websiteFailureMessage$
         +CompanyPageDto? page
         +LoadStatus status
         +String? errorMessage
         +load(String companyId) Future~void~
         +openWebsite() Future~void~
     }
-    class SafeChangeNotifier {
+    class ChangeNotifier {
         <<abstract>>
     }
     class JobExplorationService {
         <<interface>>
     }
-    SafeChangeNotifier <|-- ExplorationController
-    SafeChangeNotifier <|-- JobDetailController
-    SafeChangeNotifier <|-- CompanyPageController
+    ChangeNotifier <|-- ExplorationController
+    ChangeNotifier <|-- JobDetailController
+    ChangeNotifier <|-- CompanyPageController
     ExplorationController "1" --> "1" ExplorationStatus : estado
     ExplorationController "1" o-- "0..1" JobCardDto : cartão atual
     ExplorationController "1" o-- "0..1" QuotaDto : quota
@@ -1350,98 +1419,93 @@ Operações:
 
 ### 8.5. Matches e conversas
 
-As classes desta secção estão previstas para a `I078` e não existem no código da `main` (secção 2.4).
+Estas classes existem no código da `main` desde a `I078`.
 
 ```mermaid
 classDiagram
     direction LR
-    class MatchesController["MatchesController · I078"] {
+    class MatchesController {
+        +String emailFailedMessage$
+        +String phoneFailedMessage$
         -MatchService _service
         -ExternalLauncher _launcher
+        -int _generation
         +List~MatchDto~ matches
         +LoadStatus status
+        +String? message
         +load() Future~void~
         +find(String matchId) MatchDto?
         +openEmail(MatchDto match) Future~void~
         +openPhone(MatchDto match) Future~void~
+        +dispose() void
     }
-    class ChatController["ChatController · I078"] {
+    class ChatController {
+        +int maxLength$
+        +Set~String~ readOnlyCodes$
         -ConversationService _service
         -ConversationsStore _store
         -SessionManager _session
+        -AppLifecycleMonitor _lifecycle
         -PollingLoop _messagesPolling
         -String? _matchId
-        -DateTime? _lastSentAt
+        +String? matchId
         +ConversationSummaryDto? summary
         +List~MessageDto~ messages
         +String draft
         +int draftLength
+        +LoadStatus status
+        +String? errorMessage
+        +bool isSending
+        +bool isClosing
         +bool isReadOnly
         +bool closedByMe
         +bool canSend
-        +LoadStatus status
-        +String? errorMessage
+        +bool isPolling
         +open(String matchId) Future~void~
+        +updateDraft(String value) void
         +send() Future~void~
         +close() Future~void~
+        +poll() Future~void~
         +isOwn(MessageDto message) bool
-        -poll() Future~void~
-        -merge(List~MessageDto~ received) void
         +dispose() void
     }
-    class MatchService["MatchService · I078"] {
+    class MatchService {
         <<interface>>
     }
-    class ConversationService["ConversationService · I078"] {
+    class ConversationService {
         <<interface>>
     }
-    class PollingLoop
+    class ChangeNotifier {
+        <<abstract>>
+    }
+    ChangeNotifier <|-- MatchesController
+    ChangeNotifier <|-- ChatController
     MatchesController "1" o-- "0..*" MatchDto : matches
     ChatController "1" o-- "0..1" ConversationSummaryDto : conversa
     ChatController "1" o-- "0..*" MessageDto : mensagens
     MatchesController "1" ..> "1" MatchService
+    MatchesController "1" ..> "1" ExternalLauncher : correio e telefone
     ChatController "1" ..> "1" ConversationService
     ChatController "1" ..> "1" ConversationsStore : resumo e contador
     ChatController "1" *-- "1" PollingLoop : consulta periódica das mensagens
+    ChatController "1" ..> "1" AppLifecycleMonitor : só em primeiro plano
     ChatController "1" ..> "1" SessionManager : identifica as mensagens próprias
 ```
 
 | Classe | Ecrãs | Responsabilidade | Requisitos |
 | --- | --- | --- | --- |
-| `MatchesController` | M14, M15 | Lista de matches, com a vaga, a localidade, o estado da vaga (`jobStatus`, «Vaga encerrada») e a Empresa com o logótipo de cada um, incluindo os de vagas encerradas ou de Empresas suspensas. É aqui que o Candidato vê um novo match, sem notificação (DA v04, F008): a lista é pedida ao abrir o separador «Matches». Os contactos (correio eletrónico e telefone) já vêm no `MatchDto`, pelo que M15 não faz novo pedido; abrir o correio ou a chamada passa por `ExternalLauncher`. «Abrir conversa» navega para `ChatScreen` com o `matchId`. | RF024, RF025 |
+| `MatchesController` | M14, M15 | Lista de matches, com a vaga, a localidade, o estado da vaga (`jobStatus`, «Vaga encerrada», `MatchDto.isJobClosed`) e a Empresa com o logótipo de cada um, incluindo os de vagas encerradas ou de Empresas suspensas. É aqui que o Candidato vê um novo match, sem notificação (DA v04, F008): a lista é pedida de cada vez que o separador «Matches» é apresentado. Com uma lista já carregada, um novo pedido não a substitui por um indicador de carregamento e uma falha mantém a lista, com o motivo em `message`. Cada pedido tem um número de geração (`_generation`): a resposta de um pedido anterior ao mais recente é descartada. Os contactos (correio eletrónico e telefone) já vêm no `MatchDto`, pelo que M15 não faz novo pedido; `openEmail` e `openPhone` abrem-nos por `ExternalLauncher` e, se a aplicação externa não abrir, `message` indica `emailFailedMessage` ou `phoneFailedMessage`. «Abrir conversa» navega para `ChatScreen` com o `matchId`. | RF024, RF025 |
 | `ConversationsStore` (M16) | M16 | Ver a secção 8.1. A lista só mostra conversas dos matches do Candidato (RF070); o Administrador não tem acesso a conversas. Enquanto M16 está apresentado, a lista é atualizada por consulta periódica (secção 7). | RF027, RF029, RF070 |
-| `ChatController` | M17, M18 | Abre a conversa (`open` sem `after`: devolve o histórico completo e o servidor marca as mensagens como lidas, RF108), envia (`send`) e encerra (`close`, depois do qual recarrega a lista de conversas para obter o motivo). O resumo (Empresa, vaga, estado, motivo e parte que encerrou) vem de `ConversationsStore`, porque `open` só devolve mensagens; quando a conversa é aberta a partir da lista de matches, o store é carregado primeiro. `canSend` exige conversa aberta e texto de 1 a 1000 caracteres (P03); em modo só de consulta, `isReadOnly` desativa a escrita e o ecrã passa a M18 (RF026, RF075); `closedByMe` compara `closedBy` com o utilizador da sessão, para M18 indicar «Encerrou esta conversa» ou «A Empresa encerrou esta conversa» (PC-04). `isOwn` compara `senderId` com o utilizador da sessão para alinhar as mensagens. Enquanto o ecrã está aberto e a aplicação em primeiro plano, `_messagesPolling` executa `poll()` de 3 em 3 segundos: pede `open(matchId, _lastSentAt)` e `list()`, junta as mensagens novas e atualiza o resumo e o `ConversationsStore` (secção 7, regras 3 a 5). As mensagens são juntadas por `messageId`, sem duplicados, porque a mensagem enviada pelo próprio Candidato chega pela resposta de `send` e pode voltar numa consulta. A consulta para em `dispose`. | RF026, RF028, RF029, RF030, RF075, RF108 |
+| `ChatController` | M17, M18 | Abre a conversa (`open(matchId)`: devolve o histórico completo e o servidor marca as mensagens como lidas, RF108), envia (`send`) e encerra (`close`, depois do qual recarrega a lista de conversas para obter o motivo). O resumo (Empresa, vaga, estado, motivo e parte que encerrou) vem de `ConversationsStore.find`, porque `open` só devolve mensagens; se o store ainda não tem a conversa (por exemplo, quando é aberta a partir da lista de matches), `open` pede a lista e entrega-a ao store (`replace`). `canSend` exige a conversa carregada, não só de consulta, sem envio em curso e um texto que cumpra `InputRules.isValidMessage` (não vazio e até `maxLength`, 1000 caracteres, P03); `updateDraft` guarda o texto e `draftLength` alimenta o contador «n/1000». Em modo só de consulta, `isReadOnly` (o resumo está `closed`) desativa a escrita e o ecrã passa a M18 (RF026, RF075); `closedByMe` compara `closedBy` com o utilizador da sessão, para M18 indicar «Encerrou esta conversa» ou «A Empresa encerrou esta conversa» (PC-04). Um `409` com ERR-36 ou ERR-37 (`readOnlyCodes`) num envio ou num encerramento antecipa a leitura da lista. `isOwn` compara `senderId` com o utilizador da sessão para alinhar as mensagens. Enquanto a conversa está carregada e a aplicação em primeiro plano, `_messagesPolling` executa a tarefa de consulta de 3 em 3 segundos (`poll()`, exposta para os testes): pede `open(matchId, after: ...)` e `list()`, junta as mensagens novas e entrega a lista ao `ConversationsStore` (secção 7, regras 3 a 5). As mensagens são juntadas por `messageId`, sem duplicados e ordenadas por `sentAt`, porque a mensagem enviada pelo próprio Candidato chega pela resposta de `send` e pode voltar numa consulta. A consulta para em `dispose` e deixa de correr com a aplicação em segundo plano. | RF026, RF028, RF029, RF030, RF075, RF108 |
 
 O `NotificationsStore` (M19) da v01 foi retirado com a funcionalidade F011.
 
-### 8.6. Bases comuns do estado
+
+### 8.6. Elementos comuns do estado
 
 ```mermaid
 classDiagram
     direction LR
-    class ChangeNotifier {
-        <<abstract>>
-    }
-    class SafeChangeNotifier {
-        <<abstract>>
-        -bool _disposed
-        #bool disposed
-        +notifyListeners() void
-        +dispose() void
-    }
-    class FormController {
-        <<abstract>>
-        -FieldErrors _errors
-        -LoadStatus _status
-        -String? _errorMessage
-        +FieldErrors errors
-        +LoadStatus status
-        +String? errorMessage
-        +validate() bool
-        #edit(String field, VoidCallback change) void
-        #applyValidation(FieldErrors errors) bool
-        #send(Future request) Future~bool~
-    }
     class LoadStatus {
         <<enumeration>>
         idle
@@ -1449,26 +1513,38 @@ classDiagram
         loaded
         failed
     }
-    ChangeNotifier <|-- SafeChangeNotifier
-    SafeChangeNotifier <|-- FormController
-    FormController "1" --> "1" LoadStatus : estado
-    FormController "1" *-- "1" FieldErrors : erros por campo
+    class FieldErrors {
+        <<model>>
+    }
+    class ChangeNotifier {
+        <<abstract>>
+    }
+    ChangeNotifier <|-- RegisterController
+    ChangeNotifier <|-- ChangePasswordController
+    ChangeNotifier <|-- ProfileFormController
+    ChangeNotifier <|-- PreferencesController
+    RegisterController "1" --> "1" LoadStatus : estado
+    ProfileFormController "1" --> "1" LoadStatus : estado
+    RegisterController "1" *-- "1" FieldErrors : erros por campo
+    ProfileFormController "1" *-- "1" FieldErrors : erros por campo
 ```
 
-| Classe | Responsabilidade | Requisitos |
+| Elemento | Responsabilidade | Requisitos |
 | --- | --- | --- |
-| `SafeChangeNotifier` | `ChangeNotifier` que ignora `notifyListeners()` depois de `dispose()`. Evita erros quando a resposta de um pedido chega depois de o ecrã fechar. É a base dos controllers e dos formulários. | — |
-| `FormController` | Base dos formulários com erros por campo. `send(pedido)` não faz nada se já há um pedido em curso ou se `validate()` falha; caso contrário passa a `loading`, executa o pedido e devolve se teve êxito. Um `ApiRejection` põe os motivos do servidor em `errors` (`FieldErrors.fromApi`) e a `message` em `errorMessage`; qualquer outro `ApiException` põe só a mensagem (`failureMessage`). `edit` altera um campo e apaga o seu motivo. | RF004 |
+| `LoadStatus` | Estado de um pedido de um controller ou store: `idle` (ainda não pedido), `loading`, `loaded` e `failed` (`state/load_status.dart`). | — |
+| Formulários | Os controllers de formulário (`RegisterController`, `ChangePasswordController`, `ProfileFormController`, `PreferencesController`, `ProfileFilesController` e `SkillsController`) não têm uma classe base comum: cada um estende `ChangeNotifier`, guarda os motivos por campo em `errors` (`FieldErrors`), o estado do envio em `status` e a mensagem em `errorMessage`. Antes de enviar, `validate()` aplica as regras locais (`InputRules`) e, se falhar, não faz pedido; com um `ApiRejection`, os motivos do servidor por campo passam para `errors` (`FieldErrors.fromApi`) e a `message` para `errorMessage`; com qualquer outro `ApiException`, só a mensagem (`failureMessage`). Editar um campo apaga o seu motivo. | RF004 |
+| Guarda de `dispose` | Os controllers cujos pedidos podem terminar depois de o ecrã fechar (`AccountController`, `ProfileFormController`, `PreferencesController`, `ProfileFilesController`, `SkillsController`, `ExplorationController`, `JobDetailController`, `CompanyPageController`, `MatchesController` e `ChatController`) têm um atributo `_disposed` e uma operação privada `_notify()` que só chama `notifyListeners()` enquanto o controller não foi destruído. | — |
 
 `failureMessage` (`state/failure_messages.dart`) converte cada `ApiException` na mensagem que o ecrã mostra: a `message` do servidor para `ApiRejection` e `AuthenticationFailure`, e textos fixos para `ConnectionFailure` e `UnexpectedFailure`.
 
 ---
 
+
 ## 9. Ecrãs e widgets
 
 ### 9.1. Estrutura de navegação
 
-Os 20 ecrãs do protótipo v02 correspondem a 16 classes de ecrã: M03, M10, M11 e M18 são estados de M02, M09 e M17 e não classes próprias (secção 12, DFM-12). `HomeShell` tem a barra de navegação inferior com os quatro separadores do protótipo v02 (Explorar, Matches, Conversas e Perfil); os ecrãs M06, M07 e M08 abrem por cima da barra. O ecrã M19 e o separador «Notificações» foram retirados no protótipo v02. Na `main`, M14 a M18 ainda não existem: os separadores «Matches» e «Conversas» mostram uma área provisória até à `I078` (secção 2.4).
+Os 20 ecrãs do protótipo v02 correspondem a 16 classes de ecrã: M03, M10, M11 e M18 são estados de M02, M09 e M17 e não classes próprias (secção 12, DFM-12). `HomeShell` tem a barra de navegação inferior com os quatro separadores do protótipo v02 (Explorar, Matches, Conversas e Perfil); os ecrãs M06, M07 e M08 abrem por cima da barra. O ecrã M19 e o separador «Notificações» foram retirados no protótipo v02. Na `main`, M14 a M18 existem desde a `I078`: os separadores «Matches» e «Conversas» mostram `MatchesScreen` e `ConversationsScreen` (secção 2.4).
 
 ```mermaid
 flowchart TB
@@ -1543,12 +1619,14 @@ classDiagram
     class KatchApp {
         <<widget>>
         +AppDependencies dependencies
-        -GlobalKey navigatorKey
+        -GlobalKey _navigatorKey
+        -SessionStatus _lastStatus
     }
     class AppScope {
         <<widget>>
         +AppDependencies dependencies
         +of(BuildContext context)$ AppDependencies
+        +updateShouldNotify(AppScope oldWidget) bool
     }
     class AuthGate {
         <<widget>>
@@ -1556,15 +1634,6 @@ classDiagram
     class HomeShell {
         <<widget>>
         -int _selectedIndex
-    }
-    class PendingArea["_PendingArea"] {
-        <<widget>>
-    }
-    class KatchScaffold {
-        <<widget>>
-        +String title
-        +Widget body
-        +Widget? bottomNavigationBar
     }
     class ConnectionBanner {
         <<widget>>
@@ -1579,21 +1648,21 @@ classDiagram
     AuthGate "1" ..> "1" SessionManager : observa o estado
     AuthGate "1" --> "0..1" LoginScreen : sem sessão ou expirada
     AuthGate "1" --> "0..1" HomeShell : com sessão
-    HomeShell "1" *-- "1" KatchScaffold
-    KatchScaffold "1" *-- "1" ConnectionBanner
+    HomeShell "1" *-- "1" ConnectionBanner
     HomeShell "1" --> "1" ExplorationScreen : separador Explorar
-    HomeShell "1" *-- "2" PendingArea : Matches e Conversas, até à I078
+    HomeShell "1" --> "1" MatchesScreen : separador Matches
+    HomeShell "1" --> "1" ConversationsScreen : separador Conversas
     HomeShell "1" --> "1" ProfileScreen : separador Perfil
 ```
 
 | Classe | Responsabilidade | Requisitos |
 | --- | --- | --- |
-| `KatchApp` | Raiz da aplicação: `MaterialApp` com o tema (`katchTheme`), o `AuthGate` como ecrã inicial e o `AppScope`. Quando a sessão deixa de estar iniciada, fecha os ecrãs abertos por cima do primeiro (`popUntil`). | — |
+| `KatchApp` | Raiz da aplicação: `MaterialApp` com o tema (`ThemeData` com a cor de base do Katch), o `AuthGate` como ecrã inicial e o `AppScope`. Quando a sessão deixa de estar iniciada, fecha os ecrãs abertos por cima do primeiro (`popUntil`). | — |
 | `AppScope` | `InheritedWidget` que dá aos ecrãs as dependências de `AppDependencies` (serviços, stores e dispositivo), sem pacote de injeção de dependências (secção 12, DFM-03). | — |
 | `AuthGate` | Escolhe o que a aplicação mostra segundo `SessionManager.status`: um indicador de carregamento enquanto restaura a sessão, `LoginScreen` sem sessão (com o aviso de sessão expirada quando o estado é `expired`) ou `HomeShell` com sessão. O registo (M02) abre a partir de M01. | RNF005 |
-| `HomeShell` | Contentor dos quatro separadores (`NavigationBar` do Material: Explorar, Matches, Conversas e Perfil), mantidos num `IndexedStack`. Garante que cada área é alcançada em, no máximo, 3 interações a partir da exploração de vagas. Na `main`, «Matches» e «Conversas» mostram uma área provisória («Esta área fica disponível numa próxima versão da aplicação»); o pedido da lista ao `ConversationsStore` ao mudar de separador (DFM-16) e o contador de mensagens por ler ficam para a `I078`. | RNF011 |
-| `KatchScaffold` | Estrutura comum dos ecrãs: barra de título, `ConnectionBanner` no topo e corpo; `HomeShell` entrega-lhe a barra inferior. | RNF014 |
-| `ConnectionBanner` | Faixa que indica a falha de ligação quando `ConnectionMonitor.hasFailure`. | RNF014 |
+| `HomeShell` | Contentor dos quatro separadores (`NavigationBar` do Material: Explorar, Matches, Conversas e Perfil), mantidos num `IndexedStack`. Garante que cada área é alcançada em, no máximo, 3 interações a partir da exploração de vagas. Os separadores «Matches» e «Conversas» mostram `MatchesScreen` e `ConversationsScreen`, que recebem `active` para saberem se o separador está à vista (a consulta periódica da lista só corre com «Conversas» ativo). Ao entrar, `HomeShell` pede a lista de conversas ao `ConversationsStore`, e volta a pedi-la ao escolher «Matches» (DFM-16); o contador de mensagens por ler aparece como distintivo no separador «Conversas». | RNF011 |
+
+| `ConnectionBanner` | Faixa que indica a falha de ligação quando `ConnectionMonitor.hasFailure`. Cada ecrã que fala com o servidor (as áreas de `HomeShell` e os ecrãs abertos por cima, como M06, M07, M08, M12, M13, M15, M17 e M21, além de M01 e M02) mostra-a no topo. | RNF014 |
 
 ### 9.3. Ecrãs e controllers
 
@@ -1602,55 +1671,91 @@ classDiagram
     direction LR
     class LoginScreen {
         <<widget>>
+        +bool sessionExpired
+        +String expiredMessage$
     }
     class RegisterScreen {
         <<widget>>
     }
     class RegisterSuccessScreen {
         <<widget>>
+        +VoidCallback onStart
     }
     class ProfileScreen {
         <<widget>>
+        +String successMessage$
     }
     class ProfileFilesScreen {
         <<widget>>
+        +String successMessage$
+        +String photoHint$
+        +String cvHint$
     }
     class SkillsScreen {
         <<widget>>
+        +String successMessage$
+        +String otherOption$
     }
     class PreferencesScreen {
         <<widget>>
+        +String successMessage$
     }
     class ExplorationScreen {
         <<widget>>
+        +String emptyTitle$
+        +String emptyHint$
+        +String failedFallback$
     }
     class JobDetailScreen {
         <<widget>>
         +String jobId
+        +String failedFallback$
+        +String noBenefits$
     }
     class CompanyPageScreen {
         <<widget>>
         +String companyId
+        +String failedFallback$
+        +String noDescription$
     }
-    class MatchesScreen["MatchesScreen · I078"] {
+    class MatchesScreen {
         <<widget>>
+        +bool active
+        +VoidCallback onExplore
+        +String emptyTitle$
+        +String emptyHint$
+        +String failedFallback$
     }
-    class MatchContactScreen["MatchContactScreen · I078"] {
+    class MatchContactScreen {
         <<widget>>
         +String matchId
+        +MatchesController controller
     }
-    class ConversationsScreen["ConversationsScreen · I078"] {
+    class ConversationsScreen {
         <<widget>>
+        +bool active
+        +VoidCallback onOpenMatches
+        +String emptyTitle$
+        +String emptyHint$
+        +String failedFallback$
     }
-    class ChatScreen["ChatScreen · I078"] {
+    class ChatScreen {
         <<widget>>
         +String matchId
+        +String failedFallback$
+        +String closedByMeText$
+        +String closedByCompanyText$
+        +String suspendedText$
+        +String readOnlyHint$
+        +String readOnlyText$
+        +String closeConfirmation$
     }
     class AccountScreen {
         <<widget>>
     }
     class ChangePasswordScreen {
         <<widget>>
+        +String successMessage$
     }
     LoginScreen "1" ..> "1" LoginController
     RegisterScreen "1" ..> "1" RegisterController
@@ -1671,7 +1776,7 @@ classDiagram
     ChangePasswordScreen "1" ..> "1" ChangePasswordController
 ```
 
-Cada ecrã cria o seu controller em `initState`, obtendo as dependências de `AppScope`, e destrói-o em `dispose`; como os controllers são `SafeChangeNotifier`, uma resposta que chegue depois de o ecrã fechar não provoca notificações. `ExplorationController` observa o `ProfileStore` e o `AppLifecycleMonitor` e deixa de os observar em `dispose`. `RegisterSuccessScreen` partilha o controller do ecrã de onde vem (`RegisterController`) para não repetir pedidos. Na `I078`, `ChatController` pára a consulta periódica da conversa na sua destruição, `ConversationsScreen` usa diretamente o store e chama `watchList(true)` quando é apresentado e `watchList(false)` quando deixa de o ser, e `MatchContactScreen` partilha o `MatchesController`.
+Cada ecrã cria o seu controller em `initState`, obtendo as dependências de `AppScope`, e destrói-o em `dispose`; os controllers que podem receber uma resposta depois de o ecrã fechar ignoram a notificação (secção 8.6). `ExplorationController` observa o `ProfileStore` e o `AppLifecycleMonitor` e deixa de os observar em `dispose`. `RegisterSuccessScreen` partilha o controller do ecrã de onde vem (`RegisterController`) para não repetir pedidos. `ChatController` pára a consulta periódica da conversa na sua destruição. `ConversationsScreen` usa diretamente o `ConversationsStore` e chama `watchList(true)` quando o separador está à vista e nenhuma conversa está aberta, e `watchList(false)` no caso contrário e em `dispose`. `MatchContactScreen` recebe o `MatchesController` de `MatchesScreen`, em vez de criar outro.
 
 ### 9.4. Widgets principais
 
@@ -1681,6 +1786,8 @@ classDiagram
     class RemoteImage {
         <<widget>>
         +String filesPath$
+        +String baseUrl
+        +CredentialProvider credentials
         +String? url
         +double size
         +bool circular
@@ -1692,14 +1799,20 @@ classDiagram
         +VoidCallback onDecline
         +VoidCallback onInterest
         +VoidCallback onDetail
+        +String baseUrl
+        +CredentialProvider credentials
     }
     class JobSummary {
         <<widget>>
         +JobCardDto card
+        +String baseUrl
+        +CredentialProvider credentials
     }
     class PhotoGrid {
         <<widget>>
         +List~String~ urls
+        +String baseUrl
+        +CredentialProvider credentials
     }
     class QuotaIndicator {
         <<widget>>
@@ -1725,39 +1838,9 @@ classDiagram
         +VoidCallback? onRetry
         +String fallback
     }
-    class LoadStatusView {
-        <<widget>>
-        +bool failed
-        +String? message
-        +String fallback
-        +VoidCallback onRetry
-        +Widget? child
-    }
     class FieldErrorText {
         <<widget>>
         +String? reason
-        +double spacing
-    }
-    class FormTextField {
-        <<widget>>
-        +Key fieldKey
-        +String label
-        +bool enabled
-        +ValueChanged onChanged
-        +String? error
-        +String? helper
-        +TextInputType? keyboardType
-        +bool obscure
-    }
-    class DropdownField {
-        <<widget>>
-        +Key fieldKey
-        +String label
-        +String hint
-        +List items
-        +ValueChanged onChanged
-        +T? value
-        +String? error
     }
     class SaveButton {
         <<widget>>
@@ -1780,44 +1863,54 @@ classDiagram
         <<widget>>
         +List options
         +Set selected
-        +labelOf(T option) String
-        +keyOf(T option) Key
+        +Function labelOf
+        +Function keyOf
         +ValueChanged onToggle
         +bool enabled
     }
-    class ListFilterChip["ListFilterChip · I078"] {
+    class MatchTile {
         <<widget>>
-        +ListFilter filter
-    }
-    class MatchTile["MatchTile · I078"] {
-        <<widget>>
+        +String closedJobLabel$
         +MatchDto match
+        +String baseUrl
+        +CredentialProvider credentials
+        +VoidCallback onContact
+        +VoidCallback onConversation
     }
-    class ConversationTile["ConversationTile · I078"] {
+    class ConversationTile {
         <<widget>>
+        +String closedLabel$
         +ConversationSummaryDto conversation
+        +VoidCallback onTap
     }
-    class MessageBubble["MessageBubble · I078"] {
+    class MessageBubble {
         <<widget>>
+        +String readLabel$
+        +String unreadLabel$
         +MessageDto message
         +bool isOwn
+        +readDetail(DateTime sentAt, DateTime readAt)$ String
     }
-    class MessageComposer["MessageComposer · I078"] {
+    class MessageComposer {
         <<widget>>
-        +int maxLength
+        +TextEditingController controller
         +bool enabled
+        +bool canSend
+        +ValueChanged onChanged
+        +VoidCallback onSend
     }
-    class ContactRow["ContactRow · I078"] {
+    class ContactRow {
         <<widget>>
+        +IconData icon
         +String label
         +String value
+        +VoidCallback onTap
     }
     JobCardView "1" ..> "1" JobCardDto
     JobCardView "1" *-- "1" JobSummary : dados da vaga
     JobCardView "1" *-- "0..1" PhotoGrid : fotografias
     JobCardView "1" ..> "0..*" RemoteImage : logótipo e fotografias
     PhotoGrid "1" ..> "0..*" RemoteImage
-    LoadStatusView "1" ..> "1" LoadStateView : estados de carregamento e de erro
     MatchTile "1" ..> "1" MatchDto
     ConversationTile "1" ..> "1" ConversationSummaryDto
     MessageBubble "1" ..> "1" MessageDto
@@ -1831,21 +1924,22 @@ classDiagram
 | `QuotaIndicator` | «Interesses disponíveis: n de 10». | M09 | RF022 |
 | `QuotaBlockedNotice` | «Esgotou os 10 interesses. Poderá voltar a manifestar interesse dentro de n h m min.» | M10 | RF020 |
 | `EmptyStateView` | Estado sem conteúdo, com a ação sugerida («Ajustar preferências»). | M11 | RF014 |
-| `LoadStateView` | Indicador de carregamento (`LoadStateView.loading`) e de erro com a ação «Tentar novamente» (`LoadStateView.failed`, com a mensagem ou um texto alternativo). `LoadStatusView` escolhe entre o erro e o conteúdo (`child`), ou o carregamento quando ainda não há conteúdo. | M09 e, por `LoadStatusView`, M05 a M08, M12, M13 | RNF014 |
+| `LoadStateView` | Indicador de carregamento (`LoadStateView.loading`) e de erro com a ação «Tentar novamente» (`LoadStateView.failed`, com a mensagem ou um texto alternativo). Cada ecrã escolhe entre o carregamento, o erro e o conteúdo segundo o estado do seu controller. | M05 a M09, M12, M13, M14, M16, M17 | RNF014 |
 | `FieldErrorText` | Motivo de rejeição junto do campo. | M02, M03, M06, M07 | RF004 |
-| `FormTextField` | Campo de texto de formulário com rótulo, texto de ajuda, motivo de erro junto do campo, tipo de teclado e, com `obscure`, o modo de palavra-passe (com a indicação do formato exigido, P05, nos ecrãs de registo e de alteração). Substitui o `PasswordField` da v02. | M02, M21 | RF001, RF002, RF003 |
-| `DropdownField` | Campo de seleção de uma opção de uma lista (localidade, disponibilidade), com rótulo, texto de sugestão e motivo de erro. | M02, M05, M07 | RF003, RF006 |
+
+
 | `SaveButton` | Botão de envio dos formulários: mostra um indicador de progresso e fica inativo enquanto há um pedido em curso (`loading`). | M01, M02, M05, M06, M07, M08, M21 | RF001 a RF012 |
-| `FormMessage` | Mensagem de erro (ou de informação) de um formulário ou de um ecrã; `showSuccess` mostra a confirmação numa `SnackBar`. | M01, M02, M05 a M09, M13, M21 | RF004 |
+| `FormMessage` | Mensagem de erro (`isError`) ou de informação de um formulário ou de um ecrã. | M01, M02, M05 a M09, M13, M14, M16, M21 | RF004 |
 | `PhotoGrid` | Grelha de fotografias da Empresa, cada uma com `RemoteImage`. | M12, M13 | RF013, RF017 |
 | `SkillChip` | Etiqueta de competência, removível com um toque (`onDeleted`); `custom` distingue as competências «Outro». | M07 | RF008 |
-| `OptionChips` | Seleção por etiquetas, genérica no tipo da opção: regimes de trabalho e tipos de contrato (várias opções). A disponibilidade usa `DropdownField`. | M08 | RF006, RF007 |
-| `ListFilterChip` (previsto, `I078`) | Filtro «Todas» ou «Não lidas» da lista de conversas. | M16 | RF027 |
-| `MatchTile` (previsto, `I078`) | Linha de um match, com o logótipo da Empresa, a vaga, a localidade, o estado da vaga («Vaga encerrada», a partir de `jobStatus`) e as ações «Ver contacto» e «Abrir conversa». | M14 | RF024 |
-| `ContactRow` (previsto, `I078`) | Linha de contacto (correio eletrónico ou telefone) que abre a aplicação externa. | M15 | RF025 |
-| `ConversationTile` (previsto, `I078`) | Linha de uma conversa, com a Empresa, a vaga, o contador de mensagens por ler e a indicação de conversa encerrada; atualizada pela consulta periódica da lista. | M16 | RF027, RF029, RF075 |
-| `MessageBubble` (previsto, `I078`) | Mensagem do histórico, alinhada pelo remetente, com a data e hora e a indicação de leitura nas mensagens enviadas pelo Candidato. | M17, M18 | RF028 |
-| `MessageComposer` (previsto, `I078`) | Caixa de escrita com o contador «n/1000» e o botão «Enviar»; desativada quando a conversa é só de consulta. | M17, M18 | RF026, RF075 |
+| `OptionChips` | Seleção por etiquetas, genérica no tipo da opção: regimes de trabalho e tipos de contrato (várias opções). A disponibilidade usa um campo de escolha numa lista, privado do ecrã. | M08 | RF006, RF007 |
+| `MatchTile` | Linha de um match, com o logótipo da Empresa, a vaga, a localidade, o estado da vaga («Vaga encerrada», a partir de `jobStatus`) e as ações «Ver contacto» e «Abrir conversa». | M14 | RF024 |
+| `ContactRow` | Linha de contacto (correio eletrónico ou telefone) que abre a aplicação externa. | M15 | RF025 |
+| `ConversationTile` | Linha de uma conversa, com a Empresa, a vaga, o contador de mensagens por ler e a indicação de conversa encerrada; atualizada pela consulta periódica da lista. | M16 | RF027, RF029, RF075 |
+| `MessageBubble` | Mensagem do histórico, alinhada pelo remetente, com a data e hora e a indicação de leitura nas mensagens enviadas pelo Candidato. | M17, M18 | RF028 |
+| `MessageComposer` | Caixa de escrita com o contador «n/1000» e o botão «Enviar»; desativada quando a conversa é só de consulta. | M17, M18 | RF026, RF075 |
+
+Os campos de texto, de palavra-passe e de escolha dos formulários são widgets privados de cada ecrã que os usa (por exemplo, `_TextInput` e `_LocationInput` em `RegisterScreen` e `_PasswordInput` em `ChangePasswordScreen`) e não têm classe própria neste modelo.
 
 Os botões «Simular: ...» do protótipo servem para navegar entre estados do protótipo estático; não fazem parte da aplicação e não têm classe (secção 12, DFM-13).
 
@@ -1863,8 +1957,8 @@ classDiagram
     class AppConfig {
         +String apiBaseUrl
         +Duration requestTimeout
-        +Duration uploadTimeout
         +fromEnvironment()$ AppConfig
+        +trimSlash(String url)$ String
     }
     class AppDependencies {
         +AppConfig config
@@ -1879,6 +1973,9 @@ classDiagram
         +AppLifecycleMonitor lifecycle
         +JobExplorationService jobExploration
         +ExternalLauncher launcher
+        +MatchService matches
+        +ConversationService conversationService
+        +ConversationsStore conversations
         +create(AppConfig config)$ AppDependencies
     }
     class ApiClient {
@@ -1901,9 +1998,12 @@ classDiagram
     AppDependencies "1" *-- "1" JobExplorationService
     AppDependencies "1" *-- "1" ProfileStore
     AppDependencies "1" *-- "1" ReferenceDataStore
+    AppDependencies "1" *-- "1" MatchService
+    AppDependencies "1" *-- "1" ConversationService
+    AppDependencies "1" *-- "1" ConversationsStore
 ```
 
-`AppDependencies.create` aceita, como parâmetros opcionais, o armazenamento da sessão, o relógio, o cliente HTTP, o seletor de ficheiros e o lançador de aplicações externas, para os testes substituírem o que toca no dispositivo. Em modo de depuração liga ao `HttpApiClient` um registo de cada pedido. Os serviços e stores da `I078` (`MatchService`, `ConversationService` e `ConversationsStore`) serão acrescentados aqui; cada `PollingLoop` será criado pelo store ou pelo controller que o usa, com o `AppLifecycleMonitor` único de `AppDependencies`. Na `main`, `AppDependencies` não tem `dispose`.
+`AppDependencies.create` aceita, como parâmetros opcionais, o armazenamento da sessão, o relógio, o cliente HTTP, o seletor de ficheiros e o lançador de aplicações externas, para os testes substituírem o que toca no dispositivo. Em modo de depuração liga ao `HttpApiClient` um registo de cada pedido. `AppDependencies` cria também o `MatchService`, o `ConversationService` e o `ConversationsStore`; cada `PollingLoop` é criado pelo store ou pelo controller que o usa (`ConversationsStore` e `ChatController`), com o `AppLifecycleMonitor` único de `AppDependencies`. O `MatchesController` e o `ChatController` não ficam em `AppDependencies`: são criados pelos ecrãs. Na `main`, `AppDependencies` não tem `dispose`.
 
 ### 10.2. Exemplo: manifestar interesse numa vaga
 
@@ -1970,7 +2070,7 @@ O Candidato toca em «Manifestar interesse» (ou desliza o cartão para a direit
 
 ### 11.1. Ecrãs do protótipo v02
 
-Os 20 ecrãs da secção A do protótipo v02 (`m3-prototipo-baixa-fidelidade-v02.pdf`), com os requisitos e os casos de uso que o próprio protótipo indica na legenda de cada ecrã. O M19 foi retirado no protótipo v02. As linhas M14 a M18 descrevem classes previstas para a `I078`, sem código na `main` (secção 2.4).
+Os 20 ecrãs da secção A do protótipo v02 (`m3-prototipo-baixa-fidelidade-v02.pdf`), com os requisitos e os casos de uso que o próprio protótipo indica na legenda de cada ecrã. O M19 foi retirado no protótipo v02. Todos os ecrãs estão implementados na `main` (secção 2.4).
 
 | Ecrã | Nome no protótipo | Classe de ecrã (estado) | Controller ou store | Serviço e operação | Modelos | Requisitos | UC |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -2030,7 +2130,7 @@ Cada operação dos seis controllers com serviço tem uma operação no serviço
 | `ReferenceListsController` | `ListLocations` | `GET /api/reference-lists/locations` (sem credencial) | 6.13.1 | `ReferenceListService.listLocations` | M02, M05 |
 | `ReferenceListsController` | `ListSkills` | `GET /api/reference-lists/skills` | 6.13.2 | `ReferenceListService.listSkills` | M07 |
 
-São 27 operações de serviço de 6 controllers, mais a obtenção de ficheiros do `FilesController`: 28 dos 72 endpoints da API v02. Não são usadas pelo Candidato: `CandidateProfileController.GetCv` (6.2.9; o protótipo v02 não tem ação para abrir o próprio CV, PC-11); `AuthController.CreateRecruiterAccount` (UC07); `ReferenceListsController.ListBenefits` (os benefícios da vaga chegam como texto em `JobDetailDto.benefits`) e as operações de acrescento e alteração de competências e benefícios, reservadas ao Administrador (UC20); e os controllers `CompanyController`, `JobsController`, `CandidateEvaluationController`, `AdminAccountsController`, `AdminCompaniesController` e `AdminIndicatorsController`, que são do Recrutador e do Administrador. Não há hubs nem eventos (API v02, secção 5). Na `main` estão implementadas 22 destas operações: `AuthService` (4), `CandidateProfileService` (10), `JobExplorationService` (6) e `ReferenceListService` (2); as 5 de `MatchService` e `ConversationService` e os pedidos da consulta periódica são da `I078`.
+São 27 operações de serviço de 6 controllers, mais a obtenção de ficheiros do `FilesController`: 28 dos 72 endpoints da API v02. Não são usadas pelo Candidato: `CandidateProfileController.GetCv` (6.2.9; o protótipo v02 não tem ação para abrir o próprio CV, PC-11); `AuthController.CreateRecruiterAccount` (UC07); `ReferenceListsController.ListBenefits` (os benefícios da vaga chegam como texto em `JobDetailDto.benefits`) e as operações de acrescento e alteração de competências e benefícios, reservadas ao Administrador (UC20); e os controllers `CompanyController`, `JobsController`, `CandidateEvaluationController`, `AdminAccountsController`, `AdminCompaniesController` e `AdminIndicatorsController`, que são do Recrutador e do Administrador. Não há hubs nem eventos (API v02, secção 5). Na `main` estão implementadas as 27: `AuthService` (4), `CandidateProfileService` (10), `JobExplorationService` (6), `ReferenceListService` (2), `MatchService` (1) e `ConversationService` (4), estas duas desde a `I078`; os pedidos da consulta periódica são `ConversationService.list` e `open` com `after`.
 
 Pedidos da consulta periódica (secção 7):
 
@@ -2066,7 +2166,7 @@ Pedidos da consulta periódica (secção 7):
 | `ApiErrorDto` | `ApiErrorDto` | Resposta de erro | Todos os serviços (`ApiRejection`) | M01 a M08, M17, M21 |
 | `FieldErrorDto` | `FieldErrorDto` | Resposta de erro | (dentro de `ApiErrorDto`) | M02, M03, M06 a M08, M21 |
 
-São 22 modelos, um por cada um dos 22 DTOs usados pelo Candidato; na `main` existem 18, e `MatchDto`, `ConversationSummaryDto`, `MessageDto` e `SendMessageRequest` são da `I078`. Os 18 DTOs restantes, dos 40 da documentação da API v02, não têm modelo, porque pertencem a casos de uso do Recrutador ou do Administrador:
+São 22 modelos, um por cada um dos 22 DTOs usados pelo Candidato, todos existentes na `main`. Os 18 DTOs restantes, dos 40 da documentação da API v02, não têm modelo, porque pertencem a casos de uso do Recrutador ou do Administrador:
 
 | Utilizador | DTOs sem modelo na aplicação |
 | --- | --- |
@@ -2074,7 +2174,7 @@ São 22 modelos, um por cada um dos 22 DTOs usados pelo Candidato; na `main` exi
 | Recrutador e Administrador (UC07, UC16) | `CompanyRegistrationDto` |
 | Administrador (UC16 a UC20) | `RejectCompanyRequest`, `PendingCompanyDto`, `CompanyAdminDto`, `PublishedJobAdminDto`, `AccountDto`, `CandidateAdminDto`, `IndicatorsDto`, `ReferenceItemRequest` |
 
-Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `ConversationStatus`, `ConversationCloseReason` e `JobStatus` têm os mesmos valores que no contrato da API v02 (secção 2.4). `AccountStatus`, `Industry` e `CompanyStatus` não aparecem em nenhum DTO que o Candidato receba ou envie; `MatchStatus`, `OperationType` e `ClientApp` são internas do backend; `FileKind` só aparece na rota dos URL de ficheiros, que a aplicação não constrói. Os DTOs `ProfileSkillDto`, `NotificationDto` e `NotificationListDto` da v01 não existem na API v02. Na `main` existem `UserType`, `Availability`, `WorkMode` e `ContractType`; `ConversationStatus`, `ConversationCloseReason` e `JobStatus` são previstas (`I078`).
+Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `ConversationStatus`, `ConversationCloseReason` e `JobStatus` têm os mesmos valores que no contrato da API v02 (secção 2.4). `AccountStatus`, `Industry` e `CompanyStatus` não aparecem em nenhum DTO que o Candidato receba ou envie; `MatchStatus`, `OperationType` e `ClientApp` são internas do backend; `FileKind` só aparece na rota dos URL de ficheiros, que a aplicação não constrói. Os DTOs `ProfileSkillDto`, `NotificationDto` e `NotificationListDto` da v01 não existem na API v02.
 
 ### 11.4. Arquitetura e Regulamento Interno
 
@@ -2083,7 +2183,7 @@ Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `Conversa
 | Arquitetura, 2.1 e 2.3 | A aplicação móvel é o ponto de acesso exclusivo do Candidato. | `SessionManager.start` (rejeita outros tipos de conta), `AuthGate`, as 16 classes de ecrã |
 | Arquitetura, 2.3 | Funcionalidades da aplicação móvel: F001, F002, F004, F006, F008 e F010. | F001: M01, M20, M21; F002: M02 a M04; F004: M05 a M08; F006: M09 a M12; F008: M14, M15; F010: M16 a M18 (a página da Empresa, M13, é da F003, ver PC-08) |
 | Arquitetura, 2.4 | Aplicação móvel → API REST, em HTTPS e JSON, com o token JWT em cada pedido, incluindo a consulta periódica das mensagens (3 s). | `ApiClient`, `HttpApiClient`, `CredentialProvider`, `SessionManager`, os 6 serviços |
-| Arquitetura, 2.4 e AD-02 | Mensagens entregues por consulta periódica à API REST, de 3 em 3 segundos, enquanto a conversa ou a lista de conversas está aberta; sem ligação persistente (D-08 retirada). | `PollingLoop` (`defaultInterval`, 3 s), `AppLifecycleMonitor`; na `I078`, `ConversationsStore.watchList` e `ChatController.poll` |
+| Arquitetura, 2.4 e AD-02 | Mensagens entregues por consulta periódica à API REST, de 3 em 3 segundos, enquanto a conversa ou a lista de conversas está aberta; sem ligação persistente (D-08 retirada). | `PollingLoop` (`defaultInterval`, 3 s), `AppLifecycleMonitor`, `ConversationsStore.watchList` e `ChatController.poll` |
 | Arquitetura, 2.5; DA v04, limites transversais | Sem mecanismo de notificações, sem notificações nativas do sistema operativo, nem envio por correio eletrónico ou SMS. | Nenhuma classe de notificação nem de envio. `ExternalLauncher` só abre aplicações externas por iniciativa do Candidato. |
 | Arquitetura, 2.5 | Sem serviços externos de mapas ou de geolocalização. | A distância chega calculada em `JobCardDto.distanceKm`; não há classes de localização. |
 | Arquitetura, 2.6 | Cliente–servidor com interface REST única; autenticação sem estado de sessão no servidor. | `ApiClient` e os 6 serviços; `CredentialProvider.accessToken`; `AuthenticationFailure` |
@@ -2125,18 +2225,18 @@ Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `Conversa
 | RF021 | `ExplorationController.refreshQuota` e `onForeground`, `QuotaDto` (reposição consultada, sem notificação) |
 | RF022 | `QuotaIndicator`, `ExplorationController.quota`, `QuotaDto.available` e `total`, `JobExplorationService.getQuota` |
 | RF023 | `PreferencesScreen` aberto a partir de `ExplorationScreen`, `ProfileStore.updatePreferences`, `ExplorationController.load` |
-| RF024 | `MatchesScreen`, `MatchesController`, `MatchService.list`, `MatchTile`, `MatchDto.jobStatus` (previsto, `I078`) |
-| RF025 | `MatchContactScreen`, `MatchDto.contactEmail` e `contactPhone`, `ContactRow`, `ExternalLauncher` (previsto, `I078`) |
-| RF026 | `ChatController.send`, `MessageComposer`, `InputRules.isValidMessage`, `ConversationService.send`, `SendMessageRequest` (previsto, `I078`) |
-| RF027 | `ConversationsScreen`, `ConversationsStore`, `ConversationService.list`, `ConversationTile`, `HomeShell` (previsto, `I078`) |
-| RF028 | `ChatScreen`, `ChatController.open`, `ConversationService.open`, `MessageBubble`, `MessageDto` (previsto, `I078`) |
-| RF029 | `ChatController.poll`, `ConversationsStore.watchList`, `PollingLoop` (`defaultInterval`, 3 s), `AppLifecycleMonitor`, `ConversationService.open` com `after` e `list` (`PollingLoop` e `AppLifecycleMonitor` existem; o resto é da `I078`) |
-| RF030 | `ChatController.close`, `ConversationService.close`, `ConversationsStore.load` (motivo e parte que encerrou) (previsto, `I078`) |
-| RF068 | `ConversationsStore` (a conversa do novo match aparece na lista), `MatchesController` («Abrir conversa») (previsto, `I078`) |
-| RF070 | `ChatScreen` só aberto a partir de um match (M14, M15, M16); o servidor rejeita o envio sem match (ERR-37), apresentado como `ApiRejection` (previsto, `I078`) |
-| RF075 | `ChatController.isReadOnly` e `closedByMe`, `ConversationsStore` (consulta periódica da lista), `MessageComposer.enabled`, `ConversationStatus`, `ConversationCloseReason`, `ConversationSummaryDto.closedBy` (previsto, `I078`) |
+| RF024 | `MatchesScreen`, `MatchesController`, `MatchService.list`, `MatchTile`, `MatchDto.jobStatus` e `isJobClosed` |
+| RF025 | `MatchContactScreen`, `MatchDto.contactEmail` e `contactPhone`, `ContactRow`, `ExternalLauncher` |
+| RF026 | `ChatController.send`, `MessageComposer`, `InputRules.isValidMessage`, `ConversationService.send`, `SendMessageRequest` |
+| RF027 | `ConversationsScreen`, `ConversationsStore`, `ConversationService.list`, `ConversationTile`, `HomeShell` (contador no separador) |
+| RF028 | `ChatScreen`, `ChatController.open`, `ConversationService.open`, `MessageBubble`, `MessageDto` |
+| RF029 | `ChatController.poll`, `ConversationsStore.watchList`, `PollingLoop` (`defaultInterval`, 3 s), `AppLifecycleMonitor`, `ConversationService.open` com `after` e `list` |
+| RF030 | `ChatController.close`, `ConversationService.close`, `ConversationsStore.replace` e `find` (motivo e parte que encerrou) |
+| RF068 | `ConversationsStore` (a conversa do novo match aparece na lista), `MatchesController` («Abrir conversa») |
+| RF070 | `ChatScreen` só aberto a partir de um match (M14, M15, M16); o servidor rejeita o envio sem match (ERR-37), apresentado como `ApiRejection` |
+| RF075 | `ChatController.isReadOnly` e `closedByMe`, `ConversationsStore` (consulta periódica da lista), `MessageComposer.enabled`, `ConversationStatus`, `ConversationCloseReason`, `ConversationSummaryDto.closedBy` |
 | RF105 | `AccountScreen`, `AccountController.signOut`, `AuthService.logout`, `SessionManager.end`, `SessionScopedStore.reset` |
-| RF108 | `ChatController.open` e `poll` (o servidor marca as mensagens como lidas), `ConversationsStore.markOpened` (previsto, `I078`) |
+| RF108 | `ChatController.open` e `poll` (o servidor marca as mensagens como lidas), `ConversationsStore.replace` (o resumo seguinte já traz o contador a zero) |
 | RNF002 | `ExplorationController` (pede o cartão seguinte logo que o servidor confirma a resposta, PC-06) |
 | RNF005 | `SessionManager.accessToken` e `expire`, `AuthGate` |
 | RNF010 | `JobCardView` (três botões e os gestos de deslizar, cada ação com uma só interação) |
@@ -2159,18 +2259,18 @@ Enumerações: `UserType`, `Availability`, `WorkMode`, `ContractType`, `Conversa
 | DFM-08 | A validação local só dá o motivo ao Candidato mais depressa; o servidor aplica as mesmas regras e decide. Os motivos do servidor, por campo, prevalecem. | RNF008 e RNF016: o servidor valida 100% das regras, incluindo os pedidos diretos e o conteúdo real dos ficheiros. |
 | DFM-09 | `RemoteImage` envia a credencial de sessão ao pedir imagens. | Os URL de fotografias e logótipos dos DTOs são servidos por `GET /api/files/{kind}/{fileName}` depois de verificar a autorização (API v02, 2.6 e 6.9.1; PC-10 resolvido). |
 | DFM-10 | Navegação por barra inferior (`NavigationBar`) com os quatro separadores do protótipo v02; ações do cartão como botões e gestos. | RNF011 (3 interações para cada área) e RNF010 (uma interação por ação sobre o cartão). |
-| DFM-11 | `ChatController` pede o histórico completo ao abrir a conversa e, depois, só as mensagens posteriores à última recebida (`after` = `sentAt` dessa mensagem), juntando-as por `messageId` (revista na v02). | A API v02 identifica a conversa pelo `matchId` e devolve só as mensagens novas (6.8.2, DAPI-14), o que reduz cada consulta a uma lista normalmente vazia (L-07). Usar o `sentAt` do servidor evita perder mensagens por diferença de relógios; juntar por `messageId` evita duplicar a mensagem que o próprio Candidato enviou. |
+| DFM-11 | `ChatController` pede o histórico completo ao abrir a conversa e, depois, só as mensagens a partir da última recebida (`after`, o `sentAt` de uma mensagem recebida do servidor; a regra completa está na secção 7, regra 3), juntando-as por `messageId` (revista na v02). | A API v02 identifica a conversa pelo `matchId` e devolve só as mensagens novas (6.8.2, DAPI-14), o que reduz cada consulta a uma lista normalmente vazia (L-07). Usar o `sentAt` do servidor evita perder mensagens por diferença de relógios; juntar por `messageId` evita duplicar a mensagem que o próprio Candidato enviou e atualiza o estado de leitura das enviadas. |
 | DFM-12 | Os ecrãs M03, M10, M11 e M18 são estados de `RegisterScreen`, `ExplorationScreen` e `ChatScreen`, e não classes. | São variantes do mesmo ecrã que dependem do estado do controller (erros de campo, quota esgotada, sem vagas, conversa só de consulta). |
 | DFM-13 | Os botões «Simular: ...» do protótipo não fazem parte da aplicação. | Servem para navegar entre estados do protótipo estático. |
 | DFM-14 | O registo inicia a sessão com a `LoginResponse` que o servidor devolve. | O backend devolve uma `LoginResponse` em `RegisterCandidate`; o ecrã M04 («A sua conta está ativa» e «Começar a explorar») segue-se sem novo início de sessão (RF005). |
 | DFM-15 | A consulta periódica só corre com a aplicação em primeiro plano (`AppLifecycleMonitor`); ao voltar ao primeiro plano, a consulta é feita logo, e a área de exploração volta a pedir a quota e o cartão. | DA v04, F010 (fora do âmbito «a atualização das conversas quando a aplicação não está aberta») e P17 («com sessão iniciada», «enquanto a conversa ou a lista de conversas está aberta»); poupa bateria e rede. A leitura imediata no regresso repõe o que mudou entretanto, incluindo a reposição da quota (RF021). |
-| DFM-16 | Fora de M16 e de M17/M18, o contador do separador «Conversas» é atualizado por uma leitura da lista no início de sessão, ao escolher os separadores «Matches» ou «Conversas» e no regresso ao primeiro plano, e não por consulta periódica. | O P17 só prevê a consulta periódica com a conversa ou a lista de conversas aberta. Uma leitura nesses momentos mantém o contador útil sem pedidos de 3 em 3 segundos em toda a aplicação. |
-| DFM-17 | Os controllers e os formulários estendem `SafeChangeNotifier`, e os formulários com erros por campo estendem `FormController` (estado de carregamento, motivos por campo e envio comuns). `LoginController` fica no `ChangeNotifier` simples, porque não tem erros por campo. | Evita repetir o tratamento de `ApiRejection`, `ApiException` e do pedido em curso em cada formulário, e evita notificações depois de o ecrã fechar (relatório da `I135`). |
-| DFM-18 | Os stores partilhados reutilizam o pedido em curso (`ProfileStore`, `ReferenceDataStore`) e descartam a resposta de uma geração anterior ao `reset()` (`ProfileStore`); `ExplorationController` numera cada pedido (`_generation`) com a mesma finalidade. | Dois ecrãs que pedem o mesmo dado não fazem dois pedidos, e a resposta de uma sessão ou de um cartão anterior não substitui o estado atual. |
-| DFM-19 | As enumerações do contrato usam o mixin `WireValue` (valor em texto da API) e a extensão `byWire`; os textos apresentados ao Candidato ficam em `label`. | Uma só conversão, comum a todas as enumerações, e valores desconhecidos tratados como `UnexpectedFailure` em vez de silenciosos. |
+| DFM-16 | Fora de M16 e de M17/M18, o contador do separador «Conversas» é atualizado por uma leitura da lista ao entrar em `HomeShell` (início de sessão), ao escolher o separador «Matches» e no regresso ao primeiro plano, e não por consulta periódica. | O P17 só prevê a consulta periódica com a conversa ou a lista de conversas aberta. Uma leitura nesses momentos mantém o contador útil sem pedidos de 3 em 3 segundos em toda a aplicação. |
+| DFM-17 | Cada controller e cada store estende o `ChangeNotifier` (diretamente ou, nos stores com dados do Candidato, por `SessionScopedStore`). Os formulários guardam `errors`, `status` e `errorMessage` em cada classe, e os controllers que podem receber uma resposta depois de o ecrã fechar têm a guarda `_disposed` (secção 8.6). | É a estrutura do código da `main`. A repetição desta lógica pelos controllers é conhecida, e a refatoração `I135` (Sprint 10) prevê reuni-la em classes comuns (secção 17). |
+| DFM-18 | `ProfileStore` e `ReferenceDataStore` não fazem novo pedido quando o dado já está carregado ou a ser pedido; `ProfileStore` descarta a resposta de uma geração anterior ao `reset()`; `ExplorationController`, `MatchesController` e `ConversationsStore` numeram os pedidos (`_generation`) com a mesma finalidade. | Evita pedidos repetidos e impede que a resposta de uma sessão ou de um pedido anterior substitua o estado atual. |
+| DFM-19 | Cada enumeração do contrato tem o atributo `wire` (valor em texto da API), `toWire()` e a fábrica `fromWire`; os textos apresentados ao Candidato ficam em `label`, nas enumerações que os têm. | Uma conversão por enumeração, com o nome do valor da API; um valor desconhecido lança `FormatException`, que `readModel` converte em `UnexpectedFailure` em vez de passar em silêncio. |
 | DFM-20 | `FileSelection` guarda os primeiros 8 bytes do ficheiro e `InputRules` confirma o formato pela extensão e pela assinatura antes do envio. | O Candidato sabe o motivo antes de enviar; o servidor continua a verificar o formato real (RNF016). |
 | DFM-21 | A expiração da sessão é verificada quando a credencial é pedida (`SessionManager.accessToken`), sem temporizador. | Evita um temporizador por sessão; a credencial expirada nunca é enviada. A consequência é descrita na secção 14. |
-| DFM-22 | Na `main`, `HomeShell` tem os quatro separadores e mostra uma área provisória em «Matches» e «Conversas» até à `I078`. | Mantém a navegação do protótipo v02 e o RNF011 sem ecrãs ainda por codificar. |
+| DFM-22 | `HomeShell` tem os quatro separadores num `IndexedStack`, com `MatchesScreen` e `ConversationsScreen` a receberem `active`. | Mantém os separadores montados, para não perder edições do perfil, e dá à consulta periódica da lista a indicação de que o separador «Conversas» está à vista. |
 
 ---
 
@@ -2205,12 +2305,12 @@ Ficam por resolver os pontos PC-06, PC-08 e PC-09 e a parte por resolver de PC-0
 | Os campos de DTO acrescentados pela `I104` constam da documentação da API v02, mas ainda não do modelo de classes do backend v02 (API v02, L-08). | Se o backend de `m3` não os implementar, os elementos que deles dependem (total da quota, estado da vaga do match, parte que encerrou a conversa, código de erro) ficam sem dados; a divergência é tratada como defeito do backend, porque prevalece a documentação da API (DAPI-11). |
 | Os pontos de coerência PC-06, PC-08 e PC-09 e partes de PC-03 e PC-04 continuam por resolver (secção 13). | O comportamento implementado segue este modelo e os requisitos nesses pontos. |
 | A mensagem nova pode demorar até 3 segundos mais a duração do pedido a aparecer, e a mudança de estado de uma conversa só chega na consulta seguinte (API v02, L-04). | Dentro do P17 (5 segundos). Fora de M16 e de M17/M18, o contador do separador «Conversas» só é atualizado nos momentos da DFM-16. |
-| A consulta das mensagens com `after` só devolve mensagens novas, sem a indicação de leitura das mensagens já recebidas. | A indicação «Lida» das mensagens enviadas pelo Candidato só se atualiza quando a conversa é aberta de novo, com o histórico completo. O RF028 (histórico com a indicação de leitura) é cumprido na abertura da conversa. |
+| A consulta das mensagens com `after` repete as mensagens enviadas pelo Candidato que ainda não têm leitura, para atualizar a indicação «Lida». | Enquanto o Recrutador não lê uma mensagem, cada consulta devolve outra vez essa mensagem e as seguintes; o histórico é juntado por `messageId`, sem duplicados (secção 7, regra 3). O RF028 (histórico com a indicação de leitura) é cumprido na abertura da conversa e nas consultas seguintes. |
 | Com a conversa aberta, cada consulta faz dois pedidos (mensagens e lista), para detetar a mudança de estado da conversa. | Carga adequada aos dados de demonstração (P18; API v02, L-07); a arquitetura v02 (secção 3.6, ponto 1) manda verificar o RNF001 com as consultas periódicas no ambiente de demonstração. |
 | Algumas ações do protótipo gravam vários elementos em pedidos separados: M06 (fotografia, CV e hiperligações) e M07 (competências da lista e «Outro»). A API não tem uma operação única. | A mensagem «Os dados não foram guardados» de M06 pode não ser verdadeira se um pedido falhar depois de outro ter sido aceite. Mitigação: a validação local de todos os elementos antes do primeiro pedido e a recarga do perfil depois de qualquer falha, para mostrar o que ficou gravado. |
 | Fora do âmbito: notificações (área, contador e notificações nativas do sistema operativo), atualização das conversas com a aplicação fechada ou em segundo plano, funcionamento sem ligação à rede e serviços externos de mapas (DA v04, F010 e limites transversais). | A aplicação só mostra mensagens novas com a aplicação aberta, em primeiro plano e com a sessão iniciada; a quota reposta e os novos matches são vistos quando o Candidato abre a área correspondente. |
-| Os ecrãs M14 a M18 e as classes de matches e de conversas (secção 2.4) não existem no código da `main`. | O modelo descreve-as como previstas para a `I078`; até lá, os separadores «Matches» e «Conversas» mostram uma área provisória, e o RF024 a RF030, o RF068, o RF070, o RF075 e o RF108 não são cumpridos pela aplicação. |
-| `PollingLoop` e `AppLifecycleMonitor` não têm consumidores no código. | A consulta periódica (P17) só é verificável quando o `ConversationsStore` e o `ChatController` existirem. |
+| O ecrã M16 da `main` mostra a lista de conversas com o contador de cada uma e o do separador «Conversas», sem o filtro «Todas» / «Não lidas» nem o cabeçalho «mensagens por ler» que o desenho anterior previa. | O RF027 só exige o número de mensagens por ler em cada conversa, que a aplicação apresenta; o filtro não é requisito. |
+| A refatoração `I135` (Sprint 10) não está na `main`. | Este modelo descreve o código da `main`; as classes que a `I135` acrescenta ou retira constam só da secção 17, como previsão, e o modelo terá de ser atualizado quando a `I135` for integrada. |
 | A expiração da sessão só é detetada quando a credencial é pedida; não há temporizador. | Uma sessão expirada com a aplicação parada num ecrã sem pedidos só termina no pedido seguinte; nenhum pedido leva a credencial expirada. |
 | O ecrã M20 da `main` só tem «Alterar palavra-passe» e «Terminar sessão». | O nome, o correio eletrónico e a localidade que o protótipo v02 mostra em M20 não são apresentados; o `AccountController` não os lê do `ProfileStore`. |
 | As versões dos pacotes de terceiros (cliente HTTP, armazenamento seguro, seletor de ficheiros e abertura de aplicações externas) não constam deste modelo. | Ficam no `pubspec.yaml` e no `pubspec.lock` da configuração base do repositório; cada pacote fica atrás de uma interface. |
@@ -2224,17 +2324,17 @@ Ficam por resolver os pontos PC-06, PC-08 e PC-09 e a parte por resolver de PC-0
 
 | Verificação | Resultado |
 | --- | --- |
-| Ecrãs da secção A do protótipo v02 | 20 de 20 desenhados (M01 a M18, M20 e M21): 16 classes de ecrã e 4 estados de ecrã (M03, M10, M11 e M18). Implementados na `main`: 15 ecrãs (M01 a M13, M20 e M21) em 12 classes de ecrã; M14 a M18 (4 classes) são da `I078`. Secção 11.1. |
-| Controllers da API v02 usados pelo Candidato | 6 de 6 com serviço desenhado, e 27 operações de serviço; mais o `FilesController` através do `RemoteImage`: 28 dos 72 endpoints. Implementados: 4 serviços e 22 operações; `MatchService` e `ConversationService` (5 operações) são da `I078`. Secção 11.2. |
-| Hubs, eventos e notificações | Nenhum (DA v04). Consulta periódica com 2 pedidos repetidos: 6.8.1 e 6.8.2 com `after`; `PollingLoop` implementado, sem consumidores até à `I078`. Secções 7 e 11.2. |
-| DTOs | 22 modelos desenhados, um por cada um dos 22 DTOs que o Candidato usa (18 implementados e 4 da `I078`); os outros 18 DTOs da API v02 (40 no total) não têm modelo e estão justificados. Secção 11.3. |
+| Ecrãs da secção A do protótipo v02 | 20 de 20 desenhados (M01 a M18, M20 e M21): 16 classes de ecrã e 4 estados de ecrã (M03, M10, M11 e M18); todos implementados na `main`. Secção 11.1. |
+| Controllers da API v02 usados pelo Candidato | 6 de 6 com serviço, e 27 operações de serviço, todas implementadas na `main`; mais o `FilesController` através do `RemoteImage`: 28 dos 72 endpoints. Secção 11.2. |
+| Hubs, eventos e notificações | Nenhum (DA v04). Consulta periódica com 2 pedidos repetidos: 6.8.1 e 6.8.2 com `after`, feitos pelo `ConversationsStore` e pelo `ChatController`. Secções 7 e 11.2. |
+| DTOs | 22 modelos, um por cada um dos 22 DTOs que o Candidato usa, todos implementados; os outros 18 DTOs da API v02 (40 no total) não têm modelo e estão justificados. Secção 11.3. |
 | Enumerações | 7 enumerações do contrato espelhadas. Secção 3.3. |
 | Casos de uso | UC01 a UC06, UC13 e UC14 (o UC15 foi retirado). Secção 11.1. |
 | Requisitos | 35 requisitos funcionais com componente Frontend mobile (RF001 a RF030, RF068, RF070, RF075, RF105 e RF108) e 5 não funcionais (RNF002, RNF005, RNF010, RNF011 e RNF014). Secção 11.5. |
 | Requisitos descontinuados ainda referidos como em vigor | Nenhum (RF031 a RF036 e RF110 retirados das tabelas). |
 | Pontos de coerência | 12 (PC-01 a PC-12): 7 resolvidos ou sem aplicação (PC-01, PC-02, PC-05, PC-07, PC-10, PC-11 e PC-12), 2 resolvidos em parte (PC-03 e PC-04) e 3 por resolver (PC-06, PC-08 e PC-09). Sem pontos novos na v03. Secção 13. |
 | Diagramas Mermaid | 23: 20 diagramas de classes, 2 fluxogramas e 1 diagrama de sequência. |
-| Classes do módulo | 137: 112 implementadas na `main` e 25 previstas para a `I078`; 133 desenhadas nos diagramas e 4 implementações `Http...` descritas na secção 5. As classes privadas (`_ReferenceList`, `_PendingArea`) e as funções (`failureMessage`, `formatEuros`, `trimTrailingSlashes`, `readObject`) não contam. |
+| Classes do módulo | 128, todas implementadas na `main` (commit `7eac590`); 124 desenhadas nos diagramas e 4 implementações `Http...` descritas na secção 5. As classes privadas (por exemplo, `_PasswordInput`) e as funções (`failureMessage`, `formatEuros`, `trimTrailingSlashes`, `readObject`) não contam. |
 
 ### 15.2. Índice de classes
 
@@ -2242,20 +2342,22 @@ Ficam por resolver os pontos PC-06, PC-08 e PC-09 e a parte por resolver de PC-0
 
 | Camada ou grupo | Nº | Classes |
 | --- | --- | --- |
-| Ecrãs (16 classes de ecrã) | 16 | `LoginScreen`, `RegisterScreen`, `RegisterSuccessScreen`, `ProfileScreen`, `ProfileFilesScreen`, `SkillsScreen`, `PreferencesScreen`, `ExplorationScreen`, `JobDetailScreen`, `CompanyPageScreen`, `AccountScreen`, `ChangePasswordScreen`; previstas (`I078`): `MatchesScreen`, `MatchContactScreen`, `ConversationsScreen`, `ChatScreen` |
+| Ecrãs (16 classes de ecrã) | 16 | `LoginScreen`, `RegisterScreen`, `RegisterSuccessScreen`, `ProfileScreen`, `ProfileFilesScreen`, `SkillsScreen`, `PreferencesScreen`, `ExplorationScreen`, `JobDetailScreen`, `CompanyPageScreen`, `AccountScreen`, `ChangePasswordScreen`, `MatchesScreen`, `MatchContactScreen`, `ConversationsScreen`, `ChatScreen` |
 | Estrutura da aplicação | 6 | `KatchApp`, `AppScope`, `AuthGate`, `HomeShell`, `AppDependencies`, `AppConfig` |
-| Widgets | 24 | `KatchScaffold`, `ConnectionBanner`, `RemoteImage`, `JobCardView`, `JobSummary`, `PhotoGrid`, `QuotaIndicator`, `QuotaBlockedNotice`, `EmptyStateView`, `LoadStateView`, `LoadStatusView`, `FieldErrorText`, `FormTextField`, `DropdownField`, `SaveButton`, `FormMessage`, `SkillChip`, `OptionChips`; previstos (`I078`): `ListFilterChip`, `MatchTile`, `ConversationTile`, `MessageBubble`, `MessageComposer`, `ContactRow` |
-| Estado — controllers | 13 | `LoginController`, `RegisterController`, `ChangePasswordController`, `AccountController`, `ProfileFormController`, `ProfileFilesController`, `SkillsController`, `PreferencesController`, `ExplorationController`, `JobDetailController`, `CompanyPageController`; previstos (`I078`): `MatchesController`, `ChatController` |
-| Estado — bases, stores e enumerações de estado | 11 | `SafeChangeNotifier`, `FormController`, `SessionScopedStore`, `ProfileStore`, `ReferenceDataStore`, `LoadStatus`, `ExplorationStatus`, `RegistrationStep`, `LinkDraft`; previstos (`I078`): `ConversationsStore`, `ListFilter` |
-| Serviços (interfaces e implementações Http) | 12 | `AuthService`, `CandidateProfileService`, `JobExplorationService`, `ReferenceListService`, `HttpAuthService`, `HttpJobExplorationService`, `HttpCandidateProfileService`, `HttpReferenceListService`; previstos (`I078`): `MatchService`, `ConversationService`, `HttpMatchService`, `HttpConversationService` |
+| Widgets | 19 | `ConnectionBanner`, `RemoteImage`, `JobCardView`, `JobSummary`, `PhotoGrid`, `QuotaIndicator`, `QuotaBlockedNotice`, `EmptyStateView`, `LoadStateView`, `FieldErrorText`, `SaveButton`, `FormMessage`, `SkillChip`, `OptionChips`, `MatchTile`, `ConversationTile`, `MessageBubble`, `MessageComposer`, `ContactRow` |
+| Estado — controllers | 13 | `LoginController`, `RegisterController`, `ChangePasswordController`, `AccountController`, `ProfileFormController`, `ProfileFilesController`, `SkillsController`, `PreferencesController`, `ExplorationController`, `JobDetailController`, `CompanyPageController`, `MatchesController`, `ChatController` |
+| Estado — stores e enumerações de estado | 8 | `SessionScopedStore`, `ProfileStore`, `ReferenceDataStore`, `ConversationsStore`, `LoadStatus`, `ExplorationStatus`, `RegistrationStep`, `LinkDraft` |
+| Serviços (interfaces e implementações Http) | 12 | `AuthService`, `CandidateProfileService`, `JobExplorationService`, `ReferenceListService`, `MatchService`, `ConversationService`, `HttpAuthService`, `HttpJobExplorationService`, `HttpCandidateProfileService`, `HttpReferenceListService`, `HttpMatchService`, `HttpConversationService` |
 | Consulta periódica | 2 | `PollingLoop`, `AppLifecycleMonitor` |
 | Sessão | 5 | `Session`, `SessionStatus`, `SessionStorage`, `SecureSessionStorage`, `SessionManager` |
 | Núcleo | 16 | `ApiClient`, `HttpApiClient`, `CredentialProvider`, `ConnectionMonitor`, `ApiException`, `ApiRejection`, `AuthenticationFailure`, `ConnectionFailure`, `UnexpectedFailure`, `Clock`, `SystemClock`, `InputRules`, `DeviceFilePicker`, `PlatformFilePicker`, `ExternalLauncher`, `PlatformExternalLauncher` |
-| Modelos — espelho dos DTOs (22) | 22 | `RegisterCandidateRequest`, `LoginRequest`, `LoginResponse`, `ChangePasswordRequest`, `CandidateProfileDto`, `CustomSkillDto`, `UpdateCandidateProfileRequest`, `SearchPreferencesDto`, `AddSkillRequest`, `AddCustomSkillRequest`, `SetLinksRequest`, `JobCardDto`, `JobDetailDto`, `CompanyPageDto`, `QuotaDto`, `ReferenceItemDto`, `ApiErrorDto`, `FieldErrorDto`; previstos (`I078`): `MatchDto`, `ConversationSummaryDto`, `MessageDto`, `SendMessageRequest` |
-| Modelos — enumerações (7) e auxiliares | 10 | `UserType`, `Availability`, `WorkMode`, `ContractType`, `FileSelection`, `FieldErrors`, `WireValue`; previstas (`I078`): `ConversationStatus`, `ConversationCloseReason`, `JobStatus` |
-| **Total** | **137** | 112 implementadas e 25 previstas |
+| Modelos — espelho dos DTOs (22) | 22 | `RegisterCandidateRequest`, `LoginRequest`, `LoginResponse`, `ChangePasswordRequest`, `CandidateProfileDto`, `CustomSkillDto`, `UpdateCandidateProfileRequest`, `SearchPreferencesDto`, `AddSkillRequest`, `AddCustomSkillRequest`, `SetLinksRequest`, `JobCardDto`, `JobDetailDto`, `CompanyPageDto`, `QuotaDto`, `ReferenceItemDto`, `ApiErrorDto`, `FieldErrorDto`, `MatchDto`, `ConversationSummaryDto`, `MessageDto`, `SendMessageRequest` |
+| Modelos — enumerações (7) e auxiliares | 9 | `UserType`, `Availability`, `WorkMode`, `ContractType`, `ConversationStatus`, `ConversationCloseReason`, `JobStatus`, `FileSelection`, `FieldErrors` |
+| **Total** | **128** | Todas implementadas na `main` |
 
-Classes da v02 retiradas na v03 (6): `AppRoutes`, `KatchBottomBar`, `PasswordField`, `PollingScheduler`, `TimerPollingScheduler` e `PollingConfig`.
+Classes da v02 retiradas na v03 (8): `AppRoutes`, `KatchBottomBar`, `PasswordField`, `PollingScheduler`, `TimerPollingScheduler`, `PollingConfig`, `ListFilter` e `ListFilterChip` (o filtro «Todas» / «Não lidas» não foi implementado na `I078`).
+
+Classes acrescentadas na v03 (5 desenhadas e 4 implementações `Http...` descritas): `SaveButton`, `FormMessage`, `PhotoGrid`, `JobSummary`, `LinkDraft`, `HttpCandidateProfileService`, `HttpReferenceListService`, `HttpMatchService` e `HttpConversationService`.
 
 Classes da v01 retiradas (18): `NotificationsScreen`, `NotificationTile`, `NotificationsStore`, `NotificationService`, `HttpNotificationService`, `RealtimeClient`, `SignalRRealtimeClient`, `HubChannel`, `ReconnectPolicy`, `RealtimeCoordinator`, `RealtimeState`, `NotificationReceivedEvent`, `ProfileSkillDto`, `NotificationDto`, `NotificationListDto`, `NotificationType`, `NotificationTarget` e `NotificationTargetKind`. Classes acrescentadas na v02 (8) (na v03, `PollingScheduler`, `TimerPollingScheduler` e `PollingConfig` foram retiradas): `PollingScheduler`, `TimerPollingScheduler`, `PollingConfig`, `PollingLoop`, `AppLifecycleMonitor`, `CustomSkillDto`, `AddCustomSkillRequest` e `JobStatus`.
 
@@ -2265,31 +2367,35 @@ Classes da v01 retiradas (18): `NotificationsScreen`, `NotificationTile`, `Notif
 
 ### 16.1. Alterações da v03 face à v02
 
+O modelo da v03 descreve o código da `main` no commit `7eac590`, que inclui a `I078` e não inclui a `I135`.
+
 | # | Secção | Alteração na v03 | Fundamento |
 | --- | --- | --- | --- |
-| 1 | 1 | Identificação na v03, Issue `I137`, responsáveis, documentos de origem (relatório e código da `I135`) e histórico de versões. | `I137` |
-| 2 | 2.1, 2.2 | Camada Consulta periódica sem agendador; conversão das enumerações por `WireValue`; convenção « · I078» para as classes previstas. | Relatório da `I135`; código |
-| 3 | 2.3 | Estrutura de pastas igual à do código: `state/` e `core/` sem subpastas, sem `AppRoutes`, `polling/` com dois ficheiros e `screens/` sem `matches/` e `conversations/`. | Código da `main` (R-043) |
-| 4 | 2.4 | Nova secção «Estado de implementação»: o que existe na `main` e o que é da `I078`. | Código da `main` |
-| 5 | 3.2, 3.3, 3.4 | `FileSelection` com `path` opcional, `bytes`, `header`, `extension` e `fromBytes`, sem `mimeType`; `FieldErrors` com `fromApi`, `reasonFor`, `set` e `remove`, sem `hasAny`; `WireValue`; modelos de matches e conversas assinalados como previstos. | Código; relatório da `I135` |
-| 6 | 4.1 | `CredentialProvider` sem `authHeaders`; `HttpApiClient` com `uploadTimeout` (60 s), `X-Client-App` em todos os pedidos, `upload` e registo em depuração; `ApiRejection` só com `error`; `UnexpectedFailure` também para corpo de erro fora do modelo; classificação das operações reservadas pelo caminho e pela credencial. | Código; relatório da `I135` |
-| 7 | 4.2 | `InputRules` com `linkError`, `isValidSalary`, `isBlank`, `textTooLongReason`, limites e motivos, e validação do formato por assinatura; sem `isValidLink`; `isValidMessage` assinalada como prevista; `ExternalLauncher` só com `openUrl`; `trimTrailingSlashes`. | Código |
-| 8 | 5 | Quatro serviços implementados e dois previstos; `response_reader`; `X-Client-App` no cliente e não só no início de sessão. | Código |
-| 9 | 6 | `SessionManager` sem temporizador de expiração: `accessToken` verifica a expiração; `restore` trata falhas do armazenamento; sem `authHeaders`. | Código |
-| 10 | 7 | `PollingScheduler`, `TimerPollingScheduler` e `PollingConfig` retirados; `PollingLoop` com `defaultInterval` e `interval`, sem observar o ciclo de vida; consumidores assinalados como previstos. | Código; relatório da `I135` |
-| 11 | 8.1 | `SessionScopedStore` sem estado próprio; `ProfileStore` com pedido partilhado e geração; `ReferenceDataStore` com `_ReferenceList`; `ConversationsStore` e `ListFilter` assinalados como previstos. | Código |
-| 12 | 8.2, 8.3 | Controllers segundo o código: `LoginController` no `ChangeNotifier`, formulários em `FormController`, `AccountController` sem `ProfileStore` e com `signingOut`, `ProfileFilesController` com `LinkDraft`, `SkillsController` e `PreferencesController` com as operações reais. | Código |
-| 13 | 8.4 | `ExplorationController` com `SafeChangeNotifier`, geração de pedidos, pedidos em paralelo, contagem decrescente e estado `failed`; preferências só repetem o pedido se mudarem. | Código |
-| 14 | 8.5 | Classes de matches e conversas assinaladas como previstas. | Código da `main` |
-| 15 | 8.6 | Nova secção: `SafeChangeNotifier`, `FormController` e `failureMessage`. | Código; relatório da `I135` |
-| 16 | 9 | `AppRoutes`, `KatchBottomBar` e `PasswordField` retirados; acrescentados `KatchScaffold`, `LoadStatusView`, `FormTextField`, `DropdownField`, `SaveButton`, `FormMessage`, `PhotoGrid` e `JobSummary`; `HomeShell` com `NavigationBar` e áreas provisórias; M14 a M18 assinalados como previstos. | Código |
-| 17 | 10 | `AppDependencies` e `AppConfig` segundo o código (sem `PollingScheduler`, serviços e store de matches e conversas, nem `dispose`). | Código |
-| 18 | 11 | Correspondências com as marcações «previsto»; `InputRules.linkError`, `SessionManager.accessToken` e `HomeShell` nos requisitos e na arquitetura. | Código |
-| 19 | 12 | DFM-05 e DFM-10 revistas; acrescentadas DFM-17 a DFM-22. | Código; relatório da `I135` |
-| 20 | 13, 14 | PC-06 com a nota dos pedidos em paralelo; limitações acrescentadas (matches e conversas, consulta sem consumidores, expiração por acesso, M20). | Código |
-| 21 | 15 | Cobertura e índice recontados: 137 classes (112 implementadas e 25 previstas), 6 retiradas e 12 acrescentadas face à v02. | — |
+| 1 | 1 | Identificação na v03, Issue `I137`, responsáveis, documentos de origem (código da `main` em `7eac590`) e histórico de versões. | `I137` |
+| 2 | 2.1, 2.2 | Camada Consulta periódica sem agendador; enumerações com `wire`, `toWire()` e `fromWire`; `readObject`, `readList` e `readModel` em `response_reader`. | Código da `main` |
+| 3 | 2.3 | Estrutura de pastas igual à do código: `state/` e `core/` sem subpastas, sem `AppRoutes`, `polling/` com dois ficheiros e `screens/` com `matches/` e `conversations/`. | Código da `main` |
+| 4 | 2.4 | Nova secção «Estado de implementação»: tudo o que o modelo descreve existe na `main`, incluindo matches e conversas (`I078`); a `I135` é do Sprint 10. | Código da `main` |
+| 5 | 3.2, 3.3, 3.4 | `MatchDto`, `ConversationSummaryDto`, `MessageDto`, `SendMessageRequest` e as enumerações de conversas e vagas existem; `FileSelection` com `path` opcional, `bytes`, `header`, `extension`, `mimeType` e `fromBytes`; `FieldErrors` com `fromApi`, `reasonFor`, `add` e `remove`, sem `hasAny`; `ApiErrorDto.tryParse`; `isReadOnly`, `isJobClosed`, `isExhausted` e `withPreferences`. | Código da `main` |
+| 6 | 4.1 | `CredentialProvider` sem `authHeaders`; `HttpApiClient` com `defaultUploadTimeout` (60 s), `X-Client-App` em todos os pedidos, `upload` e registo em depuração; `ApiRejection` só com `error`; `UnexpectedFailure` também para corpo de erro fora do modelo; classificação das operações reservadas pelo caminho e pela credencial. | Código da `main` |
+| 7 | 4.2 | `InputRules` com `linkError`, `isValidLink`, `isValidSalary`, `isValidMessage`, `isBlank`, `textTooLongReason`, limites e motivos, e validação do formato por assinatura; `ExternalLauncher` com `openUrl`, `openEmail` e `openPhone`; `trimTrailingSlashes`. | Código da `main` |
+| 8 | 5 | Seis serviços implementados, com as respetivas implementações `Http...`; `response_reader`; `X-Client-App` no cliente e não só no início de sessão; `open` com `after` nomeado. | Código da `main` |
+| 9 | 6 | `SessionManager` sem temporizador de expiração: `accessToken` verifica a expiração; `restore` trata falhas do armazenamento; `isAuthenticated`; sem `authHeaders`. | Código da `main` |
+| 10 | 7 | `PollingScheduler`, `TimerPollingScheduler` e `PollingConfig` retirados; `PollingLoop` com `defaultInterval` e `interval`, sem observar o ciclo de vida; consumidores `ConversationsStore` e `ChatController`; regra 3 (`after`) e regra 7 (contador) segundo o código. | Código da `main` |
+| 11 | 8.1 | `SessionScopedStore` sem estado próprio; `ProfileStore` sem pedido partilhado e com geração; `ReferenceDataStore` sem `_ReferenceList`; `ConversationsStore` com `find`, `status`, `message` e `isPolling`, sem filtro, `summaryOf` nem `markOpened`; sem `ListFilter`. | Código da `main` |
+| 12 | 8.2, 8.3 | Controllers segundo o código: todos no `ChangeNotifier`, `AccountController` sem `ProfileStore` e com `signingOut`, `ProfileFilesController` com `LinkDraft`, `SkillsController` com `customLabel` e `addCustom()`, constantes de campo e operações reais. | Código da `main` |
+| 13 | 8.4 | `ExplorationController` com geração de pedidos, pedidos em paralelo, contagem decrescente e estado `failed`; preferências só repetem o pedido se mudarem. | Código da `main` |
+| 14 | 8.5 | `MatchesController` e `ChatController` segundo o código: `message`, `isSending`, `isClosing`, `isPolling`, `updateDraft`, `poll`, `maxLength` e `readOnlyCodes`. | Código da `main` |
+| 15 | 8.6 | Secção «Elementos comuns do estado»: `LoadStatus`, formulários sem classe base, guarda de `dispose` e `failureMessage`. | Código da `main` |
+| 16 | 9 | `AppRoutes`, `KatchBottomBar`, `PasswordField`, `ListFilterChip` e a área provisória retirados; acrescentados `SaveButton`, `FormMessage`, `PhotoGrid` e `JobSummary`; `HomeShell` com `NavigationBar` e os ecrãs M14 a M18; `MatchTile`, `ConversationTile`, `MessageBubble`, `MessageComposer` e `ContactRow` implementados. | Código da `main` |
+| 17 | 10 | `AppDependencies` e `AppConfig` segundo o código (sem `PollingScheduler`, nem `dispose`; com `matches`, `conversationService` e `conversations`). | Código da `main` |
+| 18 | 11 | Correspondências sem as marcações «previsto»; `InputRules.linkError`, `SessionManager.accessToken` e `HomeShell` nos requisitos e na arquitetura. | Código da `main` |
+| 19 | 12 | DFM-05 e DFM-10 revistas; acrescentadas DFM-17 a DFM-22. | Código da `main` |
+| 20 | 13, 14 | PC-06 com a nota dos pedidos em paralelo; limitações acrescentadas (expiração por acesso, M20, M16 sem filtro, `I135` fora da `main`) e a da indicação de leitura revista. | Código da `main` |
+| 21 | 15 | Cobertura e índice recontados: 128 classes, todas implementadas; 8 retiradas e 9 acrescentadas face à v02. | — |
+| 22 | 17 | Nova secção com as alterações previstas pela `I135` (Sprint 10), que ainda não está na `main`. | Relatório da `I135` |
 
 As restantes classes, operações, relações, regras e decisões da v02 mantêm-se sem alterações.
+
 
 ### 16.2. Alterações da v02 face à v01
 
@@ -2315,3 +2421,25 @@ As restantes classes, operações, relações, regras e decisões da v02 mantêm
 | 18 | 14, 15 | Limitações revistas; cobertura e índice de classes recontados (131 classes: 18 retiradas e 8 acrescentadas). | — |
 
 As restantes classes, operações, relações, regras e decisões da v01 mantêm-se sem alterações.
+
+---
+
+## 17. Alterações previstas pela refatoração I135 (Sprint 10)
+
+Esta secção não descreve o código da `main`. Resume o que o relatório da refatoração (`m4-relatorio-refatoracao-frontend-mobile-v01.md`, Issue `I135`, Executor João Coelho) diz que o ramo `joao-coelho/refactor/i135-refatoracao-e-limpeza-do-frontend-mobile` altera. O ramo ainda não foi enviado nem fundido na `main`, pelo que o código não pôde ser consultado: a informação vem só do relatório. A `I135` pertence ao Sprint 10 e fica registada nas não conformidades deste sprint.
+
+O relatório parte de `eb098ee`, o commit anterior à `I078`. A `I135` terá de ser refeita sobre a `main` atual antes de ser integrada, porque a `I078` acrescentou código que o relatório não conhece (`MatchesController`, `ChatController`, `ConversationsStore`, os ecrãs e os widgets de matches e conversas).
+
+| Tema | O que o relatório prevê | Item do relatório |
+| --- | --- | --- |
+| Classes novas no estado | `SafeChangeNotifier` (ignora `notifyListeners()` depois de `dispose()`) e `FormController` (edição, validação e rejeição comuns dos formulários com um só pedido); `FieldErrors.set(campo, motivo)` | R-018, R-019, R-027 |
+| Widgets novos | `KatchScaffold` (barra de título, faixa de ligação e corpo, em 8 ecrãs), `LoadStatusView`, `FormTextField` (substitui `_TextInput` e `_PasswordInput`), `DropdownField`; `showSuccess` para a confirmação por `SnackBar`; o tema (`katchTheme`) passa a ter o contorno dos campos; `SaveButton` aceita `onPressed` nulo | R-012 a R-017, R-026 |
+| Modelos e conversões | Mixin `WireValue` e extensão `byWire` para as enumerações; `readList` e `readStrings` em `models/json.dart` | R-021, R-022 |
+| Configuração | `AppConfig` com `uploadTimeout` (60 s) e `trimSlash` privado; barra final retirada só no `AppConfig`; `RemoteImage` lê `baseUrl` e a credencial do `AppScope` | R-023, R-024, R-045 |
+| Código retirado | `InputRules.isValidLink`, `FileSelection.mimeType` e `SessionManager.isAuthenticated`, que só os testes usam | R-006 a R-008 |
+| Defeitos corrigidos | `ProfileStore` e `ReferenceDataStore` guardam o pedido em curso e devolvem-no a quem chega durante ele (o `load()` da `main` regressa sem esperar); `HttpApiClient` lança `UnexpectedFailure` com uma resposta `2xx` cujo corpo não é JSON | R-001, R-002 |
+| Competência «Outro» | O texto fica só no campo do ecrã, que o entrega a `addCustom(texto)`; `customLabelChanged()` retira o motivo | R-029 |
+| Outros | `readFileSelection` passa para `platform_file_picker.dart`; `Future.wait` tipado no `ExplorationController`; M06 e M08 mostram o motivo da falha do `ProfileStore` | R-028, R-030, R-051 |
+
+Quando a `I135` for integrada, este modelo passa a incluir as classes novas nos diagramas e a retirar as que desaparecem, e a arquitetura deixa de dizer que o estado é descrito sem elas.
+

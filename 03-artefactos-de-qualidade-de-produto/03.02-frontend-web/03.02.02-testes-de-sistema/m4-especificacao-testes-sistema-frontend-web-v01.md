@@ -16,7 +16,7 @@
 
 | Versão | Data | Descrição das alterações | Issue |
 | --- | --- | --- | --- |
-| v01 | 2026-11-23 | Criação do documento: ambiente, dados e especificação dos cenários SW-01 a SW-21. | `I079` |
+| v01 | 2026-11-23 | Criação do documento: ambiente, dados e especificação dos cenários SW-01 a SW-21. Correções da revisão e da auditoria (2026-11-24): resultados com o código de erro, SW-06 com as fotografias da vaga e SW-09 com a fotografia, o destaque das competências e o CV enviados pelo teste. | `I079` |
 
 ## 2. Ambiente e execução
 
@@ -28,7 +28,7 @@
 
 ## 3. Dados de teste
 
-Cada cenário cria pela API os Recrutadores, as Empresas e as vagas que altera, com um sufixo único, para que a execução se repita sem repor a base. Usa as contas de demonstração `recrutador1` (Nortecode, para leitura), `admin@katch.pt` e `candidato09` a `candidato19` (interesses, matches, bloqueio e suspensão, repostos no fim quando aplicável).
+Cada cenário cria pela API os Recrutadores, as Empresas e as vagas que altera, com um sufixo único, para que a execução se repita sem repor a base. Usa as contas de demonstração `recrutador1` (Nortecode, para leitura), `admin@katch.pt` e `candidato09` a `candidato19` (interesses, matches, bloqueio e suspensão, repostos no fim quando aplicável). O SW-09 envia pela API da aplicação móvel a fotografia e o CV de `candidato10` e acrescenta-lhe a competência pretendida pela vaga, se ainda não a tiver.
 
 ## 4. Cenários
 
@@ -95,9 +95,9 @@ Cada cenário tem um ficheiro `e2e/sw-nn-*.spec.ts`, um `test.describe('SW-nn �
 | --- | --- |
 | Requisitos | RF050 a RF053 |
 | Precondições | Recrutador com Empresa aprovada. |
-| Dados | Mínimo 1500 e máximo 1200; depois máximo 1900; competência, benefício, urgente, data-limite a 30 dias. |
-| Passos | Criar a vaga com mínimo superior ao máximo; corrigir; guardar; publicar na lista. |
-| Resultados esperados | «O valor mínimo não pode ser superior ao máximo.»; depois, vaga «Não publicada» na lista e «Publicada» depois de publicar. |
+| Dados | Mínimo 1500 e máximo 1200; depois máximo 1900; competência, benefício, urgente, data-limite a 30 dias; fotografia PNG `vaga.png`. |
+| Passos | Criar a vaga com mínimo superior ao máximo; corrigir; escolher a fotografia em «Adicionar fotografia»; guardar; publicar na lista; abrir a alteração da vaga. |
+| Resultados esperados | «O valor mínimo não pode ser superior ao máximo.»; a fotografia aparece por enviar (1/5); ao guardar, o envio da fotografia é aceite e a vaga fica «Não publicada» na lista e «Publicada» depois de publicar; na alteração, a fotografia guardada é apresentada (1/5). |
 | Testes | `e2e/sw-06-*.spec.ts` |
 
 ### SW-07 — Ciclo de vida da vaga
@@ -127,10 +127,10 @@ Cada cenário tem um ficheiro `e2e/sw-nn-*.spec.ts`, um `test.describe('SW-nn �
 | Campo | Conteúdo |
 | --- | --- |
 | Requisitos | RF060 a RF062 |
-| Precondições | Vaga com interesse de candidato10; vaga sem interesses. |
-| Dados | — |
-| Passos | Abrir /candidatos com a vaga; abrir o perfil; abrir o CV (se existir); escolher a vaga sem interessados. |
-| Resultados esperados | Um candidato, sem «Aceitar»/«Recusar» na lista; perfil com competências, hiperligações e CV (ou «Este candidato não tem CV.»); vaga vazia sem candidatos. |
+| Precondições | Vaga com interesse de candidato10, a quem o teste envia a fotografia e o CV e dá a competência pretendida pela vaga; vaga sem interesses. |
+| Dados | Fotografia PNG e CV em PDF enviados pelo teste. |
+| Passos | Abrir /candidatos com a vaga; abrir o perfil; abrir o CV; escolher a vaga sem interessados. |
+| Resultados esperados | Um candidato, sem «Aceitar»/«Recusar» na lista; perfil com a fotografia, a competência que coincide com a vaga destacada (✓ e legenda «Competência que coincide com as pretendidas na vaga.»), hiperligações e «Abrir CV (PDF)»; o CV é devolvido com 200 em PDF; vaga vazia sem candidatos. |
 | Testes | `e2e/sw-09-*.spec.ts` |
 
 ### SW-10 — Decisão sobre o Candidato e match

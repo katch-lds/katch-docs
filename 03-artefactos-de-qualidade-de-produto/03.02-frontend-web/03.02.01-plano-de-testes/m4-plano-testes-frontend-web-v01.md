@@ -20,7 +20,7 @@
 | Módulo | Frontend web (`katch-frontend-web`), área de gestão web do Recrutador e do Administrador, em React 19 com Vite 8 e TypeScript 6 |
 | Issue | `I123` — Elaborar os planos de testes do frontend web e do frontend mobile |
 | Executor / Revisor / Auditor | João Borguem / Miguel Santos / João Coelho |
-| Documentos de origem | Regulamento de Funcionamento da UC (secção 19, pasta `03.02.01`); Regulamento Interno do Grupo v01 (secções 6.2, 10.4, 11.3 a 11.6 e 14.3); `m3-declaracao-ambito-v04.pdf`; `m3-especificacao-requisitos-v02.md`; `m3-modelo-classes-frontend-web-v02.md` |
+| Documentos de origem | Regulamento de Funcionamento da UC (secção 19, pasta `03.02.01`); Regulamento Interno do Grupo v02 (secções 6.2, 10.4, 11.3 a 11.6 e 14.3); `m3-declaracao-ambito-v04.pdf`; `m4-especificacao-requisitos-v03.md`; `m3-modelo-classes-frontend-web-v02.md` |
 | Documentos relacionados | `m3-plano-testes-backend-v01.md` (`03.01.01`); `m4-plano-testes-frontend-mobile-v01.md` (`03.03.01`); `m4-relatorio-evidencias-pipeline-ci-cd-frontends-v01.md` (`04.16-ci-cd`, Issue `I120`); `m4-registo-nao-conformidades-v02.xlsx` (NC-033) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `03.02.01-plano-de-testes`: define o âmbito, a estratégia, o ambiente, os dados, as responsabilidades e os critérios de entrada e de saída dos testes do frontend web — testes unitários (Jest), testes de sistema automáticos (Playwright, `QG-06`) e simulação dos testes de aceitação — e a rastreabilidade de cada requisito ao teste que o verifica.
@@ -31,6 +31,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | --- | --- | --- | --- |
 | v01 | 2026-11-06 | Criação do documento: objetivos, âmbito, níveis e técnicas de teste, ambiente, dados, cenários de sistema automáticos, simulação dos testes de aceitação, responsabilidades, âmbito da cobertura, critérios de entrada, de saída, de suspensão e de retoma, quality gates, rastreabilidade aos requisitos, entregáveis, riscos e referências. | `I123` |
 | v01 (revisão) | 2026-11-09 | Correção da revisão da `I123`: responsável da pipeline segundo a secção 11.6 do Regulamento Interno (D01); tempo máximo de apresentação das mensagens novas nos cenários de conversas igual ao `P17` (M01). | `I123` |
+| v01 (atualização) | 2026-11-26 | Alinhamento com o Regulamento Interno v02 (melhoria M02 da revisão da `I132`): verificação independente da configuração e dos resultados da pipeline atribuída ao elemento designado na secção 11.6, Roberto Baptista (secção 9); referências à especificação de requisitos e ao Regulamento Interno atualizadas para a v03 e a v02 (secções 1, 2, 3, 4, 8 e 16); `I131` como Issue dos resultados dos testes unitários e do relatório de cobertura (secções 14 e 15). O restante conteúdo não foi alterado. | `I139` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas.
 
@@ -41,14 +42,14 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 1. Verificar a lógica da área de gestão web — cliente da API, sessão, consulta periódica, hooks, validação dos formulários e componentes com lógica — independentemente da API e da rede (testes unitários Jest).
 2. Atingir pelo menos 40 % de cobertura de linhas no âmbito definido na secção 10 (Regulamento Interno, secção 11.5) e falhar a pipeline abaixo desse limiar.
 3. Verificar, com o sistema completo (frontend web, API e PostgreSQL), os fluxos do Recrutador e do Administrador da Declaração de Âmbito v04, de forma automática em cada Merge Request (testes de sistema Playwright, `QG-06`; Regulamento Interno, secção 11.6).
-4. Demonstrar, por simulação dos testes de aceitação, que a área de gestão web satisfaz o âmbito aprovado e os critérios de aceitação dos requisitos da especificação v02.
+4. Demonstrar, por simulação dos testes de aceitação, que a área de gestão web satisfaz o âmbito aprovado e os critérios de aceitação dos requisitos da especificação v03.
 5. Bloquear a integração na `main` sempre que um teste falha, a cobertura fica abaixo do limiar ou um quality gate não é cumprido.
 
 ## 3. Âmbito
 
 ### 3.1. Incluído
 
-O âmbito é a coluna «Âmbito no frontend-web» da Declaração de Âmbito v04 e os requisitos da especificação v02 cujo campo «Componentes abrangidos» inclui o Frontend web (secção 13).
+O âmbito é a coluna «Âmbito no frontend-web» da Declaração de Âmbito v04 e os requisitos da especificação v03 cujo campo «Componentes abrangidos» inclui o Frontend web (secção 13).
 
 | Funcionalidade (DA v04) | Âmbito no frontend web | Requisitos | Níveis de teste |
 | --- | --- | --- | --- |
@@ -87,7 +88,7 @@ O âmbito é a coluna «Âmbito no frontend-web» da Declaração de Âmbito v04
 
 ### 4.2. Técnicas
 
-- **Partições de equivalência e valores-limite** na validação local dos formulários, com os parâmetros da especificação v02: formatos P04 e P05, textos P08 (1000 e 1001 caracteres), hiperligações P10, motivo de recusa P12 (9, 10, 500 e 501 caracteres), galeria e fotografias P13 (6 e 7; 5 e 6), imagens P01 (5 MB e 5 MB + 1 byte; logótipo 2 MB), intervalo salarial da vaga (mínimo igual, inferior e superior ao máximo).
+- **Partições de equivalência e valores-limite** na validação local dos formulários, com os parâmetros da especificação v03: formatos P04 e P05, textos P08 (1000 e 1001 caracteres), hiperligações P10, motivo de recusa P12 (9, 10, 500 e 501 caracteres), galeria e fotografias P13 (6 e 7; 5 e 6), imagens P01 (5 MB e 5 MB + 1 byte; logótipo 2 MB), intervalo salarial da vaga (mínimo igual, inferior e superior ao máximo).
 - **Transições de estado** apresentadas na interface: estado da Empresa (`pendente`, `aprovada`, `recusada`, `suspensa`), da vaga (`não publicada`, `publicada`, `suspensa`, `encerrada`), da conta (`ativa`, `bloqueada`, `suspensa`) e da conversa (ativa e modo apenas de consulta) — cada ação só está disponível nos estados em que a API a admite.
 - **Tabelas de decisão** nas rotas protegidas: sessão iniciada ou não, tipo de conta (Recrutador ou Administrador) e estado da Empresa determinam a página apresentada (RF039, RF104, RF103).
 - **Casos de erro da API**: para cada formulário, pelo menos um erro de validação devolvido pela API (`400`, catálogo ERR da documentação da API v02) apresentado no campo correspondente, e os erros `401`, `403`, `404` e `409` tratados pelo cliente da API.
@@ -164,7 +165,7 @@ A simulação dos testes de aceitação é feita na Issue `I081` (Sprint previsi
 | Aspeto | Regra deste plano |
 | --- | --- |
 | Objeto | A área de gestão web integrada na `main`, com o backend da mesma data, no ambiente de demonstração |
-| Cenários | Um cenário de aceitação por funcionalidade da secção 3.1 (`AW-F001`, `AW-F002`, `AW-F003`, `AW-F004`, `AW-F005`, `AW-F007`, `AW-F008`, `AW-F009`, `AW-F010`) e um para os requisitos não funcionais (`AW-RNF`), escritos como guião de utilização do Recrutador ou do Administrador e verificados contra o **critério de aceitação** de cada requisito da especificação v02 |
+| Cenários | Um cenário de aceitação por funcionalidade da secção 3.1 (`AW-F001`, `AW-F002`, `AW-F003`, `AW-F004`, `AW-F005`, `AW-F007`, `AW-F008`, `AW-F009`, `AW-F010`) e um para os requisitos não funcionais (`AW-RNF`), escritos como guião de utilização do Recrutador ou do Administrador e verificados contra o **critério de aceitação** de cada requisito da especificação v03 |
 | Participantes | Um elemento no papel de Recrutador e outro no de Administrador, que não tenham sido Executores das Issues de implementação da funcionalidade em causa; um observador que regista os resultados; todos identificados no relatório |
 | Medições | Tempos dos RNF medidos com cronómetro ou com as ferramentas do navegador (RNF015, RNF018); larguras de 1280 e 1920 píxeis (RNF012) |
 | Registo | Para cada cenário: data e hora, versão (commit) testada, participantes, passos, resultado (aceite, aceite com desvio, não aceite), desvios observados e evidência (captura) |
@@ -181,7 +182,7 @@ A simulação dos testes de aceitação é feita na Issue `I081` (Sprint previsi
 | Simulação dos testes de aceitação, especificação e relatório | Executor da `I081` (a atribuir no Sprint Planning do S10) | Revisor e Auditor da `I081` |
 | Análise estática (relatório SonarQube e ESLint) | Executor da `I124` | Revisor e Auditor da `I124` |
 | Configuração e manutenção da pipeline e dos quality gates | João Borguem, responsável pela configuração e manutenção técnica da pipeline (Regulamento Interno, secção 11.6; configuração dos frontends na `I120`) | Revisor e Auditor de cada Issue que altera a pipeline |
-| Verificação independente da configuração e dos resultados da pipeline | Líder em funções em `m4`, João Borguem (Regulamento Interno, secções 6.2 e 11.6) | — |
+| Verificação independente da configuração e dos resultados da pipeline | Roberto Baptista, elemento designado na secção 11.6 do Regulamento Interno v02, diferente do responsável pela pipeline e do Líder em funções, com a periodicidade da verificação semanal da secção 6.2 | Comunica o resultado ao Líder em funções (Regulamento Interno v02, secção 11.6) |
 | Registo de defeitos encontrados pelos testes | Quem encontra o defeito, na Issue correspondente e em `03.02.07-defeitos` | Revisor da Issue |
 
 O Executor, o Revisor e o Auditor de cada Issue são sempre alunos diferentes; o Executor nunca aprova nem integra o próprio Merge Request (Regulamento Interno, secção 10.4).
@@ -314,8 +315,8 @@ São 67 requisitos funcionais e 2 não funcionais. A Issue de cada requisito res
 | `m4-plano-testes-frontend-web-v01.md` (este documento) | `03.02.01-plano-de-testes` | `I123` |
 | Especificação e resultados dos testes de sistema automáticos (Playwright) | `03.02.02-testes-de-sistema` | `I079` |
 | Especificação dos testes de aceitação e relatório da simulação | `03.02.03-testes-de-aceitacao` | `I081` |
-| Resultados dos testes unitários (Jest) | `03.02.04-testes-unitarios` | Issue a criar num Backlog Refinement futuro (secção 15) |
-| Relatório de cobertura dos testes unitários | `03.02.05-cobertura-de-testes` | Issue a criar num Backlog Refinement futuro (secção 15) |
+| Resultados dos testes unitários (Jest) | `03.02.04-testes-unitarios` | `I131` |
+| Relatório de cobertura dos testes unitários | `03.02.05-cobertura-de-testes` | `I131` |
 | Relatório de análise estática | `03.02.06-analise-estatica` | `I124` |
 | Registo de defeitos | `03.02.07-defeitos` | Quem encontra o defeito |
 | Código dos testes (`src/**/*.test.ts(x)`, `e2e/`) | Repositório `katch-frontend-web` | Issues de implementação e `I079` |
@@ -326,14 +327,14 @@ Os nomes dos ficheiros seguem a nomenclatura oficial (`m4-<descrição>-v0N.<ext
 
 | Risco ou limitação | Efeito | Tratamento |
 | --- | --- | --- |
-| Os resultados dos testes unitários e o relatório de cobertura (`03.02.04` e `03.02.05`) ainda não têm Issue no Backlog de Projeto v07 | O artefacto pode ficar por produzir | Issues a criar num Backlog Refinement futuro; até lá, as evidências são o artefacto `coverage-report` e o resumo de cada execução da pipeline |
+| Os resultados dos testes unitários e o relatório de cobertura (`03.02.04` e `03.02.05`) só são produzidos na `I131` (Sprint 10), a partir da execução da pipeline na `main` com a versão de `m4` | Se a `I131` não terminar antes da entrega de `m4`, o artefacto fica por produzir | Acompanhamento da `I131` no Sprint Backlog do Sprint 10; até lá, as evidências são o artefacto `coverage-report` e o resumo de cada execução da pipeline |
 
 ## 16. Referências
 
 1. Regulamento de Funcionamento da Unidade Curricular de LDS 2026/2027, secção 19 (pastas `03.02.01` e `03.03.01`).
-2. Regulamento Interno do Grupo G11, v01 (`m1-regulamento-grupo-v01.pdf`), secções 6.2, 10.4, 11.3, 11.4, 11.5, 11.6 e 14.3.
+2. Regulamento Interno do Grupo G11, v02 (`m4-regulamento-grupo-v02.pdf`), secções 6.2, 10.4, 11.3, 11.4, 11.5, 11.6 e 14.3.
 3. Declaração de Âmbito, v04 (`m3-declaracao-ambito-v04.pdf`), matriz do âmbito funcional (coluna «Âmbito no frontend-web») e limites transversais.
-4. Especificação de Requisitos, v02 (`m3-especificacao-requisitos-v02.md`), secções 2.2, 3 (parâmetros P01 a P21), 4.2, 4.3 e 5.
+4. Especificação de Requisitos, v03 (`m4-especificacao-requisitos-v03.md`), secções 2.2, 3 (parâmetros P01 a P21), 4.2, 4.3 e 5.
 5. Modelo de Classes do Frontend Web, v02 (`m3-modelo-classes-frontend-web-v02.md`), secções 2.1, 4, 6, 7 e 8.
 6. Plano de Testes do Backend, v01 (`m3-plano-testes-backend-v01.md`).
 7. Backlog de Projeto, v07 (`m4-backlog-projeto-v07.xlsx`) e Sprint Backlog do S07 (`m4-s07-sprint-backlog-v01.xlsx`): Issues `I069` a `I074`, `I079`, `I081`, `I120` a `I124` e `I126`.

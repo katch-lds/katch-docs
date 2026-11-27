@@ -21,19 +21,29 @@
 ## 2. Ambiente e execução
 
 - Aplicação completa (`KatchApp` com as dependências reais de `AppDependencies.create`) num emulador Android (API 34, `x86_64`), construída pelo `flutter test integration_test` (Flutter 3.47.x, Java 17).
-- Substituições (plano, secção 4.3): o seletor de ficheiros, por um que devolve os ficheiros do teste (`QueuedFilePicker`), e o armazenamento seguro da sessão, por um em memória, para cada teste começar sem sessão. O cliente HTTP é o real, envolvido por um que só regista os cartões recebidos (`GET /api/candidate/jobs/next`) para o SM-07 e o SM-11.
-- API do `katch-backend` (versão fixa `796f81e`, a mesma do QG-06 do frontend web) arrancada no próprio job, sobre PostgreSQL 18 com os scripts `01-create-schema.sql`, `02-seed-reference-data.sql` e `03-seed-demo-data.sql`; o emulador chega-lhe por `http://10.0.2.2:5180` (`--dart-define=API_BASE_URL`).
+- Substituições: o seletor de ficheiros, por um que devolve os ficheiros do teste (`QueuedFilePicker`), como prevê o plano (secção 4.3); e o armazenamento seguro da sessão, por um em memória, para cada teste começar sem sessão (desvio D1, secção 2.1). O cliente HTTP é o real, envolvido por um que só regista os cartões recebidos (`GET /api/candidate/jobs/next`) para o SM-07 e o SM-11 (D1).
+- API do `katch-backend` (versão fixa `796f81e`, a mesma do QG-06 do frontend web; desvio D3, secção 2.1) arrancada no próprio job, sobre PostgreSQL 18 com os scripts `01-create-schema.sql`, `02-seed-reference-data.sql` e `03-seed-demo-data.sql`; o emulador chega-lhe por `http://10.0.2.2:5180` (`--dart-define=API_BASE_URL`).
 - Um só ficheiro `*_test.dart` (`katch_system_test.dart`), para a aplicação ser construída e instalada uma vez; cada cenário é um `group('SM-nn …')` com testes `SM-nnx`, executados por ordem.
 - Na pipeline, os passos `QG-07` do job `build-and-test` do `ci.yml`, com o relatório `integration-test-report.json` (`--file-reporter json`) e o registo da API no artefacto `integration-test-report`; uma falha faz falhar o job, que a regra de proteção da `main` exige com sucesso.
 - A palavra-passe do Administrador é gerada em cada execução, mascarada nos registos e passada por `--dart-define=E2E_ADMIN_PASSWORD`; o `Jwt__Secret` também é gerado. Nenhuma palavra-passe fica no repositório (RNF003). Os limites de pedidos por IP da API (`Limits__*`) são alargados só nesta instância.
 - As esperas usam `pump` com intervalos de 100 ms até ao elemento aparecer (máximo de 20 s por espera), e não `pumpAndSettle`, porque os indicadores de carregamento animam enquanto a API responde.
+- Os tempos do SM-16 e do SM-17 contam a partir do toque (o cronómetro arranca depois de o elemento estar pronto a receber o toque e imediatamente antes dele) e são escritos na saída e no relatório JSON em todas as execuções, passe ou falhe o teste, para se ver a folga em relação ao limite.
+
+### 2.1. Desvios ao plano de testes
+
+| N.º | Plano de testes | Na automação | Motivo | Efeito na cobertura |
+| --- | --- | --- | --- | --- |
+| D1 | Secção 4.3: nos testes de sistema, a única substituição é o seletor de ficheiros; o armazenamento em memória da sessão é previsto só nos testes unitários e de widget. | O armazenamento seguro da sessão é substituído por um em memória (`MemorySessionStorage`) e o cliente HTTP real é envolvido por um que só regista os cartões recebidos (`RecordingClient`). | Os 21 testes correm na mesma instalação da aplicação (um só ponto de entrada); com o armazenamento real, a sessão de um teste passava ao seguinte. O registo dos cartões permite ao SM-07 e ao SM-11 confirmar a ordem e os filtros sem depender da posição no ecrã. | A persistência da sessão no armazenamento seguro do Android não é verificada neste nível (fica nos testes unitários do `SessionManager` com o duplo do armazenamento). Os pedidos e as respostas da API não são alterados. |
+| D2 | Secção 6: cada cenário regista o seu Candidato pela aplicação; as ações do Recrutador usam as contas dos dados de demonstração. | Só o SM-01 regista o Candidato pela aplicação; os restantes criam-no pela API e iniciam sessão pela aplicação. Os Recrutadores e as Empresas são criados pela API em cada cenário, com um sufixo único. | O registo pela aplicação é o objeto do SM-01 e do SM-02; repeti-lo nos outros cenários alongava a execução sem verificar nada de novo. Contas próprias por cenário evitam que a quota, as vagas e os matches de uma execução afetem a seguinte e permitem repetir a execução sem repor a base. | Nenhum: o registo pela aplicação é verificado no SM-01 e no SM-02, e cada cenário continua a usar a aplicação em tudo o que verifica. |
+| D3 | Secção 5: `katch-backend` do ramo `main`. | Versão fixa `796f81e` (a `main` à data da execução), a mesma do QG-06 do frontend web. | Uma alteração no backend não deve fazer falhar o merge de um Merge Request do mobile que não lhe mexe; a versão é atualizada de propósito quando a API muda. | Uma alteração da API posterior a `796f81e` só é apanhada quando a versão fixa for atualizada no `ci.yml`. |
+| D4 | Secção 6: imagens JPEG e PNG, imagem de 5 MB e de 5 MB + 1 byte, PDF mínimo, PDF de 5 MB + 1 byte e ficheiro `.pdf` com outro conteúdo, incluídos nos recursos dos testes. | PNG de 1×1 píxel, PDF mínimo, PNG de 5 MB + 1 byte e `falso.pdf` com conteúdo PNG, gerados no próprio teste. | Gerar os ficheiros no teste evita ficheiros binários grandes no repositório. | O JPEG, a imagem de exatamente 5 MB e o PDF de 5 MB + 1 byte não são usados no SM-06; o limite e o tipo são verificados com a imagem de 5 MB + 1 byte e com o `falso.pdf`. |
 
 ## 3. Dados de teste
 
-- Cada cenário cria pela API os Candidatos, os Recrutadores (com a Empresa registada, aprovada pelo Administrador, com descrição, sítio e logótipo) e as vagas de que precisa, com um sufixo único no correio eletrónico e nos nomes, para a execução se repetir sem repor a base. O SM-01 regista o Candidato pela aplicação; os restantes registam-no pela API e iniciam sessão pela aplicação.
+- Cada cenário cria pela API os Candidatos, os Recrutadores (com a Empresa registada, aprovada pelo Administrador, com descrição, sítio e logótipo) e as vagas de que precisa, com um sufixo único no correio eletrónico e nos nomes, para a execução se repetir sem repor a base. O SM-01 regista o Candidato pela aplicação; os restantes registam-no pela API e iniciam sessão pela aplicação (desvio D2, secção 2.1).
 - As ações do Recrutador e do Administrador (aceitar o interesse, enviar mensagens, bloquear a conta, suspender a Empresa) são pedidos diretos à API, como prevê o plano (secção 6).
 - **Localidades:** cada cenário de exploração usa uma localidade sem vagas nos dados de demonstração (Bragança, Guarda, Viseu, Castelo Branco, Évora, Beja, Faro, Portalegre, Leiria, Aveiro) para o Candidato e para as vagas que cria, que são urgentes. Como os cartões aparecem com as urgentes primeiro e, entre elas, as mais próximas, a vaga do cenário é o primeiro cartão (distância 0). Se aparecer antes outra vaga (de execuções anteriores), o teste recusa-a até chegar à sua.
-- **Ficheiros:** PNG de 1×1 píxel, PDF mínimo, PNG com 5 MB + 1 byte e ficheiro `falso.pdf` com conteúdo PNG (RNF016), gerados no próprio teste.
+- **Ficheiros:** PNG de 1×1 píxel, PDF mínimo, PNG com 5 MB + 1 byte e ficheiro `falso.pdf` com conteúdo PNG (RNF016), gerados no próprio teste (desvio D4, secção 2.1).
 
 ## 4. Cenários
 
@@ -146,7 +156,7 @@ Cada cenário tem um `group('SM-nn …')` num ficheiro `integration_test/scenari
 | Precondições | Candidato novo em Castelo Branco (quota completa). |
 | Dados | Total da quota lido pela API (P11: 10 interesses). |
 | Passos | SM-10a: «Tenho interesse» até esgotar a quota; tentar o interesse pela API; «Recusar». |
-| Resultados esperados | «Esgotou os 10 interesses. Poderá voltar a manifestar interesse dentro de … (às …)» e «Interesses disponíveis: 0 de 10»; «Tenho interesse» desativado; a quota da API tem `blockedUntil`; o interesse pela API é recusado; a recusa mostra o cartão seguinte. |
+| Resultados esperados | «Esgotou os 10 interesses. Poderá voltar a manifestar interesse dentro de … (às …)» e «Interesses disponíveis: 0 de 10»; «Tenho interesse» desativado; a quota da API tem `blockedUntil`; o interesse pela API é recusado com `409` e o código `ERR-31`; a recusa mostra o cartão seguinte. |
 | Testes | `sm_07_11_16_exploracao.dart` |
 
 ### SM-11 — Ajuste das preferências na exploração
@@ -210,7 +220,7 @@ Cada cenário tem um `group('SM-nn …')` num ficheiro `integration_test/scenari
 | --- | --- |
 | Requisitos | RNF002 |
 | Precondições | Candidato em Aveiro; duas vagas em Aveiro. |
-| Dados | `Stopwatch` desde o toque até ao cartão seguinte. |
+| Dados | `Stopwatch` iniciado no toque e parado quando aparece o cartão seguinte; o tempo de cada ação é escrito na saída. |
 | Passos | SM-16a: «Recusar»; «Tenho interesse». |
 | Resultados esperados | O cartão seguinte aparece em 2 segundos, no máximo, depois de cada ação. |
 | Testes | `sm_07_11_16_exploracao.dart` |
@@ -221,8 +231,8 @@ Cada cenário tem um `group('SM-nn …')` num ficheiro `integration_test/scenari
 | --- | --- |
 | Requisitos | RNF014 |
 | Precondições | Aplicação apontada para `http://10.255.255.1:5180` (rede que não responde). |
-| Dados | Credenciais quaisquer. |
-| Passos | SM-17a: «Entrar». |
+| Dados | Credenciais quaisquer; `Stopwatch` iniciado no toque em «Entrar», depois de preenchidos os campos, e parado quando aparece a mensagem; o tempo é escrito na saída. |
+| Passos | SM-17a: preencher o correio eletrónico e a palavra-passe; «Entrar». |
 | Resultados esperados | «Sem ligação ao servidor. Verifique a ligação e tente novamente.» em 10 segundos, no máximo, a contar do toque; não entra. |
 | Testes | `sm_17_falha_ligacao.dart` |
 
@@ -251,5 +261,5 @@ Cada cenário tem um `group('SM-nn …')` num ficheiro `integration_test/scenari
 ## 6. Limitações
 
 - A reposição da quota ao fim de 24 horas (RF021) não é automatizada neste nível, como prevê o plano (secção 7): é verificada no nível unitário (controller da exploração com relógio fixo), nos testes do backend e na simulação dos testes de aceitação.
-- O seletor de ficheiros nativo não é controlável pelo teste e é substituído pelo `QueuedFilePicker`; o armazenamento seguro da sessão é substituído por um em memória. A abertura do correio, do telefone e do sítio da Empresa nas aplicações do dispositivo não é verificada (só os dados apresentados).
-- Os tempos do SM-13, do SM-16 e do SM-17 são medidos no emulador da pipeline e incluem o tempo da API do job.
+- O seletor de ficheiros nativo não é controlável pelo teste e é substituído pelo `QueuedFilePicker`; o armazenamento seguro da sessão é substituído por um em memória (D1). A abertura do correio, do telefone e do sítio da Empresa nas aplicações do dispositivo não é verificada (só os dados apresentados).
+- Os tempos do SM-13, do SM-16 e do SM-17 são medidos no emulador da pipeline e incluem o tempo da API do job. No SM-17, o limite de 10 s (RNF014) tem pouca folga sobre o limite de tempo do cliente HTTP (9 s): na revisão, medido a partir do toque num emulador local, ficou entre 9 790 e 9 859 ms.

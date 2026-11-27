@@ -20,7 +20,7 @@
 | Módulo | Frontend mobile (`katch-frontend-mobile`), aplicação móvel do Candidato, em Flutter (Dart 3) para Android |
 | Issue | `I123` — Elaborar os planos de testes do frontend web e do frontend mobile |
 | Executor / Revisor / Auditor | João Borguem / Miguel Santos / João Coelho |
-| Documentos de origem | Regulamento de Funcionamento da UC (secção 19, pasta `03.03.01`); Regulamento Interno do Grupo v01 (secções 6.2, 10.4, 11.3 a 11.6 e 14.3); `m3-declaracao-ambito-v04.pdf`; `m3-especificacao-requisitos-v02.md`; `m3-modelo-classes-frontend-mobile-v02.md` |
+| Documentos de origem | Regulamento de Funcionamento da UC (secção 19, pasta `03.03.01`); Regulamento Interno do Grupo v02 (secções 6.2, 10.4, 11.3 a 11.6 e 14.3); `m3-declaracao-ambito-v04.pdf`; `m4-especificacao-requisitos-v03.md`; `m3-modelo-classes-frontend-mobile-v02.md` |
 | Documentos relacionados | `m3-plano-testes-backend-v01.md` (`03.01.01`); `m4-plano-testes-frontend-web-v01.md` (`03.02.01`); `m4-relatorio-evidencias-pipeline-ci-cd-frontends-v01.md` (`04.16-ci-cd`, Issue `I120`); `m4-registo-nao-conformidades-v02.xlsx` (NC-033) |
 
 O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curricular para `03.03.01-plano-de-testes`: define o âmbito, a estratégia, o ambiente, os dados, as responsabilidades e os critérios de entrada e de saída dos testes do frontend mobile — testes unitários e de widget (`flutter_test`), testes de sistema automáticos (`integration_test`, `QG-07`) e simulação dos testes de aceitação — e a rastreabilidade de cada requisito ao teste que o verifica.
@@ -31,6 +31,7 @@ O documento segue a secção 19 do Regulamento de Funcionamento da Unidade Curri
 | --- | --- | --- | --- |
 | v01 | 2026-11-06 | Criação do documento: objetivos, âmbito, níveis e técnicas de teste, ambiente, dados, cenários de sistema automáticos, simulação dos testes de aceitação, responsabilidades, âmbito da cobertura, critérios de entrada, de saída, de suspensão e de retoma, quality gates, rastreabilidade aos requisitos, entregáveis, riscos e referências. | `I123` |
 | v01 (revisão) | 2026-11-09 | Correção da revisão da `I123`: responsável da pipeline segundo a secção 11.6 do Regulamento Interno (D01); tempo máximo de apresentação das mensagens novas nos cenários de conversas igual ao `P17` (M01). | `I123` |
+| v01 (atualização) | 2026-11-26 | Alinhamento com o Regulamento Interno v02 (melhoria M02 da revisão da `I132`): verificação independente da configuração e dos resultados da pipeline atribuída ao elemento designado na secção 11.6, Roberto Baptista (secção 9) e nota do `QG-05` a remeter para o Regulamento Interno v02 (secção 12); referências à especificação de requisitos e ao Regulamento Interno atualizadas para a v03 e a v02 (secções 1, 2, 3, 4, 8 e 16); `I131` como Issue dos resultados dos testes unitários e do relatório de cobertura (secções 14 e 15). O restante conteúdo não foi alterado. | `I139` |
 
 Cada alteração posterior acrescenta uma linha. As versões anteriores são conservadas.
 
@@ -41,14 +42,14 @@ Cada alteração posterior acrescenta uma linha. As versões anteriores são con
 1. Verificar a lógica da aplicação móvel — cliente da API, sessão, consulta periódica, serviços, controllers de estado, validação local (`InputRules`) e widgets — independentemente da API e da rede (testes unitários e de widget).
 2. Atingir pelo menos 40 % de cobertura de linhas no âmbito definido na secção 10 (Regulamento Interno, secção 11.5) e falhar a pipeline abaixo desse limiar.
 3. Verificar, com o sistema completo (aplicação num emulador Android, API e PostgreSQL), os fluxos do Candidato da Declaração de Âmbito v04, de forma automática em cada Merge Request (testes de sistema `integration_test`, `QG-07`; Regulamento Interno, secção 11.6).
-4. Demonstrar, por simulação dos testes de aceitação, que a aplicação móvel satisfaz o âmbito aprovado e os critérios de aceitação dos requisitos da especificação v02.
+4. Demonstrar, por simulação dos testes de aceitação, que a aplicação móvel satisfaz o âmbito aprovado e os critérios de aceitação dos requisitos da especificação v03.
 5. Bloquear a integração na `main` sempre que um teste falha, a cobertura fica abaixo do limiar ou um quality gate não é cumprido.
 
 ## 3. Âmbito
 
 ### 3.1. Incluído
 
-O âmbito é a coluna «Âmbito no frontend-mobile» da Declaração de Âmbito v04 e os requisitos da especificação v02 cujo campo «Componentes abrangidos» inclui o Frontend mobile (secção 13).
+O âmbito é a coluna «Âmbito no frontend-mobile» da Declaração de Âmbito v04 e os requisitos da especificação v03 cujo campo «Componentes abrangidos» inclui o Frontend mobile (secção 13).
 
 | Funcionalidade (DA v04) | Âmbito no frontend mobile | Requisitos | Níveis de teste |
 | --- | --- | --- | --- |
@@ -84,7 +85,7 @@ O âmbito é a coluna «Âmbito no frontend-mobile» da Declaração de Âmbito 
 
 ### 4.2. Técnicas
 
-- **Partições de equivalência e valores-limite** na validação local (`InputRules`) e nos formulários, com os parâmetros da especificação v02: P04 (telefone com 8, 9 e 10 algarismos; correio eletrónico sem `@`), P05 (7 e 8 caracteres; sem algarismo), P06 (0, 1, 500 e 501 km), P07 (1, 2, 40 e 41 caracteres; o carácter `@`), P08 (1000 e 1001 caracteres), P10 (3 e 4 hiperligações; sem `http://` ou `https://`), P01 e P02 (5 MB e 5 MB + 1 byte; formato não admitido), P03 (0, 1, 1000 e 1001 caracteres).
+- **Partições de equivalência e valores-limite** na validação local (`InputRules`) e nos formulários, com os parâmetros da especificação v03: P04 (telefone com 8, 9 e 10 algarismos; correio eletrónico sem `@`), P05 (7 e 8 caracteres; sem algarismo), P06 (0, 1, 500 e 501 km), P07 (1, 2, 40 e 41 caracteres; o carácter `@`), P08 (1000 e 1001 caracteres), P10 (3 e 4 hiperligações; sem `http://` ou `https://`), P01 e P02 (5 MB e 5 MB + 1 byte; formato não admitido), P03 (0, 1, 1000 e 1001 caracteres).
 - **Transições de estado** apresentadas na aplicação: quota de interesses (disponível, esgotada com indicação da reposição, reposta), interesse (em espera, match), conversa (ativa e modo apenas de consulta) e sessão (iniciada, expirada, terminada).
 - **Tabelas de decisão** na navegação (`AuthGate`): sessão iniciada ou não, credencial expirada e perfil por completar determinam o ecrã apresentado.
 - **Casos de erro da API**: para cada formulário, pelo menos um erro de validação devolvido pela API (`400`, catálogo ERR da documentação da API v02) apresentado no campo correspondente, e os erros `401`, `403`, `404` e `409` tratados pelo cliente da API.
@@ -157,7 +158,7 @@ A simulação dos testes de aceitação é feita na Issue `I081` (Sprint previsi
 | Aspeto | Regra deste plano |
 | --- | --- |
 | Objeto | A aplicação móvel construída a partir da `main`, com o backend da mesma data, no ambiente de demonstração |
-| Cenários | Um cenário de aceitação por funcionalidade da secção 3.1 (`AM-F001`, `AM-F002`, `AM-F003`, `AM-F004`, `AM-F006`, `AM-F008`, `AM-F010`) e um para os requisitos não funcionais (`AM-RNF`), escritos como guião de utilização do Candidato e verificados contra o **critério de aceitação** de cada requisito da especificação v02 |
+| Cenários | Um cenário de aceitação por funcionalidade da secção 3.1 (`AM-F001`, `AM-F002`, `AM-F003`, `AM-F004`, `AM-F006`, `AM-F008`, `AM-F010`) e um para os requisitos não funcionais (`AM-RNF`), escritos como guião de utilização do Candidato e verificados contra o **critério de aceitação** de cada requisito da especificação v03 |
 | Participantes | Um elemento no papel de Candidato, que não tenha sido Executor das Issues de implementação da funcionalidade em causa; um elemento que executa na área de gestão web as ações do Recrutador e do Administrador necessárias; um observador que regista os resultados; todos identificados no relatório |
 | Medições | Tempos dos RNF medidos com cronómetro (RNF002, RNF014); contagem das interações (RNF010, RNF011); a falha de ligação é provocada desligando a rede do dispositivo |
 | Registo | Para cada cenário: data e hora, versão (commit) testada, dispositivo e versão do Android, participantes, passos, resultado (aceite, aceite com desvio, não aceite), desvios observados e evidência (captura de ecrã) |
@@ -174,7 +175,7 @@ A simulação dos testes de aceitação é feita na Issue `I081` (Sprint previsi
 | Simulação dos testes de aceitação, especificação e relatório | Executor da `I081` (a atribuir no Sprint Planning do S10) | Revisor e Auditor da `I081` |
 | Análise estática (relatório do Dart analyzer e do `dart format`) | Executor da `I124` | Revisor e Auditor da `I124` |
 | Configuração e manutenção da pipeline e dos quality gates | João Borguem, responsável pela configuração e manutenção técnica da pipeline (Regulamento Interno, secção 11.6; configuração dos frontends na `I120`) | Revisor e Auditor de cada Issue que altera a pipeline |
-| Verificação independente da configuração e dos resultados da pipeline | Líder em funções em `m4`, João Borguem (Regulamento Interno, secções 6.2 e 11.6) | — |
+| Verificação independente da configuração e dos resultados da pipeline | Roberto Baptista, elemento designado na secção 11.6 do Regulamento Interno v02, diferente do responsável pela pipeline e do Líder em funções, com a periodicidade da verificação semanal da secção 6.2 | Comunica o resultado ao Líder em funções (Regulamento Interno v02, secção 11.6) |
 | Registo de defeitos encontrados pelos testes | Quem encontra o defeito, na Issue correspondente e em `03.03.07-defeitos` | Revisor da Issue |
 
 O Executor, o Revisor e o Auditor de cada Issue são sempre alunos diferentes; o Executor nunca aprova nem integra o próprio Merge Request (Regulamento Interno, secção 10.4).
@@ -222,7 +223,7 @@ Os testes são suspensos quando o build falha, quando a pipeline não arranca, q
 | `QG-07` | Testes de sistema automáticos | 100 % dos testes `integration_test` executados sem falhas | Relatório da execução (artefacto `integration-test-report`) e registo do job |
 | Cobertura (secção 11.5) | Testes unitários e de widget e cobertura | 100 % dos testes `flutter test` sem falhas e ≥ 40 % de linhas | Artefacto `coverage-report` e resumo da execução |
 
-**QG-05 do mobile sem SonarQube.** O Regulamento Interno (secções 11.4 e 11.6) prevê o SonarQube também no frontend mobile, mas o SonarQube Community Build não analisa Dart. O grupo decidiu na `I120` (2026-11-05) usar como `QG-05` do mobile o Dart analyzer com `flutter_lints`, com infos e avisos tratados como erro, e o `dart format`. A divergência está registada como não conformidade NC-033 (`m4-registo-nao-conformidades-v02.xlsx`), cuja ação corretiva é a revisão do Regulamento Interno (secção 19.2). Este plano aplica o `QG-05` tal como está configurado e passa a seguir a nova redação quando a revisão for aprovada.
+**QG-05 do mobile sem SonarQube.** O Regulamento Interno v02 (secções 11.4 e 11.6) define o `QG-05` do frontend mobile como o Dart analyzer com `flutter_lints`, executado com `flutter analyze --fatal-infos --fatal-warnings`, e o `dart format --output=none --set-exit-if-changed`, sem SonarQube, que o SonarQube Community Build não suporta para Dart: nenhuma ocorrência do analyzer (info, warning ou error) e nenhum ficheiro por formatar, com o log da pipeline como evidência. É o `QG-05` configurado na `I120` (decisão de 2026-11-05) e aplicado por este plano. A não conformidade NC-033 (`m4-registo-nao-conformidades-v02.xlsx`), que registava a divergência face ao Regulamento Interno v01, teve como ação corretiva esta revisão do Regulamento Interno (secção 19.2), aprovada a 2026-11-25.
 
 Os gates `QG-02`, `QG-03` e `QG-04` do Regulamento Interno (secção 11.6) aplicam-se só ao backend. A verificação da cobertura dos frontends não tem código próprio na secção 11.6, mas é bloqueante na pipeline, como os gates codificados. Todos os gates são efetivos: o incumprimento termina o job sem sucesso, e a regra de proteção da `main` exige os jobs `build-and-test` e `static-analysis` com sucesso antes do merge (evidências da `I120`).
 
@@ -281,8 +282,8 @@ São 35 requisitos funcionais e 4 não funcionais. RF002 e RF105 são implementa
 | `m4-plano-testes-frontend-mobile-v01.md` (este documento) | `03.03.01-plano-de-testes` | `I123` |
 | Especificação e resultados dos testes de sistema automáticos (`integration_test`) | `03.03.02-testes-de-sistema` | `I080` |
 | Especificação dos testes de aceitação e relatório da simulação | `03.03.03-testes-de-aceitacao` | `I081` |
-| Resultados dos testes unitários e de widget | `03.03.04-testes-unitarios` | Issue a criar num Backlog Refinement futuro (secção 15) |
-| Relatório de cobertura dos testes unitários e de widget | `03.03.05-cobertura-de-testes` | Issue a criar num Backlog Refinement futuro (secção 15) |
+| Resultados dos testes unitários e de widget | `03.03.04-testes-unitarios` | `I131` |
+| Relatório de cobertura dos testes unitários e de widget | `03.03.05-cobertura-de-testes` | `I131` |
 | Relatório de análise estática | `03.03.06-analise-estatica` | `I124` |
 | Registo de defeitos | `03.03.07-defeitos` | Quem encontra o defeito |
 | Código dos testes (`test/`, `integration_test/`) | Repositório `katch-frontend-mobile` | Issues de implementação e `I080` |
@@ -294,14 +295,14 @@ Os nomes dos ficheiros seguem a nomenclatura oficial (`m4-<descrição>-v0N.<ext
 | Risco ou limitação | Efeito | Tratamento |
 | --- | --- | --- |
 | O Android bloqueia por omissão o tráfego HTTP sem TLS e a API do job responde em `http://10.0.2.2:5180` | Sem configuração, os pedidos da aplicação falham no emulador e o `QG-07` não corre | Configuração de rede só da variante de depuração (`network_security_config.xml` com tráfego sem TLS permitido apenas para `10.0.2.2`), feita na `I075`, primeiro ecrã que chama a API, para a `I080` e o `QG-07` a encontrarem feita; a variante de produção continua a exigir HTTPS (secção 5) |
-| Os resultados dos testes unitários e o relatório de cobertura (`03.03.04` e `03.03.05`) ainda não têm Issue no Backlog de Projeto v07 | O artefacto pode ficar por produzir | Issues a criar num Backlog Refinement futuro; até lá, as evidências são o artefacto `coverage-report` e o resumo de cada execução da pipeline |
+| Os resultados dos testes unitários e o relatório de cobertura (`03.03.04` e `03.03.05`) só são produzidos na `I131` (Sprint 10), a partir da execução da pipeline na `main` com a versão de `m4` | Se a `I131` não terminar antes da entrega de `m4`, o artefacto fica por produzir | Acompanhamento da `I131` no Sprint Backlog do Sprint 10; até lá, as evidências são o artefacto `coverage-report` e o resumo de cada execução da pipeline |
 
 ## 16. Referências
 
 1. Regulamento de Funcionamento da Unidade Curricular de LDS 2026/2027, secção 19 (pastas `03.02.01` e `03.03.01`).
-2. Regulamento Interno do Grupo G11, v01 (`m1-regulamento-grupo-v01.pdf`), secções 6.2, 10.4, 11.3, 11.4, 11.5, 11.6, 14.3 e 19.2.
+2. Regulamento Interno do Grupo G11, v02 (`m4-regulamento-grupo-v02.pdf`), secções 6.2, 10.4, 11.3, 11.4, 11.5, 11.6, 14.3 e 19.2.
 3. Declaração de Âmbito, v04 (`m3-declaracao-ambito-v04.pdf`), matriz do âmbito funcional (coluna «Âmbito no frontend-mobile») e limites transversais.
-4. Especificação de Requisitos, v02 (`m3-especificacao-requisitos-v02.md`), secções 2.2, 3 (parâmetros P01 a P21), 4.1, 4.2 e 5.
+4. Especificação de Requisitos, v03 (`m4-especificacao-requisitos-v03.md`), secções 2.2, 3 (parâmetros P01 a P21), 4.1, 4.2 e 5.
 5. Modelo de Classes do Frontend Mobile, v02 (`m3-modelo-classes-frontend-mobile-v02.md`), secções 2.3, 4, 6, 7 e 9.
 6. Plano de Testes do Backend, v01 (`m3-plano-testes-backend-v01.md`).
 7. Backlog de Projeto, v07 (`m4-backlog-projeto-v07.xlsx`) e Sprint Backlog do S07 (`m4-s07-sprint-backlog-v01.xlsx`): Issues `I075` a `I081`, `I120`, `I123`, `I124` e `I126`.
